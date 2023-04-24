@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base{
+  body{
+    /* @apply bg-blue-600 text-white */
+  }
+  h1{
+   @apply sp-text-3xl sp-font-bold sp-leading-normal
+  }
+  h2{
+    @apply sp-text-2xl sp-font-bold sp-leading-normal
+   }
+}
