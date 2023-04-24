@@ -14,8 +14,8 @@ dependencies:
     specifier: ^1.62.0
     version: 1.62.0
   vuetify:
-    specifier: ^3.1.4
-    version: 3.1.4(vue@3.2.47)
+    specifier: ^3.1.13
+    version: 3.1.13(vue@3.2.47)
 
 devDependencies:
   '@nuxtjs/tailwindcss':
@@ -5539,8 +5539,8 @@ packages:
       '@vue/server-renderer': 3.2.47(vue@3.2.47)
       '@vue/shared': 3.2.47
 
-  /vuetify@3.1.4(vue@3.2.47):
-    resolution: {integrity: sha512-6ERm2a0bJyMLjmRKTifN501o3MsCVp9agtoZsORw1b3X29ycTdXOJdRMEADaDSv59dBWwUVv3WqHcWzCG4Gwfw==}
+  /vuetify@3.1.13(vue@3.2.47):
+    resolution: {integrity: sha512-mC2UvWqS3Ne/aZ6Q+79kiL36xSe5jGxm0KWWq2e4SRxuqIE14IbyzqfXvU0bEqns0dHU5dOiKCMM9jHZFDLKgQ==}
     engines: {node: ^12.20 || >=14.13}
     peerDependencies:
       vite-plugin-vuetify: ^1.0.0-alpha.12
