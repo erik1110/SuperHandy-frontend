@@ -7,8 +7,8 @@
 </template>
 
 <script setup>
-import { useCounterStore } from '@/stores/counter'
-const counter = useCounterStore()
+  import { useCounterStore } from "@/stores/counter";
+  const counter = useCounterStore();
 </script>
 
 <style scoped></style>
