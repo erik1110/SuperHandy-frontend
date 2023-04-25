@@ -19,5 +19,20 @@ export default defineNuxtConfig({
       "process.env.DEBUG": false,
     },
   },
-  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "@pinia/nuxt",
+    [
+      "@nuxtjs/google-fonts",
+      {
+        families: {
+          Sigmar: true,
+          "Noto Sans TC": {
+            wght: [100, 300, 400, 500, 700, 900],
+          },
+          download: true,
+        },
+      },
+    ],
+  ],
 });
