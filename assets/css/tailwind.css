@@ -5,6 +5,7 @@
 @layer base{
   body{
     /* @apply bg-blue-600 text-white */
+    @apply sp-font-sans
   }
   h1{
    @apply sp-text-3xl sp-font-bold sp-leading-normal
