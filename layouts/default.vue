@@ -3,7 +3,8 @@
     <Navbar />
     <v-main>
       <!-- <v-container> -->
-      <h6 class="sp-text-gray-600">{{ $route.fullPath }}</h6>
+      <!-- <h6 class="sp-text-gray-600">{{ $route.fullPath }}</h6> -->
+      <Breadcrumbs />
       <slot />
       <!-- </v-container> -->
     </v-main>
