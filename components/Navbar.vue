@@ -53,7 +53,9 @@ const items = [
 ]
 // Auth
 import { useAuth } from '@/stores/auth'
-const { isLogin } = useAuth()
+import { storeToRefs } from 'pinia';
+const authStore = useAuth()
+const { isLogin } = storeToRefs(authStore)
 
 
 </script>
