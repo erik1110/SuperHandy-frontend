@@ -14,7 +14,7 @@
       <v-text-field v-model="confirmPassword" density="compact" label="*確認密碼" type="password"
         :rules="[ruleRequired, ruleConfirmPassword(confirmPassword, password)]" />
       <br>
-      <v-btn type="submit" block :disabled="!fields">註冊</v-btn>
+      <v-btn type="submit" block :disabled="!fields" color="secondary text-white">註冊</v-btn>
     </v-form>
     <div class="sp-text-xs sp-mt-8 sp-text-center">
       <span>已經有帳號？</span>

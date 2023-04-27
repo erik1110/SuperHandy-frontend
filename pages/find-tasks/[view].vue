@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>找任務</h1>
-    <v-tabs color="deep-purple-accent-4" class="my-5">
+    <v-tabs color="secondary" class="my-5">
       <NuxtLink to="/find-tasks/list"><v-tab>列表模式</v-tab></NuxtLink>
       <NuxtLink to="/find-tasks/map"><v-tab>地圖模式</v-tab></NuxtLink>
     </v-tabs>

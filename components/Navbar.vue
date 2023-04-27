@@ -1,6 +1,6 @@
 <template>
   <!-- <nav style="background-color: lightblue;">Logo</nav> -->
-  <v-app-bar :elevation="2" class="sp-mb-4 text-shades-white" density="compact" color="secondary">
+  <v-app-bar :elevation="2" class="sp-mb-4 text-white" density="compact" color="primary">
     <template v-slot:prepend>
       <v-icon>mdi-star-face</v-icon>
       <h1 class="sp-italic sp-text-3xl sp-font-cursive">SuperHandy</h1>
