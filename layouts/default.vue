@@ -1,17 +1,16 @@
 <template>
   <v-layout>
     <Navbar />
-    <v-main>
+    <div class="sp-mt-[48px] sp-p-[16px] sp-w-full">
       <v-container>
         <Breadcrumbs />
         <slot />
       </v-container>
-    </v-main>
+    </div>
   </v-layout>
   <Footer />
 </template>
 
-<script setup>
-</script>
+<script setup></script>
 
 <style scoped></style>
