@@ -20,7 +20,8 @@
         </template>
       </v-text-field>
       <br>
-      <v-btn :disabled="!form" :loading="loading" block color="success" size="large" type="submit" variant="elevated">
+      <v-btn :disabled="!form" :loading="loading" block color="secondary text-white" size="large" type="submit"
+        variant="elevated">
         Sign In
       </v-btn>
     </v-form>
