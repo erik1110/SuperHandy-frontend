@@ -19,6 +19,7 @@ export const siteConfig = {
     privacy: "隱私權政策",
     "exposure-plan": "曝光方案",
     "reset-password": "忘記密碼",
+    "verify-email": "信箱驗證",
   },
 
   //NuxtLink的路徑
