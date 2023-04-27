@@ -24,6 +24,12 @@ export default defineNuxtPlugin((nuxtApp) => {
     ssr: true,
     components,
     directives,
+    defaults: {
+      VAppBar: {
+        VBtn: { varient: "text", color: "#fff" },
+      },
+      VBtn: { color: "primary" },
+    },
     theme: {
       defaultTheme: "myCustomLightTheme",
       themes: {
