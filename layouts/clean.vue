@@ -2,13 +2,9 @@
   <v-layout>
     <Navbar />
     <v-main>
-      <v-container>
-        <Breadcrumbs />
-        <slot />
-      </v-container>
+      <slot />
     </v-main>
   </v-layout>
-  <Footer />
 </template>
 
 <script setup>
