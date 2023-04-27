@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen sp-bg-yellow-50">
+  <div>
     <v-sheet class="pa-12" color="transparent">
       <v-card class="mx-auto px-8 py-8" max-width="344" rounded="xl" elevation="0">
         <h1 class="text-center font-weight-bold  sp-mb-8 text-2xl">登入</h1>
@@ -38,6 +38,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+  layout: 'clean'
+})
+
 const loading = ref(false)
 
 // Form
