@@ -5,7 +5,7 @@
         <VCol cols="12">
           <!-- avatar start -->
           <VRow class="">
-            <VCol class="text-center d-md-flex text-md-start align-md-center">
+            <VCol class="d-md-flex text-md-start align-md-center">
               <label class="aui-info">
                 <img src="https://cdn.vuetifyjs.com/images/john.jpg" id="aui-avatar" class="aui-avatar" />
                 <input id="uploadImgBtn" style="display:none;" type="file" @change="uploadAvatar">
@@ -68,23 +68,21 @@ function uploadAvatar () {
 .aui-camera {
   color: #757575;
   position: absolute;
-  top: -1.5rem;
-  bottom: 0;
+  bottom: 0.7rem;
   left: 5.8rem;
-  right: 0;
 }
 
 
 /* md 以上 */
 @media(min-width: 960px) {
-  .aui-camera {
+  /* .aui-camera {
     color: #757575;
     position: absolute;
     top: 5.5rem;
     bottom: 0;
     left: 5.8rem;
     right: 0;
-  }
+  } */
 
 }
 </style>

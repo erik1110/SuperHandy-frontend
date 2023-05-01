@@ -25,25 +25,24 @@
                 <v-row dense>
                     <v-col cols="12" sm="6">
                         <div class="mt-1">
-                            <label class="label text-grey-darken-2" for="firstname">姓</label>
-                            <VTextField :rules="rules.firstname" v-model="user.firstname" id="firstname" name="firstname"
-                                type="text" :disabled="isDisabled" counter="5" hint="最多輸入5個字元" required
-                                validate-on="blur" />
+                            <label class="label text-grey-darken-2" for="firstName">姓</label>
+                            <VTextField :rules="rules.firstName" v-model="user.firstName" id="firstName" name="firstName"
+                                type="text" disabled counter="5" hint="最多輸入5個字元" required validate-on="blur" />
                         </div>
                     </v-col>
 
                     <v-col cols="12" sm="6">
                         <div class="mt-1">
-                            <label class="label text-grey-darken-2" for="lastname">名</label>
-                            <VTextField :rules="rules.lastname" v-model="user.lastname" id="lastname" name="lastname"
-                                type="text" :disabled="isDisabled" counter="10" hint="最多輸入10個字元" required />
+                            <label class="label text-grey-darken-2" for="lastName">名</label>
+                            <VTextField :rules="rules.lastName" v-model="user.lastName" id="lastName" name="lastName"
+                                type="text" disabled counter="10" hint="最多輸入10個字元" required />
                         </div>
                     </v-col>
 
                     <v-col cols="12">
                         <div class="mt-1">
-                            <label class="label text-grey-darken-2" for="nickname">暱稱</label>
-                            <VTextField :rules="rules.nickname" v-model="user.nickname" id="nickname" name="nickname"
+                            <label class="label text-grey-darken-2" for="nickName">暱稱</label>
+                            <VTextField :rules="rules.nickName" v-model="user.nickName" id="nickName" name="nickName"
                                 type="text" :disabled="isDisabled" counter="10" hint="最多輸入10個字元" required />
                         </div>
                     </v-col>
@@ -80,18 +79,17 @@
 
                     <v-col cols="12">
                         <div class="mt-1">
-                            <label class="label text-grey-darken-2" for="hostResume">案主簡介</label>
-                            <VTextarea :rules="rules.hostResume" v-model="user.hostResume" id="hostResume" name="hostResume"
-                                type="textarea" :disabled="isDisabled" counter="200" hint="最多輸入200個字元" />
+                            <label class="label text-grey-darken-2" for="posterIntro">案主簡介</label>
+                            <VTextarea :rules="rules.posterIntro" v-model="user.posterIntro" id="posterIntro"
+                                name="posterIntro" type="textarea" :disabled="isDisabled" counter="200" hint="最多輸入200個字元" />
                         </div>
                     </v-col>
 
                     <v-col cols="12">
                         <div class="mt-1">
-                            <label class="label text-grey-darken-2" for="helperResume">幫手簡介</label>
-                            <VTextarea :rules="rules.helperResume" v-model="user.helperResume" id="helperResume"
-                                name="helperResume" type="textarea" :disabled="isDisabled" counter="200"
-                                hint="最多輸入200個字元" />
+                            <label class="label text-grey-darken-2" for="helperIntro">幫手簡介</label>
+                            <VTextarea :rules="rules.helperIntro" v-model="user.helperIntro" id="helperIntro"
+                                name="helperIntro" type="textarea" :disabled="isDisabled" counter="200" hint="最多輸入200個字元" />
                         </div>
                     </v-col>
 
@@ -118,7 +116,8 @@
 <script setup>
 
 
-
+import { getAccountInfo, updateAccountInfo } from '@/services/apis'
+const { spGet, spPatch } = useHttp()
 
 //任務類別清單
 const taskItems = [
@@ -131,41 +130,44 @@ const taskItems = [
 //宣告
 const { user } = reactive({
     user: {
-        firstname: '',
-        lastname: '',
-        nickname: '',
-        phone: '',
         email: '',
         address: '',
-        hostResume: '',
-        helperResume: '',
+        avatarPath: '',
+        firstName: '',
+        helperIntro: '',
+        lastName: '',
+        nickName: '',
+        phone: '',
+        posterIntro: '',
+        helperSkills: ''
     }
 })
+
 
 //表單檢查規則
 const { ruleRequired, ruleAddress, validateFormResult } = useFormUtil()
 const rules = {
-    firstname: [
+    firstName: [
         ruleRequired,
         (v) => (!!v && v.length <= 10) || "長度不可以超過10個字元"
     ],
-    lastname: [
+    lastName: [
         ruleRequired,
         (v) => (!!v && v.length <= 10) || "長度不可以超過10個字元"
     ],
-    nickname: [
+    nickName: [
         ruleRequired,
-        (v) => (!!v && v.length <= 10) || "長度不可以超過10個字元"
+        (v) => (!!v && v.length <= 50) || "長度不可以超過50個字元"
     ],
     address: [
         ruleRequired,
         (v) => (!!v && v.length <= 100) || "長度不可以超過100個字元",
         ruleAddress,
     ],
-    hostResume: [
+    posterIntro: [
         (v) => (v.length <= 200) || "長度不可以超過200個字元"
     ],
-    helperResume: [
+    helperIntro: [
         (v) => (v.length <= 200) || "長度不可以超過200個字元"
     ],
     helperSkills: [
@@ -196,10 +198,39 @@ function cancel () {
     console.log(isDisabled.value, 'cancel')
     isDisabled.value = !isDisabled.value
     //重刷頁面
+    getAccountData()
 }
 
 
-//更新資料
+
+//取得會員資料
+onMounted(() => {
+    getAccountData()
+});
+function getAccountData () {
+    spGet(getAccountInfo).then((response) => {
+        if (!response || !response?.userInfoForm || !response?.userInfoForm?.status) {
+            alert('取得會員資料失敗')
+            return
+        }
+
+        Object.keys(user).forEach((key) => {
+            const value = response.userInfoForm[key]
+            if (value) {
+                user[key] = value
+            }
+        })
+
+    }).catch((error) => {
+        console.log(error)
+        alert('取得會員資料失敗')
+    });
+}
+
+
+
+
+//更新會員資料
 const profileForm = ref(null);
 const isUpdating = ref(false);
 const submit = async () => {
@@ -214,14 +245,29 @@ const submit = async () => {
 
     isUpdating.value = true
     //組裝資料
+    const data = {
+        nickName: user.nickName,
+        phone: user.phone,
+        address: user.address,
+        posterIntro: user.posterIntro,
+        helperIntro: user.helperIntro
+    }
 
-    //put到後端
-    setTimeout(() => {
-        //顯示更新成功
-        //重刷頁面
+    //patch到後端
+    spPatch(updateAccountInfo, data).then((response) => {
+        //console.log(response, 'response')
+        if (!response) {
+            alert('更新會員資料失敗')
+            return
+        }
+        alert('更新會員資料成功')
+        getAccountData()
         isUpdating.value = false
-        alert('更新成功')
-    }, 5000)
+
+    }).catch((error) => {
+        console.log(error)
+        alert('取得會員資料失敗')
+    });
 
 
 
@@ -229,8 +275,4 @@ const submit = async () => {
 
 
 </script>
-<style scoped>
-.theme-error {
-    color: rgb(239, 68, 68)
-}
-</style>
+<style scoped></style>
