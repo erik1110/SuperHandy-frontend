@@ -12,8 +12,8 @@
                 <v-icon icon="mdi-camera" size="large" class="aui-camera"></v-icon>
               </label>
               <div class="mt-5 mt-md-0 ml-md-5">
-                <p class="text-h5 font-weight-bold">Warren Buffett</p>
-                <p class="text-grey-lighten-1">帳號 abc123@gmail.com</p>
+                <p class="text-h5 font-weight-bold">{{ user.firstName }} {{ user.lastName }}</p>
+                <p class="text-grey-lighten-1">帳號 {{ user.email }}</p>
               </div>
             </VCol>
           </VRow>
@@ -41,15 +41,27 @@
 
 <script setup>
 
-
 // definePageMeta({
 //   layout: "account"
 // })
 
+import { storeToRefs } from 'pinia'
+import { storeAccount } from '@/stores/storeAccount'
 
+
+// 取得會員資料
+const _storeAccount = storeAccount()
+const { getAccount } = _storeAccount
+const { user } = storeToRefs(_storeAccount)
+onMounted(() => {
+  getAccount()
+});
+
+
+//更新頭像
 function uploadAvatar () {
   //console.log('uploadAvatar')
-  alert('還沒好喔')
+  alert('還沒寫喔')
 }
 </script>
 

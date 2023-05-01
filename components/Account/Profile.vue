@@ -115,9 +115,15 @@
 </template>
 <script setup>
 
+import { storeToRefs } from 'pinia'
+import { storeAccount } from '@/stores/storeAccount'
 
-import { getAccountInfo, updateAccountInfo } from '@/services/apis'
-const { spGet, spPatch } = useHttp()
+
+// 取得會員資料
+const _storeAccount = storeAccount()
+const { getAccount, updateAccount } = _storeAccount
+const { user } = storeToRefs(_storeAccount)
+
 
 //任務類別清單
 const taskItems = [
@@ -126,22 +132,6 @@ const taskItems = [
     { name: 'CCC' },
     { name: 'DDD' }
 ]
-
-//宣告
-const { user } = reactive({
-    user: {
-        email: '',
-        address: '',
-        avatarPath: '',
-        firstName: '',
-        helperIntro: '',
-        lastName: '',
-        nickName: '',
-        phone: '',
-        posterIntro: '',
-        helperSkills: ''
-    }
-})
 
 
 //表單檢查規則
@@ -198,36 +188,8 @@ function cancel () {
     console.log(isDisabled.value, 'cancel')
     isDisabled.value = !isDisabled.value
     //重刷頁面
-    getAccountData()
+    getAccount()
 }
-
-
-
-//取得會員資料
-onMounted(() => {
-    getAccountData()
-});
-function getAccountData () {
-    spGet(getAccountInfo).then((response) => {
-        if (!response || !response?.userInfoForm || !response?.userInfoForm?.status) {
-            alert('取得會員資料失敗')
-            return
-        }
-
-        Object.keys(user).forEach((key) => {
-            const value = response.userInfoForm[key]
-            if (value) {
-                user[key] = value
-            }
-        })
-
-    }).catch((error) => {
-        console.log(error)
-        alert('取得會員資料失敗')
-    });
-}
-
-
 
 
 //更新會員資料
@@ -235,41 +197,33 @@ const profileForm = ref(null);
 const isUpdating = ref(false);
 const submit = async () => {
 
+    //1. 表單檢查
     const result = await validateFormResult(profileForm)
     //console.log(result, 'result')
     if (!result) {
-        //表單檢查不通過，不顯示loading
         isUpdating.value = false
         return false;
     }
 
+    //2. 開啟loading
     isUpdating.value = true
-    //組裝資料
+
+    //3. 組裝資料
     const data = {
-        nickName: user.nickName,
-        phone: user.phone,
-        address: user.address,
-        posterIntro: user.posterIntro,
-        helperIntro: user.helperIntro
+        nickName: user.value.nickName,
+        address: user.value.address,
+        posterIntro: user.value.posterIntro,
+        helperIntro: user.value.helperIntro
     }
+    // console.log(data, 'data')
 
-    //patch到後端
-    spPatch(updateAccountInfo, data).then((response) => {
-        //console.log(response, 'response')
-        if (!response) {
-            alert('更新會員資料失敗')
-            return
-        }
+    //4. 更新資料
+    updateAccount(data, () => {
         alert('更新會員資料成功')
-        getAccountData()
+        getAccount()
+        isDisabled.value = true
         isUpdating.value = false
-
-    }).catch((error) => {
-        console.log(error)
-        alert('取得會員資料失敗')
-    });
-
-
+    })
 
 };
 
