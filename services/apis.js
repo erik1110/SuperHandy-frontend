@@ -1,5 +1,5 @@
-const BACKEND_ROOT_PROD = ``;
-const BACKEND_ROOT_DEV = `https://superhandy-backend-heroku.herokuapp.com`;
+const BACKEND_ROOT_PROD = import.meta.env.BACKEND_ROOT_PROD;
+const BACKEND_ROOT_DEV = import.meta.env.BACKEND_ROOT_DEV;
 const BACKEND_ROOT = BACKEND_ROOT_DEV
 
 //會員帳號 - 取得會員資料

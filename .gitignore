@@ -4,8 +4,8 @@ node_modules
 .nitro
 .cache
 .output
-.env
 dist
 .DS_Store
 
+Config.env
 .anna/
