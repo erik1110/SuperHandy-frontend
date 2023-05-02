@@ -7,8 +7,22 @@
 </template>
 
 <script setup>
-  import { useCounterStore } from "@/stores/counter";
-  const counter = useCounterStore();
+import { useCounterStore } from "@/stores/counter";
+import { getCompletedCases } from '@/services/apis/home'
+const counter = useCounterStore();
+const testData = ref({})
+
+onMounted(async () => {
+  try {
+    let { data } = await getCompletedCases()
+    console.log(data);
+    testData.value = data
+  } catch (err) {
+    console.log({ err });
+  }
+
+})
+
 </script>
 
 <style scoped></style>

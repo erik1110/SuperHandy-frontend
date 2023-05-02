@@ -53,12 +53,13 @@ const submitForm = () => {
 // for test
 const { query } = useRoute()
 onMounted(() => {
+  const randomNum = Math.floor(Math.random() * 100)
   if (query.dev == 1) {
-    firstName.value = 'a'
-    lastName.value = 'aaa'
-    nickname.value = 'a'
-    phone.value = '0999999999'
-    email.value = 'abc@gmail.com'
+    firstName.value = 'yang'
+    lastName.value = 'rrr'
+    nickname.value = `Rere${randomNum}`
+    phone.value = `09999999${randomNum}`
+    email.value = 'supersuperhandy@gmail.com'
     password.value = '11111111'
     confirmPassword.value = '11111111'
   }
