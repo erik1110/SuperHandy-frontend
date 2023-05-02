@@ -2,15 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base{
-  body{
+@layer base {
+  body {
     /* @apply bg-blue-600 text-white */
-    @apply sp-font-sans
+    @apply sp-font-sans;
   }
-  h1{
-   @apply sp-text-3xl sp-font-bold sp-leading-normal
+  h1 {
+    @apply sp-text-3xl sp-font-bold sp-leading-normal;
   }
-  h2{
-    @apply sp-text-2xl sp-font-bold sp-leading-normal
-   }
+  h2 {
+    @apply sp-text-2xl sp-font-bold sp-leading-normal;
+  }
+}
+@layer components {
+  .sp-text-h1 {
+    font-size: 3.5rem;
+    line-height: 1.2;
+  }
+  .sp-text-h2 {
+    font-size: 3rem;
+    line-height: 1.2;
+  }
+  .sp-text-h3 {
+    font-size: 2.25rem;
+    line-height: 1.2;
+  }
+  .sp-text-h4 {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+  .sp-text-title {
+    font-size: 1.125rem;
+    line-height: 1.5;
+  }
+  .sp-text-body {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  .sp-text-body-sm {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  .sp-text-Caption {
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
 }
