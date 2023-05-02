@@ -1,14 +1,42 @@
 <template>
   <div>
-    <h1>首頁2</h1>
+    <header class="landing__background sp-flex sp-align-middle sp-text-center sp-flex-col">
+      <div class="sp-mt-[100px]">
+        <h1>來一場地圖尋寶<br />
+          找到你的任務機會
+        </h1>
+        <v-btn class="sp-mt-4">成為幫手</v-btn>
+      </div>
+    </header>
     <div>Current Count: {{ counter.count }}</div>
     <button @click="counter.increment()">+1</button>
   </div>
 </template>
 
 <script setup>
-  import { useCounterStore } from "@/stores/counter";
-  const counter = useCounterStore();
+import { useCounterStore } from "@/stores/counter";
+const counter = useCounterStore();
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.landing__background,
+.landing__background::after {
+  position: relative;
+  left: 0;
+  right: 0;
+  height: calc(100vh - 3rem);
+  min-height: 750px;
+}
+
+.landing__background::after {
+  height: 100vh;
+  position: absolute;
+  top: -72px;
+  z-index: -10;
+  content: '';
+  background-image: url('@/assets/images/bg-landing.svg');
+  background-repeat: no-repeat;
+  background-position: center top 4rem;
+  background-size: 100%;
+}
+</style>
