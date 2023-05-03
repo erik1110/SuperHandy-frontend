@@ -15,27 +15,37 @@
       <v-text-field v-model="sginInData.password" :readonly="loading" :rules="[ruleRequired]" clearable label="密碼"
         placeholder="Enter your password" density="compact">
         <template #details>
-          <p class="sp-text-blue-600 sp-text-right sp-font-bold sp-text-xs sp-cursor-pointer">忘記密碼
-          </p>
+          <NuxtLink
+            to="/auth/send-reset-email"
+            class="sp-text-blue-600 sp-text-right sp-font-bold sp-text-xs sp-cursor-pointer"
+            >忘記密碼
+          </NuxtLink>
         </template>
       </v-text-field>
-      <br>
-      <v-btn :disabled="!form" :loading="loading" block color="secondary text-white" size="large" type="submit"
-        variant="elevated">
+      <br />
+      <v-btn
+        :disabled="!form"
+        :loading="loading"
+        block
+        color="secondary text-white"
+        size="large"
+        type="submit"
+        variant="elevated"
+      >
         Sign In
       </v-btn>
     </v-form>
     <div class="sp-text-xs sp-mt-8 sp-text-center">
       <span>還沒有帳號？</span>
       <NuxtLink to="/auth/signup">
-        <span class="sp-font-bold ">註冊</span>
+        <span class="sp-font-bold">註冊</span>
       </NuxtLink>
     </div>
   </AuthSheetWrapper>
 </template>
 
 <script setup>
-
+  const loading = ref(false);
 const loading = ref(false)
 // Rules
 const {
@@ -52,8 +62,6 @@ const onSubmit = () => {
   loading.value = true
   setTimeout(() => (loading.value = false), 2000)
 }
-
-
 </script>
 
 <style lang="scss" scoped></style>

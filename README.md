@@ -15,6 +15,7 @@ pnpm install
 
 ## Development Server
 
+Added .env file and set Backend Port
 Start the development server on `http://localhost:3000`
 
 ```bash
@@ -36,4 +37,3 @@ pnpm run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
-
