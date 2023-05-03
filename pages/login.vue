@@ -54,8 +54,7 @@
 const email = ref("");
 const password = ref("");
 
-const { formRules } = spUtility();
-const { ruleRequired, ruleEmail, rulePassLen } = formRules;
+const { ruleRequired, ruleEmail, rulePassLen } = useFormUtil();
 
 const submit = async () => { };
 </script>

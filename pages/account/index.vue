@@ -13,7 +13,7 @@
               </label>
               <div class="mt-5 mt-md-0 ml-md-5">
                 <p class="text-h5 font-weight-bold">{{ user.firstName }} {{ user.lastName }}</p>
-                <p class="text-grey-lighten-1">帳號 {{ user.email }}</p>
+                <p class="text-grey-lighten-1" v-show="user.email">帳號 {{ user.email }}</p>
               </div>
             </VCol>
           </VRow>
@@ -59,7 +59,7 @@ onMounted(() => {
 
 
 //更新頭像
-function uploadAvatar () {
+function uploadAvatar() {
   //console.log('uploadAvatar')
   alert('還沒寫喔')
 }
