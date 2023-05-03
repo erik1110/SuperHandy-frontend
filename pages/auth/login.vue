@@ -9,11 +9,25 @@
       - 或使用 SuperHandy 帳號密碼登入 -
     </div>
     <v-form v-model="form" @submit.prevent="onSubmit">
-      <v-text-field v-model="sginInData.email" :readonly="loading" :rules="[ruleRequired]" class="mb-2" clearable
-        label="信箱/手機" density="compact"></v-text-field>
+      <v-text-field
+        v-model="sginInData.email"
+        :readonly="loading"
+        :rules="[ruleRequired]"
+        class="mb-2"
+        clearable
+        label="信箱/手機"
+        density="compact"
+      ></v-text-field>
 
-      <v-text-field v-model="sginInData.password" :readonly="loading" :rules="[ruleRequired]" clearable label="密碼"
-        placeholder="Enter your password" density="compact">
+      <v-text-field
+        v-model="sginInData.password"
+        :readonly="loading"
+        :rules="[ruleRequired]"
+        clearable
+        label="密碼"
+        placeholder="Enter your password"
+        density="compact"
+      >
         <template #details>
           <NuxtLink
             to="/auth/send-reset-email"
@@ -46,22 +60,19 @@
 
 <script setup>
   const loading = ref(false);
-const loading = ref(false)
-// Rules
-const {
-  ruleRequired,
-} = useFormUtil()
-// Form
-const form = ref(false)
-const sginInData = ref({
-  email: null,
-  password: null,
-})
-const onSubmit = () => {
-  if (!form.value) return
-  loading.value = true
-  setTimeout(() => (loading.value = false), 2000)
-}
+  // Rules
+  const { ruleRequired } = useFormUtil();
+  // Form
+  const form = ref(false);
+  const sginInData = ref({
+    email: null,
+    password: null,
+  });
+  const onSubmit = () => {
+    if (!form.value) return;
+    loading.value = true;
+    setTimeout(() => (loading.value = false), 2000);
+  };
 </script>
 
 <style lang="scss" scoped></style>
