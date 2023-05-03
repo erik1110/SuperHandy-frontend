@@ -1,25 +1,32 @@
-
+const { VITE_BACKEND_ROOT_DEV, VITE_BACKEND_ROOT_PROD } = import.meta.env;
 export const useHttp = () => {
   const _fetch = async function (url, options) {
     await nextTick();
     const { data, pending, error, refresh } = await useFetch(url, {
+      baseURL: VITE_BACKEND_ROOT_DEV,
       ...options,
-      onRequest ({ request, options }) {
+      onRequest({ request, options }) {
+        //console.log({ options });
+        options.headers = options.headers || {};
         //把快取關掉
         //options.initialCache = false;
-
         //Header攜帶token回後端
-        //.....
-
+        if (options.auth) {
+          options.headers.authorization = `Bearer token from localStorage`;
+        }
+        if (options.token) {
+          options.headers.authorization = `Bearer ${options.token}`;
+        }
+        // console.log(options);
       },
-      onRequestError ({ request, options, error }) {
+      onRequestError({ request, options, error }) {
         console.log(error, "onRequestError");
       },
-      onResponse ({ request, response, options }) {
+      onResponse({ request, response, options }) {
         //console.log(response, "onResponse");
         return response._data;
       },
-      onResponseError ({ request, options, response }) {
+      onResponseError({ request, options, response }) {
         console.log(response, "onResponseError");
       },
     });
@@ -33,47 +40,6 @@ export const useHttp = () => {
     return unref(data);
   };
 
-  //GET
-  const spGet = function (url, params) {
-    if (!params) {
-      return _fetch(url, { method: "GET" });
-    } else {
-      return _fetch(url, { method: "GET", params: params });
-    }
-  };
-
-  //POST
-  const spPost = function (url, body) {
-    if (!body) {
-      return _fetch(url, { method: "POST" });
-    } else {
-      return _fetch(url, { method: "POST", body: body });
-    }
-  };
-
-  //DELETE
-  const spDelete = function (url) {
-    return _fetch(url, { method: "DELETE" });
-  };
-
-  //PUT
-  const spPut = function (url, body) {
-    if (!body) {
-      return _fetch(url, { method: "PUT" });
-    } else {
-      return _fetch(url, { method: "PUT", body: body });
-    }
-  };
-
-  //PATCH
-  const spPatch = function (url, body) {
-    if (!body) {
-      return _fetch(url, { method: "PATCH" });
-    } else {
-      return _fetch(url, { method: "PATCH", body: body });
-    }
-  };
-
   //Form
   const spPostForm = function (url, formDate) {
     return _fetch(url, {
@@ -83,12 +49,39 @@ export const useHttp = () => {
     });
   };
 
+  const req = function (method, url, data, config) {
+    console.log();
+    method = method.toUpperCase();
+    let options = { method, ...config };
+    switch (method) {
+      case "GET":
+        options = {
+          params: data,
+          ...options,
+        };
+        return _fetch(url, options);
+      case "POST":
+      case "PATCH":
+      case "PUT":
+        options = {
+          body: data,
+          ...options,
+        };
+        return _fetch(url, options);
+      case "DELETE":
+        options = {
+          params: data,
+          ...options,
+        };
+        return _fetch(url, options);
+      default:
+        console.log(`未知的method : ${method}`);
+        return false;
+    }
+  };
+
   return {
-    spGet,
-    spPost,
-    spDelete,
-    spPut,
-    spPatch,
     spPostForm,
+    req,
   };
 };

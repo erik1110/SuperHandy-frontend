@@ -1,4 +1,4 @@
-const { req } = useHttp_v2();
+const { req } = useHttp();
 // 不需登入的API
 export const getCompletedCases = () => req("GET", `/home/completed-cases`);
 
