@@ -207,6 +207,8 @@ const submit = async () => {
 
     //3. 組裝資料
     const data = {
+        firstName: user.value.firstName,
+        lastName: user.value.lastName,
         nickName: user.value.nickName,
         address: user.value.address,
         posterIntro: user.value.posterIntro,
