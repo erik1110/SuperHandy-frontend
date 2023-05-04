@@ -13,13 +13,14 @@
         label="信箱/手機" density="compact"></v-text-field>
 
       <v-text-field v-model="sginInData.password" :readonly="loading" :rules="[ruleRequired]" clearable label="密碼"
-        type="password" ㄋdensity="compact">
+        type="password" density="compact">
         <template #details>
-          <p class="sp-text-blue-600 sp-text-right sp-font-bold sp-text-xs sp-cursor-pointer">忘記密碼
-          </p>
+          <NuxtLink to="/auth/send-reset-email"
+            class="sp-text-blue-600 sp-text-right sp-font-bold sp-text-xs sp-cursor-pointer">忘記密碼
+          </NuxtLink>
         </template>
       </v-text-field>
-      <br>
+      <br />
       <v-btn :disabled="!form" :loading="loading" block color="secondary text-white" size="large" type="submit"
         variant="elevated">
         Sign In
@@ -28,7 +29,7 @@
     <div class="sp-text-xs sp-mt-8 sp-text-center">
       <span>還沒有帳號？</span>
       <NuxtLink to="/auth/signup">
-        <span class="sp-font-bold ">註冊</span>
+        <span class="sp-font-bold">註冊</span>
       </NuxtLink>
     </div>
   </AuthSheetWrapper>
