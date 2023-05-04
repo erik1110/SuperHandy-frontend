@@ -26,27 +26,28 @@
                     <v-col cols="12" sm="6">
                         <div class="mt-1">
                             <label class="label text-grey-darken-2" for="firstName">姓</label>
-                            <VTextField :rules="formRules.name.rule" v-model="user.firstName" id="firstName"
-                                name="firstName" type="text" :disabled="isDisabled" :counter="formRules.name.counter"
-                                :hint="formRules.name.hint" required />
+                            <VTextField :rules="profileFormRules.name.rule" v-model="user.firstName" id="firstName"
+                                name="firstName" type="text" :disabled="isDisabled" :counter="profileFormRules.name.counter"
+                                :hint="profileFormRules.name.hint" required />
                         </div>
                     </v-col>
 
                     <v-col cols="12" sm="6">
                         <div class="mt-1">
                             <label class="label text-grey-darken-2" for="lastName">名</label>
-                            <VTextField :rules="formRules.name.rule" v-model="user.lastName" id="lastName" name="lastName"
-                                type="text" :disabled="isDisabled" :counter="formRules.name.counter"
-                                :hint="formRules.name.hint" required />
+                            <VTextField :rules="profileFormRules.name.rule" v-model="user.lastName" id="lastName"
+                                name="lastName" type="text" :disabled="isDisabled" :counter="profileFormRules.name.counter"
+                                :hint="profileFormRules.name.hint" required />
                         </div>
                     </v-col>
 
                     <v-col cols="12">
                         <div class="mt-1">
                             <label class="label text-grey-darken-2" for="nickName">暱稱</label>
-                            <VTextField :rules="formRules.nickName.rule" v-model="user.nickName" id="nickName"
-                                name="nickName" type="text" :disabled="isDisabled" :counter="formRules.nickName.counter"
-                                :hint="formRules.nickName.hint" required />
+                            <VTextField :rules="profileFormRules.nickName.rule" v-model="user.nickName" id="nickName"
+                                name="nickName" type="text" :disabled="isDisabled"
+                                :counter="profileFormRules.nickName.counter" :hint="profileFormRules.nickName.hint"
+                                required />
                         </div>
                     </v-col>
 
@@ -75,27 +76,28 @@
                     <v-col cols="12">
                         <div class="mt-1">
                             <label class="label text-grey-darken-2" for="address">地址</label>
-                            <VTextField :rules="formRules.address.rule" v-model="user.address" id="address" name="address"
-                                type="text" :disabled="isDisabled" :counter="formRules.address.counter"
-                                :hint="formRules.address.hint" required />
+                            <VTextField :rules="profileFormRules.address.rule" v-model="user.address" id="address"
+                                name="address" type="text" :disabled="isDisabled"
+                                :counter="profileFormRules.address.counter" :hint="profileFormRules.address.hint"
+                                required />
                         </div>
                     </v-col>
 
                     <v-col cols="12">
                         <div class="mt-1">
                             <label class="label text-grey-darken-2" for="posterIntro">案主簡介</label>
-                            <VTextarea :rules="formRules.intro.rule" v-model="user.posterIntro" id="posterIntro"
-                                name="posterIntro" type="textarea" :disabled="isDisabled" :counter="formRules.intro.counter"
-                                :hint="formRules.intro.hint" />
+                            <VTextarea :rules="profileFormRules.intro.rule" v-model="user.posterIntro" id="posterIntro"
+                                name="posterIntro" type="textarea" :disabled="isDisabled"
+                                :counter="profileFormRules.intro.counter" :hint="profileFormRules.intro.hint" />
                         </div>
                     </v-col>
 
                     <v-col cols="12">
                         <div class="mt-1">
                             <label class="label text-grey-darken-2" for="helperIntro">幫手簡介</label>
-                            <VTextarea :rules="formRules.intro.rule" v-model="user.helperIntro" id="helperIntro"
-                                name="helperIntro" type="textarea" :disabled="isDisabled" :counter="formRules.intro.counter"
-                                :hint="formRules.intro.hint" />
+                            <VTextarea :rules="profileFormRules.intro.rule" v-model="user.helperIntro" id="helperIntro"
+                                name="helperIntro" type="textarea" :disabled="isDisabled"
+                                :counter="profileFormRules.intro.counter" :hint="profileFormRules.intro.hint" />
                         </div>
                     </v-col>
 
@@ -105,7 +107,7 @@
                                 最多可以選三項
                             </v-chip>
                         </label>
-                        <v-autocomplete :rules="formRules.helperSpecialities.rule" :disabled="isDisabled"
+                        <v-autocomplete :rules="profileFormRules.helperSpecialities.rule" :disabled="isDisabled"
                             :items="taskCategories" chips clearable color="blue-grey-lighten-2" item-title="name"
                             item-value="name" multiple v-model="helperSpecialities" id="helperSpecialities"
                             name="helperSpecialities">
@@ -127,7 +129,7 @@ import { storeAccount } from '@/stores/storeAccount'
 import { getCategories } from "@/services/apis/general";
 import { useAlert } from '~/composables/useAlert';
 const profileForm = ref(null);
-const { basicBox, confirmBox } = useAlert()
+const { basicBox } = useAlert()
 
 
 
@@ -150,60 +152,13 @@ onMounted(async () => {
 })
 
 
-
-
-
 // - 表單驗證 -
-const { ruleRequired, ruleAddress, validateFormResult } = useFormUtil()
-const _formRules = () => {
-    const _counter = [10, 50, 100, 200]
-    const _hint = '最多輸入{_counter}個字元'
-    const _error = '只能輸入{_counter}個字元喔!'
-    function _replace(text, counter) {
-        const result = text.replace('{_counter}', counter)
-        return result
-    }
-    return {
-        name: {
-            counter: _counter[0],
-            hint: _replace(_hint, _counter[0]),
-            rule: [
-                ruleRequired,
-                (v) => (!!v && v.length <= 10) || _replace(_error, _counter[0])
-            ]
-        },
-        nickName: {
-            counter: _counter[1],
-            hint: _replace(_hint, _counter[1]),
-            rule: [
-                ruleRequired,
-                (v) => (!!v && v.length <= _counter[1]) || _replace(_error, _counter[1])
-            ]
-        },
-        address: {
-            counter: _counter[2],
-            hint: _replace(_hint, _counter[2]),
-            rule: [
-                ruleRequired,
-                (v) => (!!v && v.length <= _counter[2]) || _replace(_error, _counter[2]),
-                ruleAddress
-            ]
-        },
-        intro: {
-            counter: _counter[3],
-            hint: _replace(_hint, _counter[3]),
-            rule: [
-                (v) => (!!v && v.length <= _counter[3]) || _replace(_error, _counter[3])
-            ]
-        },
-        helperSpecialities: {
-            rule: [
-                (v) => (!helperSpecialitiesError) || "最多輸入三項"
-            ]
-        }
-    }
+const { formRules, validateFormResult } = useFormUtil()
+let profileFormRules = formRules()
+profileFormRules.helperSpecialities = {
+    rule: [(v) => !helperSpecialitiesError || "最多輸入三項"],
 }
-const formRules = formRules || _formRules()
+
 const helperSpecialities = ref(user.value.helperSpecialities)
 let helperSpecialitiesError = false
 watch(
