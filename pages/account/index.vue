@@ -6,7 +6,7 @@
           <!-- avatar start -->
           <VRow class="">
             <VCol class="d-md-flex text-md-start align-md-center">
-              <label class="aui-info">
+              <label class="aui-info d-inline-block">
                 <img src="https://cdn.vuetifyjs.com/images/john.jpg" id="aui-avatar" class="aui-avatar" />
                 <input id="uploadImgBtn" style="display:none;" type="file" @change="uploadAvatar">
                 <v-icon icon="mdi-camera" size="large" class="aui-camera"></v-icon>
@@ -15,6 +15,7 @@
                 <p class="text-h5 font-weight-bold">{{ user.firstName }} {{ user.lastName }}</p>
                 <p class="text-grey-lighten-1" v-show="user.email">帳號 {{ user.email }}</p>
               </div>
+
             </VCol>
           </VRow>
           <!-- avatar end -->
@@ -47,6 +48,7 @@
 
 import { storeToRefs } from 'pinia'
 import { storeAccount } from '@/stores/storeAccount'
+const { basicBox } = useAlert()
 
 
 // 取得會員資料
@@ -61,7 +63,7 @@ onMounted(() => {
 //更新頭像
 function uploadAvatar() {
   //console.log('uploadAvatar')
-  alert('還沒寫喔')
+  basicBox('還沒寫喔')
 }
 </script>
 

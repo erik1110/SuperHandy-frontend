@@ -13,7 +13,8 @@ export const useFormUtil = () => {
   const rulePhone = (v) => pattern.phone.test(v) || "請輸入有效的手機號碼";
   const ruleConfirmPassword = (v, password) =>
     v === password || "確認密碼必須和密碼相同";
-  const ruleAddress = (v) => (!!v && v.indexOf("號") != -1) || "地址填寫不完整";
+  const ruleAddress = (v) =>
+    (!!v && v.length > 2 && v.indexOf("號") != -1) || "地址填寫不完整";
   const validateFormResult = async function (form) {
     let result = false;
     if (!form) return result;
@@ -30,6 +31,53 @@ export const useFormUtil = () => {
     return result;
   };
 
+  const formRules = () => {
+    const _counter = [10, 50, 100, 200];
+    const _hint = "最多輸入{_counter}個字元";
+    const _error = "只能輸入{_counter}個字元喔!";
+    function _replace(text, counter) {
+      const result = text.replace("{_counter}", counter);
+      return result;
+    }
+    return {
+      name: {
+        counter: _counter[0],
+        hint: _replace(_hint, _counter[0]),
+        rule: [
+          ruleRequired,
+          (v) => (!!v && v.length <= 10) || _replace(_error, _counter[0]),
+        ],
+      },
+      nickName: {
+        counter: _counter[1],
+        hint: _replace(_hint, _counter[1]),
+        rule: [
+          ruleRequired,
+          (v) =>
+            (!!v && v.length <= _counter[1]) || _replace(_error, _counter[1]),
+        ],
+      },
+      address: {
+        counter: _counter[2],
+        hint: _replace(_hint, _counter[2]),
+        rule: [
+          ruleRequired,
+          (v) =>
+            (!!v && v.length <= _counter[2]) || _replace(_error, _counter[2]),
+          ruleAddress,
+        ],
+      },
+      intro: {
+        counter: _counter[3],
+        hint: _replace(_hint, _counter[3]),
+        rule: [
+          (v) =>
+            (!!v && v.length <= _counter[3]) || _replace(_error, _counter[3]),
+        ],
+      },
+    };
+  };
+
   return {
     ruleRequired,
     ruleEmail,
@@ -38,5 +86,6 @@ export const useFormUtil = () => {
     ruleConfirmPassword,
     ruleAddress,
     validateFormResult,
+    formRules,
   };
 };
