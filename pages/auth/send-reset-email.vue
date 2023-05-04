@@ -26,9 +26,9 @@
   </AuthSheetWrapper>
 </template>
 <script setup>
+  import { postResetPassword } from "@/services/apis/sendResetEmail";
   const message = ref("");
-  const { formRules } = spUtility();
-  const { ruleRequired, ruleEmail } = formRules;
+  const { ruleRequired, ruleEmail } = useFormUtil();
   const loading = ref(false);
   const form = ref(false);
   const sginInData = ref({
@@ -37,9 +37,10 @@
   const onSubmit = async () => {
     if (!form.value) return;
     loading.value = true;
-    let res = await useHttp_v2().req("POST", "/forgot-password", {
+    let data = {
       email: sginInData.value.email,
-    });
+    };
+    let res = await postResetPassword(data);
     loading.value = false;
     if (!res.error) {
       message.value = "信件已寄出，請去信箱查看";

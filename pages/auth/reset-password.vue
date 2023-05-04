@@ -33,6 +33,7 @@
   </AuthSheetWrapper>
 </template>
 <script setup>
+  import { patchResetPassword } from "@/services/apis/resetPassword";
   const route = useRoute();
   const token = ref("");
   const nickName = ref("");
@@ -41,8 +42,7 @@
 
   const message = ref("");
 
-  const { formRules } = spUtility();
-  const { ruleRequired, rulePassLen, ruleConfirmPassword } = formRules;
+  const { ruleRequired, rulePassLen, ruleConfirmPassword } = useFormUtil();
   const loading = ref(false);
   const form = ref(false);
   const sginInData = ref({
@@ -52,17 +52,11 @@
   const onSubmit = async () => {
     if (!form.value) return;
     loading.value = true;
-    let res = await useHttp_v2().req(
-      "PATCH",
-      "/forgot-reset-password",
-      {
-        password: sginInData.value.password,
-        confirmPassword: sginInData.value.confirmPassword,
-      },
-      {
-        token: token.value,
-      }
-    );
+    let data = {
+      password: sginInData.value.password,
+      confirmPassword: sginInData.value.confirmPassword,
+    };
+    let res = await patchResetPassword(data, token.value);
     loading.value = false;
     if (!res.error) {
       message.value = "重設成功，請使用新密碼登入";

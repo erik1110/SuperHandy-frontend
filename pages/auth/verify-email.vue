@@ -24,6 +24,10 @@
   </AuthSheetWrapper>
 </template>
 <script setup>
+  import {
+    getVerifyEmail,
+    postResendVerification,
+  } from "@/services/apis/verifyEmail";
   const route = useRoute();
   const token = ref("");
   const nickName = ref("");
@@ -33,14 +37,8 @@
   nickName.value = route.query.nickName;
   token.value = route.query.token;
   onMounted(async () => {
-    let res = await useHttp_v2().req(
-      "GET",
-      "/verify-email",
-      {},
-      {
-        token: token.value,
-      }
-    );
+    let res = await getVerifyEmail(token.value);
+    console.log(res);
     if (!res.error) {
       status.value = "200";
       message.value = "恭喜您註冊成功";
@@ -52,9 +50,10 @@
 
   email.value = route.query.email;
   const resendEamil = async function () {
-    let res = await useHttp_v2().req("POST", "/resend-verification", {
+    let data = {
       email: email.value,
-    });
+    };
+    let res = await postResendVerification(data);
     if (!res.error) {
       status.value = "600";
       message.value = "信件已重新寄出，請去信箱查看";
