@@ -1,7 +1,7 @@
 // stores/counter.js
 import { defineStore } from "pinia";
 
-export const useAuth = defineStore("auth", {
+export const storeAuth = defineStore("auth", {
   state: () => {
     return {
       isLogin: false,

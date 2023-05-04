@@ -15,9 +15,9 @@
       <v-text-field v-model="sginInData.password" :readonly="loading" :rules="[ruleRequired]" clearable label="密碼"
         type="password" density="compact">
         <template #details>
-          <NuxtLink to="/auth/send-reset-email"
+          <p @click="sendResetDialog = true"
             class="sp-text-blue-600 sp-text-right sp-font-bold sp-text-xs sp-cursor-pointer">忘記密碼
-          </NuxtLink>
+          </p>
         </template>
       </v-text-field>
       <br />
@@ -32,12 +32,14 @@
         <span class="sp-font-bold">註冊</span>
       </NuxtLink>
     </div>
+    <AuthSendResetModal :dialog="sendResetDialog" @close="sendResetDialog = false" />
   </AuthSheetWrapper>
 </template>
 
 <script setup>
 import { postLogin } from '~/services/apis/auth'
 const loading = ref(false)
+const sendResetDialog = ref(false)
 // Rules
 const {
   ruleRequired,
@@ -59,6 +61,7 @@ const onSubmit = async () => {
   }
   loading.value = false
 }
+
 
 
 </script>
