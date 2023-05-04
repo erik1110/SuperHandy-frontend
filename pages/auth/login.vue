@@ -20,10 +20,15 @@
           </p>
         </template>
       </v-text-field>
+      <v-alert v-if="errMsg" class="mt-4" type="error" :icon="false" :text="errMsg" variant="tonal"></v-alert>
       <br />
+      <v-btn v-if="showResendBtn" @click="resendEmail" :loading="resendLoading" class="mb-4" block
+        color="primary text-white" size="large" variant="elevated">
+        重寄驗證信
+      </v-btn>
       <v-btn :disabled="!form" :loading="loading" block color="secondary text-white" size="large" type="submit"
         variant="elevated">
-        Sign In
+        登入
       </v-btn>
     </v-form>
     <div class="sp-text-xs sp-mt-8 sp-text-center">
@@ -38,8 +43,20 @@
 
 <script setup>
 import { postLogin } from '~/services/apis/auth'
+import { postResendVerification } from "~/services/apis/verifyEmail"
+import { storeAuth } from "@/stores/storeAuth";
+import { storeGlobal } from '~/stores/storeGlobal';
+const _storeGlobal = storeGlobal()
+const _storeAuth = storeAuth();
+
 const loading = ref(false)
+const resendLoading = ref(false)
 const sendResetDialog = ref(false)
+const errMsg = ref("")
+const showResendBtn = ref(false)
+
+
+
 // Rules
 const {
   ruleRequired,
@@ -54,13 +71,54 @@ const onSubmit = async () => {
   if (!form.value) return
   loading.value = true
   try {
-    let { data } = await postLogin(sginInData)
-    console.log({ data });
+    let res = await postLogin(sginInData)
+    console.log({ res });
+    if (res.error) {
+      errMsg.value = res.message
+      loading.value = false
+      if (res.error.name == '40010') {
+        showResendBtn.value = true
+      }
+      return
+    } else {
+      // TODO: 儲存token to LS
+      _storeAuth.setLoginToken(res.data.token)
+      navigateTo('/')
+    }
   } catch (err) {
     console.log({ err });
   }
   loading.value = false
 }
+// Resend Email
+const resendEmail = async function () {
+  resendLoading.value = true
+  let payload = {
+    email: sginInData.value.account,
+  };
+  let res = await postResendVerification(payload);
+  if (!res.error) {
+    _storeGlobal.confirmHandler({
+      open: true,
+      content: "驗證信已重新寄出，請至信箱收取信件"
+    })
+  } else {
+    errMsg.value = res.message
+  }
+  resendLoading.value = false
+};
+
+// for test
+const { query } = useRoute()
+onMounted(() => {
+  if (query.dev == 1) {
+    sginInData.value = {
+      account: 'simola5631@syinxun.com',
+      password: '11111111',
+    }
+  }
+})
+
 
 
 

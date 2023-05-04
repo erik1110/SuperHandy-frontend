@@ -8,8 +8,8 @@
       <br />
     </v-form>
     <template #actions>
-      <v-btn v-if="!message" @click="onSubmit" :disabled="!form" block color="primary text-white" size="large"
-        type="submit" variant="elevated">
+      <v-btn v-if="!message" :loading="loading" @click="onSubmit" :disabled="!form" block color="primary text-white"
+        size="large" type="submit" variant="elevated">
         寄送
       </v-btn>
     </template>

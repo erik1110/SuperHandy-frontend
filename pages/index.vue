@@ -15,7 +15,7 @@ const testData = ref({})
 onMounted(async () => {
   try {
     let { data } = await getCompletedCases()
-    console.log(data);
+    // console.log(data);
     testData.value = data
   } catch (err) {
     console.log({ err });
