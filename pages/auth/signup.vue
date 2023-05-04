@@ -25,6 +25,7 @@
 </template>
 
 <script setup>
+import { postSignup } from '~/services/apis/auth';
 const fields = ref(null)
 const firstName = ref("");
 const lastName = ref("");
@@ -43,10 +44,25 @@ const {
   ruleConfirmPassword,
 } = useFormUtil()
 
-const submitForm = () => {
+// Sign up submit
+const submitForm = async () => {
   //submit
   console.log('submit');
+  let payload = {
+    fields: fields.value,
+    firstName: firstName.value,
+    lastName: lastName.value,
+    nickname: nickname.value,
+    phone: phone.value,
+    email: email.value,
+    password: password.value,
+    confirmPassword: confirmPassword.value,
+  }
+  console.log({ payload });
+  let res = await postSignup(payload)
+  console.log({ res });
 }
+
 
 // for test
 const { query } = useRoute()
@@ -57,7 +73,7 @@ onMounted(() => {
     lastName.value = 'rrr'
     nickname.value = `Rere${randomNum}`
     phone.value = `09999999${randomNum}`
-    email.value = 'supersuperhandy@gmail.com'
+    email.value = 'fodixay487@saeoil.com'
     password.value = '11111111'
     confirmPassword.value = '11111111'
   }
