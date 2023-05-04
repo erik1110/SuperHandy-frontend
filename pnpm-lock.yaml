@@ -16,6 +16,9 @@ dependencies:
   sass:
     specifier: ^1.62.0
     version: 1.62.0
+  sweetalert2:
+    specifier: ^11.7.3
+    version: 11.7.3
   vuetify:
     specifier: ^3.1.13
     version: 3.1.13(vue@3.2.47)
@@ -5025,6 +5028,10 @@ packages:
       csso: 5.0.5
       picocolors: 1.0.0
     dev: true
+
+  /sweetalert2@11.7.3:
+    resolution: {integrity: sha512-fUN/fyVSBZNtY4Rr/Qtxn7tNNnlRAbUhQxTQ9uOo0xVMIHBmqq4/9pau5N9dB2pvkB353XL/ywRAycscLoYU3w==}
+    dev: false
 
   /tailwind-config-viewer@1.7.2(tailwindcss@3.3.1):
     resolution: {integrity: sha512-3JJCeAAlvG+i/EBj+tQb0x4weo30QjdSAo4hlcnVbtD+CkpzHi/UwU9InbPMcYH+ESActoa2kCyjpLEyjEkn0Q==}
