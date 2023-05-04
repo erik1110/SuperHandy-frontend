@@ -164,7 +164,7 @@ let helperSpecialitiesError = false
 watch(
     helperSpecialities,
     (val) => {
-        //console.log(val.length, 'helperSpecialities')
+        //console.log(val, 'helperSpecialities')
         if (val.length > 3) {
             // val.pop()
             helperSpecialitiesError = true
@@ -173,7 +173,7 @@ watch(
         }
     },
     {
-        immediate: true,
+        //immediate: true,
     }
 );
 
