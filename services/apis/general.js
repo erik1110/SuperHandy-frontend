@@ -4,4 +4,4 @@ const { req } = useHttp();
 export const getCategories = () => req("GET", "/general/categories");
 
 // 取得曝光方案
-//export const getExposurePlanUrl = `/general/exposure-plan`;
+export const getExposurePlan = () => req("GET", "/general/exposure-plan");
