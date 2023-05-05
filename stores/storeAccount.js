@@ -30,7 +30,7 @@ export const storeAccount = defineStore("storeAccount", () => {
       .then((response) => {
         //console.log(response, "respaonse");
         if (!response || !response?.userInfoForm) {
-          alert("取得會員資料失敗");
+          console.log("取得會員資料失敗");
           return;
         }
 
@@ -43,8 +43,7 @@ export const storeAccount = defineStore("storeAccount", () => {
         });
       })
       .catch((error) => {
-        console.log(error);
-        alert("取得會員資料失敗");
+        console.log(error, "取得會員資料失敗");
       });
   }
 

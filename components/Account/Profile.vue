@@ -1,136 +1,116 @@
 <template>
-    <v-card color="transparent" class="mx-auto pa-5" elevation="0" border rounded="0">
-        <!-- <template v-slot:loader="{ isActive }">
-            <v-progress-linear :active="isActive" color="green-lighten-3" height="4" indeterminate></v-progress-linear>
-        </template> -->
-
+    <v-overlay v-model="loading"></v-overlay>
+    <v-sheet border="sm" opacity-12 class="text-body-2 mx-auto pa-3">
         <v-form @submit.prevent="submit" ref="profileForm">
-
-            <v-card-actions class="d-flex justify-end">
-                <v-btn type="submit" v-if="!isDisabled" class="text-white px-5" color="red-darken-4" rounded="0"
-                    variant="flat" :loading="isUpdating" prepend-icon="mdi-update">
-                    更新
-                </v-btn>
-                <v-btn v-if="!isDisabled" class="text-white px-5" color="grey-lighten-1" rounded="0" variant="flat"
-                    prepend-icon="mdi-close" @click="cancel">
-                    取消
-                </v-btn>
-                <v-btn v-else class="text-white px-5" color="blue-darken-4" rounded="0" variant="flat"
-                    prepend-icon="mdi-pencil" @click="isDisabled = !isDisabled">
-                    編輯
-                </v-btn>
-            </v-card-actions>
-
-            <v-container>
-                <v-row dense>
-                    <v-col cols="12" sm="6">
-                        <div class="mt-1">
-                            <label class="label text-grey-darken-2" for="firstName">姓</label>
-                            <VTextField :rules="profileFormRules.name.rule" v-model="user.firstName" id="firstName"
-                                name="firstName" type="text" :disabled="isDisabled" :counter="profileFormRules.name.counter"
-                                :hint="profileFormRules.name.hint" required />
-                        </div>
+            <div class='text-end'>
+                <v-btn v-if="isDisabled" type='button' class='me-2' @click="isDisabled = !isDisabled">編輯</v-btn>
+                <div v-else>
+                    <v-btn type='submit' class='me-2' :loading="loading" color="error">更新</v-btn>
+                    <v-btn type='button' class='me-2' @click="cancel" color="blue-grey-lighten-2">取消</v-btn>
+                </div>
+            </div>
+            <v-container fluid="">
+                <v-row>
+                    <v-col cols="12" md="6">
+                        <label class="label text-grey-darken-2" for="firstName">姓</label>
+                        <v-text-field :rules="profileFormRules.name.rule" v-model="user.firstName" :disabled="isDisabled"
+                            :counter="profileFormRules.name.counter" :hint="profileFormRules.name.hint" required />
                     </v-col>
-
-                    <v-col cols="12" sm="6">
-                        <div class="mt-1">
-                            <label class="label text-grey-darken-2" for="lastName">名</label>
-                            <VTextField :rules="profileFormRules.name.rule" v-model="user.lastName" id="lastName"
-                                name="lastName" type="text" :disabled="isDisabled" :counter="profileFormRules.name.counter"
-                                :hint="profileFormRules.name.hint" required />
-                        </div>
+                    <v-col cols="12" md="6">
+                        <label class="label text-grey-darken-2" for="lastName">名</label>
+                        <v-text-field :rules="profileFormRules.name.rule" v-model="user.lastName" :disabled="isDisabled"
+                            :counter="profileFormRules.name.counter" :hint="profileFormRules.name.hint" required />
                     </v-col>
-
-                    <v-col cols="12">
-                        <div class="mt-1">
-                            <label class="label text-grey-darken-2" for="nickName">暱稱</label>
-                            <VTextField :rules="profileFormRules.nickName.rule" v-model="user.nickName" id="nickName"
-                                name="nickName" type="text" :disabled="isDisabled"
-                                :counter="profileFormRules.nickName.counter" :hint="profileFormRules.nickName.hint"
-                                required />
-                        </div>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <label class="label text-grey-darken-2" for="nickName">暱稱</label>
+                        <v-text-field :rules="profileFormRules.nickName.rule" v-model="user.nickName" :disabled="isDisabled"
+                            :counter="profileFormRules.nickName.counter" :hint="profileFormRules.nickName.hint" required />
                     </v-col>
-
-                    <v-col cols="12">
-                        <div class="mt-1">
-                            <label class="label text-grey-darken-2 d-flex align-center" for="phone">手機號碼
-                                <v-chip class="ma-1" color="red" text-color="white" size="x-small">
-                                    不可修改
-                                </v-chip>
-                            </label>
-                            <VTextField v-model="user.phone" id="phone" name="phone" type="phone" disabled required />
-                        </div>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <label class="label text-grey-darken-2 d-flex align-center" for="phone">手機號碼
+                            <v-chip class="ma-1" color="red" text-color="white" size="x-small">
+                                不可修改
+                            </v-chip>
+                        </label>
+                        <v-text-field v-model="user.phone" disabled="true" required />
                     </v-col>
-
-                    <v-col cols="12">
-                        <div class="mt-1">
-                            <label class="label text-grey-darken-2 d-flex align-center" for="email">電子信箱
-                                <v-chip class="ma-1" color="red" text-color="white" size="x-small">
-                                    不可修改
-                                </v-chip>
-                            </label>
-                            <VTextField v-model="user.email" id="email" name="email" type="email" disabled required />
-                        </div>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <label class="label text-grey-darken-2 d-flex align-center" for="email">電子信箱
+                            <v-chip class="ma-1" color="red" text-color="white" size="x-small">
+                                不可修改
+                            </v-chip>
+                        </label>
+                        <v-text-field v-model="user.email" disabled="true" required />
                     </v-col>
-
-                    <v-col cols="12">
-                        <div class="mt-1">
-                            <label class="label text-grey-darken-2" for="address">地址</label>
-                            <VTextField :rules="profileFormRules.address.rule" v-model="user.address" id="address"
-                                name="address" type="text" :disabled="isDisabled"
-                                :counter="profileFormRules.address.counter" :hint="profileFormRules.address.hint"
-                                required />
-                        </div>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <label class="label text-grey-darken-2" for="address">地址</label>
+                        <v-text-field :rules="profileFormRules.address.rule" v-model="user.address" :disabled="isDisabled"
+                            :counter="profileFormRules.address.counter" :hint="profileFormRules.address.hint" required />
                     </v-col>
-
-                    <v-col cols="12">
-                        <div class="mt-1">
-                            <label class="label text-grey-darken-2" for="posterIntro">案主簡介</label>
-                            <VTextarea :rules="profileFormRules.intro.rule" v-model="user.posterIntro" id="posterIntro"
-                                name="posterIntro" type="textarea" :disabled="isDisabled"
-                                :counter="profileFormRules.intro.counter" :hint="profileFormRules.intro.hint" />
-                        </div>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <label class="label text-grey-darken-2" for="posterIntro">案主簡介</label>
+                        <v-textarea :rules="profileFormRules.intro.rule" v-model="user.posterIntro" :disabled="isDisabled"
+                            :counter="profileFormRules.intro.counter" :hint="profileFormRules.intro.hint" />
                     </v-col>
-
-                    <v-col cols="12">
-                        <div class="mt-1">
-                            <label class="label text-grey-darken-2" for="helperIntro">幫手簡介</label>
-                            <VTextarea :rules="profileFormRules.intro.rule" v-model="user.helperIntro" id="helperIntro"
-                                name="helperIntro" type="textarea" :disabled="isDisabled"
-                                :counter="profileFormRules.intro.counter" :hint="profileFormRules.intro.hint" />
-                        </div>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <label class="label text-grey-darken-2" for="helperIntro">幫手簡介</label>
+                        <v-textarea :rules="profileFormRules.intro.rule" v-model="user.helperIntro" :disabled="isDisabled"
+                            :counter="profileFormRules.intro.counter" :hint="profileFormRules.intro.hint" />
                     </v-col>
-
-                    <v-col cols="12">
-                        <label class="label text-grey-darken-2 d-flex align-center" for="helperSpecialities">幫手專長
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <label class="label text-grey-darken-2 d-flex align-center" for="helperSkills">幫手專長
                             <v-chip class="ma-1" color="red" text-color="white" size="x-small">
                                 最多可以選三項
                             </v-chip>
                         </label>
-                        <v-autocomplete :rules="profileFormRules.helperSpecialities.rule" :disabled="isDisabled"
-                            :items="taskCategories" chips clearable color="blue-grey-lighten-2" item-title="name"
-                            item-value="name" multiple v-model="helperSpecialities" id="helperSpecialities"
-                            name="helperSpecialities">
+                        <v-select :rules="profileFormRules.helperSkills.rule" :disabled="isDisabled" :items="taskCategories"
+                            color="blue-grey-lighten-2" item-title="name" item-value="name" multiple chips clearable
+                            v-model="helperSkills">
                             <template v-slot:chip="{ props, item }">
                                 <v-chip v-bind="props" :text="item.name"></v-chip>
                             </template>
-                        </v-autocomplete>
+                        </v-select>
                     </v-col>
-
                 </v-row>
             </v-container>
         </v-form>
-    </v-card>
+    </v-sheet>
 </template>
 <script setup>
-
 import { storeToRefs } from 'pinia'
 import { storeAccount } from '@/stores/storeAccount'
 import { getCategories } from "@/services/apis/general";
-import { useAlert } from '~/composables/useAlert';
-const profileForm = ref(null);
 const { basicBox } = useAlert()
 
+
+// - 初始宣告 -
+const loading = ref(false);
+const isDisabled = ref(true);
+const profileForm = ref(null)
+
+
+// - 取消編輯-
+function cancel() {
+    //console.log(isDisabled.value, 'cancel')
+    isDisabled.value = true
+    //重刷頁面
+    profileForm.value.reset()
+    getAccount()
+}
 
 
 // - 取得會員資料 -
@@ -139,37 +119,22 @@ const { getAccount, updateAccount } = _storeAccount
 const { user } = storeToRefs(_storeAccount)
 
 
-// - 取得任務類別 -
-const taskCategories = ref([])
-onMounted(async () => {
-    try {
-        let { data } = await getCategories();
-        //console.log(data);
-        taskCategories.value = data;
-    } catch (err) {
-        console.log({ err });
-    }
-})
-
-
-// - 表單驗證 -
+// - 取得表單驗證規則 -
 const { formRules, validateFormResult } = useFormUtil()
 let profileFormRules = formRules()
-profileFormRules.helperSpecialities = {
-    rule: [(v) => !helperSpecialitiesError || "最多輸入三項"],
+let _helperSkillsError = false
+const helperSkills = ref(user.value.helperSkills)
+profileFormRules.helperSkills = {
+    rule: [(v) => !_helperSkillsError || "最多輸入三項"],
 }
-
-const helperSpecialities = ref(user.value.helperSpecialities)
-let helperSpecialitiesError = false
 watch(
-    helperSpecialities,
+    helperSkills,
     (val) => {
-        //console.log(val, 'helperSpecialities')
+        //console.log(val, 'helperSkillsError')
         if (val.length > 3) {
-            // val.pop()
-            helperSpecialitiesError = true
+            _helperSkillsError = true
         } else {
-            helperSpecialitiesError = false
+            _helperSkillsError = false
         }
     },
     {
@@ -178,19 +143,19 @@ watch(
 );
 
 
-// - 是否開起編輯欄位 -
-const isDisabled = ref(true);
-function cancel() {
-    //console.log(isDisabled.value, 'cancel')
-    isDisabled.value = !isDisabled.value
-    //重刷頁面
-    profileForm.value.reset()
-    getAccount()
-}
+// - 取得任務類別 -
+const taskCategories = ref([])
+onMounted(async () => {
+    try {
+        let { data } = await getCategories();
+        taskCategories.value = data;
+    } catch (err) {
+        console.log({ err });
+    }
+})
 
 
 // - 更新會員資料 -
-const isUpdating = ref(false);
 const submit = async () => {
 
     //1. 表單檢查
@@ -198,12 +163,11 @@ const submit = async () => {
     //console.log(result, 'result')
     if (!result) {
         basicBox('表單驗證還沒有成功喔!')
-        isUpdating.value = false
         return false;
     }
 
     //2. 開啟loading
-    isUpdating.value = true
+    loading.value = true
 
     //3. 組裝資料
     const data = {
@@ -213,23 +177,23 @@ const submit = async () => {
         address: user.value.address,
         posterIntro: user.value.posterIntro,
         helperIntro: user.value.helperIntro,
-        helperSpecialities: helperSpecialities.value
+        helperSkills: helperSkills.value
     }
     //console.log(data, 'data')
 
     //4. 更新資料
     updateAccount(data, () => {
         profileForm.value.reset()
+        loading.value = false
+        isDisabled.value = true
         getAccount()
         basicBox('更新會員資料成功')
-        isDisabled.value = true
-        isUpdating.value = false
     }, () => {
         profileForm.value.reset()
+        loading.value = false
+        isDisabled.value = true
         getAccount()
         basicBox("取得會員資料失敗");
-        isDisabled.value = true
-        isUpdating.value = false
     })
 
 };
