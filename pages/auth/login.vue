@@ -84,9 +84,9 @@ const onSubmit = async () => {
       }
       return
     } else {
-      // TODO: 儲存token to LS
       _storeAuth.setLoginToken(res.data.token)
       navigateTo('/')
+
     }
   } catch (err) {
     console.log({ err });
