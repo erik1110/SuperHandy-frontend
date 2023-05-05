@@ -6,7 +6,7 @@
                 <v-form @submit.prevent=submit ref='postTaskForm'>
                     <div class=''>
                         <label class='label text-grey-darken-2' for='title'>任務標題</label>
-                        <VTextField variant='outlined' :rules='postTaskFormRules.taskTitle.rule' v-model='title'
+                        <v-text-field variant='outlined' :rules='postTaskFormRules.taskTitle.rule' v-model='title'
                             :counter='postTaskFormRules.taskTitle.counter' :hint='postTaskFormRules.taskTitle.hint'
                             required />
                     </div>
@@ -27,7 +27,7 @@
 
                     <div class='mt-16'>
                         <label class='label text-grey-darken-2' for='salary'>任務薪水</label>
-                        <VTextField variant='outlined' :rules='[ruleSuperCoint]' v-model='salary' type='number' prefix=$
+                        <v-text-field variant='outlined' :rules='[ruleSuperCoint]' v-model='salary' type='number' prefix=$
                             suffix=超人幣 required />
                     </div>
 
@@ -56,17 +56,18 @@
                             <v-container fluid>
                                 <v-row>
                                     <v-col>
-                                        <VTextField label=姓名 v-model='contactInfoName' :rules='postTaskFormRules.name.rule'
-                                            :counter='postTaskFormRules.name.counter' :hint='postTaskFormRules.name.hint'
-                                            required />
+                                        <v-text-field label=姓名 v-model='contactInfoName'
+                                            :rules='postTaskFormRules.name.rule' :counter='postTaskFormRules.name.counter'
+                                            :hint='postTaskFormRules.name.hint' required />
                                     </v-col>
                                 </v-row>
                                 <v-row>
-                                    <v-col>
-                                        <VTextField label=聯絡電話 :rules='[rulePhone]' v-model='contactInfoPhone' required />
+                                    <v-col cols="12" md="6">
+                                        <v-text-field label=聯絡電話 :rules='[rulePhone]' v-model='contactInfoPhone' required />
                                     </v-col>
                                     <v-col>
-                                        <VTextField label=EMAIL :rules='[ruleEmail]' v-model='contactInfoEmail' required />
+                                        <v-text-field label=EMAIL :rules='[ruleEmail]' v-model='contactInfoEmail'
+                                            required />
                                     </v-col>
                                 </v-row>
                                 <v-row>
@@ -85,7 +86,7 @@
                                 </v-row>
                                 <v-row>
                                     <v-col>
-                                        <VTextField label=地址 :rules='postTaskFormRules.address.rule'
+                                        <v-text-field label=地址 :rules='postTaskFormRules.address.rule'
                                             v-model='locationAddress' :counter='postTaskFormRules.address.counter'
                                             :hint='postTaskFormRules.address.hint' required />
                                     </v-col>

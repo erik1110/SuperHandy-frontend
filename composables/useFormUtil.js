@@ -73,8 +73,9 @@ export const useFormUtil = () => {
         counter: _counter[3],
         hint: _replace(_hint, _counter[3]),
         rule: [
-          (v) =>
-            (!!v && v.length <= _counter[3]) || _replace(_error, _counter[3]),
+          (v) => {
+            !v || v.length <= _counter[3] || _replace(_error, _counter[3]);
+          },
         ],
       },
       taskTitle: {
