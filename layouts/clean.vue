@@ -1,13 +1,12 @@
 <template>
   <v-layout>
     <Navbar />
-    <v-main>
+    <div class="sp-mt-[48px] sp-w-full">
       <slot />
-    </v-main>
+    </div>
   </v-layout>
 </template>
 
-<script setup>
-</script>
+<script setup></script>
 
 <style scoped></style>

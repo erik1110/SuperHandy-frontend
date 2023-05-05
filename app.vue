@@ -2,6 +2,7 @@
   <v-app>
     <NuxtLayout>
       <NuxtPage />
+      <DialogConfirm />
     </NuxtLayout>
   </v-app>
 </template>

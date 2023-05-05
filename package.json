@@ -11,6 +11,8 @@
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.6.6",
     "@types/node": "^18",
+    "@vueuse/core": "^10.1.2",
+    "@vueuse/nuxt": "^10.1.2",
     "nuxt": "^3.4.2"
   },
   "dependencies": {
@@ -19,6 +21,7 @@
     "@pinia/nuxt": "^0.4.9",
     "pinia": "^2.0.35",
     "sass": "^1.62.0",
+    "sweetalert2": "^11.7.3",
     "vuetify": "^3.1.13"
   }
 }

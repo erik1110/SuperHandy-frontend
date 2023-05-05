@@ -9,49 +9,119 @@
       - 或使用 SuperHandy 帳號密碼登入 -
     </div>
     <v-form v-model="form" @submit.prevent="onSubmit">
-      <v-text-field v-model="sginInData.email" :readonly="loading" :rules="[required]" class="mb-2" clearable
-        label="Email" density="compact"></v-text-field>
+      <v-text-field v-model="account" :readonly="loading" :rules="[ruleRequired]" class="mb-2" clearable label="信箱/手機"
+        density="compact"></v-text-field>
 
-      <v-text-field v-model="sginInData.password" :readonly="loading" :rules="[required]" clearable label="Password"
-        placeholder="Enter your password" density="compact">
+      <v-text-field v-model="password" :readonly="loading" :rules="[ruleRequired]" clearable label="密碼" type="password"
+        density="compact">
         <template #details>
-          <p class="sp-text-blue-600 sp-text-right sp-font-bold sp-text-xs sp-cursor-pointer">忘記密碼
+          <p @click="sendResetDialog = true"
+            class="sp-text-blue-600 sp-text-right sp-font-bold sp-text-xs sp-cursor-pointer">忘記密碼
           </p>
         </template>
       </v-text-field>
-      <br>
+      <v-alert v-if="errMsg" class="mt-4" type="error" :icon="false" :text="errMsg" variant="tonal"></v-alert>
+      <br />
+      <v-btn v-if="showResendBtn" @click="resendEmail" :loading="resendLoading" class="mb-4" block
+        color="primary text-white" size="large" variant="elevated">
+        重寄驗證信
+      </v-btn>
       <v-btn :disabled="!form" :loading="loading" block color="secondary text-white" size="large" type="submit"
         variant="elevated">
-        Sign In
+        登入
       </v-btn>
     </v-form>
     <div class="sp-text-xs sp-mt-8 sp-text-center">
       <span>還沒有帳號？</span>
       <NuxtLink to="/auth/signup">
-        <span class="sp-font-bold ">註冊</span>
+        <span class="sp-font-bold">註冊</span>
       </NuxtLink>
     </div>
+    <AuthSendResetModal :dialog="sendResetDialog" @close="sendResetDialog = false" />
   </AuthSheetWrapper>
 </template>
 
 <script setup>
+import { postLogin } from '~/services/apis/auth'
+import { postResendVerification } from "~/services/apis/verifyEmail"
+import { storeAuth } from "@/stores/storeAuth";
+import { storeGlobal } from '~/stores/storeGlobal';
+const _storeGlobal = storeGlobal()
+const _storeAuth = storeAuth();
 
 const loading = ref(false)
+const resendLoading = ref(false)
+const sendResetDialog = ref(false)
+const errMsg = ref("")
+const showResendBtn = ref(false)
 
+
+
+// Rules
+const {
+  ruleRequired,
+} = useFormUtil()
 // Form
 const form = ref(false)
-const sginInData = ref({
-  email: null,
-  password: null,
-})
-const onSubmit = () => {
+
+const account = ref(null)
+const password = ref(null)
+const onSubmit = async () => {
   if (!form.value) return
   loading.value = true
-  setTimeout(() => (loading.value = false), 2000)
+  try {
+    let payload = {
+      account: account.value,
+      password: password.value
+    }
+    let res = await postLogin(payload)
+    console.log({ res });
+    if (res.error) {
+      errMsg.value = res.message
+      loading.value = false
+      if (res.error.name == '40010') {
+        showResendBtn.value = true
+      }
+      return
+    } else {
+      _storeAuth.setLoginToken(res.data.token)
+      navigateTo('/')
+
+    }
+  } catch (err) {
+    console.log({ err });
+  }
+  loading.value = false
 }
-const required = (v) => {
-  return !!v || 'Field is required'
-}
+// Resend Email
+const resendEmail = async function () {
+  resendLoading.value = true
+  let payload = {
+    email: account.value,
+  };
+  let res = await postResendVerification(payload);
+  if (!res.error) {
+    _storeGlobal.confirmHandler({
+      open: true,
+      content: "驗證信已重新寄出，請至信箱收取信件"
+    })
+  } else {
+    errMsg.value = res.message
+  }
+  resendLoading.value = false
+};
+
+// for test
+const { query } = useRoute()
+onMounted(() => {
+  if (query.dev == 1) {
+    account.value = 'simola5631@syinxun.com'
+    password.value = '11111111'
+  }
+})
+
+
+
 
 </script>
 
