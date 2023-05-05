@@ -6,7 +6,7 @@
           找到你的任務機會
         </h1>
         <div class="slogon_img"></div>
-        <v-btn class="text-white" rounded>成為幫手</v-btn>
+        <v-btn class="text-white" color="v-purple" rounded>成為幫手</v-btn>
         <!-- <v-btn class="sp-mt-4 text-white" color="blue">成為幫手</v-btn> -->
       </div>
     </header>
