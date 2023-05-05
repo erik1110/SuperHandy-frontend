@@ -1,11 +1,12 @@
 <template>
   <div>
-    <header class="landing__background sp-flex align-center sp-flex-col ">
-      <div class="sp-mt-[170px] sp-flex align-center sp-text-white sp-max-w-[400px]">
-        <h1>來一場地圖尋寶<br />
+    <header class="landing__background sp-flex sp-justify-center">
+      <div class="sp-mt-[30px] sp-flex sp-flex-col sp-text-white sp-max-w-[400px]">
+        <h1 class="sp-hidden">來一場地圖尋寶<br />
           找到你的任務機會
         </h1>
-        <v-btn class="text-white ml-6" rounded>成為幫手</v-btn>
+        <div class="slogon_img"></div>
+        <v-btn class="text-white" rounded>成為幫手</v-btn>
         <!-- <v-btn class="sp-mt-4 text-white" color="blue">成為幫手</v-btn> -->
       </div>
     </header>
@@ -28,7 +29,6 @@ const counter = useCounterStore();
   right: 0;
   height: calc(100vh - 3rem);
   min-height: 750px;
-  width: 100vw;
 }
 
 .landing__background::after {
@@ -37,19 +37,37 @@ const counter = useCounterStore();
   top: -72px;
   z-index: -1;
   content: '';
-  background-image: url('@/assets/images/bg.svg');
+  background-image: url('@/assets/images/bg-landing-2.svg');
   background-repeat: no-repeat;
   background-position: center top 4rem;
-  background-size: cover;
+  background-size: 100%;
 }
 
-.landing__background::before {
-  height: 100vh;
-  position: absolute;
-  top: -72px;
-  z-index: -1;
+.slogon_img,
+.slogon_img::after {
+  position: relative;
+  width: 300px;
+  min-height: 180px;
+  top: 0;
+  left: 0;
+}
+
+.slogon_img::after {
   content: '';
-  background: #3dc2eb;
-
+  position: absolute;
+  background-image: url('@/assets/images/slogon.svg');
+  background-repeat: no-repeat;
+  background-position: center top 4rem;
+  background-size: 100%;
 }
+
+// .landing__background::before {
+//   height: 100vh;
+//   position: absolute;
+//   top: -72px;
+//   z-index: -1;
+//   content: '';
+//   background: #3dc2eb;
+
+// }
 </style>
