@@ -1,8 +1,8 @@
 <template>
   <AuthSheetWrapper>
     <h1 class="text-center sp-mb-8">登入</h1>
-    <v-btn block>
-      <v-icon>mdi-google</v-icon>
+    <v-btn block color="v-purple">
+      <v-icon class="mr-5">mdi-google</v-icon>
       Log in with google
     </v-btn>
     <div class="sp-text-center sp-text-xs sp-my-8">

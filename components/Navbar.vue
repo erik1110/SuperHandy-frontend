@@ -10,7 +10,7 @@
       <NuxtLink to="/find-tasks/list">
         <v-btn>找任務</v-btn>
       </NuxtLink>
-      <NuxtLink to="/post-task/-1">
+      <NuxtLink to="/post-task">
         <v-btn>刊登任務</v-btn>
       </NuxtLink>
       <v-btn icon size="small"><v-icon>mdi-bell</v-icon>
