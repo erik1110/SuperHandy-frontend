@@ -36,7 +36,7 @@
                                 不可修改
                             </v-chip>
                         </label>
-                        <v-text-field v-model="user.phone" disabled="true" required />
+                        <v-text-field v-model="user.phone" disabled required />
                     </v-col>
                 </v-row>
                 <v-row>
@@ -46,7 +46,7 @@
                                 不可修改
                             </v-chip>
                         </label>
-                        <v-text-field v-model="user.email" disabled="true" required />
+                        <v-text-field v-model="user.email" disabled required />
                     </v-col>
                 </v-row>
                 <v-row>

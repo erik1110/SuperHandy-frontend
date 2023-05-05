@@ -20,6 +20,7 @@
     "@mdi/font": "^7.2.96",
     "@nuxtjs/google-fonts": "^3.0.0",
     "@pinia/nuxt": "^0.4.9",
+    "nuxt-swiper": "^1.1.0",
     "pinia": "^2.0.35",
     "sass": "^1.62.0",
     "sweetalert2": "^11.7.3",
