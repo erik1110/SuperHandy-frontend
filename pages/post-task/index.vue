@@ -1,15 +1,9 @@
 <template>
-    <v-dialog v-model="loading">
-        <v-container fullscreen full-width>
-            <div class="d-flex justify-center">
-                <v-progress-circular indeterminate color="indigo"></v-progress-circular>
-            </div>
-        </v-container>
-    </v-dialog>
+    <v-overlay v-model="loading"></v-overlay>
     <v-container>
         <VRow justify='center'>
             <VCol cols='12' lg='10'>
-                <v-form @submit.prevent="submit" ref='postTaskForm'>
+                <v-form @submit.prevent=submit ref='postTaskForm'>
                     <div class=''>
                         <label class='label text-grey-darken-2' for='title'>任務標題</label>
                         <VTextField variant='outlined' :rules='postTaskFormRules.taskTitle.rule' v-model='title'
@@ -19,9 +13,9 @@
 
                     <div class='mt-16'>
                         <label class='label text-grey-darken-2' for='category'>服務類別</label>
-                        <v-autocomplete variant='outlined' :rules='[ruleRequired]' :items='taskCategories' clearable
+                        <v-select variant='outlined' :rules='[ruleRequired]' :items='taskCategories' clearable
                             item-title='name' item-value='name' v-model='category'>
-                        </v-autocomplete>
+                        </v-select>
                     </div>
 
                     <div class='mt-16'>
@@ -33,8 +27,8 @@
 
                     <div class='mt-16'>
                         <label class='label text-grey-darken-2' for='salary'>任務薪水</label>
-                        <VTextField variant='outlined' :rules='[ruleSuperCoint]' v-model='salary' type='number' prefix="$"
-                            suffix="超人幣" required />
+                        <VTextField variant='outlined' :rules='[ruleSuperCoint]' v-model='salary' type='number' prefix=$
+                            suffix=超人幣 required />
                     </div>
 
                     <div class='mt-16'>
@@ -47,59 +41,53 @@
                         </div>
                     </div>
 
-                    <div class="mt-16">
+                    <div class=mt-16>
                         <label class='label text-grey-darken-2' for='exposurePlan'>任務說明照片
-                            <v-chip class="ma-1" color="red" size="x-small">
+                            <v-chip class=ma-1 color=red size=x-small>
                                 非必填
                             </v-chip>
                         </label>
                         <UploadImage></UploadImage>
                     </div>
 
-                    <div class="mt-16">
+                    <div class=mt-16>
                         <label class='label text-grey-darken-2' for='exposurePlan'>任務聯絡人資訊</label>
-                        <v-sheet border="lg opacity-12" class="text-body-2 mx-auto pa-3">
+                        <v-sheet border=lg opacity-12 class=text-body-2 mx-auto pa-3>
                             <v-container fluid>
                                 <v-row>
                                     <v-col>
-                                        <VTextField label="姓名" v-model='contactInfoName'
-                                            :rules='postTaskFormRules.name.rule' :counter='postTaskFormRules.name.counter'
-                                            :hint='postTaskFormRules.name.hint' required />
-                                    </v-col>
-                                </v-row>
-                                <v-row>
-                                    <v-col>
-                                        <VTextField label="聯絡電話" :rules='[rulePhone]' v-model='contactInfoPhone' required />
-                                    </v-col>
-                                    <v-col>
-                                        <VTextField label="EMAIL" :rules='[ruleEmail]' v-model='contactInfoEmail'
+                                        <VTextField label=姓名 v-model='contactInfoName' :rules='postTaskFormRules.name.rule'
+                                            :counter='postTaskFormRules.name.counter' :hint='postTaskFormRules.name.hint'
                                             required />
                                     </v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col>
-                                        <v-autocomplete label="請選擇縣市" :rules='[ruleRequired]' :items='citys' clearable
-                                            item-title='name' item-value='name' v-model='locationCity' required>
+                                        <VTextField label=聯絡電話 :rules='[rulePhone]' v-model='contactInfoPhone' required />
+                                    </v-col>
+                                    <v-col>
+                                        <VTextField label=EMAIL :rules='[ruleEmail]' v-model='contactInfoEmail' required />
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col>
+                                        <v-autocomplete label=請選擇縣市 :rules='[ruleRequired]' :items='citys' clearable
+                                            item-title='city' item-value='city' v-model='locationCity' required>
                                         </v-autocomplete>
                                     </v-col>
                                     <v-col>
-                                        <v-autocomplete label="請選擇區域" :rules='[ruleRequired]' :items='discs' clearable
-                                            item-title='name' item-value='name' v-model='locationDist'
-                                            :disabled="disableDiscs" required>
+                                        <v-autocomplete label=請選擇區域 :rules='[ruleRequired]' :items='discs' clearable
+                                            v-model='locationDist' :hint=hintLocationDisc :readonly=readonlyLocationDisc
+                                            required>
                                         </v-autocomplete>
                                     </v-col>
 
                                 </v-row>
                                 <v-row>
                                     <v-col>
-                                        <VTextField label="地址" :rules='postTaskFormRules.address.rule'
+                                        <VTextField label=地址 :rules='postTaskFormRules.address.rule'
                                             v-model='locationAddress' :counter='postTaskFormRules.address.counter'
                                             :hint='postTaskFormRules.address.hint' required />
-                                    </v-col>
-                                </v-row>
-                                <v-row class="text-center">
-                                    <v-col>
-
                                     </v-col>
                                 </v-row>
                             </v-container>
@@ -107,8 +95,10 @@
                     </div>
 
                     <div class='btns text-center mt-16'>
-                        <v-btn type='submit' class='mt-2' id='draft' :disabled="loading">儲存為草稿</v-btn>
-                        <v-btn type='submit' class='mt-2' id='post' :disabled="loading">立即刊登</v-btn>
+                        <v-btn type='submit' class='mt-2' id='draft' :disabled="loading"
+                            :loading="draftBtnloading">儲存為草稿</v-btn>
+                        <v-btn type='submit' class='mt-2' id='post' :disabled="loading"
+                            :loading="postBtnloading">立即刊登</v-btn>
                     </div>
 
                 </v-form>
@@ -120,10 +110,19 @@
 <script setup>
 import { getCategories, getExposurePlan } from '@/services/apis/general';
 const { basicBox, confirmBox, deleteConfirmBox } = useAlert()
-
+const _status = {
+    draft: 'draft',
+    post: 'post'
+}
+const _message = {
+    draft: '儲存草稿成功',
+    post: '立即刊登成功'
+}
 
 // - 表單初始宣告 -
 const loading = ref(false);
+const draftBtnloading = ref(false);
+const postBtnloading = ref(false);
 const title = ref('');
 const category = ref('');
 const description = ref('');
@@ -151,9 +150,19 @@ postTaskFormRules.exposurePlan = {
 }
 
 
-// - 取得任務類別 & 曝光方案  -
+// - 取得任務類別 & 曝光方案 & 取得縣市與地區 -
 const exposurePlans = ref([])
 const taskCategories = ref([])
+const fakedataCitys = [
+    { city: '台北市' },
+    { city: '新北市' },
+    { city: '高雄市' },
+]
+const fakedataDiscs = [
+    { city: '台北市', disc: '大同區' },
+    { city: '新北市', disc: '中正區' },
+    { city: '高雄市', disc: '信義區' },
+]
 function getAllData() {
     Promise.all([
         getExposurePlan(),
@@ -171,46 +180,33 @@ onMounted(() => getAllData())
 
 
 // - 取得縣市 -
-const citys = ref([])
-citys.value = [
-    { name: '台北市' },
-    { name: '新北市' },
-    { name: '高雄市' },
-]
-// onMounted(async () => {
-//     try {
-//         let { data } = await getCategories();
-//         //console.log(data);
-//         citys.value = data;
-//     } catch (err) {
-//         console.log({ err });
-//     }
-// })
+const citys = computed(() => {
+    return fakedataCitys;
+})
 
 
-// - 取得地區 -
-const discs = ref([])
-discs.value = [
-    { name: '大同區' },
-    { name: '中正區' },
-    { name: '信義區' },
-]
-// onMounted(async () => {
-//     try {
-//         let { data } = await getCategories();
-//         //console.log(data);
-//         discs.value = data;
-//     } catch (err) {
-//         console.log({ err });
-//     }
-// })
+// - 跟據縣市顯示地區選單 -
+const hintLocationDisc = ref('')
+const readonlyLocationDisc = ref(false)
+const discs = computed(() => {
+    if (!locationCity.value) {
+        hintLocationDisc.value = '請先選擇縣市'
+        readonlyLocationDisc.value = true
+    } else {
+        hintLocationDisc.value = ''
+        readonlyLocationDisc.value = false
+        const result = fakedataDiscs.filter(item => item.city === locationCity.value)
+        return Object.values(result).map(item => item.disc)
+    }
+})
+
 
 
 // - 送出表單 -
 const postTaskForm = ref(null)
 const submit = async (event) => {
-
-    //console.log(event.submitter.id, 'submitter')
+    const _submitter = event.submitter.id
+    console.log(_submitter, 'submitter')
 
     //1. 表單檢查
     // const result = await validateFormResult(postTaskForm)
@@ -223,50 +219,67 @@ const submit = async (event) => {
 
     //2. 開啟loading & disable btns
     loading.value = true
+    switch (_submitter) {
+        case _status.draft:
+            draftBtnloading.value = true
+            break;
+        case _status.post:
+            postBtnloading.value = true
+            break;
+        default:
+            break;
+    }
 
     //3. 組裝資料
+    const data = {
+        title: title.value,
+        status: _submitter,
+        category: category.value,
+        description: description.value,
+        salary: salary.value,
+        exposurePlan: exposurePlan.value,
+        imagesUrl: [],
+        contactInfo: {
+            name: contactInfoName,
+            phone: contactInfoPhone,
+            email: contactInfoEmail
+        },
+        location: {
+            city: locationCity.value,
+            dist: locationDist.value,
+            address: locationAddress.value,
+            landmark: locationLandmark.value,
+            lng: locationLongitude.value,
+            lat: locationLatitude.value
+        }
+    }
+    console.log(data, 'data')
 
 
     //4. 更新資料
+    //5. 關閉loading
     setTimeout(() => {
         loading.value = false
+        draftBtnloading.value = false
+        postBtnloading.value = false
+        postTaskForm.value.reset()
     }, 5000)
 
-    //5. 關閉loading
+
 
 };
 
 
 // - 選擇服務類別帶出任務說明 -
-function _getTaskCategoriesTemplate(category) {
-    const result = taskCategories.value.filter((item) => item.name === category)
-    return result[0].template
-}
 watch(
     category,
     (val) => {
-        //console.log(val, 'category')
-        description.value = _getTaskCategoriesTemplate(val)
-    },
-);
-// - 選擇縣市帶出地區 -
-const disableDiscs = ref(true)
-watch(
-    locationCity,
-    (val) => {
-        console.log(val, 'locationCity')
-        if (val && val.length > 0) {
-            //打開區域選單
-            disableDiscs.value = false
-        } else {
-            //關閉區域選單
-            disableDiscs.value = true
+        if (val && taskCategories) {
+            const result = taskCategories.value.filter((item) => item.name === val)
+            description.value = result[0].template
         }
     },
 );
-
-
-// - 開啟
 
 
 </script>
