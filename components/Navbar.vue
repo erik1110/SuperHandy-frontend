@@ -1,10 +1,9 @@
 <template>
   <!-- <nav style="background-color: lightblue;">Logo</nav> -->
-  <v-app-bar :elevation="2" class="sp-mb-4 text-white" density="compact" color="primary">
+  <v-app-bar :elevation="2" class="sp-mb-4" density="compact" color="white">
     <template v-slot:prepend>
       <NuxtLink class="sp-inline-flex" to="/">
-        <v-icon>mdi-star-face</v-icon>
-        <h1 class="sp-italic sp-text-3xl sp-font-cursive">SuperHandy</h1>
+        <div class="logo"></div>
       </NuxtLink>
     </template>
     <template v-slot:append>
@@ -12,7 +11,7 @@
         <v-btn>找任務</v-btn>
       </NuxtLink>
       <NuxtLink to="/post-task">
-        <v-btn variant="outlined">刊登任務</v-btn>
+        <v-btn>刊登任務</v-btn>
       </NuxtLink>
       <v-btn icon size="small"><v-icon>mdi-bell</v-icon>
         <v-menu activator="parent">
@@ -58,3 +57,22 @@ import { storeAuth } from "@/stores/storeAuth";
 const _storeAuth = storeAuth();
 
 </script>
+<style scoped>
+.logo,
+.logo::after {
+  position: relative;
+  width: 120px;
+  min-height: 48px;
+  top: 0;
+  left: 0;
+}
+
+.logo::after {
+  content: '';
+  position: absolute;
+  background-image: url('@/assets/images/logo.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+}
+</style>
