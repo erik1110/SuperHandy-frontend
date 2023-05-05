@@ -9,11 +9,11 @@
       - 或使用 SuperHandy 帳號密碼登入 -
     </div>
     <v-form v-model="form" @submit.prevent="onSubmit">
-      <v-text-field v-model="sginInData.account" :readonly="loading" :rules="[ruleRequired]" class="mb-2" clearable
-        label="信箱/手機" density="compact"></v-text-field>
+      <v-text-field v-model="account" :readonly="loading" :rules="[ruleRequired]" class="mb-2" clearable label="信箱/手機"
+        density="compact"></v-text-field>
 
-      <v-text-field v-model="sginInData.password" :readonly="loading" :rules="[ruleRequired]" clearable label="密碼"
-        type="password" density="compact">
+      <v-text-field v-model="password" :readonly="loading" :rules="[ruleRequired]" clearable label="密碼" type="password"
+        density="compact">
         <template #details>
           <p @click="sendResetDialog = true"
             class="sp-text-blue-600 sp-text-right sp-font-bold sp-text-xs sp-cursor-pointer">忘記密碼
@@ -63,15 +63,18 @@ const {
 } = useFormUtil()
 // Form
 const form = ref(false)
-const sginInData = ref({
-  account: null,
-  password: null,
-})
+
+const account = ref(null)
+const password = ref(null)
 const onSubmit = async () => {
   if (!form.value) return
   loading.value = true
   try {
-    let res = await postLogin(sginInData)
+    let payload = {
+      account: account.value,
+      password: password.value
+    }
+    let res = await postLogin(payload)
     console.log({ res });
     if (res.error) {
       errMsg.value = res.message
@@ -94,7 +97,7 @@ const onSubmit = async () => {
 const resendEmail = async function () {
   resendLoading.value = true
   let payload = {
-    email: sginInData.value.account,
+    email: account.value,
   };
   let res = await postResendVerification(payload);
   if (!res.error) {
@@ -112,10 +115,8 @@ const resendEmail = async function () {
 const { query } = useRoute()
 onMounted(() => {
   if (query.dev == 1) {
-    sginInData.value = {
-      account: 'simola5631@syinxun.com',
-      password: '11111111',
-    }
+    account.value = 'simola5631@syinxun.com'
+    password.value = '11111111'
   }
 })
 
