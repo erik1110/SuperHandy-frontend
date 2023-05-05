@@ -26,7 +26,7 @@
         </v-menu>
       </v-btn>
       <!-- <NuxtLink to="/account"> -->
-      <v-btn v-if="_storeAuth.isLogin" icon><v-icon>mdi-account-circle</v-icon>
+      <v-btn v-if="_storeAuth.loginToken" icon><v-icon>mdi-account-circle</v-icon>
         <v-menu activator="parent">
           <v-list>
             <NuxtLink v-for="(item, index) in items" :key="index" :value="index" :to="item.to">
@@ -47,11 +47,11 @@
 <script setup>
 // Account Menu Data
 const items = [
-  { title: "登入", to: "/auth/login" },
   { title: "我的帳號", to: "/account" },
   { title: "任務管理", to: "/account/tasks" },
   { title: "評價查看", to: "/account/comments" },
   { title: "點數管理", to: "/account/points" },
+  { title: "登出", to: "/auth/login" },
 ];
 // Auth
 import { storeAuth } from "@/stores/storeAuth";
