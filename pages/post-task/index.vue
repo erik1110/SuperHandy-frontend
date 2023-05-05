@@ -65,18 +65,18 @@
                                     <v-col cols="12" md="6">
                                         <v-text-field label=聯絡電話 :rules='[rulePhone]' v-model='contactInfoPhone' required />
                                     </v-col>
-                                    <v-col>
+                                    <v-col cols="12" md="6">
                                         <v-text-field label=EMAIL :rules='[ruleEmail]' v-model='contactInfoEmail'
                                             required />
                                     </v-col>
                                 </v-row>
                                 <v-row>
-                                    <v-col>
+                                    <v-col cols="12" md="6">
                                         <v-autocomplete label=請選擇縣市 :rules='[ruleRequired]' :items='citys' clearable
                                             item-title='city' item-value='city' v-model='locationCity' required>
                                         </v-autocomplete>
                                     </v-col>
-                                    <v-col>
+                                    <v-col cols="12" md="6">
                                         <v-autocomplete label=請選擇區域 :rules='[ruleRequired]' :items='discs' clearable
                                             v-model='locationDist' :hint=hintLocationDisc :readonly=readonlyLocationDisc
                                             required>
