@@ -1,24 +1,25 @@
 <template>
   <div>
-    <header class="landing__background sp-flex sp-justify-center">
-      <div class="sp-mt-[30px] sp-flex sp-flex-col sp-text-white sp-max-w-[400px]">
-        <h1 class="sp-hidden">來一場地圖尋寶<br />
-          找到你的任務機會
-        </h1>
-        <div class="slogon_img"></div>
-        <v-btn class="text-white" color="v-purple" rounded>成為幫手</v-btn>
-        <!-- <v-btn class="sp-mt-4 text-white" color="blue">成為幫手</v-btn> -->
-      </div>
-    </header>
-    <div>Current Count: {{ counter.count }}</div>
-    <button @click="counter.increment()">+1</button>
+    <div class="wrapper">
+      <header>
+        <img src="../assets/images/bg/bg-1.png" class="back" />
+        <img src="../assets/images/bg/bg-2.png" class="fore" />
+        <div class="sp-flex sp-flex-col sp-items-center">
+          <img src="../assets/images/bg/slogon.png" class="sp-max-w-sm sp-mb-4" />
+          <v-btn class="text-white" max-width="100" color="v-purple" rounded>成為幫手</v-btn>
+        </div>
+      </header>
+    </div>
+    <div class="sp-bg-[#DFDFFF] sp-h-[100vh]"></div>
+    <div class="sp-bg-[#0C0D50] sp-h-[100vh]">
+      <Counter />
+    </div>
+
   </div>
 </template>
 
 <script setup>
-import { useCounterStore } from "@/stores/counter";
 import { getCompletedCases } from '@/services/apis/home'
-const counter = useCounterStore();
 const testData = ref({})
 
 onMounted(async () => {
@@ -35,53 +36,41 @@ onMounted(async () => {
 </script>
 
 <style scoped lang="scss">
-.landing__background,
-.landing__background::before,
-.landing__background::after {
-  position: relative;
-  left: 0;
-  right: 0;
-  height: calc(100vh - 3rem);
-  min-height: 750px;
+.wrapper {
+  height: 85vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  perspective: 10px;
 }
 
-.landing__background::after {
-  height: 100vh;
-  position: absolute;
-  top: -72px;
+header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  transform-style: preserve-3d;
   z-index: -1;
-  content: '';
-  background-image: url('@/assets/images/bg-landing-2.svg');
-  background-repeat: no-repeat;
-  background-position: center top 4rem;
-  background-size: 100%;
 }
 
-.slogon_img,
-.slogon_img::after {
-  position: relative;
-  width: 300px;
-  min-height: 180px;
-  top: 0;
-  left: 0;
+.back {
+  transform: translateZ(-10px) scale(2);
 }
 
-.slogon_img::after {
-  content: '';
+.fore {
+  transform: translateZ(-5px) scale(1.5);
+}
+
+.back,
+.fore {
   position: absolute;
-  background-image: url('@/assets/images/slogon.svg');
-  background-repeat: no-repeat;
-  background-position: center top 4rem;
-  background-size: 100%;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  z-index: -1;
 }
 
-// .landing__background::before {
-//   height: 100vh;
-//   position: absolute;
-//   top: -72px;
-//   z-index: -1;
-//   content: '';
-//   background: #3dc2eb;
-
-// }
+.title {
+  max-width: 350px;
+}
 </style>
