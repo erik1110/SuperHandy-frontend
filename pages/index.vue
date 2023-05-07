@@ -10,7 +10,17 @@
         </div>
       </header>
     </div>
-    <div class="sp-bg-[#DFDFFF] sp-h-[100vh]"></div>
+    <section class="sp-bg-[#DFDFFF] sp-h-[100vh] sp-max-h-[600px] section-2 sp-relative">
+      <v-container class="sp-flex sp-flex-row">
+        <div class="sp-basis-1/2 sp-p-8">
+          <img src="../assets/images/bg/bg-s2-left.png" alt="">
+        </div>
+        <div class="content sp-basis-1/2">
+          <IconSmile class="icon"></IconSmile>
+          <HomeCard v-for="(cardData, idx) in intro" :card-data="cardData" :key="idx" />
+        </div>
+      </v-container>
+    </section>
     <div class="sp-bg-[#0C0D50] sp-h-[100vh]">
       <Counter />
     </div>
@@ -20,6 +30,10 @@
 
 <script setup>
 import { getCompletedCases } from '@/services/apis/home'
+import IconSmile from "@/assets/images/icons/smile.svg"
+import homeData from "@/static/home.json"
+const { intro } = homeData
+
 const testData = ref({})
 
 onMounted(async () => {
@@ -41,6 +55,14 @@ onMounted(async () => {
   overflow-y: auto;
   overflow-x: hidden;
   perspective: 10px;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.wrapper::-webkit-scrollbar {
+  display: none;
 }
 
 header {
@@ -70,7 +92,21 @@ header {
   z-index: -1;
 }
 
-.title {
-  max-width: 350px;
+.section-2::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: url(../assets/images/bg/bg-s2.png) center no-repeat;
+  background-size: contain;
+  opacity: 0.8;
+  z-index: 1;
+  /* Set a specific height */
+  // min-height: 500px;
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
 }
 </style>

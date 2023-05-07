@@ -10,6 +10,9 @@ dependencies:
   '@pinia/nuxt':
     specifier: ^0.4.9
     version: 0.4.9(vue@3.2.47)
+  nuxt-swiper:
+    specifier: ^1.1.0
+    version: 1.1.0
   pinia:
     specifier: ^2.0.35
     version: 2.0.35(vue@3.2.47)
@@ -24,6 +27,9 @@ dependencies:
     version: 3.1.13(vue@3.2.47)
 
 devDependencies:
+  '@lewebsimple/nuxt3-svg':
+    specifier: ^0.2.2
+    version: 0.2.2
   '@nuxtjs/tailwindcss':
     specifier: ^6.6.6
     version: 6.6.6(webpack@5.80.0)
@@ -618,6 +624,16 @@ packages:
       - supports-color
     dev: true
 
+  /@lewebsimple/nuxt3-svg@0.2.2:
+    resolution: {integrity: sha512-P3ORrTRmYm85GPVyHqtY5YEtaOUEA8LBIsow8IsQs2PYmqdeB+/aDnnBqCXMhsRdHOu4LNAH0pGOYEuCmbe7TA==}
+    dependencies:
+      '@nuxt/kit': 3.4.3
+      vite-svg-loader: 4.0.0
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
+    dev: true
+
   /@mapbox/node-pre-gyp@1.0.10:
     resolution: {integrity: sha512-4ySo4CjzStuprMwk35H5pPbkymjv1SF3jGLj6rAHp/xT/RF7TL7bd9CTm1xDY49K2qF7jmR/g7k+SkLETP6opA==}
     hasBin: true
@@ -720,7 +736,6 @@ packages:
     transitivePeerDependencies:
       - rollup
       - supports-color
-    dev: true
 
   /@nuxt/postcss8@1.1.3(webpack@5.80.0):
     resolution: {integrity: sha512-CdHtErhvQwueNZPBOmlAAKrNCK7aIpZDYhtS7TzXlSgPHHox1g3cSlf+Ke9oB/8t4mNNjdB+prclme2ibuCOEA==}
@@ -770,7 +785,6 @@ packages:
     transitivePeerDependencies:
       - rollup
       - supports-color
-    dev: true
 
   /@nuxt/telemetry@2.2.0:
     resolution: {integrity: sha512-Z2UmPkBy5WjxvHKuUcl1X6vKWnIyWSP+9UGde1F+MzzZxYgAQybFud1uL2B3KCowxZdoqT1hd2WklV7EtyCwrQ==}
@@ -3826,6 +3840,16 @@ packages:
       fsevents: 2.3.2
     dev: true
 
+  /nuxt-swiper@1.1.0:
+    resolution: {integrity: sha512-DJFxKLIKvJw8BQ4VL/64Eu/znOL9UlQA07R4vA4fJCUxbk/vUvgrWEX1fRS7z7+vb2tEY8HIAxSLdoRSneFogA==}
+    dependencies:
+      '@nuxt/kit': 3.4.3
+      swiper: 9.2.4
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
+    dev: false
+
   /nuxt@3.4.2(@types/node@18.0.0)(sass@1.62.0):
     resolution: {integrity: sha512-4v+oeBL4ZI8nHzF0Dm1p5kF9VCNlzrpvOt7wu3BnmzlueXsu4A/LfmFvpfZLxws+r5U74eM5Ut/LMD8B8LrZIw==}
     engines: {node: ^14.18.0 || ^16.10.0 || ^17.0.0 || ^18.0.0 || ^19.0.0}
@@ -4978,6 +5002,10 @@ packages:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
     deprecated: Please use @jridgewell/sourcemap-codec instead
 
+  /ssr-window@4.0.2:
+    resolution: {integrity: sha512-ISv/Ch+ig7SOtw7G2+qkwfVASzazUnvlDTwypdLoPoySv+6MqlOV10VwPSE6EWkGjhW50lUmghPmpYZXMu/+AQ==}
+    dev: false
+
   /standard-as-callback@2.1.0:
     resolution: {integrity: sha512-qoRRSyROncaz1z0mvYqIE4lCd9p2R90i6GxW3uZv5ucSu8tU7B5HXUP1gG8pVZsYNVaXjk8ClXHPttLyxAL48A==}
     dev: true
@@ -5129,6 +5157,13 @@ packages:
 
   /sweetalert2@11.7.3:
     resolution: {integrity: sha512-fUN/fyVSBZNtY4Rr/Qtxn7tNNnlRAbUhQxTQ9uOo0xVMIHBmqq4/9pau5N9dB2pvkB353XL/ywRAycscLoYU3w==}
+    dev: false
+
+  /swiper@9.2.4:
+    resolution: {integrity: sha512-L7y3K/iiMXNYQ94FbfcJn7jex4QPnS4+voXGupTdC+UHW4XrR40QDdm4c9hXJ+Br0Il7PP0vP1W3goM9/Ly6Sg==}
+    engines: {node: '>= 4.7.0'}
+    dependencies:
+      ssr-window: 4.0.2
     dev: false
 
   /tailwind-config-viewer@1.7.2(tailwindcss@3.3.1):
@@ -5546,6 +5581,13 @@ packages:
       vscode-languageserver: 7.0.0
       vscode-languageserver-textdocument: 1.0.8
       vscode-uri: 3.0.7
+    dev: true
+
+  /vite-svg-loader@4.0.0:
+    resolution: {integrity: sha512-0MMf1yzzSYlV4MGePsLVAOqXsbF5IVxbn4EEzqRnWxTQl8BJg/cfwIzfQNmNQxZp5XXwd4kyRKF1LytuHZTnqA==}
+    dependencies:
+      '@vue/compiler-sfc': 3.2.47
+      svgo: 3.0.2
     dev: true
 
   /vite@4.3.1(@types/node@18.0.0)(sass@1.62.0):

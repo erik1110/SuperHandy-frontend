@@ -10,6 +10,7 @@
     "start": "node .output/server/index.mjs"
   },
   "devDependencies": {
+    "@lewebsimple/nuxt3-svg": "^0.2.2",
     "@nuxtjs/tailwindcss": "^6.6.6",
     "@types/node": "^18",
     "@vueuse/core": "^10.1.2",

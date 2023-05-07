@@ -24,6 +24,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@vueuse/nuxt",
     "nuxt-swiper",
+    "@lewebsimple/nuxt3-svg",
     [
       "@nuxtjs/google-fonts",
       {
