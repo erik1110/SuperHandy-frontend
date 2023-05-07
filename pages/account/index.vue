@@ -1,7 +1,7 @@
 <template>
   <div>
     <VContainer fluid>
-      <VRow justify="center">
+      <VRow>
         <VCol cols="12">
           <!-- avatar start -->
           <VRow class="">
@@ -20,11 +20,9 @@
           </VRow>
           <!-- avatar end -->
           <!-- pointsBar start -->
-          <VRow class="mt-5">
-            <VCol>
-              <AccountPointsBar />
-            </VCol>
-          </VRow>
+          <div class="my-5" width="800px">
+            <AccountPointsBar />
+          </div>
           <!-- pointsBar end -->
           <!-- AccountProfile start -->
           <VRow>
