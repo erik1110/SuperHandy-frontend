@@ -37,7 +37,7 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 .wrapper {
-  height: 85vh;
+  height: 75vh;
   overflow-y: auto;
   overflow-x: hidden;
   perspective: 10px;
