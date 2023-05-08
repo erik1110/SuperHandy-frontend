@@ -6,6 +6,6 @@ export const getCompletedCases = () => req("GET", `/home/completed-cases`);
 // export const getCompletedCases = () =>
 //   req("PATCH", `/verify-email`, {}, { token: "hello" });
 
-// 需登入的API
-// getCompletedCases = () =>
-//   req("POST", `/verify-email`, {}, { auth: true });
+// 需登入的API(example)
+export const getAccountProfile = () =>
+  req("GET", `/account/profile`, {}, { auth: true });

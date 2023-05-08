@@ -33,6 +33,9 @@
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item>
             </NuxtLink>
+            <v-list-item @click="logout">
+              <v-list-item-title>登出</v-list-item-title>
+            </v-list-item>
           </v-list>
         </v-menu>
       </v-btn>
@@ -50,11 +53,16 @@ const items = [
   { title: "任務管理", to: "/account/tasks" },
   { title: "評價查看", to: "/account/comments" },
   { title: "點數管理", to: "/account/points" },
-  { title: "登出", to: "/auth/login" },
+  // { title: "登出", to: "/auth/login" },
 ];
 // Auth
 import { storeAuth } from "@/stores/storeAuth";
 const _storeAuth = storeAuth();
+
+const logout = () => {
+  _storeAuth.setLoginToken("")
+  navigateTo('/auth/login')
+}
 
 </script>
 <style scoped>
