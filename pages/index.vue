@@ -10,21 +10,22 @@
         </div>
       </header>
     </div>
+    <div class="sp-bg-[#DFDFFF] sp-h-[100vh]">
+      <v-btn @click="fetchAccountProfile">getAccountProfile</v-btn>
+      {{ profileData }}
+    </div>
     <section class="sp-bg-[#DFDFFF] sp-h-[100vh] sp-max-h-[600px] section-2 sp-relative">
       <v-container class="sp-flex sp-flex-row">
         <div class="sp-basis-1/2 sp-p-8">
           <img src="../assets/images/bg/bg-s2-left.png" alt="">
         </div>
-        <div class="content sp-basis-1/2">
+
+        <div ref="introCards" class="content sp-basis-1/2 animate__animated animate__lightSpeedInRight">
           <IconSmile class="icon"></IconSmile>
-          <HomeCard v-for="(cardData, idx) in intro" :card-data="cardData" :key="idx" />
+          <HomeCard class="introCard" v-for="(cardData, idx) in intro" :card-data="cardData" :key="idx" />
         </div>
       </v-container>
     </section>
-    <div class="sp-bg-[#DFDFFF] sp-h-[100vh]">
-      <v-btn @click="fetchAccountProfile">getAccountProfile</v-btn>
-      {{ profileData }}
-    </div>
     <div class="sp-bg-[#0C0D50] sp-h-[100vh]">
       <Counter />
     </div>
@@ -39,8 +40,65 @@ import homeData from "@/static/home.json"
 const { intro } = homeData
 
 const testData = ref({})
+const introCards = ref(null)
 
 onMounted(async () => {
+  parallaxInit()
+  await fetchCompletedCases()
+  // const animateEl = this.$el.querySelector('.introCard'); // 取得 .animate 元素
+  console.log(introCards.value);
+  // 創建一個新的 IntersectionObserver 監聽器
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        console.log('in Section');
+        // introCards.value.classList.add('animate__animated animate__lightSpeedInRight')
+        // introCard.value.classList.add('animate__animated animate__lightSpeedInRight'); // 元素進入可視區域，添加 .animated 類別
+        observer.unobserve(entry.target); // 停止監聽該元素
+      }
+    });
+  });
+
+  // 監聽 .animate 元素是否進入可視區域
+  observer.observe(introCards.value);
+  // observerInit()
+})
+// Init
+let windowMousewheel = () => {
+  let wrapper = document.querySelector("html");
+  let content = document.querySelector(".wrapper");
+  if (content.scrollTop + content.clientHeight < content.scrollHeight && event.deltaY > 0) {
+    content.scrollTop += event.deltaY / 2;
+  } else if (wrapper.scrollTop < content.clientHeight && event.deltaY < 0) {
+    content.scrollTop += event.deltaY / 2;
+  }
+}
+const parallaxInit = () => {
+  window.addEventListener('mousewheel', windowMousewheel)
+}
+onUnmounted(async () => {
+  window.removeEventListener("mousewheel", windowMousewheel);
+});
+
+const observerInit = () => {
+  const animateEl = this.$el.querySelector('.introCard'); // 取得 .animate 元素
+
+  // 創建一個新的 IntersectionObserver 監聽器
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateEl.classList.add('animate__animated animate__lightSpeedInRight'); // 元素進入可視區域，添加 .animated 類別
+        observer.unobserve(entry.target); // 停止監聽該元素
+      }
+    });
+  });
+
+  // 監聽 .animate 元素是否進入可視區域
+  observer.observe(animateEl);
+}
+
+// Fetch
+const fetchCompletedCases = async () => {
   try {
     let { data } = await getCompletedCases()
     // console.log(data);
@@ -48,25 +106,15 @@ onMounted(async () => {
   } catch (err) {
     console.log({ err });
   }
-  parallaxInit()
-})
-const parallaxInit = () => {
-  window.addEventListener('mousewheel', function (event) {
-    let wrapper = document.querySelector("html");
-    let content = document.querySelector(".wrapper");
-    if (content.scrollTop + content.clientHeight < content.scrollHeight && event.deltaY > 0) {
-      content.scrollTop += event.deltaY / 2;
-    } else if (wrapper.scrollTop < content.clientHeight && event.deltaY < 0) {
-      content.scrollTop += event.deltaY / 2;
-    }
-  })
 }
 // Test: API with token
 const profileData = ref({})
+
 const fetchAccountProfile = async () => {
   try {
     let res = await getAccountProfile()
-    profileData.value = res.data
+    console.log({ res });
+    profileData.value = res
   } catch (err) {
     console.log({ err });
   }
@@ -132,6 +180,6 @@ header {
   // min-height: 500px;
 
   /* Create the parallax scrolling effect */
-  background-attachment: fixed;
+  // background-attachment: fixed;
 }
 </style>

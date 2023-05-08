@@ -2,7 +2,8 @@
   <v-card width="400" elevation="0">
     <v-card-item>
       <v-card-title class="font-weight-bold">
-        <component :is="IconSmile"></component>
+        <!-- <IconSmile /> -->
+        <component :is="cardData.icon"></component>
         {{ cardData.title }}
       </v-card-title>
     </v-card-item>

@@ -5,6 +5,12 @@ export default defineNuxtConfig({
       charset: "utf-8",
       viewport: "width=device-width, initial-scale=1",
       title: "超人幫手",
+      link: [
+        {
+          rel: "stylesheet",
+          src: "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css",
+        },
+      ],
     },
   },
   css: [
