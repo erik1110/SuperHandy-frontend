@@ -8,4 +8,4 @@ export const getCompletedCases = () => req("GET", `/home/completed-cases`);
 
 // 需登入的API(example)
 export const getAccountProfile = () =>
-  req("GET", `/account/info-form`, {}, { auth: true });
+  req("GET", `/account/profile`, {}, { auth: true });
