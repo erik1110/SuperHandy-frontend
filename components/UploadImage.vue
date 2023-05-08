@@ -58,7 +58,7 @@ function upload() {
 
 .swiper-slide {
     min-width: 140px;
-    min-height: 100;
+    min-height: 100px;
     display: flex;
     background: #fff;
 }

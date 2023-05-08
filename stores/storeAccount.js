@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import {
   getAccountInfoUrl,
-  updateAccountInfoUrl,
+  patchAccountInfoUrl,
 } from "@/services/apis/account";
 const { req } = useHttp();
 
@@ -13,10 +13,10 @@ export const storeAccount = defineStore("storeAccount", () => {
     firstName: "",
     helperIntro: "",
     lastName: "",
-    nickName: "",
+    nickname: "",
     phone: "",
     posterIntro: "",
-    helperSpecialities: [],
+    helperSkills: [],
   });
   const user = computed({
     get() {
@@ -26,7 +26,7 @@ export const storeAccount = defineStore("storeAccount", () => {
 
   //取得會員資料
   function getAccount() {
-    req("GET", getAccountInfoUrl)
+    req("GET", getAccountInfoUrl, {}, { auth: true })
       .then((response) => {
         //console.log(response, "respaonse");
         if (!response || !response?.userInfoForm) {
@@ -49,7 +49,7 @@ export const storeAccount = defineStore("storeAccount", () => {
 
   //更新會員資料
   function updateAccount(data, successFun, failFun) {
-    req("PATCH", updateAccountInfoUrl, data)
+    req("PATCH", patchAccountInfoUrl, data, { auth: true })
       .then((response) => {
         if (typeof successFun === "function") {
           successFun();
