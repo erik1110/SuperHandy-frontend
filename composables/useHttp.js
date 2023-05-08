@@ -12,7 +12,9 @@ export const useHttp = () => {
         //options.initialCache = false;
         //Header攜帶token回後端
         if (options.auth) {
-          options.headers.authorization = `Bearer token from localStorage`;
+          let spToken = localStorage.getItem("spToken");
+          // if(localStorage.getItem('spToken'))
+          options.headers.authorization = `Bearer ${spToken}`;
         }
         if (options.token) {
           options.headers.authorization = `Bearer ${options.token}`;

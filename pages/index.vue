@@ -10,7 +10,10 @@
         </div>
       </header>
     </div>
-    <div class="sp-bg-[#DFDFFF] sp-h-[100vh]"></div>
+    <div class="sp-bg-[#DFDFFF] sp-h-[100vh]">
+      <v-btn @click="fetchAccountProfile">getAccountProfile</v-btn>
+      {{ profileData }}
+    </div>
     <div class="sp-bg-[#0C0D50] sp-h-[100vh]">
       <Counter />
     </div>
@@ -19,7 +22,7 @@
 </template>
 
 <script setup>
-import { getCompletedCases } from '@/services/apis/home'
+import { getCompletedCases, getAccountProfile } from '@/services/apis/home'
 const testData = ref({})
 
 onMounted(async () => {
@@ -32,12 +35,22 @@ onMounted(async () => {
   }
 
 })
+// Test: API with token
+const profileData = ref({})
+const fetchAccountProfile = async () => {
+  try {
+    let res = await getAccountProfile()
+    profileData.value = res.data
+  } catch (err) {
+    console.log({ err });
+  }
+}
 
 </script>
 
 <style scoped lang="scss">
 .wrapper {
-  height: 85vh;
+  height: 75vh;
   overflow-y: auto;
   overflow-x: hidden;
   perspective: 10px;
