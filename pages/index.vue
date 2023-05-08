@@ -33,8 +33,19 @@ onMounted(async () => {
   } catch (err) {
     console.log({ err });
   }
-
+  parallaxInit()
 })
+const parallaxInit = () => {
+  window.addEventListener('mousewheel', function (event) {
+    let wrapper = document.querySelector("html");
+    let content = document.querySelector(".wrapper");
+    if (content.scrollTop + content.clientHeight < content.scrollHeight && event.deltaY > 0) {
+      content.scrollTop += event.deltaY / 2;
+    } else if (wrapper.scrollTop < content.clientHeight && event.deltaY < 0) {
+      content.scrollTop += event.deltaY / 2;
+    }
+  })
+}
 // Test: API with token
 const profileData = ref({})
 const fetchAccountProfile = async () => {
@@ -51,7 +62,7 @@ const fetchAccountProfile = async () => {
 <style scoped lang="scss">
 .wrapper {
   height: 75vh;
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
   perspective: 10px;
 }
