@@ -26,26 +26,26 @@ import { getCompletedCases, getAccountProfile } from '@/services/apis/home'
 const testData = ref({})
 
 onMounted(async () => {
-  try {
-    let { data } = await getCompletedCases()
-    // console.log(data);
-    testData.value = data
-  } catch (err) {
-    console.log({ err });
-  }
   parallaxInit()
 })
-const parallaxInit = () => {
-  window.addEventListener('mousewheel', function (event) {
-    let wrapper = document.querySelector("html");
-    let content = document.querySelector(".wrapper");
-    if (content.scrollTop + content.clientHeight < content.scrollHeight && event.deltaY > 0) {
-      content.scrollTop += event.deltaY / 2;
-    } else if (wrapper.scrollTop < content.clientHeight && event.deltaY < 0) {
-      content.scrollTop += event.deltaY / 2;
-    }
-  })
+/* Init */
+// sec1-滾動視差
+let windowMousewheel = () => {
+  let wrapper = document.querySelector("html");
+  let content = document.querySelector(".wrapper");
+  if (content.scrollTop + content.clientHeight < content.scrollHeight && event.deltaY > 0) {
+    content.scrollTop += event.deltaY / 2;
+  } else if (wrapper.scrollTop < content.clientHeight && event.deltaY < 0) {
+    content.scrollTop += event.deltaY / 2;
+  }
 }
+const parallaxInit = () => {
+  window.addEventListener('mousewheel', windowMousewheel)
+}
+onUnmounted(async () => {
+  window.removeEventListener("mousewheel", windowMousewheel);
+});
+
 // Test: API with token
 const profileData = ref({})
 const fetchAccountProfile = async () => {

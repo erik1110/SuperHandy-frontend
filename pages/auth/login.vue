@@ -26,7 +26,7 @@
         color="primary text-white" size="large" variant="elevated">
         重寄驗證信
       </v-btn>
-      <v-btn :disabled="!form" :loading="loading" block color="secondary text-white" size="large" type="submit"
+      <v-btn :disabled="!form" :loading="loading" block color="v-purple text-white" size="large" type="submit"
         variant="elevated">
         登入
       </v-btn>
@@ -42,10 +42,10 @@
 </template>
 
 <script setup>
-import { postLogin } from '~/services/apis/auth'
-import { postResendVerification } from "~/services/apis/verifyEmail"
+import { postLogin } from '@/services/apis/auth'
+import { postResendVerification } from "@/services/apis/auth"
 import { storeAuth } from "@/stores/storeAuth";
-import { storeGlobal } from '~/stores/storeGlobal';
+import { storeGlobal } from '@/stores/storeGlobal';
 const _storeGlobal = storeGlobal()
 const _storeAuth = storeAuth();
 
@@ -79,7 +79,7 @@ const onSubmit = async () => {
     if (res.error) {
       errMsg.value = res.message
       loading.value = false
-      if (res.error.name == '40010') {
+      if (res.error.name == '40202') {
         showResendBtn.value = true
       }
       return
