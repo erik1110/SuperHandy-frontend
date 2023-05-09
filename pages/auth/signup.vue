@@ -15,7 +15,7 @@
       <v-alert v-if="errMsg" type="error" :icon="false" :text="errMsg" variant="tonal"></v-alert>
       <br />
 
-      <v-btn type="submit" block :disabled="!fields" color="secondary text-white">註冊</v-btn>
+      <v-btn type="submit" block :disabled="!fields" color="v-purple text-white">註冊</v-btn>
     </v-form>
     <div class="sp-text-xs sp-mt-8 sp-text-center">
       <span>已經有帳號？</span>

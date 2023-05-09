@@ -17,7 +17,7 @@
   </AuthSheetWrapper>
 </template>
 <script setup>
-import { patchResetPassword } from "@/services/apis/resetPassword";
+import { patchResetPassword } from "@/services/apis/auth";
 import { storeGlobal } from '~/stores/storeGlobal';
 const _storeGlobal = storeGlobal()
 
