@@ -11,8 +11,8 @@
       </header>
     </div>
     <section class="sp-bg-[#DFDFFF] sp-h-[100vh] sp-max-h-[600px] section-2 sp-relative sp-py-20 sp-px-12">
-      <v-container class="sp-flex sp-flex-row">
-        <div ref="sec2Img" class="sp-basis-1/2 sp-p-8">
+      <v-container class="sp-flex sp-flex-row sm:sp-flex-wrap">
+        <div ref="sec2Img" class="sp-basis-1/2 sp-p-8 ">
           <img src="../assets/images/bg/bg-s2-left.png" alt="">
         </div>
 
