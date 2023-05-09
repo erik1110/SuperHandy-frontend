@@ -12,7 +12,8 @@ export const useHttp = () => {
         //options.initialCache = false;
         //Header攜帶token回後端
         if (options.auth) {
-          let spToken = localStorage.getItem("spToken");
+          let spToken = useCookie("spToken");
+          console.log(spToken);
           // if(localStorage.getItem('spToken'))
           options.headers.authorization = `Bearer ${spToken}`;
         }
