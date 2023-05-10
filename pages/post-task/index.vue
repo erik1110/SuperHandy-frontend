@@ -3,7 +3,7 @@
     <v-container>
         <VRow justify='center'>
             <VCol cols='12' lg='10'>
-                <v-form @submit.prevent=submit ref='postTaskForm'>
+                <v-form @submit.prevent=submit ref='postTaskForm' validate-on="submit">
                     <div class=''>
                         <label class='label text-grey-darken-2' for='title'>任務標題</label>
                         <v-text-field variant='outlined' :rules='postTaskFormRules.taskTitle.rule' v-model='title'
@@ -72,15 +72,16 @@
                                 </v-row>
                                 <v-row>
                                     <v-col cols="12" md="6">
-                                        <v-autocomplete label=請選擇縣市 :rules='[ruleRequired]' :items='citys' clearable
-                                            item-title='city' item-value='city' v-model='locationCity' required>
-                                        </v-autocomplete>
+                                        <v-select label=請選擇縣市 :rules='[ruleRequired]' :items='twArea.county' clearable
+                                            item-title='city' item-value='city' v-model='locationCity' required
+                                            @click:clear="clearDisc">
+                                        </v-select>
                                     </v-col>
                                     <v-col cols="12" md="6">
-                                        <v-autocomplete label=請選擇區域 :rules='[ruleRequired]' :items='discs' clearable
-                                            v-model='locationDist' :hint=hintLocationDisc :readonly=readonlyLocationDisc
-                                            required>
-                                        </v-autocomplete>
+                                        <v-select label=請選擇區域 :rules='[ruleRequired]' :items='discList' clearable
+                                            item-title='disc' item-value='disc' v-model='locationDist'
+                                            :hint='hintLocationDisc' :readonly='readonlyLocationDisc' required>
+                                        </v-select>
                                     </v-col>
 
                                 </v-row>
@@ -98,7 +99,7 @@
                     <div class='btns text-center mt-16'>
                         <v-btn type='submit' class='mt-2' id='draft' :disabled="loading"
                             :loading="draftBtnloading">儲存為草稿</v-btn>
-                        <v-btn type='submit' class='mt-2' id='post' :disabled="loading"
+                        <v-btn type='submit' class='mt-2' id='published' :disabled="loading"
                             :loading="postBtnloading">立即刊登</v-btn>
                     </div>
 
@@ -109,13 +110,11 @@
 </template>
 
 <script setup>
+import { twArea } from '@/services/twArea'
+import { siteConfig } from '@/services/siteConfig'
 import { getCategories, getExposurePlan } from '@/services/apis/general';
 const { basicBox, confirmBox, deleteConfirmBox } = useAlert()
 const { logInfo, logError } = useLog();
-const _status = {
-    draft: 'draft',
-    post: 'post'
-}
 const _message = {
     draft: '儲存草稿成功',
     post: '立即刊登成功'
@@ -154,16 +153,6 @@ postTaskFormRules.exposurePlan = {
 // - 取得任務類別 & 曝光方案 & 取得縣市與地區 -
 const exposurePlans = ref([])
 const taskCategories = ref([])
-const fakedataCitys = [
-    { city: '台北市' },
-    { city: '新北市' },
-    { city: '高雄市' },
-]
-const fakedataDiscs = [
-    { city: '台北市', disc: '大同區' },
-    { city: '新北市', disc: '中正區' },
-    { city: '高雄市', disc: '信義區' },
-]
 function getAllData() {
     Promise.all([
         getExposurePlan(),
@@ -177,29 +166,27 @@ function getAllData() {
         basicBox('取得選單資料發生異常')
     })
 }
-onMounted(() => getAllData())
+getAllData()
 
-
-// - 取得縣市 -
-const citys = computed(() => {
-    return fakedataCitys;
-})
 
 
 // - 跟據縣市顯示地區選單 -
 const hintLocationDisc = ref('')
-const readonlyLocationDisc = ref(false)
-const discs = computed(() => {
+const readonlyLocationDisc = ref(true)
+const discList = computed(() => {
     if (!locationCity.value) {
         hintLocationDisc.value = '請先選擇縣市'
         readonlyLocationDisc.value = true
     } else {
         hintLocationDisc.value = ''
         readonlyLocationDisc.value = false
-        const result = fakedataDiscs.filter(item => item.city === locationCity.value)
+        const result = twArea.town.filter(item => item.city === locationCity.value)
         return Object.values(result).map(item => item.disc)
     }
 })
+function clearDisc() {
+    locationDist.value = ''
+}
 
 
 
@@ -221,10 +208,10 @@ const submit = async (event) => {
     //2. 開啟loading & disable btns
     loading.value = true
     switch (_submitter) {
-        case _status.draft:
+        case siteConfig.taskStatus.draft:
             draftBtnloading.value = true
             break;
-        case _status.post:
+        case siteConfig.taskStatus.published:
             postBtnloading.value = true
             break;
         default:
@@ -281,6 +268,7 @@ watch(
         }
     },
 );
+
 
 
 </script>

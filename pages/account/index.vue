@@ -12,7 +12,7 @@
                 <v-icon icon="mdi-camera" size="large" class="aui-camera"></v-icon>
               </label>
               <div class="mt-5 mt-md-0 ml-md-5">
-                <p class="text-h5 font-weight-bold">{{ user.firstName }} {{ user.lastName }}</p>
+                <p class="text-h5 font-weight-bold">{{ user.lastName }}{{ user.firstName }}</p>
                 <p class="text-grey-lighten-1" v-show="user.email">帳號 {{ user.email }}</p>
               </div>
 
@@ -53,9 +53,8 @@ const { basicBox } = useAlert()
 const _storeAccount = storeAccount()
 const { getAccount } = _storeAccount
 const { user } = storeToRefs(_storeAccount)
-onMounted(() => {
-  getAccount()
-});
+getAccount()
+
 
 
 //更新頭像

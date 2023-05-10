@@ -29,4 +29,17 @@ export const siteConfig = {
     postTask: { title: "刊登任務", to: "/post-task" },
     account: { title: "會員帳號", to: "/account" },
   },
+
+  //任務狀態
+  taskStatus: {
+    draft: "draft", //草稿區
+    published: "published", //發布任務
+    unpublished: "unpublished", //已下架
+    deleted: "deleted", //未成立
+    inProgess: "inProgess", //進行中
+    submitted: "submitted", //幫手提交驗收內容
+    confirmed: "confirmed", //案主點確認驗收
+    expired: "expired", //任務過期
+    completed: "completed", //雙方評價完成
+  },
 };

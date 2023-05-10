@@ -12,13 +12,13 @@
             <v-container fluid="">
                 <v-row>
                     <v-col cols="12" md="6">
-                        <label class="label text-grey-darken-2" for="firstName">姓</label>
-                        <v-text-field :rules="profileFormRules.name.rule" v-model="user.firstName" :disabled="isDisabled"
+                        <label class="label text-grey-darken-2" for="lastName">姓</label>
+                        <v-text-field :rules="profileFormRules.name.rule" v-model="user.lastName" :disabled="isDisabled"
                             :counter="profileFormRules.name.counter" :hint="profileFormRules.name.hint" required />
                     </v-col>
                     <v-col cols="12" md="6">
-                        <label class="label text-grey-darken-2" for="lastName">名</label>
-                        <v-text-field :rules="profileFormRules.name.rule" v-model="user.lastName" :disabled="isDisabled"
+                        <label class="label text-grey-darken-2" for="firstName">名</label>
+                        <v-text-field :rules="profileFormRules.name.rule" v-model="user.firstName" :disabled="isDisabled"
                             :counter="profileFormRules.name.counter" :hint="profileFormRules.name.hint" required />
                     </v-col>
                 </v-row>
@@ -139,14 +139,12 @@ watch(() => user.value.helperSkills, (newVal) => {
 
 // - 取得任務類別 -
 const taskCategories = ref([])
-onMounted(async () => {
-    try {
-        let { data } = await getCategories();
-        taskCategories.value = data;
-    } catch (err) {
-        console.log({ err });
-    }
-})
+try {
+    let { data } = await getCategories();
+    taskCategories.value = data;
+} catch (err) {
+    console.log({ err });
+}
 
 
 // - 更新會員資料 -
@@ -164,19 +162,19 @@ const submit = async () => {
     loading.value = true
 
     //3. 組裝資料
-    const data = {
-        firstName: user.value.firstName,
-        lastName: user.value.lastName,
-        nickname: user.value.nickname,
-        address: user.value.address,
-        posterIntro: user.value.posterIntro,
-        helperIntro: user.value.helperIntro,
-        helperSkills: user.value.helperSkills
-    }
-    // console.log(data, 'data')
+    // const data = {
+    //     firstName: user.value.firstName,
+    //     lastName: user.value.lastName,
+    //     nickname: user.value.nickname,
+    //     address: user.value.address,
+    //     posterIntro: user.value.posterIntro,
+    //     helperIntro: user.value.helperIntro,
+    //     helperSkills: user.value.helperSkills
+    // }
+    //console.log(data, 'data')
 
     //4. 更新資料
-    updateAccount(data, () => {
+    updateAccount(user.value, () => {
         profileForm.value.reset()
         loading.value = false
         isDisabled.value = true

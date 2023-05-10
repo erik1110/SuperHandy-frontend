@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex justify-start">
+    <div class="d-flex justify-start" v-if="pointBarSwiperShow">
         <Swiper class="pointBarSwiper" :modules="[SwiperFreeMode, SwiperPagination]" :freeMode="true" :breakpoints="{
             '130': {
                 slidesPerView: 0.5,
@@ -105,23 +105,23 @@ const status = ref({
 })
 
 // - 取得點數狀態 -
-onMounted(async () => {
-    const _work = '取得點數狀態'
-    try {
-        const response = await getProfileStatus()
-        if (response && checkRespStatus(response)) {
-            const { data } = response
-            Object.keys(status.value).forEach((key) => {
-                if (data[key]) {
-                    status.value[key] = data[key];
-                }
-            });
-        }
-        logInfo(_work, response);
-    } catch (error) {
-        logError(_work, { error });
+const pointBarSwiperShow = ref(false)
+const _work = '取得點數狀態'
+try {
+    const response = await getProfileStatus()
+    if (response && checkRespStatus(response)) {
+        const { data } = response
+        Object.keys(status.value).forEach((key) => {
+            if (data[key]) {
+                status.value[key] = data[key];
+            }
+        });
+        pointBarSwiperShow.value = true
     }
-})
+    logInfo(_work, response);
+} catch (error) {
+    logError(_work, { error });
+}
 
 </script>
 
