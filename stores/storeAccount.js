@@ -3,7 +3,8 @@ import {
   getAccountInfoUrl,
   patchAccountInfoUrl,
 } from "@/services/apis/account";
-const { req } = useHttp();
+const { req, checkRespStatus } = useHttp();
+const { logInfo, logError } = useLog();
 
 export const storeAccount = defineStore("storeAccount", () => {
   const _user = ref({
@@ -24,39 +25,35 @@ export const storeAccount = defineStore("storeAccount", () => {
     },
   });
 
-  //取得會員資料
+  // - 取得會員資料 -
   function getAccount() {
+    const _work = "取得會員資料";
     req("GET", getAccountInfoUrl, {}, { auth: true })
       .then((response) => {
-        //console.log(response, "respaonse");
-        if (!response || !response?.userInfoForm) {
-          console.log("取得會員資料失敗");
-          return;
+        if (response && checkRespStatus(response)) {
+          _user.value = response.data;
         }
-
-        const userInfoForm = response.userInfoForm;
-        Object.keys(_user.value).forEach((key) => {
-          const value = userInfoForm[key];
-          if (value) {
-            _user.value[key] = value;
-          }
-        });
+        logInfo(_work, response);
       })
       .catch((error) => {
-        console.log(error, "取得會員資料失敗");
+        logError(_work, { error });
       });
   }
 
-  //更新會員資料
+  // - 更新會員資料 -
   function updateAccount(data, successFun, failFun) {
+    const _work = "更新會員資料";
     req("PATCH", patchAccountInfoUrl, data, { auth: true })
       .then((response) => {
-        if (typeof successFun === "function") {
-          successFun();
+        if (response && checkRespStatus(response)) {
+          if (typeof successFun === "function") {
+            successFun();
+          }
         }
+        logInfo(_work, response);
       })
       .catch((error) => {
-        console.log({ error });
+        logError(_work, { error });
         if (typeof failFun === "function") {
           failFun();
         }
