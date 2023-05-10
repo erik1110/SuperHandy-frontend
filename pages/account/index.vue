@@ -20,7 +20,7 @@
           </VRow>
           <!-- avatar end -->
           <!-- pointsBar start -->
-          <div class="my-5" width="800px">
+          <div class="my-5">
             <AccountPointsBar />
           </div>
           <!-- pointsBar end -->
