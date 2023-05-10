@@ -1,6 +1,5 @@
 <template>
-  <!-- <nav style="background-color: lightblue;">Logo</nav> -->
-  <v-app-bar :elevation="2" class="sp-mb-4" density="compact" color="white">
+  <v-app-bar class="sp-mb-4" density="compact" color="white">
     <template v-slot:prepend>
       <NuxtLink class="sp-inline-flex" to="/">
         <div class="logo"></div>
@@ -24,7 +23,6 @@
           </v-list>
         </v-menu> -->
       </v-btn>
-      <!-- <NuxtLink to="/account"> -->
       <v-btn v-if="_storeAuth.loginToken" icon><v-icon>mdi-account-circle</v-icon>
         <v-menu activator="parent">
           <v-list>
@@ -42,7 +40,6 @@
       <NuxtLink v-else to="/auth/login">
         <v-btn>登入</v-btn>
       </NuxtLink>
-      <!-- </NuxtLink> -->
     </template>
   </v-app-bar>
 </template>

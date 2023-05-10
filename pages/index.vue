@@ -10,23 +10,62 @@
         </div>
       </header>
     </div>
-    <div class="sp-bg-[#DFDFFF] sp-h-[100vh]">
-      <v-btn @click="fetchAccountProfile">getAccountProfile</v-btn>
-      {{ profileData }}
-    </div>
-    <div class="sp-bg-[#0C0D50] sp-h-[100vh]">
+    <section class="sp-bg-[#DFDFFF] section-2 sp-relative sp-py-10 ">
+      <div class="flexCenter sp-max-w-[800px] secContainer lg:sp-flex-nowrap">
+        <div ref="sec2Img" class="sm:sp-basis-1/2 sp-p-8 sp-max-w-[450px] sp-min-w-[300px]">
+          <img src="../assets/images/bg/bg-s2-left.png" alt="">
+        </div>
+
+        <div class="sm:sp-basis-1/2 flexCenter sp-flex-col">
+          <div class="introCard sp-mb-4 sp-mx-2 sp-hidden" v-for="(cardData, idx) in intro" :key="idx">
+            <HomeCard :card-data="cardData" />
+          </div>
+        </div>
+      </div>
+    </section>
+    <div ref="showIntroCard"></div>
+    <section class="sp-bg-[#0C0D50] sp-relative sp-py-10 ">
+      <div class="flexCenter sp-max-w-[600px] secContainer lg:sp-flex-nowrap">
+        <div class="sp-basis-1/2 sp-p-8 sp-max-w-[450px]">
+          <HomeCounter count="300" icon="IconTasks" title="本月已刊登任務" />
+        </div>
+
+        <div class="sp-basis-1/2 sp-flex-col">
+          <HomeCounter count="190" icon="IconTrophy" title="本月已完成任務" />
+        </div>
+      </div>
+    </section>
+    <section class="sp-py-10 flexCenter  sp-max-w-[800px] secContainer lg:sp-flex-nowrap">
+      <div class="sp-basis-1/3 sp-p-8 sp-max-w-[450px] flexCenter sp-flex-col sm:sp-border-r-2 sp-border-slate-200">
+        <HomeSteper class="sp-mb-8" v-for="(step, idx) in steps" :key="idx" :step-data="step" />
+      </div>
+
+      <div class="sp-basis-2/3 sp-flex-col">
+
+
+      </div>
+    </section>
+    <!-- <section class="sp-bg-[#0C0D50] sp-h-[60vh]">
       <Counter />
-    </div>
+    </section> -->
 
   </div>
 </template>
 
 <script setup>
 import { getCompletedCases, getAccountProfile } from '@/services/apis/home'
+import IconSmile from "@/assets/images/icons/smile.svg"
+import homeData from "@/static/home.json"
+const { intro, steps } = homeData
+
 const testData = ref({})
+const showIntroCard = ref(null)
+const sec2Img = ref(null)
 
 onMounted(async () => {
   parallaxInit()
+  await fetchCompletedCases()
+  observerSec2()
 })
 /* Init */
 // sec1-滾動視差
@@ -45,26 +84,81 @@ const parallaxInit = () => {
 onUnmounted(async () => {
   window.removeEventListener("mousewheel", windowMousewheel);
 });
+// sec2-動畫
+const observerSec2 = () => {
+  const animateEl = document.querySelectorAll('.introCard'); // 取得 .animate 元素
+  console.log({ animateEl });
+  // 創建一個新的 IntersectionObserver 監聽器
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // section2 left 
+        sec2Img.value.classList.add('animate__animated', 'animate__pulse')
+        // section2 right
+        animateEl.forEach((el, idx) => {
+          el.classList.remove('sp-hidden')
+          el.classList.add('animate__animated', 'animate__slideInRight', 'animate__fast', `animate__delay-${idx}s`)
+        }) // 元素進入可視區域，添加 .animated 類別
+        observer.unobserve(entry.target); // 停止監聽該元素
+      }
+    }, {
+      root: null,
+      rootMargin: "30px",
+      threshold: 1,
+    });
+  });
+
+  // 監聽 .animate 元素是否進入可視區域
+  observer.observe(showIntroCard.value);
+}
+// sec3-動畫+counter
+
+
+// Fetch
+const fetchCompletedCases = async () => {
+  try {
+    let { data } = await getCompletedCases()
+    // console.log(data);
+    testData.value = data
+  } catch (err) {
+    console.log({ err });
+  }
+}
 
 // Test: API with token
 const profileData = ref({})
+
 const fetchAccountProfile = async () => {
   try {
     let res = await getAccountProfile()
-    profileData.value = res.data
+    console.log({ res });
+    profileData.value = res
   } catch (err) {
     console.log({ err });
   }
 }
 
 </script>
-
+<style scoped lang="postcss">
+.secContainer {
+  @apply sp-flex-row sp-mx-auto sp-flex-wrap
+}
+</style>
 <style scoped lang="scss">
 .wrapper {
   height: 75vh;
+  max-height: 600px;
   overflow-y: hidden;
   overflow-x: hidden;
   perspective: 10px;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.wrapper::-webkit-scrollbar {
+  display: none;
 }
 
 header {
@@ -94,7 +188,16 @@ header {
   z-index: -1;
 }
 
-.title {
-  max-width: 350px;
+.section-2::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: url(../assets/images/bg/bg-s2.png) center no-repeat;
+  background-size: contain;
+  opacity: 0.8;
+  z-index: 1;
 }
 </style>

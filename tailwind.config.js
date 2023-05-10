@@ -7,7 +7,14 @@ module.exports = {
       // serif: ['Georgia', 'serif'],
       cursive: ["'Sigmar'", "cursive"],
     },
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#0C0D50",
+        "primary-lighten": "#DFDFFF",
+        secondary: "#B7EEEE",
+        purple: "#5658FB",
+      },
+    },
   },
   plugins: [],
 };
