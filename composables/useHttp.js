@@ -79,8 +79,26 @@ export const useHttp = () => {
     }
   };
 
+  const checkRespStatus = (res) => {
+    const _status = {
+      false: "false",
+      success: "success",
+    };
+    const _check = () => {
+      if (res && res["status"]) {
+        if (res["status"] === _status.success) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    return _check();
+  };
+
   return {
     spPostForm,
     req,
+    checkRespStatus,
   };
 };

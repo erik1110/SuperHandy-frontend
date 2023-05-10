@@ -111,6 +111,7 @@
 <script setup>
 import { getCategories, getExposurePlan } from '@/services/apis/general';
 const { basicBox, confirmBox, deleteConfirmBox } = useAlert()
+const { logInfo, logError } = useLog();
 const _status = {
     draft: 'draft',
     post: 'post'
@@ -145,8 +146,7 @@ const { formRules, ruleSuperCoint, rulePhone, ruleEmail, ruleRequired, validateF
 const postTaskFormRules = formRules()
 postTaskFormRules.exposurePlan = {
     rule: [
-        (v) =>
-            (!!v && v.length > 1) || "必填欄位",
+        (v) = (!!v && v.length > 1) || "必填欄位",
     ],
 }
 
@@ -173,7 +173,7 @@ function getAllData() {
         exposurePlans.value = result[0].data
         taskCategories.value = result[1].data
     }).catch(error => {
-        console.log(error);
+        logError(error);
         basicBox('取得選單資料發生異常')
     })
 }
@@ -254,7 +254,7 @@ const submit = async (event) => {
             lat: locationLatitude.value
         }
     }
-    console.log(data, 'data')
+    //console.log(data, 'data')
 
 
     //4. 更新資料
