@@ -11,7 +11,7 @@
       </header>
     </div>
     <section class="sp-bg-[#DFDFFF] section-2 sp-relative sp-py-10 ">
-      <div class="flexCenter sp-max-w-[1200px] secContainer sp-flex-wrap lg:sp-flex-nowrap">
+      <div class="flexCenter sp-max-w-[800px] secContainer lg:sp-flex-nowrap">
         <div ref="sec2Img" class="sp-basis-1/2 sp-p-8 sp-max-w-[450px] sp-min-w-[300px]">
           <img src="../assets/images/bg/bg-s2-left.png" alt="">
         </div>
@@ -25,7 +25,7 @@
     </section>
     <div ref="showIntroCard"></div>
     <section class="sp-bg-[#0C0D50] sp-relative sp-py-10 ">
-      <div class="flexCenter sp-max-w-[600px] secContainer ">
+      <div class="flexCenter sp-max-w-[600px] secContainer lg:sp-flex-nowrap">
         <div class="sp-basis-1/2 sp-p-8 sp-max-w-[450px]">
           <HomeCounter count="300" icon="IconTasks" title="本月已刊登任務" />
         </div>
@@ -35,7 +35,7 @@
         </div>
       </div>
     </section>
-    <section class="sp-py-10 flexCenter  sp-max-w-[1200px] sp-mx-auto sm:sp-flex-wrap">
+    <section class="sp-py-10 flexCenter  sp-max-w-[800px] secContainer lg:sp-flex-nowrap">
       <div class="sp-basis-1/3 sp-p-8 sp-max-w-[450px] flexCenter sp-flex-col sp-border-r-2 sp-border-slate-200">
         <HomeSteper class="sp-mb-8" v-for="(step, idx) in steps" :key="idx" :step-data="step" />
       </div>
@@ -141,7 +141,7 @@ const fetchAccountProfile = async () => {
 </script>
 <style scoped lang="postcss">
 .secContainer {
-  @apply sp-flex-row sp-mx-auto
+  @apply sp-flex-row sp-mx-auto sp-flex-wrap
 }
 </style>
 <style scoped lang="scss">
