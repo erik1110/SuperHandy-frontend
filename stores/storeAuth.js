@@ -13,7 +13,7 @@ export const storeAuth = defineStore("auth", () => {
 
   return {
     isLogin,
-    loginToken: skipHydrate(loginToken),
+    loginToken,
     setLoginToken,
   };
 });

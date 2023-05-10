@@ -27,11 +27,11 @@
     <section class="sp-bg-[#0C0D50] sp-relative sp-py-10 ">
       <div class="flexCenter sp-max-w-[600px] secContainer lg:sp-flex-nowrap">
         <div class="sp-basis-1/2 sp-p-8 sp-max-w-[450px]">
-          <HomeCounter count="300" icon="IconTasks" title="本月已刊登任務" />
+          <HomeCounter :count="300" icon="IconTasks" title="本月已刊登任務" />
         </div>
 
         <div class="sp-basis-1/2 sp-flex-col">
-          <HomeCounter count="190" icon="IconTrophy" title="本月已完成任務" />
+          <HomeCounter :count="190" icon="IconTrophy" title="本月已完成任務" />
         </div>
       </div>
     </section>
@@ -51,17 +51,16 @@
 
 <script setup>
 import { getCompletedCases, getAccountProfile } from '@/services/apis/home'
-import IconSmile from "@/assets/images/icons/smile.svg"
 import homeData from "@/static/home.json"
 const { intro, steps } = homeData
 
-const testData = ref({})
+// const testData = ref({})
 const showIntroCard = ref(null)
 const sec2Img = ref(null)
 
 onMounted(async () => {
   parallaxInit()
-  await fetchCompletedCases()
+  // await fetchCompletedCases()
   observerSec2()
 })
 /* Init */
@@ -111,16 +110,16 @@ const observerSec2 = () => {
 // sec3-動畫+counter
 
 
-// Fetch
-const fetchCompletedCases = async () => {
-  try {
-    let { data } = await getCompletedCases()
-    // console.log(data);
-    testData.value = data
-  } catch (err) {
-    console.log({ err });
-  }
-}
+// // Fetch
+// const fetchCompletedCases = async () => {
+//   try {
+//     let { data } = await getCompletedCases()
+//     // console.log(data);
+//     testData.value = data
+//   } catch (err) {
+//     console.log({ err });
+//   }
+// }
 
 // Test: API with token
 const profileData = ref({})
