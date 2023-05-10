@@ -187,7 +187,7 @@ const submit = async () => {
         loading.value = false
         isDisabled.value = true
         getAccount()
-        basicBox("取得會員資料失敗");
+        basicBox("更新會員資料失敗");
     })
 
 };
