@@ -81,6 +81,8 @@ const onSubmit = async () => {
       loading.value = false
       if (res.error.name == '40202') {
         showResendBtn.value = true
+      } else {
+        showResendBtn.value = false
       }
       return
     } else {
