@@ -2,7 +2,11 @@ export const useLog = function () {
   const _options = {
     alwaysOpen: false,
     env: process.dev,
-    whiteArrs: ["localhost", "127.0.0.1"],
+    whiteArrs: [
+      "localhost",
+      "127.0.0.1",
+      "superhandy-frontend-fork.herokuapp.com",
+    ],
   };
 
   function _consoleLog(options, args) {
