@@ -39,10 +39,7 @@
       <div class="sp-basis-1/3 sp-p-8 sp-max-w-[450px] flexCenter sp-flex-col sm:sp-border-r-2 sp-border-slate-200">
         <HomeSteper class="sp-mb-8" v-for="(step, idx) in steps" :key="idx" :step-data="step" />
       </div>
-
       <div class="sp-basis-2/3 sp-flex-col">
-
-
       </div>
     </section>
     <!-- <section class="sp-bg-[#0C0D50] sp-h-[60vh]">
