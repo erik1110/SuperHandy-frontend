@@ -25,5 +25,7 @@ export const siteConfig = {
   //NuxtLink的路徑
   linkPaths: {
     home: { title: "首頁", to: "/" },
+    login: { title: "登入", to: "/auth/login" },
+    postTask: { title: "刊登任務", to: "/post-task" },
   },
 };
