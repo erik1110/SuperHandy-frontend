@@ -5,7 +5,7 @@ import { useStorage } from "@vueuse/core";
 export const storeAuth = defineStore("auth", () => {
   const isLogin = ref(false);
   // const loginToken = ref("");
-  const loginToken = useStorage("spToken", "");
+  const loginToken = useCookie("spToken", "");
   const setLoginToken = (val) => (loginToken.value = val);
 
   return {

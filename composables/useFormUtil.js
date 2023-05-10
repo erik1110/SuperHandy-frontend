@@ -15,7 +15,8 @@ export const useFormUtil = () => {
   const ruleConfirmPassword = (v, password) =>
     v === password || "確認密碼必須和密碼相同";
   const ruleAddress = (v) =>
-    (!!v && v.length > 2 && v.indexOf("號") != -1) || "地址填寫不完整";
+    //(!!v && v.length > 2 && v.indexOf("號") != -1) || "地址填寫不完整";
+    (!!v && v.length > 0) || "地址填寫不完整";
   const ruleSuperCoint = (v) => pattern.superCoint.test(v) || "金額輸入不正確";
   const validateFormResult = async function (form) {
     let result = false;
@@ -50,7 +51,7 @@ export const useFormUtil = () => {
           (v) => (!!v && v.length <= 10) || _replace(_error, _counter[0]),
         ],
       },
-      nickName: {
+      nickname: {
         counter: _counter[1],
         hint: _replace(_hint, _counter[1]),
         rule: [
@@ -73,9 +74,7 @@ export const useFormUtil = () => {
         counter: _counter[3],
         hint: _replace(_hint, _counter[3]),
         rule: [
-          (v) => {
-            !v || v.length <= _counter[3] || _replace(_error, _counter[3]);
-          },
+          (v) => !v || v.length <= _counter[3] || _replace(_error, _counter[3]),
         ],
       },
       taskTitle: {

@@ -24,9 +24,9 @@
                 </v-row>
                 <v-row>
                     <v-col>
-                        <label class="label text-grey-darken-2" for="nickName">暱稱</label>
-                        <v-text-field :rules="profileFormRules.nickName.rule" v-model="user.nickName" :disabled="isDisabled"
-                            :counter="profileFormRules.nickName.counter" :hint="profileFormRules.nickName.hint" required />
+                        <label class="label text-grey-darken-2" for="nickname">暱稱</label>
+                        <v-text-field :rules="profileFormRules.nickname.rule" v-model="user.nickname" :disabled="isDisabled"
+                            :counter="profileFormRules.nickname.counter" :hint="profileFormRules.nickname.hint" required />
                     </v-col>
                 </v-row>
                 <v-row>
@@ -79,7 +79,7 @@
                         </label>
                         <v-select :rules="profileFormRules.helperSkills.rule" :disabled="isDisabled" :items="taskCategories"
                             color="blue-grey-lighten-2" item-title="name" item-value="name" multiple chips clearable
-                            v-model="helperSkills">
+                            v-model="user.helperSkills">
                             <template v-slot:chip="{ props, item }">
                                 <v-chip v-bind="props" :text="item.name"></v-chip>
                             </template>
@@ -123,24 +123,18 @@ const { user } = storeToRefs(_storeAccount)
 const { formRules, validateFormResult } = useFormUtil()
 let profileFormRules = formRules()
 let _helperSkillsError = false
-const helperSkills = ref(user.value.helperSkills)
 profileFormRules.helperSkills = {
-    rule: [(v) => !_helperSkillsError || "最多輸入三項"],
+    rule: [() => !_helperSkillsError || "最多輸入三項"],
 }
-watch(
-    helperSkills,
-    (val) => {
-        //console.log(val, 'helperSkillsError')
-        if (val.length > 3) {
+watch(() => user.value.helperSkills, (newVal) => {
+    if (newVal) {
+        if (newVal && newVal.length > 3) {
             _helperSkillsError = true
         } else {
             _helperSkillsError = false
         }
-    },
-    {
-        //immediate: true,
     }
-);
+})
 
 
 // - 取得任務類別 -
@@ -173,13 +167,13 @@ const submit = async () => {
     const data = {
         firstName: user.value.firstName,
         lastName: user.value.lastName,
-        nickName: user.value.nickName,
+        nickname: user.value.nickname,
         address: user.value.address,
         posterIntro: user.value.posterIntro,
         helperIntro: user.value.helperIntro,
-        helperSkills: helperSkills.value
+        helperSkills: user.value.helperSkills
     }
-    //console.log(data, 'data')
+    // console.log(data, 'data')
 
     //4. 更新資料
     updateAccount(data, () => {

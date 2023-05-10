@@ -13,12 +13,12 @@
         寄送
       </v-btn>
     </template>
-    <v-alert v-if="message" type="success" :text="message" variant="tonal"></v-alert>
+    <v-alert v-if="message" type="success" :text="message" color="v-purple"></v-alert>
   </DialogModal>
 </template>
 
 <script setup>
-import { postResetPassword } from "@/services/apis/sendResetEmail";
+import { postResetPassword } from "@/services/apis/auth";
 const props = defineProps({
   dialog: Boolean,
 })

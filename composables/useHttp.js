@@ -6,20 +6,17 @@ export const useHttp = () => {
       baseURL: VITE_BACKEND_ROOT_DEV,
       ...options,
       onRequest({ request, options }) {
-        //console.log({ options });
         options.headers = options.headers || {};
         //把快取關掉
         //options.initialCache = false;
         //Header攜帶token回後端
         if (options.auth) {
-          let spToken = localStorage.getItem("spToken");
-          // if(localStorage.getItem('spToken'))
-          options.headers.authorization = `Bearer ${spToken}`;
+          let spToken = useCookie("spToken");
+          options.headers.authorization = `Bearer ${spToken.value}`;
         }
         if (options.token) {
           options.headers.authorization = `Bearer ${options.token}`;
         }
-        // console.log(options);
       },
       onRequestError({ request, options, error }) {
         console.log(error, "onRequestError");
