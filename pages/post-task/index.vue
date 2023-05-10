@@ -146,7 +146,7 @@ const { formRules, ruleSuperCoint, rulePhone, ruleEmail, ruleRequired, validateF
 const postTaskFormRules = formRules()
 postTaskFormRules.exposurePlan = {
     rule: [
-        (v) = (!!v && v.length > 1) || "必填欄位",
+        (v) => (!!v && v.length > 1) || "必填欄位",
     ],
 }
 
