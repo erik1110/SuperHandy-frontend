@@ -1,10 +1,12 @@
 <template>
   <v-card width="400" elevation="0">
     <v-card-item>
-      <v-card-title class="font-weight-bold">
+      <v-card-title class="font-weight-bold d-flex align-center">
         <!-- <IconSmile /> -->
-        <component :is="cardData.icon"></component>
-        {{ cardData.title }}
+        <component :is="icons[cardData.icon]" class="sp-mr-1"></component>
+        <div>
+          {{ cardData.title }}
+        </div>
       </v-card-title>
     </v-card-item>
 
@@ -17,10 +19,15 @@
 <script setup>
 import IconSmile from "@/assets/images/icons/smile.svg"
 import IconRocket from "@/assets/images/icons/rocket.svg"
+import IconSafe from "@/assets/images/icons/safe.svg"
 const { cardData } = defineProps({
   cardData: Object,
 })
-const icon = computed(() => cardData.icon)
+const icons = ref({
+  IconSmile,
+  IconRocket,
+  IconSafe
+})
 </script>
 
 <style lang="scss" scoped></style>
