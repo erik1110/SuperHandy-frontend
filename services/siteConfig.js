@@ -27,5 +27,6 @@ export const siteConfig = {
     home: { title: "首頁", to: "/" },
     login: { title: "登入", to: "/auth/login" },
     postTask: { title: "刊登任務", to: "/post-task" },
+    account: { title: "會員帳號", to: "/account" },
   },
 };
