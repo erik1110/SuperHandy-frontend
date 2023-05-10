@@ -23,7 +23,7 @@ import IconSafe from "@/assets/images/icons/safe.svg"
 const { cardData } = defineProps({
   cardData: Object,
 })
-const icons = ref({
+const icons = shallowRef({
   IconSmile,
   IconRocket,
   IconSafe

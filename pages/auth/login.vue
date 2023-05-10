@@ -86,7 +86,8 @@ const onSubmit = async () => {
       }
       return
     } else {
-      _storeAuth.setLoginToken(res.data.token)
+      // _storeAuth.setLoginToken(res.data.token)
+      _storeAuth.loginToken = res.data.token
       navigateTo('/')
 
     }

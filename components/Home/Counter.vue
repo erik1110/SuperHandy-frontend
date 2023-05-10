@@ -19,7 +19,7 @@ const props = defineProps({
 })
 
 const counter = ref(0);
-const icons = ref({
+const icons = shallowRef({
   IconTasks,
   IconTrophy
 })
