@@ -12,11 +12,11 @@
     </div>
     <section class="sp-bg-[#DFDFFF] section-2 sp-relative sp-py-10 ">
       <div class="flexCenter sp-max-w-[800px] secContainer lg:sp-flex-nowrap">
-        <div ref="sec2Img" class="sp-basis-1/2 sp-p-8 sp-max-w-[450px] sp-min-w-[300px]">
+        <div ref="sec2Img" class="sm:sp-basis-1/2 sp-p-8 sp-max-w-[450px] sp-min-w-[300px]">
           <img src="../assets/images/bg/bg-s2-left.png" alt="">
         </div>
 
-        <div class="sp-basis-1/2 flexCenter sp-flex-col">
+        <div class="sm:sp-basis-1/2 flexCenter sp-flex-col">
           <div class="introCard sp-mb-4 sp-mx-2 sp-hidden" v-for="(cardData, idx) in intro" :key="idx">
             <HomeCard :card-data="cardData" />
           </div>
@@ -36,7 +36,7 @@
       </div>
     </section>
     <section class="sp-py-10 flexCenter  sp-max-w-[800px] secContainer lg:sp-flex-nowrap">
-      <div class="sp-basis-1/3 sp-p-8 sp-max-w-[450px] flexCenter sp-flex-col sp-border-r-2 sp-border-slate-200">
+      <div class="sp-basis-1/3 sp-p-8 sp-max-w-[450px] flexCenter sp-flex-col sm:sp-border-r-2 sp-border-slate-200">
         <HomeSteper class="sp-mb-8" v-for="(step, idx) in steps" :key="idx" :step-data="step" />
       </div>
 
