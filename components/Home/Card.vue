@@ -1,5 +1,5 @@
 <template>
-  <v-card width="400" elevation="0">
+  <v-card max-width="400" min-width="300" elevation="0">
     <v-card-item>
       <v-card-title class="font-weight-bold d-flex align-center">
         <!-- <IconSmile /> -->

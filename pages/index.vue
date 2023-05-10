@@ -11,13 +11,13 @@
       </header>
     </div>
     <section class="sp-bg-[#DFDFFF] section-2 sp-relative sp-py-10 ">
-      <div class="flexCenter sp-flex-row sm:sp-flex-wrap sp-max-w-[1200px] sp-mx-auto">
-        <div ref="sec2Img" class="sp-basis-1/2 sp-p-8 sp-max-w-[450px]">
+      <div class="flexCenter sp-max-w-[1200px] secContainer sp-flex-wrap lg:sp-flex-nowrap">
+        <div ref="sec2Img" class="sp-basis-1/2 sp-p-8 sp-max-w-[450px] sp-min-w-[300px]">
           <img src="../assets/images/bg/bg-s2-left.png" alt="">
         </div>
 
         <div class="sp-basis-1/2 flexCenter sp-flex-col">
-          <div class="introCard sp-mb-4 sp-hidden" v-for="(cardData, idx) in intro" :key="idx">
+          <div class="introCard sp-mb-4 sp-mx-2 sp-hidden" v-for="(cardData, idx) in intro" :key="idx">
             <HomeCard :card-data="cardData" />
           </div>
         </div>
@@ -25,7 +25,7 @@
     </section>
     <div ref="showIntroCard"></div>
     <section class="sp-bg-[#0C0D50] sp-relative sp-py-10 ">
-      <div class="flexCenter sm:sp-flex-wrap sp-max-w-[600px] sp-mx-auto">
+      <div class="flexCenter sp-max-w-[600px] secContainer ">
         <div class="sp-basis-1/2 sp-p-8 sp-max-w-[450px]">
           <HomeCounter count="300" icon="IconTasks" title="本月已刊登任務" />
         </div>
@@ -139,7 +139,11 @@ const fetchAccountProfile = async () => {
 }
 
 </script>
-
+<style scoped lang="postcss">
+.secContainer {
+  @apply sp-flex-row sp-mx-auto
+}
+</style>
 <style scoped lang="scss">
 .wrapper {
   height: 75vh;
@@ -184,16 +188,16 @@ header {
   z-index: -1;
 }
 
-// .section-2::after {
-//   content: '';
-//   position: absolute;
-//   top: 0;
-//   left: 0;
-//   height: 100%;
-//   width: 100%;
-//   background: url(../assets/images/bg/bg-s2.png) center no-repeat;
-//   background-size: contain;
-//   opacity: 0.8;
-//   z-index: 1;
-// }
+.section-2::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: url(../assets/images/bg/bg-s2.png) center no-repeat;
+  background-size: contain;
+  opacity: 0.8;
+  z-index: 1;
+}
 </style>
