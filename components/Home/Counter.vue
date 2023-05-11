@@ -1,33 +1,25 @@
 <template>
   <div class="sp-w-full flexCenter sp-flex-col">
-    <Component :is="icons[props.icon]" class="sp-mb-2" />
+    <Component :is="icons[props.icon]" class="sp-mb-2 sp-icon-md sp-mr-2 sp-text-white" />
     <p class="sp-flex sp-justify-center count-num sp-relative">
-      <span class="sp-text-7xl sp-font-black  sp-text-secondary">{{ counter }}</span>
+      <span class="sp-text-7xl sp-font-black  sp-text-secondary">{{ count }}</span>
     </p>
     <p class="sp-text-white sp-font-bold sp-mt-4">{{ props.title }}</p>
   </div>
 </template>
 
 <script setup>
-import IconTasks from "@/assets/images/icons/tasks.svg"
-import IconTrophy from "@/assets/images/icons/trophy.svg"
+import { DocumentDuplicateIcon, TrophyIcon } from '@heroicons/vue/24/solid'
 
 const props = defineProps({
   count: Number,
   icon: String,
   title: String,
 })
-
-const counter = ref(0);
 const icons = shallowRef({
-  IconTasks,
-  IconTrophy
+  DocumentDuplicateIcon,
+  TrophyIcon
 })
-setInterval(() => {
-  if (counter.value < props.count) {
-    counter.value += 2;
-  }
-}, 1);
 </script>
 
 <style lang="scss" scoped>

@@ -3,12 +3,13 @@
 @tailwind utilities;
 
 @layer base {
+  /* 全域字型 */
   body {
-    /* @apply bg-blue-600 text-white */
     @apply sp-font-sans;
   }
 }
 @layer components {
+  /* 標題 */
   .sp-text-h1 {
     font-size: 3.5rem;
     line-height: 1.2;
@@ -59,7 +60,34 @@
 :root {
   --animate-delay: 0.2s;
 }
+/* Logo */
+.logo,
+.logo::after {
+  position: relative;
+  width: 120px;
+  min-height: 48px;
+  top: 0;
+  left: 0;
+}
+.logo::after {
+  content: '';
+  position: absolute;
+  background-image: url('@/assets/images/logo.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+}
+/* 置中 */
 .flexCenter{
   @apply sp-flex sp-justify-center sp-items-center
 }
-
+/* Icons */
+.sp-icon-sm{
+  @apply sp-w-5 sp-h-5
+}
+.sp-icon-md{
+  @apply sp-w-10 sp-h-10
+}
+.sp-icon-lg{
+  @apply sp-w-12 sp-h-12
+}
