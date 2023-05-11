@@ -3,7 +3,7 @@
     <VRow>
       <VCol cols="12">
         <!-- avatar start -->
-        <!-- <VRow>
+        <VRow>
           <VCol class="d-md-flex text-md-start align-md-center">
             <label class="aui-info d-inline-block">
               <img src="https://cdn.vuetifyjs.com/images/john.jpg" id="aui-avatar" class="aui-avatar" />
@@ -19,7 +19,7 @@
               </p>
             </div>
           </VCol>
-        </VRow> -->
+        </VRow>
         <!-- avatar end -->
         <!-- pointsBar start -->
         <VRow class="mt-5">
