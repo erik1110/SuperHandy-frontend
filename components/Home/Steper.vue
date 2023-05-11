@@ -1,7 +1,7 @@
 <template>
   <div class="sp-flex sp-items-center">
     <div class="circle flexCenter">
-      <Component :is="icons[icon]" class="sp-w-12 sp-h-12 sp-text-primary" />
+      <Component :is="icons[icon]" class="sp-icon-lg sp-text-primary" />
     </div>
     <div class="sp-whitespace-nowrap">
       <h3 class="sp-text-h3 sp-mb-2">
