@@ -7,7 +7,9 @@
         <img src="../assets/images/bg/bg-2.png" class="fore" />
         <div class="sp-flex sp-flex-col sp-items-center">
           <img src="../assets/images/bg/slogon.png" class="sp-max-w-sm sp-mb-4" />
-          <v-btn class="text-white" max-width="100" color="v-purple" rounded>成為幫手</v-btn>
+          <NuxtLink to="/find-tasks/list">
+            <v-btn class="text-white" max-width="100" color="v-purple" rounded>成為幫手</v-btn>
+          </NuxtLink>
         </div>
       </header>
     </div>
