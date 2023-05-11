@@ -10,20 +10,22 @@
         </div>
       </header>
     </div>
+    <!-- Sec-2-Intor -->
     <section class="sp-bg-[#DFDFFF] section-2 sp-relative sp-py-10 ">
-      <div class="flexCenter sp-max-w-[800px] secContainer lg:sp-flex-nowrap">
+      <div class="flexCenter sp-max-w-[900px] secContainer lg:sp-flex-nowrap">
         <div ref="sec2Img" class="sm:sp-basis-1/2 sp-p-8 sp-max-w-[450px] sp-min-w-[300px]">
           <img src="../assets/images/bg/bg-s2-left.png" alt="">
         </div>
 
         <div class="sm:sp-basis-1/2 flexCenter sp-flex-col">
           <div class="introCard sp-mb-4 sp-mx-2 sp-hidden" v-for="(cardData, idx) in intro" :key="idx">
-            <HomeCard :card-data="cardData" />
+            <HomeIntroCard :card-data="cardData" />
           </div>
         </div>
       </div>
     </section>
     <div ref="showIntroCard"></div>
+    <!-- Sec-3-Counter -->
     <section class="sp-bg-[#0C0D50] sp-relative sp-py-10 ">
       <div class="flexCenter sp-max-w-[600px] secContainer lg:sp-flex-nowrap">
         <div class="sp-basis-1/2 sp-p-8 sp-max-w-[450px]">
@@ -35,11 +37,14 @@
         </div>
       </div>
     </section>
-    <section class="sp-py-10 flexCenter  sp-max-w-[800px] secContainer lg:sp-flex-nowrap">
-      <div class="sp-basis-1/3 sp-p-8 sp-max-w-[450px] flexCenter sp-flex-col sm:sp-border-r-2 sp-border-slate-200">
+    <!-- Sec-4-CompletedCase -->
+    <section class=" sp-py-20 sp-max-w-[900px] sp-flex secContainer sp-flex-nowrap">
+      <div
+        class="sp-basis-1/3 sp-py-4 sp-grow sp-max-w-[450px] flexCenter sp-flex-col sp-border-slate-200 md:sp-border-r-2">
         <HomeSteper class="sp-mb-8" v-for="(step, idx) in steps" :key="idx" :step-data="step" />
       </div>
-      <div class="sp-basis-2/3 sp-flex-col">
+      <div class="sp-grow sp-py-4 lg:sp-pl-8">
+        <HomeCompletedCard v-for="item in completedCaseData" :key="item._id" :card-data="item" />
       </div>
     </section>
     <!-- <section class="sp-bg-[#0C0D50] sp-h-[60vh]">
@@ -54,13 +59,10 @@ import { getCompletedCases, getAccountProfile } from '@/services/apis/home'
 import homeData from "@/static/home.json"
 const { intro, steps } = homeData
 
-// const testData = ref({})
-const showIntroCard = ref(null)
-const sec2Img = ref(null)
 
 onMounted(async () => {
   parallaxInit()
-  // await fetchCompletedCases()
+  await fetchCompletedCases()
   observerSec2()
 })
 /* Init */
@@ -80,10 +82,11 @@ const parallaxInit = () => {
 onUnmounted(async () => {
   window.removeEventListener("mousewheel", windowMousewheel);
 });
-// sec2-動畫
+// sec2-IntroCard動畫
+const sec2Img = ref(null)
+const showIntroCard = ref(null)
 const observerSec2 = () => {
   const animateEl = document.querySelectorAll('.introCard'); // 取得 .animate 元素
-  console.log({ animateEl });
   // 創建一個新的 IntersectionObserver 監聽器
   const observer = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
@@ -109,17 +112,17 @@ const observerSec2 = () => {
 }
 // sec3-動畫+counter
 
-
-// // Fetch
-// const fetchCompletedCases = async () => {
-//   try {
-//     let { data } = await getCompletedCases()
-//     // console.log(data);
-//     testData.value = data
-//   } catch (err) {
-//     console.log({ err });
-//   }
-// }
+// sec4-CompletedCase
+//Fetch
+const completedCaseData = ref([])
+const fetchCompletedCases = async () => {
+  try {
+    let { data } = await getCompletedCases()
+    completedCaseData.value = data
+  } catch (err) {
+    console.log({ err });
+  }
+}
 
 // Test: API with token
 const profileData = ref({})

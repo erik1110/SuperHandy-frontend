@@ -18,17 +18,17 @@
   ],
   "steps":[
     {
-      "icon": "",
+      "icon": "NewspaperIcon",
       "title": "步驟 1",
       "subtitle": "刊登任務"
     },
     {
-      "icon": "",
+      "icon": "UserGroupIcon",
       "title": "步驟 2",
       "subtitle": "幫手上門"
     },
     {
-      "icon": "",
+      "icon": "HandThumbUpIcon",
       "title": "步驟 3",
       "subtitle": "共享雙贏"
     }
