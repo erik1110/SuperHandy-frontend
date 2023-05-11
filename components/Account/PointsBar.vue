@@ -32,66 +32,18 @@
                         spaceBetween: 10,
                     },
                 }" :observer="true" :observeParents="true">
-                <!-- <div class="swiper-wrapper"> -->
                 <SwiperSlide>
-                    <div class="box bg-amber d-flex align-center justify-center">
-                        <div class="text-center">
-                            <div class="d-flex align-center justify-center">
-                                <span class="sp-text-2xl sp-font-medium pr-1">{{ status.superCoin }}</span>
-                                <v-icon icon="mdi-star-circle" size="x-small"></v-icon>
-                            </div>
-                            <p class="sp-text-sm">超人幣</p>
-                        </div>
-                    </div>
-                    <div class="box bg-amber d-flex align-center justify-center">
-                        <div class="text-center">
-                            <div class="d-flex align-center justify-center">
-                                <span class="sp-text-2xl sp-font-medium pr-1">{{ status.helperCoin }}</span>
-                                <v-icon icon="mdi-star-circle" size="x-small"></v-icon>
-                            </div>
-                            <p class="sp-text-sm">幫手幣</p>
-                        </div>
-                    </div>
+                    <AccountStatusBox text="超人幣" :number="status.superCoin" icon="mdi-star-circle"></AccountStatusBox>
+                    <AccountStatusBox text="幫手幣" :number="status.helperCoin" icon="mdi-star-circle"></AccountStatusBox>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <div class="box bg-amber d-flex align-center justify-center">
-                        <div class="text-center">
-                            <div class="d-flex align-center justify-center">
-                                <span class="sp-text-2xl sp-font-medium pr-1">{{ status.numOfPostTasks }}</span>
-                            </div>
-                            <p class="sp-text-sm">發案數</p>
-                        </div>
-                    </div>
-                    <div class="box bg-amber d-flex align-center justify-center">
-                        <div class="text-center">
-                            <div class="d-flex align-center justify-center">
-                                <span class="sp-text-2xl sp-font-medium pr-1">{{ status.numOfCompletedTasks }}</span>
-                            </div>
-                            <p class="sp-text-sm">已接任務</p>
-                        </div>
-                    </div>
+                    <AccountStatusBox text="發案數" :number="status.numOfPostTasks" icon=""></AccountStatusBox>
+                    <AccountStatusBox text="已接任務" :number="status.numOfCompletedTasks" icon=""></AccountStatusBox>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <div class="box bg-amber d-flex align-center justify-center">
-                        <div class="text-center">
-                            <div class="d-flex align-center justify-center">
-                                <span class="sp-text-2xl sp-font-medium pr-1">{{ status.ratingPoster }}</span>
-                                <v-icon icon="mdi-star" size="x-small"></v-icon>
-                            </div>
-                            <p class="sp-text-sm">案主評價</p>
-                        </div>
-                    </div>
-                    <div class="box bg-amber d-flex align-center justify-center">
-                        <div class="text-center">
-                            <div class="d-flex align-center justify-center">
-                                <span class="sp-text-2xl sp-font-medium pr-1">{{ status.ratingHelper }}</span>
-                                <v-icon icon="mdi-star" size="x-small"></v-icon>
-                            </div>
-                            <p class="sp-text-sm">幫手評價</p>
-                        </div>
-                    </div>
+                    <AccountStatusBox text="案主評價" :number="status.ratingPoster" icon="mdi-star"></AccountStatusBox>
+                    <AccountStatusBox text="幫手評價" :number="status.ratingHelper" icon="mdi-star"></AccountStatusBox>
                 </SwiperSlide>
-                <!-- </div> -->
             </Swiper>
         </div>
     </client-only>
@@ -116,12 +68,6 @@ try {
     const response = await getProfileStatus()
     if (response && checkRespStatus(response)) {
         status.value = response.data
-        //const { data } = response
-        // Object.keys(status.value).forEach((key) => {
-        //     if (data[key]) {
-        //         status.value[key] = data[key];
-        //     }
-        // });
         pointBarSwiperShow.value = true
     }
     logInfo(_work, response);
@@ -143,10 +89,5 @@ try {
 .swiper-slide {
     width: 260px;
     display: flex;
-}
-
-.box {
-    width: 130px;
-    height: 110px;
 }
 </style>
