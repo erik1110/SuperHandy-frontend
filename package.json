@@ -18,9 +18,11 @@
     "nuxt": "^3.4.2"
   },
   "dependencies": {
+    "@heroicons/vue": "^2.0.18",
     "@mdi/font": "^7.2.96",
     "@nuxtjs/google-fonts": "^3.0.0",
     "@pinia/nuxt": "^0.4.9",
+    "moment": "^2.29.4",
     "nuxt-swiper": "^1.1.0",
     "pinia": "^2.0.35",
     "sass": "^1.62.0",
