@@ -26,6 +26,5 @@
 <style lang="scss" scoped>
   .footer {
     max-height: 180px;
-    transform: translateY(100%);
   }
 </style>
