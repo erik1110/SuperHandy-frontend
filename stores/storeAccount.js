@@ -25,18 +25,30 @@ export const storeAccount = defineStore("storeAccount", () => {
     },
   });
 
+  // const accountLoading = ref(true);
+  // const setAccountLoading = (value) => {
+  //   accountLoading.value = value;
+  // };
+
   // - 取得會員資料 -
-  function getAccount() {
+  function getAccount(successFun) {
     const _work = "取得會員資料";
+    //setAccountLoading(true);
     req("GET", getAccountInfoUrl, {}, { auth: true })
       .then((response) => {
         if (response && checkRespStatus(response)) {
           _user.value = response.data;
+          if (typeof successFun === "function") {
+            successFun();
+          }
         }
         logInfo(_work, response);
       })
       .catch((error) => {
         logError(_work, { error });
+      })
+      .finally(() => {
+        //setAccountLoading(false);
       });
   }
 
@@ -49,14 +61,15 @@ export const storeAccount = defineStore("storeAccount", () => {
           if (typeof successFun === "function") {
             successFun();
           }
+        } else {
+          if (typeof failFun === "function") {
+            failFun(response?.message);
+          }
         }
         logInfo(_work, response);
       })
       .catch((error) => {
         logError(_work, { error });
-        if (typeof failFun === "function") {
-          failFun();
-        }
       });
   }
 
@@ -64,5 +77,6 @@ export const storeAccount = defineStore("storeAccount", () => {
     user,
     getAccount,
     updateAccount,
+    // accountLoading,
   };
 });
