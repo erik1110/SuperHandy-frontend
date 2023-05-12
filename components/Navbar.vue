@@ -62,22 +62,4 @@ const logout = () => {
 }
 
 </script>
-<style scoped>
-// .logo,
-// .logo::after {
-//   position: relative;
-//   width: 120px;
-//   min-height: 48px;
-//   top: 0;
-//   left: 0;
-// }
-
-// .logo::after {
-//   content: '';
-//   position: absolute;
-//   background-image: url('@/assets/images/logo.svg');
-//   background-repeat: no-repeat;
-//   background-position: center;
-//   background-size: 100%;
-// }
-</style>
+<style scoped></style>
