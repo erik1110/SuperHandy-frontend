@@ -4,6 +4,7 @@
         <VRow justify='center'>
             <VCol cols='12' lg='10'>
                 <v-form @submit.prevent=submit ref='postTaskForm' validate-on="submit">
+
                     <div class=''>
                         <label class='label text-grey-darken-2' for='title'>任務標題</label>
                         <v-text-field variant='outlined' :rules='postTaskFormRules.taskTitle.rule' v-model='title'
@@ -11,23 +12,26 @@
                             required />
                     </div>
 
+
                     <div class='mt-16'>
                         <label class='label text-grey-darken-2' for='category'>服務類別</label>
-                        <v-select variant='outlined' :rules='[ruleRequired]' :items='taskCategories' clearable
+                        <v-select variant='outlined' :rules='rules.category' :items='taskCategories' clearable
                             item-title='name' item-value='name' v-model='category'>
                         </v-select>
                     </div>
 
+
+
                     <div class='mt-16'>
                         <label class='label text-grey-darken-2' for='description'>任務說明</label>
-                        <v-textarea variant='outlined' :rules='postTaskFormRules.taskDescription.rule' v-model='description'
+                        <v-textarea variant='outlined' :rules='rules.description' v-model='description'
                             :counter='postTaskFormRules.taskDescription.counter'
                             :hint='postTaskFormRules.taskDescription.hint' required />
                     </div>
 
                     <div class='mt-16'>
                         <label class='label text-grey-darken-2' for='salary'>任務薪水</label>
-                        <v-text-field variant='outlined' :rules='[ruleSuperCoint]' v-model='salary' type='number' prefix=$
+                        <v-text-field variant='outlined' :rules='rules.salary' v-model='salary' type='number' prefix=$
                             suffix=超人幣 required />
                     </div>
 
@@ -35,7 +39,7 @@
                         <label class='label text-grey-darken-2' for='exposurePlan'>曝光方案</label>
                         <div class='d-md-flex'>
                             <v-radio-group v-for='(item, index) in exposurePlans' :key='index' v-model='exposurePlan'
-                                :rules='postTaskFormRules.exposurePlan.rule' required>
+                                :rules='rules.exposurePlan' required>
                                 <v-radio :label='`${item.title} ${item.price}點`' :value='item.title'></v-radio>
                             </v-radio-group>
                         </div>
@@ -56,39 +60,41 @@
                             <v-container fluid>
                                 <v-row>
                                     <v-col>
-                                        <v-text-field label=姓名 v-model='contactInfoName'
-                                            :rules='postTaskFormRules.name.rule' :counter='postTaskFormRules.name.counter'
-                                            :hint='postTaskFormRules.name.hint' required />
-                                    </v-col>
-                                </v-row>
-                                <v-row>
-                                    <v-col cols="12" md="6">
-                                        <v-text-field label=聯絡電話 :rules='[rulePhone]' v-model='contactInfoPhone' required />
-                                    </v-col>
-                                    <v-col cols="12" md="6">
-                                        <v-text-field label=EMAIL :rules='[ruleEmail]' v-model='contactInfoEmail'
+                                        <v-text-field label=姓名 v-model='contactInfoName' :rules='rules.contactInfoName'
+                                            :counter='postTaskFormRules.name.counter' :hint='postTaskFormRules.name.hint'
                                             required />
                                     </v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col cols="12" md="6">
-                                        <v-select label=請選擇縣市 :rules='[ruleRequired]' :items='twArea.county' clearable
+                                        <v-text-field label=聯絡電話 :rules='rules.contactInfoPhone' v-model='contactInfoPhone'
+                                            required />
+                                    </v-col>
+                                    <v-col cols="12" md="6">
+                                        <v-text-field label=EMAIL :rules='rules.contactInfoEmail' v-model='contactInfoEmail'
+                                            required />
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" md="6">
+                                        <v-select label=請選擇縣市 :rules='rules.locationCity' :items='twArea.county' clearable
                                             item-title='city' item-value='city' v-model='locationCity' required
                                             @click:clear="clearDisc">
                                         </v-select>
                                     </v-col>
                                     <v-col cols="12" md="6">
-                                        <v-select label=請選擇區域 :rules='[ruleRequired]' :items='discList' clearable
+                                        <v-select label=請選擇區域 :rules='rules.locationDist' :items='discList' clearable
                                             item-title='disc' item-value='disc' v-model='locationDist'
-                                            :hint='hintLocationDisc' :readonly='readonlyLocationDisc' required>
+                                            :hint='hintLocationDisc' :readonly='readonlyLocationDisc' persistent-hint
+                                            required>
                                         </v-select>
                                     </v-col>
 
                                 </v-row>
                                 <v-row>
                                     <v-col>
-                                        <v-text-field label=地址 :rules='postTaskFormRules.address.rule'
-                                            v-model='locationAddress' :counter='postTaskFormRules.address.counter'
+                                        <v-text-field label=地址 :rules='rules.locationAddress' v-model='locationAddress'
+                                            :counter='postTaskFormRules.address.counter'
                                             :hint='postTaskFormRules.address.hint' required />
                                     </v-col>
                                 </v-row>
@@ -140,14 +146,53 @@ const locationLandmark = ref('')
 const locationLongitude = ref('')//經度
 const locationLatitude = ref('')//緯度
 
+
+
+
+
 // - 表單驗證 -
-const { formRules, ruleSuperCoint, rulePhone, ruleEmail, ruleRequired, validateFormResult } = useFormUtil()
+const { formRules, ruleSuperCoint, rulePhone, ruleEmail, ruleAddress, ruleRequired, validateFormResult } = useFormUtil()
 const postTaskFormRules = formRules()
-postTaskFormRules.exposurePlan = {
-    rule: [
-        (v) => (!!v && v.length > 1) || "必填欄位",
-    ],
+const rules = ref({
+    //titlerules: [],
+    category: [],
+    description: [],
+    salary: [],
+    exposurePlan: [],
+    contactInfoName: [],
+    contactInfoPhone: [],
+    contactInfoEmail: [],
+    locationCity: [],
+    locationDist: [],
+    locationAddress: [],
+})
+const v1 = {
+    //titlerules: postTaskFormRules.taskTitle.rule,
+    category: [],
+    description: postTaskFormRules.taskDescription.rule,
+    salary: [],
+    exposurePlan: [],
+    contactInfoName: [],
+    contactInfoPhone: [],
+    contactInfoEmail: [],
+    locationCity: [],
+    locationDist: [],
+    locationAddress: [],
 }
+const v2 = {
+    //titlerules: postTaskFormRules.taskTitle.rule,
+    category: [ruleRequired],
+    description: [ruleRequired, postTaskFormRules.taskDescription.rule[0]],
+    salary: [ruleSuperCoint],
+    exposurePlan: [(v) => (!!v && v.length > 1) || "必填欄位"],
+    contactInfoName: postTaskFormRules.name.rule,
+    contactInfoPhone: [rulePhone],
+    contactInfoEmail: [ruleEmail],
+    locationCity: [ruleRequired],
+    locationDist: [ruleRequired],
+    locationAddress: [ruleAddress],
+}
+
 
 
 // - 取得任務類別 & 曝光方案 & 取得縣市與地區 -
@@ -195,15 +240,30 @@ const postTaskForm = ref(null)
 const submit = async (event) => {
     const _submitter = event.submitter.id
     console.log(_submitter, 'submitter')
+    //console.log(postTaskForm, 'postTaskForm')
+    // 處理表單規則
+    rules.value = {}
+    postTaskForm.value.resetValidation()
+    switch (_submitter) {
+        case siteConfig.taskStatus.draft:
+            rules.value = v1
+            break;
+        case siteConfig.taskStatus.published:
+            rules.value = v2
+            break;
+        default:
+            break;
+    }
+    //console.log(rules.value.title, 'rules.value.title')
 
     //1. 表單檢查
-    // const result = await validateFormResult(postTaskForm)
-    // //console.log(result, 'result')
-    // if (!result) {
-    //     basicBox('表單驗證還沒有成功喔!')
-    //     isUpdating.value = false
-    //     return false;
-    // }
+    const result = await validateFormResult(postTaskForm)
+    console.log(result, 'validateFormResult')
+    if (!result) {
+        // basicBox('表單驗證還沒有成功喔!')
+        // isUpdating.value = false
+        return false;
+    }
 
     //2. 開啟loading & disable btns
     loading.value = true
@@ -241,7 +301,7 @@ const submit = async (event) => {
             lat: locationLatitude.value
         }
     }
-    //console.log(data, 'data')
+    console.log(data, 'data')
 
 
     //4. 更新資料

@@ -81,6 +81,7 @@ export const useFormUtil = () => {
         counter: _counter[1],
         hint: _replace(_hint, _counter[1]),
         rule: [
+          ruleRequired,
           (v) =>
             (!!v && v.length <= _counter[1]) || _replace(_error, _counter[1]),
         ],
@@ -89,8 +90,7 @@ export const useFormUtil = () => {
         counter: _counter[4],
         hint: _replace(_hint, _counter[4]),
         rule: [
-          (v) =>
-            (!!v && v.length <= _counter[4]) || _replace(_error, _counter[4]),
+          (v) => !v || v.length <= _counter[4] || _replace(_error, _counter[4]),
         ],
       },
     };
