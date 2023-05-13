@@ -54,7 +54,7 @@
   };
   // Reset
   watch(
-    () => props.dialog,
+    () => purchaseModal.value,
     (val) => {
       if (!val) {
         message.value = "";
