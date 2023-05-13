@@ -3,7 +3,7 @@
     <Navbar />
     <div class="sp-mt-[48px] sp-w-full sp-flex">
       <div class="sp-flex sp-flex-col sp-p-4 sp-border-r-2 sp-border-balck">
-        <NuxtLink class="sp-pb-2" to="/account">我的帳號</NuxtLink>
+        <NuxtLink class="account sp-pb-2" to="/account">我的帳號</NuxtLink>
         <NuxtLink class="sp-pb-2" to="/account/tasks">任務管理</NuxtLink>
         <NuxtLink class="sp-pb-2" to="/account/comments">評價查看</NuxtLink>
         <NuxtLink to="/account/points">點數管理</NuxtLink>
@@ -20,7 +20,10 @@
 <script setup></script>
 
 <style scoped lang="scss">
-  .router-link-exact-active {
+  .router-link-active:not(.account) {
+    color: #b7eeee;
+  }
+  .account.router-link-exact-active {
     color: #b7eeee;
   }
 </style>
