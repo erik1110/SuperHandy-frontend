@@ -1,55 +1,65 @@
 <template>
   <div>
-    <VContainer fluid v-if="!isLoading">
+    <VContainer class="sp-max-w-[1000px]" fluid v-if="!isLoading">
       <VRow>
         <VCol cols="12" class="sp-flex">
-          <div
-            class="sp-border-2 sp-border-black sp-text-center sp-border-solid sp-border-r-0"
-          >
-            <div class="sp-text-h2">超人幣</div>
-            <div class="bg-svg superCoin"></div>
-            <div class="">{{ point.superCoin }}</div>
-          </div>
-          <div
-            class="sp-border-2 sp-border-black sp-text-center sp-border-solid sp-mr-4"
-          >
-            <div class="sp-text-h2">幫手幣</div>
-            <div class="bg-svg helperCoin"></div>
-            <div class="">{{ point.helperCoin }}</div>
-          </div>
+          <VCard class="sp-flex-1">
+            <v-card-text
+              class="sp-border-2 sp-border-black sp-border-solid sp-rounded-2 sp-text-center"
+            >
+              <div class="sp-text-h3 sp-mb-2">超人幣</div>
+              <div class="bg-svg superCoin sp-mx-auto sp-mb-2"></div>
+              <div class="">{{ point.superCoin }}</div>
+            </v-card-text>
+          </VCard>
+          <VCard class="sp-flex-1">
+            <v-card-text
+              class="sp-border-2 sp-border-black sp-border-solid sp-rounded-2 sp-text-center"
+            >
+              <div class="sp-text-h3 sp-mb-2">幫手幣</div>
+              <div class="bg-svg helperCoin sp-mx-auto sp-mb-2"></div>
+              <div class="">{{ point.helperCoin }}</div>
+            </v-card-text>
+          </VCard>
         </VCol>
         <VCol cols="12"> * 幫手幣僅用於案主曝光方案折抵使用 </VCol>
         <VCol cols="12" class="sp-text-center sp-text-title"> 儲值點數 </VCol>
         <VCol cols="12" class="sp-flex">
-          <div
-            class="sp-border-2 sp-border-black sp-text-center sp-border-solid sp-border-r-0"
-          >
-            <div class="sp-text-h3 sp-mb-[18px]">100 超人幣</div>
-            <div>NT$ 100</div>
-            <v-btn color="primary" outline @click="openPurchaseModal(100)"
-              >儲值去</v-btn
+          <VCard class="sp-flex-1">
+            <v-card-text
+              class="sp-border-2 sp-border-black sp-border-solid sp-rounded-2 sp-text-center"
             >
-          </div>
-          <div
-            class="sp-border-2 sp-border-black sp-text-center sp-border-solid sp-border-r-0"
-          >
-            <div class="sp-text-h3">500 超人幣</div>
-            <div class="sp-text-caption">贈送 50 幫手幣</div>
-            <div>NT$ 500</div>
-            <v-btn color="primary" outline @click="openPurchaseModal(500)"
-              >儲值去</v-btn
+              <div class="sp-text-h3 sp-pb-[18px]">100 超人幣</div>
+              <div class="sp-my-4">NT$ 100</div>
+              <v-btn color="primary" outline @click="openPurchaseModal(100)"
+                >儲值去</v-btn
+              >
+            </v-card-text>
+          </VCard>
+          <VCard class="sp-flex-1">
+            <v-card-text
+              class="sp-border-2 sp-border-black sp-border-solid sp-rounded-2 sp-text-center"
             >
-          </div>
-          <div
-            class="sp-border-2 sp-border-black sp-text-center sp-border-solid"
-          >
-            <div class="sp-text-h3">1000 超人幣</div>
-            <div class="sp-text-caption">贈送 200 幫手幣</div>
-            <div>NT$ 1000</div>
-            <v-btn color="primary" outline @click="openPurchaseModal(1000)"
-              >儲值去</v-btn
+              <div class="sp-text-h3">500 超人幣</div>
+              <div class="sp-text-caption">贈送 50 幫手幣</div>
+              <div class="sp-my-4">NT$ 500</div>
+              <v-btn color="primary" outline @click="openPurchaseModal(500)"
+                >儲值去</v-btn
+              >
+            </v-card-text>
+          </VCard>
+          <VCard class="sp-flex-1">
+            <v-card-text
+              class="sp-border-2 sp-border-black sp-border-solid sp-rounded-2 sp-text-center"
             >
-          </div>
+              <div class="sp-text-h3">1000 超人幣</div>
+              <div class="sp-text-caption">贈送 200 幫手幣</div>
+              <div class="sp-my-4">NT$ 1000</div>
+              <v-btn color="primary" outline @click="openPurchaseModal(1000)"
+                >儲值去</v-btn
+              >
+            </v-card-text>
+          </VCard>
         </VCol>
       </VRow>
     </VContainer>
@@ -93,7 +103,6 @@
   .bg-svg {
     width: 48px;
     height: 48px;
-    margin: 0 auto;
     &.superCoin {
       background: url("@/assets/images/svg/superCoin.svg") center center /
         contain no-repeat;

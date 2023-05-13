@@ -2,7 +2,9 @@
   <v-layout class="sp-min-h-screen">
     <Navbar />
     <div class="sp-mt-[48px] sp-w-full sp-flex">
-      <div class="sp-flex sp-flex-col sp-p-4 sp-border-r-2 sp-border-balck">
+      <div
+        class="sp-hidden md:sp-flex sp-flex-col sp-p-4 sp-border-r-2 sp-border-balck"
+      >
         <NuxtLink class="account sp-pb-2" to="/account">我的帳號</NuxtLink>
         <NuxtLink class="sp-pb-2" to="/account/tasks">任務管理</NuxtLink>
         <NuxtLink class="sp-pb-2" to="/account/comments">評價查看</NuxtLink>
