@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Sec-1-CTA -->
-    <div class="wrapper">
+    <div class="wrapper 2xl:sp-min-h-[85vh]">
       <header>
         <img src="../assets/images/bg/bg-1.png" class="back" />
         <img src="../assets/images/bg/bg-2.png" class="fore" />
@@ -13,65 +13,90 @@
         </div>
       </header>
     </div>
-    <!-- Sec-2-Intor -->
-    <section class="sp-bg-[#DFDFFF] section-2 sp-relative sp-py-10 ">
-      <div class="flexCenter sp-max-w-[900px] secContainer lg:sp-flex-nowrap">
-        <div ref="sec2Img" class="sm:sp-basis-1/2 sp-p-8 sp-max-w-[450px] sp-min-w-[300px]">
-          <img src="../assets/images/bg/bg-s2-left.png" alt="">
-        </div>
+    <!-- Sec-2-Intors -->
+    <HomeSecWrapper class="section-2 " bgColor="primary-lighten" maxWidth="screen-lg">
+      <div ref="sec2Img" class="sm:sp-basis-1/2  sp-max-w-[450px] sp-min-w-[300px]">
+        <img src="../assets/images/bg/bg-s2-left.png" alt="">
+      </div>
 
-        <div class="sm:sp-basis-1/2 flexCenter sp-flex-col">
-          <div class="introCard sp-mb-4 sp-mx-2 sp-hidden" v-for="(cardData, idx) in intro" :key="idx">
-            <HomeIntroCard :card-data="cardData" />
-          </div>
+      <div class="sm:sp-basis-1/2 sp-flex-center sp-flex-col">
+        <div class="introCard sp-mb-4 sp-mx-2 sp-hidden" v-for="(cardData, idx) in intro" :key="idx">
+          <HomeIntroCard :card-data="cardData" />
         </div>
       </div>
-    </section>
+    </HomeSecWrapper>
     <div ref="showIntroCard"></div>
-    <!-- Sec-3-Counter -->
-    <section class="sp-bg-[#0C0D50] sp-relative sp-py-10 ">
-      <div class="flexCenter sp-max-w-[600px] secContainer lg:sp-flex-nowrap">
-        <div v-for="(cnt, idx) in _countData" :key="idx" class="sp-basis-1/2 sp-p-8 sp-max-w-[450px]">
-          <HomeCounter class="counterItem" v-bind="cnt" />
-        </div>
+
+    <!-- Sec-3-Counters -->
+    <HomeSecWrapper bgColor="primary" maxWidth="screen-md">
+      <div v-for="(cnt, idx) in _countData" :key="idx" class="sp-basis-full sm:sp-basis-1/2 sp-p-8 sp-max-w-[450px]">
+        <HomeCounter class="counterItem" v-bind="cnt" />
       </div>
-    </section>
+    </HomeSecWrapper>
     <div ref="startCount"></div>
 
     <!-- Sec-4-CompletedCase -->
-    <section class=" sp-pt-20 sp-pb-8 sp-max-w-[900px] sp-flex secContainer sp-flex-nowrap">
-      <div
-        class="sp-basis-1/3 sp-py-10 sp-grow sp-max-w-[450px] sp-flex sp-flex-col sp-justify-between sp-items-center sp-border-slate-200 md:sp-border-r-2">
+    <HomeSecWrapper maxWidth="screen-md" class="s4">
+      <div class="s4_left md:sp-border-r-2">
         <HomeSteper class="sp-mb-8" v-for="(step, idx) in steps" :key="idx" :step-data="step" />
       </div>
       <div class="sp-grow sp-py-4 lg:sp-pl-8">
         <HomeCompletedCard v-for="item in completedCaseData" :key="item._id" :card-data="item" />
       </div>
-    </section>
-    <div class="flexCenter sp-mb-20">
-      <v-btn class="text-white" max-width="200" color="v-purple" rounded>立即刊登任務
-        <v-icon class="mt-1">mdi-arrow-right</v-icon>
-      </v-btn>
-    </div>
-    <section class="sp-bg-[#DFDFFF] sp-py-10 "></section>
+      <div class="sp-basis-full sp-mt-8">
+        <div class="sp-flex-center sp-mb-20 ">
+          <NuxtLink to="/post-task">
+            <v-btn class="text-white" max-width="200" color="v-purple" rounded>立即刊登任務
+              <v-icon class="mt-1">mdi-arrow-right</v-icon>
+            </v-btn>
+          </NuxtLink>
+        </div>
+        <Bg_s4 class="s4_bg" />
+      </div>
+    </HomeSecWrapper>
 
-    <!-- <section class="sp-bg-[#0C0D50] sp-h-[60vh]">
-      <Counter />
-    </section> -->
+    <!-- Sec-5-Helpers -->
+    <HomeSecWrapper bgColor="primary-lighten" maxWidth="screen-xl" class="sp-py-32">
+      <div class="sp-border-l-[12px] sp-border-primary sp-pl-4">
+        <h2 class="sp-text-h2 sp-mb-4">最優秀的超<br />人幫手</h2>
+        <p>讓超人幫手成為你的得力助手</p>
+      </div>
+      <div class="sp-bg-purple sp-flex-grow sp-m-4">
+        <div class="sp-text-h3">Carousels
+        </div>
+        <span v-for="(h, idx) in helpers" :key="idx">{{ h.name }}</span>
+      </div>
+    </HomeSecWrapper>
 
+    <!-- Sec-6-Comments -->
+    <HomeSecWrapper maxWidth="screen-xl" class="s6">
+      <div class="sp-text-h3 sp-basis-full sp-text-center sp-my-8">
+        超過 <span class="sp-text-purple">500+</span> 則真實評價
+      </div>
+      <div class="s6_right sm:sp-justify-between">
+        <HomeCommentCard v-bind="c" v-for="(c, idx) in comments" :key="idx" />
+      </div>
+      <Bg_s6 class="s6_bg" />
+    </HomeSecWrapper>
   </div>
 </template>
 
 <script setup>
-import { ArrowSmallRightIcon } from "@heroicons/vue/24/solid";
-import { getCompletedCases, getAccountProfile } from '@/services/apis/home'
+import Bg_s4 from "@/assets/images/bg/bg-s4.svg"
+import Bg_s6 from "@/assets/images/bg/bg-s6.svg"
+import {
+  getCompletedCases,
+  getTaskStats,
+  getExcellentHelpers,
+  getCompletedReviews,
+} from '@/services/apis/home'
 import homeData from "@/static/home.json"
 const { intro, countData, steps } = homeData
 
 
 onMounted(async () => {
+  await initData()
   parallaxInit()
-  await fetchCompletedCases()
   observerSec2()
   observerSec3()
 })
@@ -154,10 +179,11 @@ const countDown = async (item) => {
 
 }
 /* 
-  sec4-CompletedCase
+  Init Data
 */
-//Fetch
 const completedCaseData = ref([])
+const helpers = ref([])
+const comments = ref([])
 const fetchCompletedCases = async () => {
   try {
     let { data } = await getCompletedCases()
@@ -166,11 +192,38 @@ const fetchCompletedCases = async () => {
     console.log({ err });
   }
 }
+const fetchTaskStats = async () => {
+  let res = await getTaskStats()
+  console.log({ res });
+}
+const fetchExcellentHelpers = async () => {
+  let { data } = await getExcellentHelpers()
+  helpers.value = data
+}
+const fetchCompletedReviews = async () => {
+  let { data } = await getCompletedReviews()
+  comments.value = data
+}
+const initData = async () => {
+  await fetchCompletedCases()
+  await fetchTaskStats()
+  await fetchExcellentHelpers()
+  await fetchCompletedReviews()
+}
+
 
 </script>
 <style scoped lang="postcss">
 .secContainer {
-  @apply sp-flex-row sp-mx-auto sp-flex-wrap
+  @apply sp-flex sp-flex-row sp-mx-auto sp-flex-wrap
+}
+
+.s4_left {
+  @apply sp-basis-1/3 sp-py-10 sp-grow sp-mx-auto sp-max-w-[450px] sp-flex sp-flex-col sp-justify-between sp-items-center sp-border-slate-200
+}
+
+.s6_right {
+  @apply sp-w-full sp-flex sp-justify-center sp-flex-wrap
 }
 </style>
 <style scoped lang="scss">
@@ -201,7 +254,7 @@ header {
 }
 
 .back {
-  transform: translateZ(-10px) scale(2);
+  transform: translateZ(-30px) scale(4);
 }
 
 .fore {
@@ -228,5 +281,19 @@ header {
   background-size: contain;
   opacity: 0.8;
   z-index: 1;
+}
+
+.s4_bg {
+  position: absolute;
+  bottom: 0;
+  right: 5%;
+  z-index: -1;
+}
+
+.s6_bg {
+  position: absolute;
+  top: 0;
+  left: 5%;
+  z-index: -1;
 }
 </style>
