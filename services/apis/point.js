@@ -6,5 +6,8 @@ export const getAccountPoints = () =>
 export const getAccountPointsHistory = () =>
   req("GET", `/account/points/history`, {}, { auth: true });
 
-export const postPointspurchase = (data) =>
+export const postAccountPointspurchase = (data) =>
   req("POST", `/account/points/purchase`, data, { auth: true });
+
+export const postAccountPointsCashback = (data) =>
+  req("POST", `/account/points/cashback`, data, { auth: true });

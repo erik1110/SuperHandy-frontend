@@ -34,6 +34,13 @@ export const useFormUtil = () => {
     return result;
   };
 
+  //現金兌換驗證
+  const ruleBankAcctLen = (v) =>
+    (!!v && v.length == 14) || "請輸入銀行號碼 14 碼";
+  const rulePointExchange = (v) =>
+    (!!v && v >= 300) || "單次兌換最少需要 300 點超人幣";
+
+  //註冊表單驗證
   const formRules = () => {
     const _counter = [10, 50, 100, 200, 1000];
     const _hint = "最多輸入{_counter}個字元";
@@ -100,6 +107,8 @@ export const useFormUtil = () => {
     ruleRequired,
     ruleEmail,
     rulePassLen,
+    ruleBankAcctLen,
+    rulePointExchange,
     rulePhone,
     ruleConfirmPassword,
     ruleAddress,

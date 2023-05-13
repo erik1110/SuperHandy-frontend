@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-  import { postPointspurchase } from "@/services/apis/point";
+  import { postAccountPointspurchase } from "@/services/apis/point";
   const props = defineProps({
     money: Number,
   });
@@ -41,7 +41,7 @@
     let data = {
       money: props.money,
     };
-    let res = await postPointspurchase(data);
+    let res = await postAccountPointspurchase(data);
     loading.value = false;
     if (!res.error) {
       message.value = "儲值成功!";
