@@ -1,5 +1,5 @@
 <template>
-  <section class="sp-relative sp-py-10" :class="bgColor ? `sp-bg-${bgColor}` : ''">
+  <section class="sp-relative sp-py-10" :class="bgColor ? bgColor : ''">
     <div class="sp-flex-center secContainer sp-max-w-screen-xl">
       <slot></slot>
     </div>
