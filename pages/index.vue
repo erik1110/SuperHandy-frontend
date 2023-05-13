@@ -14,7 +14,7 @@
       </header>
     </div>
     <!-- Sec-2-Intors -->
-    <HomeSecWrapper class="section-2 sp-py-20 " bgColor="primary-lighten">
+    <HomeSecWrapper class="section-2 sp-py-20 " bgColor="sp-bg-primary-lighten">
       <div ref="sec2Img" class="sm:sp-basis-1/2 sp-flex-center">
         <img class="sp-max-w-[450px] sp-min-w-[300px]" src="../assets/images/bg/bg-s2-left.png" alt="">
       </div>
@@ -28,7 +28,7 @@
     <div ref="showIntroCard"></div>
 
     <!-- Sec-3-Counters -->
-    <HomeSecWrapper bgColor="primary">
+    <HomeSecWrapper bgColor="sp-bg-primary">
       <div v-for="(cnt, idx) in _countData" :key="idx" class="sp-basis-full sm:sp-basis-1/2 sp-p-8 sp-max-w-[450px]">
         <HomeCounter class="counterItem" v-bind="cnt" />
       </div>
@@ -56,7 +56,7 @@
     </HomeSecWrapper>
 
     <!-- Sec-5-Helpers -->
-    <HomeSecWrapper bgColor="primary-lighten" class="sp-py-32">
+    <HomeSecWrapper bgColor="sp-bg-primary-lighten" class="sp-py-32">
       <div class="sp-border-l-[12px] sp-border-primary sp-pl-4">
         <h2 class="sp-text-h2 sp-mb-4">最優秀的超<br />人幫手</h2>
         <p>讓超人幫手成為你的得力助手</p>
