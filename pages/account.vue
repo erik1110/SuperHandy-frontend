@@ -1,13 +1,5 @@
 <template>
   <div>
-    <VContainer fluid>
-      <VRow>
-        <VCol>
-          <h1>會員</h1>
-        </VCol>
-      </VRow>
-    </VContainer>
-
     <NuxtPage />
   </div>
 </template>
