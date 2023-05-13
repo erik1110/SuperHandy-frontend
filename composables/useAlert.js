@@ -6,7 +6,7 @@ export const useAlert = () => {
   //基本視窗(要按OK才會關閉)
   const basicBox = function (text, nuxtFunc) {
     swal.fire({ title: "", text, confirmButtonText: "確定" }).then((result) => {
-      if (result.isConfirmed && nuxtFunc && typeof nuxtFunc === "function") {
+      if (nuxtFunc && typeof nuxtFunc === "function") {
         nuxtFunc();
       }
     });

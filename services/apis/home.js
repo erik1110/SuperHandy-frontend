@@ -1,11 +1,6 @@
 const { req } = useHttp();
-// 不需登入的API
+
 export const getCompletedCases = () => req("GET", `/home/completed-cases`);
-
-// 一次性token
-// export const getCompletedCases = () =>
-//   req("PATCH", `/verify-email`, {}, { token: "hello" });
-
-// 需登入的API(example)
-export const getAccountProfile = () =>
-  req("GET", `/account/profile`, {}, { auth: true });
+export const getTaskStats = () => req("GET", `/home/task-stats`);
+export const getExcellentHelpers = () => req("GET", `/home/excellent-helpers`);
+export const getCompletedReviews = () => req("GET", `/home/completed-reviews`);

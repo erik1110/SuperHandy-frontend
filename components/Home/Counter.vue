@@ -1,5 +1,5 @@
 <template>
-  <div class="sp-w-full flexCenter sp-flex-col">
+  <div class="sp-w-full sp-flex-center sp-flex-col">
     <Component :is="icons[props.icon]" class="sp-mb-2 sp-icon-md sp-mr-2 sp-text-white" />
     <p class="sp-flex sp-justify-center count-num sp-relative">
       <span class="sp-text-7xl sp-font-black  sp-text-secondary">{{ count }}</span>

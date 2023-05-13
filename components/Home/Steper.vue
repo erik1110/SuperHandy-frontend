@@ -1,6 +1,6 @@
 <template>
   <div class="sp-flex sp-items-center">
-    <div class="circle flexCenter">
+    <div class="circle sp-flex-center">
       <Component :is="icons[icon]" class="sp-icon-lg sp-text-primary" />
     </div>
     <div class="sp-whitespace-nowrap">
