@@ -14,9 +14,9 @@
       </header>
     </div>
     <!-- Sec-2-Intors -->
-    <HomeSecWrapper class="section-2 " bgColor="primary-lighten" maxWidth="screen-lg">
-      <div ref="sec2Img" class="sm:sp-basis-1/2  sp-max-w-[450px] sp-min-w-[300px]">
-        <img src="../assets/images/bg/bg-s2-left.png" alt="">
+    <HomeSecWrapper class="section-2 sp-py-20 " bgColor="primary-lighten">
+      <div ref="sec2Img" class="sm:sp-basis-1/2 sp-flex-center">
+        <img class="sp-max-w-[450px] sp-min-w-[300px]" src="../assets/images/bg/bg-s2-left.png" alt="">
       </div>
 
       <div class="sm:sp-basis-1/2 sp-flex-center sp-flex-col">
@@ -28,7 +28,7 @@
     <div ref="showIntroCard"></div>
 
     <!-- Sec-3-Counters -->
-    <HomeSecWrapper bgColor="primary" maxWidth="screen-md">
+    <HomeSecWrapper bgColor="primary">
       <div v-for="(cnt, idx) in _countData" :key="idx" class="sp-basis-full sm:sp-basis-1/2 sp-p-8 sp-max-w-[450px]">
         <HomeCounter class="counterItem" v-bind="cnt" />
       </div>
@@ -36,7 +36,7 @@
     <div ref="startCount"></div>
 
     <!-- Sec-4-CompletedCase -->
-    <HomeSecWrapper maxWidth="screen-md" class="s4">
+    <HomeSecWrapper class="s4">
       <div class="s4_left md:sp-border-r-2">
         <HomeSteper class="sp-mb-8" v-for="(step, idx) in steps" :key="idx" :step-data="step" />
       </div>
@@ -56,7 +56,7 @@
     </HomeSecWrapper>
 
     <!-- Sec-5-Helpers -->
-    <HomeSecWrapper bgColor="primary-lighten" maxWidth="screen-xl" class="sp-py-32">
+    <HomeSecWrapper bgColor="primary-lighten" class="sp-py-32">
       <div class="sp-border-l-[12px] sp-border-primary sp-pl-4">
         <h2 class="sp-text-h2 sp-mb-4">最優秀的超<br />人幫手</h2>
         <p>讓超人幫手成為你的得力助手</p>
@@ -69,7 +69,7 @@
     </HomeSecWrapper>
 
     <!-- Sec-6-Comments -->
-    <HomeSecWrapper maxWidth="screen-xl" class="s6">
+    <HomeSecWrapper class="s6">
       <div class="sp-text-h3 sp-basis-full sp-text-center sp-my-8">
         超過 <span class="sp-text-purple">500+</span> 則真實評價
       </div>

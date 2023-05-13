@@ -1,13 +1,15 @@
 <template>
-  <section class="sp-relative sp-py-10" :class="$attrs.bgColor ? `sp-bg-${$attrs.bgColor}` : ''">
-    <div class="sp-flex-center secContainer" :class="$attrs.maxWidth ? `sp-max-w-${$attrs.maxWidth}` : ''">
+  <section class="sp-relative sp-py-10" :class="bgColor ? `sp-bg-${bgColor}` : ''">
+    <div class="sp-flex-center secContainer sp-max-w-screen-xl">
       <slot></slot>
     </div>
   </section>
 </template>
 
 <script setup>
-
+const { bgColor } = defineProps({
+  bgColor: String,
+})
 </script>
 
 <style lang="postcss" scoped>
