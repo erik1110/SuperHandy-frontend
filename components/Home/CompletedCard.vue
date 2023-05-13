@@ -1,5 +1,5 @@
 <template>
-  <div class="caseCard">
+  <div class="sp-card-wrapper caseCard">
     <v-card min-width="300" elevation="0">
       <div class="sp-flex sp-justify-between sp-items-center">
         <div class="left sp-basis-2/3">
@@ -46,7 +46,7 @@ const { timeFormat } = useMoment();
 
 <style lang="postcss" scoped>
 .caseCard {
-  @apply sp-mx-auto sp-w-[90%] sp-px-6 sp-py-5 sp-max-w-lg sp-min-w-[420px] sp-mb-4 sp-rounded-2xl sp-shadow-lg;
+  @apply sp-w-[90%] sp-max-w-lg sp-min-w-[420px] sp-px-6 sp-py-5 sp-mb-4;
 }
 
 .successTag {

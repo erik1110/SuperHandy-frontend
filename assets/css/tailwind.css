@@ -16,7 +16,7 @@
     font-weight: 700;
   }
   .sp-text-h2 {
-    font-size: 3rem;
+    font-size: 2.5rem;
     line-height: 1.2;
     font-weight: 700;
   }
@@ -78,7 +78,7 @@
   background-size: 100%;
 }
 /* 置中 */
-.flexCenter{
+.sp-flex-center{
   @apply sp-flex sp-justify-center sp-items-center
 }
 /* Icons */
@@ -90,4 +90,8 @@
 }
 .sp-icon-lg{
   @apply sp-w-12 sp-h-12
+}
+/* Card Wrapper */
+.sp-card-wrapper{
+  @apply sp-mx-auto sp-rounded-2xl sp-shadow-lg;
 }
