@@ -54,26 +54,24 @@ export const useFormUtil = () => {
         counter: _counter[0],
         hint: _replace(_hint, _counter[0]),
         rule: [
-          ruleRequired,
-          (v) => (!!v && v.length <= 10) || _replace(_error, _counter[0]),
+          (v) => !v || v.length <= 10|| _replace(_error, _counter[0]),
         ],
       },
       nickname: {
         counter: _counter[1],
         hint: _replace(_hint, _counter[1]),
         rule: [
-          ruleRequired,
-          (v) =>
-            (!!v && v.length <= _counter[1]) || _replace(_error, _counter[1]),
+          //ruleRequired,
+          (v) => !v || v.length <= _counter[1] || _replace(_error, _counter[1]),
         ],
       },
       address: {
         counter: _counter[2],
         hint: _replace(_hint, _counter[2]),
         rule: [
-          ruleRequired,
+          //ruleRequired,
           (v) =>
-            (!!v && v.length <= _counter[2]) || _replace(_error, _counter[2]),
+          !v || v.length <= _counter[2] || _replace(_error, _counter[2]),
           ruleAddress,
         ],
       },
@@ -89,8 +87,7 @@ export const useFormUtil = () => {
         hint: _replace(_hint, _counter[1]),
         rule: [
           ruleRequired,
-          (v) =>
-            (!!v && v.length <= _counter[1]) || _replace(_error, _counter[1]),
+          (v) => !v || v.length <= _counter[1] || _replace(_error, _counter[1]),
         ],
       },
       taskDescription: {
