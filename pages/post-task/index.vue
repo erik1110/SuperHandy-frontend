@@ -3,7 +3,7 @@
     <v-container>
         <VRow justify='center'>
             <VCol cols='12' lg='10'>
-                <v-form @submit.prevent='submit' ref='postTaskForm' validate-on="blur">
+                <v-form @submit.prevent='submit' ref='postTaskForm' validate-on="submit">
 
                     <div class=''>
                         <label class='label text-grey-darken-2' for='title'>任務標題</label>
@@ -105,8 +105,8 @@
                     <div class='btns text-center mt-16'>
                         <v-btn color="primary" type='submit' class='mt-2 me-2' id='draft' :disabled="loading"
                             :loading="draftBtnloading">儲存為草稿</v-btn>
-                        <v-btn color="primary" type='button' class='mt-2' id='publish' :disabled="loading"
-                            :loading="publishBtnloading">費用計算</v-btn>
+                        <v-btn color="primary" type='submit' class='mt-2' id='publish' :disabled="loading"
+                            :loading="publishBtnloading">立即刊登費用計算</v-btn>
                     </div>
 
                 </v-form>
