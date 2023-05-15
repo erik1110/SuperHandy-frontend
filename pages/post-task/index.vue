@@ -3,7 +3,7 @@
     <v-container>
         <VRow justify='center'>
             <VCol cols='12' lg='10'>
-                <v-form @submit.prevent=submit ref='postTaskForm' validate-on="submit">
+                <v-form @submit.prevent='submit' ref='postTaskForm' validate-on="blur">
 
                     <div class=''>
                         <label class='label text-grey-darken-2' for='title'>任務標題</label>
@@ -77,13 +77,13 @@
                                 </v-row>
                                 <v-row>
                                     <v-col cols="12" md="6">
-                                        <v-select label=請選擇縣市 :rules='rules.locationCity' :items='twArea.county' clearable
+                                        <v-select label=請選擇縣市 :rules='rules.locationCity' :items='countyList' clearable
                                             item-title='city' item-value='city' v-model='locationCity' required
                                             @click:clear="clearDisc">
                                         </v-select>
                                     </v-col>
                                     <v-col cols="12" md="6">
-                                        <v-select label=請選擇區域 :rules='rules.locationDist' :items='discList' clearable
+                                        <v-select label=請選擇區域 :rules='rules.locationDist' :items='townList' clearable
                                             item-title='disc' item-value='disc' v-model='locationDist'
                                             :hint='hintLocationDisc' :readonly='readonlyLocationDisc' persistent-hint
                                             required>
@@ -103,33 +103,83 @@
                     </div>
 
                     <div class='btns text-center mt-16'>
-                        <v-btn type='submit' class='mt-2' id='draft' :disabled="loading"
+                        <v-btn color="primary" type='submit' class='mt-2 me-2' id='draft' :disabled="loading"
                             :loading="draftBtnloading">儲存為草稿</v-btn>
-                        <v-btn type='submit' class='mt-2' id='published' :disabled="loading"
-                            :loading="postBtnloading">立即刊登</v-btn>
+                        <v-btn color="primary" type='button' class='mt-2' id='publish' :disabled="loading"
+                            :loading="publishBtnloading">費用計算</v-btn>
                     </div>
 
                 </v-form>
             </VCol>
         </VRow>
     </v-container>
+    <v-dialog v-model="dialogIsOpen" width="auto">
+        <v-card>
+            <v-toolbar :color="dialogType" title="系統訊息"></v-toolbar>
+            <v-card-text>
+                {{ dialogMessage }}
+            </v-card-text>
+            <v-card-actions v-if="dialogIsShowSuccessBtn" class="mt-2">
+                <v-btn color="primary me-2" @click="dialogIsOpen = false">繼續刊登</v-btn>
+                <NuxtLink :to="siteConfig.linkPaths.tasks.to">
+                    <v-btn color="primary">前往任務管理</v-btn>
+                </NuxtLink>
+            </v-card-actions>
+            <v-card-actions v-else class="mt-2">
+                <v-btn color="primary me-2 " @click="dialogIsOpen = false" block>關閉</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script setup>
-import { twArea } from '@/services/twArea'
+import tw_county from '@/static/tw_county.json'
+import tw_town from '@/static/tw_town.json'
 import { siteConfig } from '@/services/siteConfig'
 import { getCategories, getExposurePlan } from '@/services/apis/general';
-const { basicBox, confirmBox, deleteConfirmBox } = useAlert()
+import { postDraft, postPublish } from '@/services/apis/postTask';
+const { checkRespStatus } = useHttp();
 const { logInfo, logError } = useLog();
-const _message = {
-    draft: '儲存草稿成功',
-    post: '立即刊登成功'
-}
+const _work = '刊登任務'
 
-// - 表單初始宣告 -
+// - loading -
 const loading = ref(false);
 const draftBtnloading = ref(false);
-const postBtnloading = ref(false);
+const publishBtnloading = ref(false);
+function setLoading({
+    overlay,
+    draftBtn,
+    publishBtn
+}) {
+    loading.value = overlay;
+    draftBtnloading.value = draftBtn;
+    publishBtnloading.value = publishBtn
+}
+
+// - 彈出視窗 -
+const dialogHeaderColor = {
+    info: 'primary',
+    error: 'error'
+}
+const dialogType = ref('')
+const dialogIsOpen = ref(false)
+const dialogMessage = ref('')
+const dialogIsShowSuccessBtn = ref(false)
+function setPostTaskDialog({
+    isOpen,
+    message,
+    isShowSuccessBtn,
+    HeaderColor,
+}) {
+    dialogIsOpen.value = isOpen
+    dialogMessage.value = message
+    dialogIsShowSuccessBtn.value = isShowSuccessBtn
+    dialogType.value = !HeaderColor ? dialogHeaderColor.info : HeaderColor
+}
+
+
+// - 表單宣告 -
+const postTaskForm = ref(null)
 const title = ref('');
 const category = ref('');
 const description = ref('');
@@ -142,12 +192,6 @@ const contactInfoEmail = ref('')
 const locationCity = ref('')
 const locationDist = ref('')
 const locationAddress = ref('')
-const locationLandmark = ref('')
-const locationLongitude = ref('')//經度
-const locationLatitude = ref('')//緯度
-
-
-
 
 
 // - 表單驗證 -
@@ -166,36 +210,117 @@ const rules = ref({
     locationDist: [],
     locationAddress: [],
 })
-const v1 = {
-    //titlerules: postTaskFormRules.taskTitle.rule,
-    category: [],
-    description: postTaskFormRules.taskDescription.rule,
-    salary: [],
-    exposurePlan: [],
-    contactInfoName: [],
-    contactInfoPhone: [],
-    contactInfoEmail: [],
-    locationCity: [],
-    locationDist: [],
-    locationAddress: [],
-}
-const v2 = {
-    //titlerules: postTaskFormRules.taskTitle.rule,
-    category: [ruleRequired],
-    description: [ruleRequired, postTaskFormRules.taskDescription.rule[0]],
-    salary: [ruleSuperCoint],
-    exposurePlan: [(v) => (!!v && v.length > 1) || "必填欄位"],
-    contactInfoName: postTaskFormRules.name.rule,
-    contactInfoPhone: [rulePhone],
-    contactInfoEmail: [ruleEmail],
-    locationCity: [ruleRequired],
-    locationDist: [ruleRequired],
-    locationAddress: [ruleAddress],
+function setFormRule(rules, status) {
+    switch (status) {
+        case siteConfig.taskStatus.draft:
+            rules.value = _draftRule
+            break;
+        case siteConfig.taskStatus.publish:
+            rules.value = _publishRule
+            break;
+        default:
+            break;
+    }
 }
 
 
+// - 表單送出 -
+async function postFormData(status, data) {
+    switch (status) {
+        case siteConfig.taskStatus.draft:
+            return await postDraft(data);
+        case siteConfig.taskStatus.publish:
+            data.taskTrans = {
+                superCoin: 1000,
+                helperCoin: 0
+            }
+            return await postPublish(data);
+        default:
+            break;
+    }
+}
+const submit = async (event) => {
 
-// - 取得任務類別 & 曝光方案 & 取得縣市與地區 -
+    // 1. 開啟loading & disable btns
+    const _submitter = event.submitter.id
+    setLoading({
+        overlay: true,
+        draftBtn: _submitter === siteConfig.taskStatus.draft,
+        publishBtn: _submitter === siteConfig.taskStatus.publish,
+    })
+    logInfo(_work, 'submitter', _submitter)
+
+
+    // 2.表單檢查
+    setFormRule(rules, _submitter)
+    const validate = await validateFormResult(postTaskForm)
+    logInfo(_work, 'validateFormResult', validate)
+    if (!validate) {
+        setPostTaskDialog({
+            isOpen: true,
+            message: '表單驗證還沒有成功喔!',
+            isShowSuccessBtn: false
+        })
+        setLoading({
+            overlay: false,
+            draftBtn: false,
+            publishBtn: false,
+        })
+        return;
+    }
+
+    //3. 更新資料
+    //4. 關閉loading & reset form
+    const data = {
+        title: title.value,
+        category: category.value,
+        description: description.value,
+        salary: salary.value,
+        exposurePlan: exposurePlan.value,
+        imagesUrl: [],
+        contactInfo: {
+            name: contactInfoName.value,
+            phone: contactInfoPhone.value,
+            email: contactInfoEmail.value
+        },
+        location: {
+            city: locationCity.value,
+            dist: locationDist.value,
+            address: locationAddress.value,
+        }
+    }
+    logInfo(_work, 'send data', data)
+    let _message = ''
+    let _dialogType = ''
+    try {
+        const response = await postFormData(_submitter, data)
+        logInfo(_work, 'response', response);
+        if (response && checkRespStatus(response)) {
+            postTaskForm.value.reset()
+        }
+        _message = response.message
+    } catch (error) {
+        _message = '刊登任務失敗'
+        _dialogType = dialogHeaderColor.error
+        logError(_work, { error });
+    } finally {
+        setLoading({
+            overlay: false,
+            draftBtn: false,
+            publishBtn: false,
+        })
+        setPostTaskDialog({
+            isOpen: true,
+            message: _message,
+            isShowSuccessBtn: true,
+            HeaderColor: _dialogType
+        })
+    }
+}
+
+
+
+// - 取得任務類別 & 曝光方案  -
 const exposurePlans = ref([])
 const taskCategories = ref([])
 function getAllData() {
@@ -208,114 +333,16 @@ function getAllData() {
         taskCategories.value = result[1].data
     }).catch(error => {
         logError(error);
-        basicBox('取得選單資料發生異常')
+        setPostTaskDialog({
+            isOpen: true,
+            message: '取得選單資料發生異常',
+            isShowSuccessBtn: true,
+            HeaderColor: 'error'
+        })
     })
 }
 getAllData()
 
-
-
-// - 跟據縣市顯示地區選單 -
-const hintLocationDisc = ref('')
-const readonlyLocationDisc = ref(true)
-const discList = computed(() => {
-    if (!locationCity.value) {
-        hintLocationDisc.value = '請先選擇縣市'
-        readonlyLocationDisc.value = true
-    } else {
-        hintLocationDisc.value = ''
-        readonlyLocationDisc.value = false
-        const result = twArea.town.filter(item => item.city === locationCity.value)
-        return Object.values(result).map(item => item.disc)
-    }
-})
-function clearDisc() {
-    locationDist.value = ''
-}
-
-
-
-// - 送出表單 -
-const postTaskForm = ref(null)
-const submit = async (event) => {
-    const _submitter = event.submitter.id
-    console.log(_submitter, 'submitter')
-    //console.log(postTaskForm, 'postTaskForm')
-    // 處理表單規則
-    rules.value = {}
-    postTaskForm.value.resetValidation()
-    switch (_submitter) {
-        case siteConfig.taskStatus.draft:
-            rules.value = v1
-            break;
-        case siteConfig.taskStatus.published:
-            rules.value = v2
-            break;
-        default:
-            break;
-    }
-    //console.log(rules.value.title, 'rules.value.title')
-
-    //1. 表單檢查
-    const result = await validateFormResult(postTaskForm)
-    console.log(result, 'validateFormResult')
-    if (!result) {
-        // basicBox('表單驗證還沒有成功喔!')
-        // isUpdating.value = false
-        return false;
-    }
-
-    //2. 開啟loading & disable btns
-    loading.value = true
-    switch (_submitter) {
-        case siteConfig.taskStatus.draft:
-            draftBtnloading.value = true
-            break;
-        case siteConfig.taskStatus.published:
-            postBtnloading.value = true
-            break;
-        default:
-            break;
-    }
-
-    //3. 組裝資料
-    const data = {
-        title: title.value,
-        status: _submitter,
-        category: category.value,
-        description: description.value,
-        salary: salary.value,
-        exposurePlan: exposurePlan.value,
-        imagesUrl: [],
-        contactInfo: {
-            name: contactInfoName,
-            phone: contactInfoPhone,
-            email: contactInfoEmail
-        },
-        location: {
-            city: locationCity.value,
-            dist: locationDist.value,
-            address: locationAddress.value,
-            landmark: locationLandmark.value,
-            lng: locationLongitude.value,
-            lat: locationLatitude.value
-        }
-    }
-    console.log(data, 'data')
-
-
-    //4. 更新資料
-    //5. 關閉loading
-    setTimeout(() => {
-        loading.value = false
-        draftBtnloading.value = false
-        postBtnloading.value = false
-        postTaskForm.value.reset()
-    }, 5000)
-
-
-
-};
 
 
 // - 選擇服務類別帶出任務說明 -
@@ -330,19 +357,64 @@ watch(
 );
 
 
+// - 跟據縣市顯示地區選單 -
+const hintLocationDisc = ref('')
+const readonlyLocationDisc = ref(true)
+const countyList = ref(tw_county)
+const townList = computed(() => {
+    if (!locationCity.value) {
+        hintLocationDisc.value = '請先選擇縣市'
+        readonlyLocationDisc.value = true
+    } else {
+        hintLocationDisc.value = ''
+        readonlyLocationDisc.value = false
+        try {
+            const result = tw_town.filter(item => item.city === locationCity.value)
+            return Object.values(result).map(item => item.disc)
+        } catch (error) {
+            logError(_work, "取得區域選單", { error })
+            return []
+        }
+    }
+})
+// 當縣市變更，區域也要清空
+watch(locationCity, (nV, oV) => {
+    if (nV !== oV) {
+        clearDisc()
+    }
+})
+function clearDisc() {
+    locationDist.value = ''
+}
+
+
+const _draftRule = {
+    category: [],
+    description: postTaskFormRules.taskDescription.rule,
+    salary: [ruleSuperCoint],
+    exposurePlan: [],
+    contactInfoName: [],
+    contactInfoPhone: [rulePhone],
+    contactInfoEmail: [ruleEmail],
+    locationCity: [],
+    locationDist: [],
+    locationAddress: [],
+}
+
+const _publishRule = {
+    category: [ruleRequired],
+    description: [ruleRequired, postTaskFormRules.taskDescription.rule[0]],
+    salary: [ruleRequired, ruleSuperCoint],
+    exposurePlan: [(v) => (!!v && v.length > 1) || "必填欄位"],
+    contactInfoName: [ruleRequired, postTaskFormRules.name.rule[0]],
+    contactInfoPhone: [ruleRequired, rulePhone],
+    contactInfoEmail: [ruleRequired, ruleEmail],
+    locationCity: [ruleRequired],
+    locationDist: [ruleRequired],
+    locationAddress: [ruleAddress],
+}
+
 
 </script>
 
-<style scoped>
-.btns button {
-    width: 100%;
-}
-
-/* xs 以上 */
-@media(min-width: 600px) {
-    .btns button {
-        width: auto;
-        margin: 0 0.25rem;
-    }
-}
-</style>
+<style scoped></style>
