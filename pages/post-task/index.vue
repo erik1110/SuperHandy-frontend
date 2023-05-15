@@ -3,7 +3,7 @@
     <v-container>
         <VRow justify='center'>
             <VCol cols='12' lg='10'>
-                <v-form @submit.prevent='submit' ref='postTaskForm' validate-on="submit">
+                <v-form @submit.prevent='submit' ref='postTaskForm' validate-on="blur">
 
                     <div class=''>
                         <label class='label text-grey-darken-2' for='title'>任務標題</label>
@@ -213,39 +213,14 @@ const rules = ref({
 function setFormRule(rules, status) {
     switch (status) {
         case siteConfig.taskStatus.draft:
-            rules.value = {
-                //titlerules: postTaskFormRules.taskTitle.rule,
-                category: [],
-                description: postTaskFormRules.taskDescription.rule,
-                salary: [],
-                exposurePlan: [],
-                contactInfoName: [],
-                contactInfoPhone: [rulePhone],
-                contactInfoEmail: [ruleEmail],
-                locationCity: [],
-                locationDist: [],
-                locationAddress: [],
-            }
+            rules.value = _draftRule
             break;
         case siteConfig.taskStatus.publish:
-            rules.value = {
-                //titlerules: postTaskFormRules.taskTitle.rule,
-                category: [ruleRequired],
-                description: [ruleRequired, postTaskFormRules.taskDescription.rule[0]],
-                salary: [ruleSuperCoint],
-                exposurePlan: [(v) => (!!v && v.length > 1) || "必填欄位"],
-                contactInfoName: postTaskFormRules.name.rule,
-                contactInfoPhone: [rulePhone],
-                contactInfoEmail: [ruleEmail],
-                locationCity: [ruleRequired],
-                locationDist: [ruleRequired],
-                locationAddress: [ruleAddress],
-            }
+            rules.value = _publishRule
             break;
         default:
             break;
     }
-
 }
 
 
@@ -376,7 +351,7 @@ watch(
     (val) => {
         if (val && taskCategories) {
             const result = taskCategories.value.filter((item) => item.name === val)
-            description = result[0].template
+            description.value = result[0].template
         }
     },
 );
@@ -412,6 +387,32 @@ function clearDisc() {
     locationDist.value = ''
 }
 
+
+const _draftRule = {
+    category: [],
+    description: postTaskFormRules.taskDescription.rule,
+    salary: [ruleSuperCoint],
+    exposurePlan: [],
+    contactInfoName: [],
+    contactInfoPhone: [rulePhone],
+    contactInfoEmail: [ruleEmail],
+    locationCity: [],
+    locationDist: [],
+    locationAddress: [],
+}
+
+const _publishRule = {
+    category: [ruleRequired],
+    description: [ruleRequired, postTaskFormRules.taskDescription.rule[0]],
+    salary: [ruleRequired, ruleSuperCoint],
+    exposurePlan: [(v) => (!!v && v.length > 1) || "必填欄位"],
+    contactInfoName: [ruleRequired, postTaskFormRules.name.rule[0]],
+    contactInfoPhone: [ruleRequired, rulePhone],
+    contactInfoEmail: [ruleRequired, ruleEmail],
+    locationCity: [ruleRequired],
+    locationDist: [ruleRequired],
+    locationAddress: [ruleAddress],
+}
 
 
 </script>
