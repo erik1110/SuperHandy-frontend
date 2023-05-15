@@ -2,7 +2,7 @@ const pattern = {
   email:
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   phone: /^09[0-9]{8}$/,
-  superCoint: /^([1-9]\d*|[0]{1,1})$/, //含0的正整數
+  superCoin: /^([1-9]\d*|[0]{1,1})$/, //含0的正整數
 };
 
 export const useFormUtil = () => {
@@ -17,7 +17,7 @@ export const useFormUtil = () => {
   const ruleAddress = (v) =>
     //(!!v && v.length > 2 && v.indexOf("號") != -1) || "地址填寫不完整";
     (!!v && v.length > 0) || "地址填寫不完整";
-  const ruleSuperCoint = (v) => !v ||pattern.superCoint.test(v) || "金額輸入不正確";
+  const ruleSuperCoin = (v) => !v || pattern.superCoin.test(v) || "金額輸入不正確";
   const validateFormResult = async function (form) {
     let result = false;
     if (!form) return result;
@@ -109,7 +109,7 @@ export const useFormUtil = () => {
     rulePhone,
     ruleConfirmPassword,
     ruleAddress,
-    ruleSuperCoint,
+    ruleSuperCoin,
     validateFormResult,
     formRules,
   };

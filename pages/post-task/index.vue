@@ -3,7 +3,7 @@
     <v-container>
         <VRow justify='center'>
             <VCol cols='12' lg='10'>
-                <v-form @submit.prevent='submit' ref='postTaskForm' validate-on="submit">
+                <v-form @submit.prevent='submit' ref='postTaskForm' validate-on="blur">
 
                     <div class=''>
                         <label class='label text-grey-darken-2' for='title'>任務標題</label>
@@ -16,7 +16,7 @@
                     <div class='mt-16'>
                         <label class='label text-grey-darken-2' for='category'>服務類別</label>
                         <v-select variant='outlined' :rules='rules.category' :items='taskCategories' clearable
-                            item-title='name' item-value='name' v-model='category'>
+                            item-title='name' item-value='name' v-model='category' @update:modelValue="changeCategory">
                         </v-select>
                     </div>
 
@@ -102,7 +102,8 @@
                         </v-sheet>
                     </div>
 
-                    <div class='btns text-center mt-16'>
+                    <div class='text-center mt-16'>
+                        <v-btn color="primary" type='button' class='mt-2 me-2' id='draft' @click="resetForm">全部清除</v-btn>
                         <v-btn color="primary" type='submit' class='mt-2 me-2' id='draft' :disabled="loading"
                             :loading="draftBtnloading">儲存為草稿</v-btn>
                         <v-btn color="primary" type='submit' class='mt-2' id='publish' :disabled="loading"
@@ -119,7 +120,7 @@
             <v-card-text>
                 {{ dialogMessage }}
             </v-card-text>
-            <v-card-actions v-if="dialogIsShowSuccessBtn" class="mt-2">
+            <v-card-actions v-if="dialogIsShowSuccessBtn" class="mt-2 justify-center">
                 <v-btn color="primary me-2" @click="dialogIsOpen = false">繼續刊登</v-btn>
                 <NuxtLink :to="siteConfig.linkPaths.tasks.to">
                     <v-btn color="primary">前往任務管理</v-btn>
@@ -140,6 +141,7 @@ import { getCategories, getExposurePlan } from '@/services/apis/general';
 import { postDraft, postPublish } from '@/services/apis/postTask';
 const { checkRespStatus } = useHttp();
 const { logInfo, logError } = useLog();
+const { confirmBox } = useAlert()
 const _work = '刊登任務'
 
 // - loading -
@@ -183,7 +185,7 @@ const postTaskForm = ref(null)
 const title = ref('');
 const category = ref('');
 const description = ref('');
-const salary = ref('')
+const salary = ref(0)
 const exposurePlan = ref('')
 const imagesUrl = ref([])
 const contactInfoName = ref('')
@@ -192,24 +194,38 @@ const contactInfoEmail = ref('')
 const locationCity = ref('')
 const locationDist = ref('')
 const locationAddress = ref('')
+const superCoin = ref(0)
+const helperCoin = ref(0)
 
 
 // - 表單驗證 -
-const { formRules, ruleSuperCoint, rulePhone, ruleEmail, ruleAddress, ruleRequired, validateFormResult } = useFormUtil()
+const { formRules, ruleSuperCoin, rulePhone, ruleEmail, ruleAddress, ruleRequired, validateFormResult } = useFormUtil()
 const postTaskFormRules = formRules()
-const rules = ref({
-    //titlerules: [],
+const _draftRule = {
     category: [],
-    description: [],
-    salary: [],
+    description: postTaskFormRules.taskDescription.rule,
+    salary: [ruleSuperCoin],
     exposurePlan: [],
     contactInfoName: [],
-    contactInfoPhone: [],
-    contactInfoEmail: [],
+    contactInfoPhone: [rulePhone],
+    contactInfoEmail: [ruleEmail],
     locationCity: [],
     locationDist: [],
-    locationAddress: [],
-})
+    locationAddress: []
+}
+const _publishRule = {
+    category: [ruleRequired],
+    description: [ruleRequired, postTaskFormRules.taskDescription.rule[0]],
+    salary: [ruleSuperCoin],
+    exposurePlan: [(v) => (!!v && v.length > 1) || "必填欄位"],
+    contactInfoName: [ruleRequired, postTaskFormRules.name.rule[0]],
+    contactInfoPhone: [ruleRequired, rulePhone],
+    contactInfoEmail: [ruleRequired, ruleEmail],
+    locationCity: [ruleRequired],
+    locationDist: [ruleRequired],
+    locationAddress: [ruleAddress]
+}
+const rules = ref(_draftRule)
 function setFormRule(rules, status) {
     switch (status) {
         case siteConfig.taskStatus.draft:
@@ -225,85 +241,88 @@ function setFormRule(rules, status) {
 
 
 // - 表單送出 -
-async function postFormData(status, data) {
+const resetForm = () => {
+    postTaskForm.value.reset()
+    salary.value = 0
+}
+const postFormData = async (status, data) => {
     switch (status) {
         case siteConfig.taskStatus.draft:
+            logInfo(_work, 'draft data', data)
             return await postDraft(data);
         case siteConfig.taskStatus.publish:
             data.taskTrans = {
-                superCoin: 1000,
-                helperCoin: 0
+                superCoin: superCoin.value,
+                helperCoin: helperCoin.value
             }
+            logInfo(_work, 'publish data', data)
             return await postPublish(data);
         default:
             break;
     }
 }
 const submit = async (event) => {
-
-    // 1. 開啟loading & disable btns
-    const _submitter = event.submitter.id
-    setLoading({
-        overlay: true,
-        draftBtn: _submitter === siteConfig.taskStatus.draft,
-        publishBtn: _submitter === siteConfig.taskStatus.publish,
-    })
-    logInfo(_work, 'submitter', _submitter)
-
-
-    // 2.表單檢查
-    setFormRule(rules, _submitter)
-    const validate = await validateFormResult(postTaskForm)
-    logInfo(_work, 'validateFormResult', validate)
-    if (!validate) {
-        setPostTaskDialog({
-            isOpen: true,
-            message: '表單驗證還沒有成功喔!',
-            isShowSuccessBtn: false
-        })
-        setLoading({
-            overlay: false,
-            draftBtn: false,
-            publishBtn: false,
-        })
-        return;
-    }
-
-    //3. 更新資料
-    //4. 關閉loading & reset form
-    const data = {
-        title: title.value,
-        category: category.value,
-        description: description.value,
-        salary: salary.value,
-        exposurePlan: exposurePlan.value,
-        imagesUrl: [],
-        contactInfo: {
-            name: contactInfoName.value,
-            phone: contactInfoPhone.value,
-            email: contactInfoEmail.value
-        },
-        location: {
-            city: locationCity.value,
-            dist: locationDist.value,
-            address: locationAddress.value,
-        }
-    }
-    logInfo(_work, 'send data', data)
     let _message = ''
     let _dialogType = ''
+    let _isShowSuccessBtn = false
     try {
+        // 1. 開啟loading & disable btns
+        const _submitter = event.submitter.id
+        setLoading({
+            overlay: true,
+            draftBtn: _submitter === siteConfig.taskStatus.draft,
+            publishBtn: _submitter === siteConfig.taskStatus.publish,
+        })
+        logInfo(_work, 'submitter', _submitter)
+
+
+        // 2.表單檢查
+        setFormRule(rules, _submitter)
+        const validate = await validateFormResult(postTaskForm)
+        logInfo(_work, 'validateFormResult', validate)
+        if (!validate) {
+            _message = '表單驗證還沒有完成喔!';
+            return;
+        }
+
+        //3. 更新資料
+        //4. 關閉loading & reset form
+        const data = {
+            title: title.value,
+            category: category.value,
+            description: description.value,
+            salary: parseInt(salary.value),
+            exposurePlan: exposurePlan.value,
+            imagesUrl: [],
+            contactInfo: {
+                name: contactInfoName.value,
+                phone: contactInfoPhone.value,
+                email: contactInfoEmail.value
+            },
+            location: {
+                city: locationCity.value,
+                dist: locationDist.value,
+                address: locationAddress.value,
+            }
+        }
         const response = await postFormData(_submitter, data)
         logInfo(_work, 'response', response);
         if (response && checkRespStatus(response)) {
-            postTaskForm.value.reset()
+            resetForm()
+            _isShowSuccessBtn = true
+        } else {
+            _dialogType = dialogHeaderColor.error
         }
         _message = response.message
+
     } catch (error) {
+
         _message = '刊登任務失敗'
         _dialogType = dialogHeaderColor.error
         logError(_work, { error });
+
     } finally {
+
         setLoading({
             overlay: false,
             draftBtn: false,
@@ -312,9 +331,10 @@ const submit = async (event) => {
         setPostTaskDialog({
             isOpen: true,
             message: _message,
-            isShowSuccessBtn: true,
+            isShowSuccessBtn: _isShowSuccessBtn,
             HeaderColor: _dialogType
         })
+
     }
 }
 
@@ -332,12 +352,12 @@ function getAllData() {
         exposurePlans.value = result[0].data
         taskCategories.value = result[1].data
     }).catch(error => {
-        logError(error);
+        logError('取得選單資料', error);
         setPostTaskDialog({
             isOpen: true,
             message: '取得選單資料發生異常',
             isShowSuccessBtn: true,
-            HeaderColor: 'error'
+            HeaderColor: dialogHeaderColor.error
         })
     })
 }
@@ -346,15 +366,20 @@ getAllData()
 
 
 // - 選擇服務類別帶出任務說明 -
-watch(
-    category,
-    (val) => {
-        if (val && taskCategories) {
-            const result = taskCategories.value.filter((item) => item.name === val)
-            description.value = result[0].template
-        }
-    },
-);
+const changeCategory = (value) => {
+    //console.log(value, 'category.value')
+    const _setDescription = () => {
+        const result = taskCategories.value?.filter((item) => item.name === value)
+        description.value = result.length > 0 ? result[0].template : ''
+    }
+    // 1. 如果任務說明是空的，就直接帶入樣板
+    // 2. 如果任務說明已有資料的，就詢問是否要清空
+    if (description.value) {
+        confirmBox('是否要清空目前的任務說明?', _setDescription)
+    } else {
+        _setDescription()
+    }
+}
 
 
 // - 跟據縣市顯示地區選單 -
@@ -388,31 +413,6 @@ function clearDisc() {
 }
 
 
-const _draftRule = {
-    category: [],
-    description: postTaskFormRules.taskDescription.rule,
-    salary: [ruleSuperCoint],
-    exposurePlan: [],
-    contactInfoName: [],
-    contactInfoPhone: [rulePhone],
-    contactInfoEmail: [ruleEmail],
-    locationCity: [],
-    locationDist: [],
-    locationAddress: [],
-}
-
-const _publishRule = {
-    category: [ruleRequired],
-    description: [ruleRequired, postTaskFormRules.taskDescription.rule[0]],
-    salary: [ruleRequired, ruleSuperCoint],
-    exposurePlan: [(v) => (!!v && v.length > 1) || "必填欄位"],
-    contactInfoName: [ruleRequired, postTaskFormRules.name.rule[0]],
-    contactInfoPhone: [ruleRequired, rulePhone],
-    contactInfoEmail: [ruleRequired, ruleEmail],
-    locationCity: [ruleRequired],
-    locationDist: [ruleRequired],
-    locationAddress: [ruleAddress],
-}
 
 
 </script>
