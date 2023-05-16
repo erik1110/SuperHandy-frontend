@@ -20,7 +20,7 @@ export const useFormUtil = () => {
   const ruleSuperCoin = (v) => !v || pattern.superCoin.test(v) || "金額輸入不正確";
   const validateFormResult = async function (form) {
     let result = false;
-    if (!form) return result;
+    if (!form.value) return result;
     await form.value
       .validate()
       .then((res) => {
