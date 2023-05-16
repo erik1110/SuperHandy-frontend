@@ -27,6 +27,7 @@
     "pinia": "^2.0.35",
     "sass": "^1.62.0",
     "sweetalert2": "^11.7.3",
+    "vue-star-rating": "^2.1.0",
     "vuetify": "^3.1.13"
   }
 }
