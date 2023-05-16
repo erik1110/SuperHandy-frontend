@@ -399,8 +399,8 @@ const postFormData = async (status, data) => {
             return await postDraft(data);
         case siteConfig.taskStatus.publish:
             data.taskTrans = {
-                superCoin: superCoin.value,
-                helperCoin: helperCoin.value
+                superCoin: taskTrans.value.superCoin,
+                helperCoin: helperCoinCost.value
             }
             logInfo(_work, 'publish data', data)
             return await postPublish(data);
