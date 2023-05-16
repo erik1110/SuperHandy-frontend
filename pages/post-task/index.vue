@@ -4,7 +4,9 @@
         <v-sheet max-width="1200" color="transparent" class="mx-auto">
             <h1 class="mb-4 sp-text-2xl sp-font-bold">發布任務</h1>
             <v-card class="mb-4 py-4 px-6" rounded="lg" elevation="0">
-                <h2 class="po-title"><span>任務內容</span></h2>
+                <h2 class="po-title"><span>任務內容</span>
+
+                </h2>
                 <v-form @submit.prevent='submit' ref='postTaskForm' validate-on="blur">
                     <div class='mt-4'>
                         <label class='text-v-gray-text pb-2 d-block' for='title'>任務標題</label>
@@ -15,8 +17,7 @@
                     <div class='mt-4'>
                         <label class='text-v-gray-text pb-2 d-block' for='category'>服務類別</label>
                         <v-select v-model='category' :rules='rules.category' :items='taskCategories' item-title='name'
-                            item-value='name' @update:modelValue="changeCategory" placeholder="請選擇服務類別" id="category"
-                            clearable>
+                            item-value='name' placeholder="請選擇服務類別" id="category" clearable>
                         </v-select>
                     </div>
                     <div class='mt-4'>
@@ -57,12 +58,12 @@
                     </div>
                     <div class='mt-4 md:sp-w-1/2'>
                         <label class='text-v-gray-text pb-2 d-block' for="contactInfoEmail">Email</label>
-                        <v-text-field lv-model='contactInfoEmail' :rules='rules.contactInfoEmail' id="contactInfoEmail" />
+                        <v-text-field v-model='contactInfoEmail' :rules='rules.contactInfoEmail' id="contactInfoEmail" />
                     </div>
                     <div class='mt-4'>
                         <label class='text-v-gray-text pb-2 d-block'>地址</label>
-                        <div class="lg:sp-flex lg:sp-space-x-2">
-                            <div class="lg:sp-w-1/2 lg:sp-flex lg:sp-space-x-2">
+                        <div class=" lg:sp-flex lg:sp-space-x-2">
+                            <div class=" lg:sp-w-1/2 lg:sp-flex lg:sp-space-x-2">
                                 <v-select v-model='locationCity' :rules='rules.locationCity' :items='countyList'
                                     item-title='city' item-value='city' @click:clear="clearDisc" label="縣市" clearable>
                                 </v-select>
@@ -80,8 +81,6 @@
                             <div>
                                 <v-btn color="v-orange" type='button' class='sp-mb-4 sp-w-full md:sp-mb-0'
                                     @click="resetForm">全部清除</v-btn>
-                                <!-- <button type="button" class="sp-po-btn-lg sp-po-btn-orange sp-w-full sp-mb-4 md:sp-mb-0"
-                                    @click="resetForm">全部清空</button> -->
                             </div>
                             <div class="md:sp-flex md:sp-justify-end md:sp-space-x-2">
                                 <v-btn type='submit' id='draft' color="v-gray-placeholder"
@@ -89,13 +88,11 @@
                                     :loading="draftBtnloading">儲存為草稿</v-btn>
                                 <v-btn type='button' color="v-purple" class='sp-mb-4 sp-w-full md:sp-mb-0 md:sp-w-auto'
                                     :disabled="loading" @click="openFeeDialog">立即刊登費用計算</v-btn>
-                                <!-- <button type="submit" id="draft"
-                                    class="sp-po-btn-lg sp-po-btn-gray sp-w-full sp-mb-4 md:sp-mb-0 md:sp-w-auto">儲存為草稿</button>
-                                <button type="button"
-                                    class="sp-po-btn-lg sp-po-btn-purple sp-w-full sp-mb-4 md:sp-mb-0 md:sp-w-auto"
-                                    @click="feeDialogIsOpen = true">計算刊登費用</button> -->
                             </div>
                         </div>
+                    </div>
+                    <div>
+                        <v-btn color="primary" @click="fakeData">填入假資料</v-btn>
                     </div>
                 </v-form>
             </v-card>
@@ -130,14 +127,14 @@
                     <tbody>
                         <tr class="sp-border-b sp-h-12">
                             <td class="sp-text-v-gray-dark sp-font-bold">目前持有超人幣</td>
-                            <td class="sp-text-end">10點</td>
+                            <td class="sp-text-end">{{ taskTrans.superCoin }}點</td>
                         </tr>
                         <tr class="sp-border-b sp-h-12">
                             <td class="sp-text-v-gray-dark sp-font-bold">可折抵幫手幣</td>
                             <td>
                                 <div class="d-flex align-center justify-end">
-                                    <span>40點</span>
-                                    <v-checkbox-btn class="" inline></v-checkbox-btn>
+                                    <span>{{ helperCoinEstimate }}點</span>
+                                    <v-checkbox-btn @update:modelValue="calculateHelperCoin"></v-checkbox-btn>
                                 </div>
                             </td>
                         </tr>
@@ -151,15 +148,15 @@
                                     <tbody>
                                         <tr class="sp-h-10">
                                             <td class="sp-text-v-gray-dark">曝光方案</td>
-                                            <td class="sp-text-end">50點</td>
+                                            <td class="sp-text-end">{{ exposurePlanCost }}點</td>
                                         </tr>
                                         <tr class="sp-h-10">
                                             <td class="sp-text-v-gray-dark">預扣薪水</td>
-                                            <td class="sp-text-end">50點</td>
+                                            <td class="sp-text-end">{{ salary }}點</td>
                                         </tr>
                                         <tr class="sp-h-10">
                                             <td class="sp-text-v-gray-dark">折抵幫手幣</td>
-                                            <td class="sp-text-end">50點</td>
+                                            <td class="sp-text-end"> - {{ helperCoinCost }}點</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -167,9 +164,9 @@
                         </tr>
                         <tr class="sp-bg-v-gray-light sp-h-12">
                             <td class="sp-font-bold pl-2">總金額</td>
-                            <td class="sp-font-bold sp-text-v-orange sp-text-end sp-text-xl pe-2">110點</td>
+                            <td class="sp-font-bold sp-text-v-orange sp-text-end sp-text-xl pe-2">{{ total }}點</td>
                         </tr>
-                        <tr class="sp-border-b sp-h-20">
+                        <tr v-if="total === 0" class="sp-border-b sp-h-20">
                             <td class="sp-text-v-orange">
                                 <v-icon class="mx-2">mdi-alert-circle</v-icon>超人幣餘額不足，請儲值
                             </td>
@@ -179,14 +176,15 @@
                                 </NuxtLink>
                             </td>
                         </tr>
-                        <tr class="sp-border-b sp-h-20">
+                        <tr v-else class="sp-border-b sp-h-20">
                             <td>
-                                <v-checkbox-btn label="我已詳閱點數付款須知" class="" inline></v-checkbox-btn>
+                                <v-checkbox-btn label="我已詳閱點數付款須知"
+                                    @update:modelValue="publishBtnDisable = !$event"></v-checkbox-btn>
                             </td>
                             <td class="sp-text-end">
-                                <v-form @submit.prevent='submit' ref='postTaskForm'>
+                                <v-form @submit.prevent='submit'>
                                     <v-btn color="v-purple" id="publish" type="submit" :loading="publishBtnloading"
-                                        :disabled="loading">確認刊登</v-btn>
+                                        :disabled="publishBtnDisable">確認刊登</v-btn>
                                 </v-form>
                             </td>
                         </tr>
@@ -212,6 +210,7 @@ import tw_town from '@/static/tw_town.json'
 import { siteConfig } from '@/services/siteConfig'
 import { getCategories, getExposurePlan } from '@/services/apis/general';
 import { postDraft, postPublish } from '@/services/apis/postTask';
+import { getAccountPoints } from '@/services/apis/point';
 const { checkRespStatus } = useHttp();
 const { logInfo, logError } = useLog();
 const { confirmBox } = useAlert()
@@ -230,6 +229,11 @@ function setLoading({
     loading.value = overlay;
     draftBtnloading.value = draftBtn;
     publishBtnloading.value = publishBtn
+}
+function closeLoading() {
+    loading.value = false;
+    draftBtnloading.value = false;
+    publishBtnloading.value = false
 }
 
 // - 訊息彈出視窗 -
@@ -257,6 +261,8 @@ function setPostTaskDialog({
 // - 費用彈出視窗 -
 const feeDialogIsOpen = ref(false)
 
+
+
 // - 表單宣告 -
 const postTaskForm = ref(null)
 const title = ref('');
@@ -271,8 +277,45 @@ const contactInfoEmail = ref('')
 const locationCity = ref('')
 const locationDist = ref('')
 const locationAddress = ref('')
-const superCoin = ref(0)
-const helperCoin = ref(0)
+const taskTrans = ref({
+    superCoin: 0,
+    helperCoin: 0
+})
+const exposurePlanCost = computed(() => {
+    const planCost = exposurePlans.value?.find(item => item.title === exposurePlan.value)
+    return planCost.price
+})
+const helperCoinEstimate = computed(() => {
+    const helperCoin = taskTrans.value.helperCoin
+    const planCost = exposurePlans.value?.find(item => item.title === exposurePlan.value)
+    console.log(helperCoin, 'helperCoin')
+    console.log(planCost.price, 'planCost')
+    if (helperCoin && planCost) {
+        return helperCoin >= planCost.price ? planCost.price : helperCoin
+    }
+    return 0
+})
+const helperCoinCost = ref(0)
+function calculateHelperCoin(event) {
+    //console.log(event, 'calculateHelperCoin')
+    if (event) {
+        helperCoinCost.value = helperCoinEstimate.value
+    } else {
+        helperCoinCost.value = 0
+    }
+}
+const total = computed(() => {
+    let _total = 0
+    // _total = 超人幣-曝光費用-任務薪水+折抵幫手幣
+    const all = taskTrans.value.superCoin
+    const fee_plan = exposurePlanCost.value
+    const fee_salary = salary.value
+    const fee_helperCoin = helperCoinCost.value
+    _total = all - fee_plan - fee_salary + fee_helperCoin
+    return _total
+})
+
+const publishBtnDisable = ref(true);
 
 
 // - 表單驗證 -
@@ -303,7 +346,8 @@ const _publishRule = {
     locationAddress: [ruleAddress]
 }
 const rules = ref(_draftRule)
-function setFormRule(rules, status) {
+const validatePostTaskForm = async (status) => {
+
     switch (status) {
         case siteConfig.taskStatus.draft:
             rules.value = _draftRule
@@ -312,14 +356,40 @@ function setFormRule(rules, status) {
             rules.value = _publishRule
             break;
         default:
+            rules.value = _publishRule
             break;
     }
+
+    const validate = await validateFormResult(postTaskForm)
+    logInfo(_work, 'validatePostTaskForm', validate)
+    if (validate) {
+        return true;
+    }
+    //要移動到第一個錯誤訊息的地方
+    // if (process.client) {
+    //     //console.log(vueApp._instance.ctx.$vuetify, 'postTaskForm.value')
+    //     const arr = postTaskForm.value.items.filter(item => item.isValid === false)
+    //     const id = arr[0].id
+    //     const heigh = document.getElementById(id).scrollHeight
+    //     console.log(heigh, 'scrollHeight')
+    //     window.scrollTo({
+    //         top: 0,
+    //         behavior: 'smooth'
+    //     })
+    // }
+    setPostTaskDialog({
+        isOpen: true,
+        message: '表單驗證還沒有完成喔!',
+        isShowSuccessBtn: false,
+        HeaderColor: dialogHeaderColor.error
+    })
+    return false;
 }
 
 
 // - 表單送出 -
 const resetForm = () => {
-    postTaskForm.value.reset()
+    postTaskForm.value?.reset()
     salary.value = 0
 }
 const postFormData = async (status, data) => {
@@ -339,43 +409,31 @@ const postFormData = async (status, data) => {
     }
 }
 const submit = async (event) => {
+
+    // 1. 開啟loading & disable btns
+    const _submitter = event.submitter.id
+    setLoading({
+        overlay: true,
+        draftBtn: _submitter === siteConfig.taskStatus.draft,
+        publishBtn: _submitter === siteConfig.taskStatus.publish,
+    })
+    logInfo(_work, 'submitter', _submitter)
+
+
+    // 2.表單檢查
+    const result = await validatePostTaskForm(_submitter)
+    if (!result) {
+        closeLoading()
+        return;
+    }
+
+    //3. 更新資料
+    //4. 關閉loading & reset form
     let _message = ''
     let _dialogType = ''
     let _isShowSuccessBtn = false
     try {
-        // 1. 開啟loading & disable btns
-        const _submitter = event.submitter.id
-        setLoading({
-            overlay: true,
-            draftBtn: _submitter === siteConfig.taskStatus.draft,
-            publishBtn: _submitter === siteConfig.taskStatus.publish,
-        })
-        logInfo(_work, 'submitter', _submitter)
 
-
-        // 2.表單檢查
-        setFormRule(rules, _submitter)
-        const validate = await validateFormResult(postTaskForm)
-        logInfo(_work, 'validateFormResult', validate)
-        if (!validate) {
-            // if (process.client) {
-            //     //console.log(vueApp._instance.ctx.$vuetify, 'postTaskForm.value')
-            //     const arr = postTaskForm.value.items.filter(item => item.isValid === false)
-            //     const id = arr[0].id
-            //     const heigh = document.getElementById(id).scrollHeight
-            //     console.log(heigh, 'scrollHeight')
-            //     window.scrollTo({
-            //         top: 0,
-            //         behavior: 'smooth'
-            //     })
-            // }
-            _message = '表單驗證還沒有完成喔!';
-            return;
-        }
-
-
-        //3. 更新資料
-        //4. 關閉loading & reset form
         const data = {
             title: title.value,
             category: category.value,
@@ -412,11 +470,7 @@ const submit = async (event) => {
 
     } finally {
 
-        setLoading({
-            overlay: false,
-            draftBtn: false,
-            publishBtn: false,
-        })
+        closeLoading()
         setPostTaskDialog({
             isOpen: true,
             message: _message,
@@ -427,39 +481,32 @@ const submit = async (event) => {
     }
 }
 const openFeeDialog = async (event) => {
-    setFormRule(rules, siteConfig.taskStatus.publish)
-    const validate = await validateFormResult(postTaskForm)
-    logInfo(_work, 'validateFormResult', validate)
-    if (!validate) {
-        setPostTaskDialog({
-            isOpen: true,
-            message: '表單驗證還沒有完成喔!',
-            isShowSuccessBtn: false,
-            HeaderColor: dialogHeaderColor.error
-        })
-        return;
+    logInfo(_work, 'openFeeDialog')
+    if (await validatePostTaskForm(siteConfig.taskStatus.publish)) {
+        feeDialogIsOpen.value = true
     }
-    feeDialogIsOpen.value = true
 }
 
 
 
-// - 取得任務類別 & 曝光方案  -
+// - 取得任務類別 & 曝光方案  & 會員的超人幣和幫手幣-
 const exposurePlans = ref([])
 const taskCategories = ref([])
 function getAllData() {
     Promise.all([
         getExposurePlan(),
-        getCategories()
+        getCategories(),
+        getAccountPoints()
     ]).then(result => {
         //console.log(result[0].data, 'result')
         exposurePlans.value = result[0].data
         taskCategories.value = result[1].data
+        taskTrans.value = result[2].data
     }).catch(error => {
-        logError('取得選單資料', error);
+        logError('取得初始資料', error);
         setPostTaskDialog({
             isOpen: true,
-            message: '取得選單資料發生異常',
+            message: '取得初始資料發生異常',
             isShowSuccessBtn: true,
             HeaderColor: dialogHeaderColor.error
         })
@@ -468,22 +515,31 @@ function getAllData() {
 getAllData()
 
 
+// - 顯示幫手幣 -
+watch(() => taskTrans.helperCoin, (nV, oV) => {
+    const planValue = exposurePlan.value
+    const planObj = exposurePlans.value?.find((item) => item.name === planValue)
+    console.log(planValue, 'planValue')
+    console.log(planObj, 'planObj')
+})
+
 
 // - 選擇服務類別帶出任務說明 -
-const changeCategory = (value) => {
-    //console.log(value, 'category.value')
-    const _setDescription = () => {
-        const result = taskCategories.value?.filter((item) => item.name === value)
-        description.value = result.length > 0 ? result[0].template : ''
-    }
+watch(category, (nV, oV) => {
+    const newObj = taskCategories.value?.find((item) => item.name === nV)
+    const oldObj = taskCategories.value?.find((item) => item.name === oV)
     // 1. 如果任務說明是空的，就直接帶入樣板
-    // 2. 如果任務說明已有資料的，就詢問是否要清空
-    if (description.value) {
-        confirmBox('是否要清空目前的任務說明?', _setDescription)
-    } else {
-        _setDescription()
+    if (newObj && newObj.template && !description.value) {
+        description.value = newObj.template
+        return;
     }
-}
+    // 2. 如果任務說明已有資料，且跟樣板一樣才清空
+    if (oldObj && description.value && (description.value == oldObj.template)) {
+        description.value = newObj.template
+        return;
+    }
+})
+
 
 
 // - 跟據縣市顯示地區選單 -
@@ -517,7 +573,20 @@ function clearDisc() {
 }
 
 
-
+// - 假資料 -
+function fakeData() {
+    title.value = '測試任務'
+    category.value = '到府驅蟲'
+    description.value = 'test'
+    salary.value = 100
+    exposurePlan.value = '一般曝光'
+    contactInfoName.value = 'test'
+    contactInfoPhone.value = '0910123456'
+    // locationCity.value = '台北市'
+    // locationDist.value = '信義區'
+    locationAddress.value = '信義路一段12號'
+    contactInfoEmail.value = 'test@gmail.com'
+}
 
 </script>
 
