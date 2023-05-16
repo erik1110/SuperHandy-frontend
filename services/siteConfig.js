@@ -29,6 +29,7 @@ export const siteConfig = {
     postTask: { title: "刊登任務", to: "/post-task" },
     account: { title: "會員帳號", to: "/account" },
     tasks: { title: "任務管理", to: "/account/tasks" },
+    points: { title: "點數管理", to: "/account/points" },
   },
 
   //任務狀態
