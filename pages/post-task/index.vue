@@ -78,21 +78,28 @@
                     <div class='my-8'>
                         <div class="md:sp-flex md:sp-justify-between">
                             <div>
-                                <button type="button"
-                                    class="sp-po-btn-lg sp-po-btn-orange sp-w-full sp-mb-4 md:sp-mb-0">刪除任務</button>
+                                <v-btn color="v-orange" type='button' class='sp-mb-4 sp-w-full md:sp-mb-0'
+                                    @click="resetForm">全部清除</v-btn>
+                                <!-- <button type="button" class="sp-po-btn-lg sp-po-btn-orange sp-w-full sp-mb-4 md:sp-mb-0"
+                                    @click="resetForm">全部清空</button> -->
                             </div>
                             <div class="md:sp-flex md:sp-justify-end md:sp-space-x-2">
-                                <button type="button"
+                                <v-btn type='submit' id='draft' color="v-gray-placeholder"
+                                    class='sp-mb-4 sp-w-full md:sp-mb-0 md:sp-w-auto' :disabled="loading"
+                                    :loading="draftBtnloading">儲存為草稿</v-btn>
+                                <v-btn type='button' color="v-purple" class='sp-mb-4 sp-w-full md:sp-mb-0 md:sp-w-auto'
+                                    :disabled="loading" @click="openFeeDialog">立即刊登費用計算</v-btn>
+                                <!-- <button type="submit" id="draft"
                                     class="sp-po-btn-lg sp-po-btn-gray sp-w-full sp-mb-4 md:sp-mb-0 md:sp-w-auto">儲存為草稿</button>
                                 <button type="button"
-                                    class="sp-po-btn-lg sp-po-btn-purple sp-w-full sp-mb-4 md:sp-mb-0 md:sp-w-auto">計算刊登費用</button>
+                                    class="sp-po-btn-lg sp-po-btn-purple sp-w-full sp-mb-4 md:sp-mb-0 md:sp-w-auto"
+                                    @click="feeDialogIsOpen = true">計算刊登費用</button> -->
                             </div>
                         </div>
                     </div>
                 </v-form>
             </v-card>
         </v-sheet>
-
     </v-sheet>
     <v-dialog v-model="dialogIsOpen" width="auto">
         <v-card>
@@ -167,8 +174,8 @@
                                 <v-icon class="mx-2">mdi-alert-circle</v-icon>超人幣餘額不足，請儲值
                             </td>
                             <td class="sp-text-end">
-                                <NuxtLink to="">
-                                    <button class="sp-po-btn-pill sp-po-btn-orange-dark">立即儲值</button>
+                                <NuxtLink :to="siteConfig.linkPaths.points.to" target="_blank">
+                                    <v-btn color="v-orange" class="rounded-pill">立即儲值</v-btn>
                                 </NuxtLink>
                             </td>
                         </tr>
@@ -177,9 +184,10 @@
                                 <v-checkbox-btn label="我已詳閱點數付款須知" class="" inline></v-checkbox-btn>
                             </td>
                             <td class="sp-text-end">
-                                <NuxtLink to="">
-                                    <button class="sp-po-btn sp-po-btn-purple-dark">確認刊登</button>
-                                </NuxtLink>
+                                <v-form @submit.prevent='submit' ref='postTaskForm'>
+                                    <v-btn color="v-purple" id="publish" type="submit" :loading="publishBtnloading"
+                                        :disabled="loading">確認刊登</v-btn>
+                                </v-form>
                             </td>
                         </tr>
                     </tbody>
@@ -247,7 +255,7 @@ function setPostTaskDialog({
 
 
 // - 費用彈出視窗 -
-const feeDialogIsOpen = ref(true)
+const feeDialogIsOpen = ref(false)
 
 // - 表單宣告 -
 const postTaskForm = ref(null)
@@ -365,6 +373,7 @@ const submit = async (event) => {
             return;
         }
 
+
         //3. 更新資料
         //4. 關閉loading & reset form
         const data = {
@@ -416,6 +425,21 @@ const submit = async (event) => {
         })
 
     }
+}
+const openFeeDialog = async (event) => {
+    setFormRule(rules, siteConfig.taskStatus.publish)
+    const validate = await validateFormResult(postTaskForm)
+    logInfo(_work, 'validateFormResult', validate)
+    if (!validate) {
+        setPostTaskDialog({
+            isOpen: true,
+            message: '表單驗證還沒有完成喔!',
+            isShowSuccessBtn: false,
+            HeaderColor: dialogHeaderColor.error
+        })
+        return;
+    }
+    feeDialogIsOpen.value = true
 }
 
 
@@ -498,7 +522,6 @@ function clearDisc() {
 </script>
 
 <style scoped>
-/* po:postTask */
 .po-title {
     @apply sp-border-l-8 sp-border-secondary sp-pl-4 sp-font-bold sp-text-lg sp-text-primary
 }
