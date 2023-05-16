@@ -1,119 +1,99 @@
 <template>
     <v-overlay v-model="loading"></v-overlay>
-    <v-container>
-        <VRow justify='center'>
-            <VCol cols='12' lg='10'>
+    <v-sheet class="pa-10 h-100" color="primary-lighten">
+        <v-sheet max-width="1200" color="transparent" class="mx-auto">
+            <h1 class="mb-4 sp-text-2xl sp-font-bold">發布任務</h1>
+            <v-card class="mb-4 py-4 px-6" rounded="lg" elevation="0">
+                <h2 class="po-title"><span>任務內容</span></h2>
                 <v-form @submit.prevent='submit' ref='postTaskForm' validate-on="blur">
-
-                    <div class=''>
-                        <label class='label text-grey-darken-2' for='title'>任務標題</label>
-                        <v-text-field variant='outlined' :rules='postTaskFormRules.taskTitle.rule' v-model='title'
+                    <div class='mt-4'>
+                        <label class='text-v-gray-text pb-2 d-block' for='title'>任務標題</label>
+                        <v-text-field v-model='title' :rules='postTaskFormRules.taskTitle.rule'
                             :counter='postTaskFormRules.taskTitle.counter' :hint='postTaskFormRules.taskTitle.hint'
-                            required />
+                            placeholder="請輸入任務標題" id="title" />
                     </div>
-
-
-                    <div class='mt-16'>
-                        <label class='label text-grey-darken-2' for='category'>服務類別</label>
-                        <v-select variant='outlined' :rules='rules.category' :items='taskCategories' clearable
-                            item-title='name' item-value='name' v-model='category' @update:modelValue="changeCategory">
+                    <div class='mt-4'>
+                        <label class='text-v-gray-text pb-2 d-block' for='category'>服務類別</label>
+                        <v-select v-model='category' :rules='rules.category' :items='taskCategories' item-title='name'
+                            item-value='name' @update:modelValue="changeCategory" placeholder="請選擇服務類別" id="category"
+                            clearable>
                         </v-select>
                     </div>
-
-
-
-                    <div class='mt-16'>
-                        <label class='label text-grey-darken-2' for='description'>任務說明</label>
-                        <v-textarea variant='outlined' :rules='rules.description' v-model='description'
+                    <div class='mt-4'>
+                        <label class='text-v-gray-text pb-2 d-block' for='description'>任務說明</label>
+                        <v-textarea v-model='description' :rules='rules.description'
                             :counter='postTaskFormRules.taskDescription.counter'
-                            :hint='postTaskFormRules.taskDescription.hint' required />
+                            :hint='postTaskFormRules.taskDescription.hint' placeholder="請輸入任務說明" id="description" />
                     </div>
-
-                    <div class='mt-16'>
-                        <label class='label text-grey-darken-2' for='salary'>任務薪水</label>
-                        <v-text-field variant='outlined' :rules='rules.salary' v-model='salary' type='number' prefix=$
-                            suffix=超人幣 required />
+                    <div class='mt-4 md:sp-w-1/2 lg:sp-w-1/3'>
+                        <label class='text-v-gray-text pb-2 d-block' for='salary'>任務薪水</label>
+                        <v-text-field v-model='salary' :rules='rules.salary' type='number' prefix=$ suffix=超人幣
+                            id="salary" />
                     </div>
-
-                    <div class='mt-16'>
-                        <label class='label text-grey-darken-2' for='exposurePlan'>曝光方案</label>
+                    <div class='mt-4'>
+                        <label class='text-v-gray-text pb-2 d-block'>曝光方案</label>
                         <div class='d-md-flex'>
                             <v-radio-group v-for='(item, index) in exposurePlans' :key='index' v-model='exposurePlan'
-                                :rules='rules.exposurePlan' required>
+                                :rules='rules.exposurePlan'>
                                 <v-radio :label='`${item.title} ${item.price}點`' :value='item.title'></v-radio>
                             </v-radio-group>
                         </div>
                     </div>
-
-                    <div class=mt-16>
-                        <label class='label text-grey-darken-2' for='exposurePlan'>任務說明照片
-                            <v-chip class=ma-1 color=red size=x-small>
-                                非必填
-                            </v-chip>
-                        </label>
+                    <div class='mt-4'>
+                        <label class='text-v-gray-text pb-2 d-block'>任務說明照片(非必填)</label>
                         <UploadImage></UploadImage>
                     </div>
-
-                    <div class=mt-16>
-                        <label class='label text-grey-darken-2' for='exposurePlan'>任務聯絡人資訊</label>
-                        <v-sheet border=lg opacity-12 class=text-body-2 mx-auto pa-3>
-                            <v-container fluid>
-                                <v-row>
-                                    <v-col>
-                                        <v-text-field label=姓名 v-model='contactInfoName' :rules='rules.contactInfoName'
-                                            :counter='postTaskFormRules.name.counter' :hint='postTaskFormRules.name.hint'
-                                            required />
-                                    </v-col>
-                                </v-row>
-                                <v-row>
-                                    <v-col cols="12" md="6">
-                                        <v-text-field label=聯絡電話 :rules='rules.contactInfoPhone' v-model='contactInfoPhone'
-                                            required />
-                                    </v-col>
-                                    <v-col cols="12" md="6">
-                                        <v-text-field label=EMAIL :rules='rules.contactInfoEmail' v-model='contactInfoEmail'
-                                            required />
-                                    </v-col>
-                                </v-row>
-                                <v-row>
-                                    <v-col cols="12" md="6">
-                                        <v-select label=請選擇縣市 :rules='rules.locationCity' :items='countyList' clearable
-                                            item-title='city' item-value='city' v-model='locationCity' required
-                                            @click:clear="clearDisc">
-                                        </v-select>
-                                    </v-col>
-                                    <v-col cols="12" md="6">
-                                        <v-select label=請選擇區域 :rules='rules.locationDist' :items='townList' clearable
-                                            item-title='disc' item-value='disc' v-model='locationDist'
-                                            :hint='hintLocationDisc' :readonly='readonlyLocationDisc' persistent-hint
-                                            required>
-                                        </v-select>
-                                    </v-col>
-
-                                </v-row>
-                                <v-row>
-                                    <v-col>
-                                        <v-text-field label=地址 :rules='rules.locationAddress' v-model='locationAddress'
-                                            :counter='postTaskFormRules.address.counter'
-                                            :hint='postTaskFormRules.address.hint' required />
-                                    </v-col>
-                                </v-row>
-                            </v-container>
-                        </v-sheet>
+                    <v-divider class="border-opacity-100 my-8"></v-divider>
+                    <h2 class="po-title"><span>任務聯絡人</span></h2>
+                    <div class='mt-4 md:sp-w-1/2'>
+                        <label class='text-v-gray-text pb-2 d-block' for="contactInfoName">姓名</label>
+                        <v-text-field v-model='contactInfoName' :rules='rules.contactInfoName'
+                            :counter='postTaskFormRules.name.counter' :hint='postTaskFormRules.name.hint'
+                            id="contactInfoName" />
                     </div>
-
-                    <div class='text-center mt-16'>
-                        <v-btn color="primary" type='button' class='mt-2 me-2' id='draft' @click="resetForm">全部清除</v-btn>
-                        <v-btn color="primary" type='submit' class='mt-2 me-2' id='draft' :disabled="loading"
-                            :loading="draftBtnloading">儲存為草稿</v-btn>
-                        <v-btn color="primary" type='submit' class='mt-2' id='publish' :disabled="loading"
-                            :loading="publishBtnloading">立即刊登費用計算</v-btn>
+                    <div class='mt-4 md:sp-w-1/2'>
+                        <label class='text-v-gray-text pb-2 d-block' for="contactInfoPhone">電話</label>
+                        <v-text-field v-model='contactInfoPhone' :rules='rules.contactInfoPhone' id="contactInfoPhone" />
                     </div>
-
+                    <div class='mt-4 md:sp-w-1/2'>
+                        <label class='text-v-gray-text pb-2 d-block' for="contactInfoEmail">Email</label>
+                        <v-text-field lv-model='contactInfoEmail' :rules='rules.contactInfoEmail' id="contactInfoEmail" />
+                    </div>
+                    <div class='mt-4'>
+                        <label class='text-v-gray-text pb-2 d-block'>地址</label>
+                        <div class="lg:sp-flex lg:sp-space-x-2">
+                            <div class="lg:sp-w-1/2 lg:sp-flex lg:sp-space-x-2">
+                                <v-select v-model='locationCity' :rules='rules.locationCity' :items='countyList'
+                                    item-title='city' item-value='city' @click:clear="clearDisc" label="縣市" clearable>
+                                </v-select>
+                                <v-select v-model='locationDist' :rules='rules.locationDist' :items='townList'
+                                    item-title='disc' item-value='disc' :hint='hintLocationDisc'
+                                    :readonly='readonlyLocationDisc' label="區域" clearable>
+                                </v-select>
+                            </div>
+                            <v-text-field :rules='rules.locationAddress' v-model='locationAddress'
+                                :counter='postTaskFormRules.address.counter' :hint='postTaskFormRules.address.hint' />
+                        </div>
+                    </div>
+                    <div class='my-8'>
+                        <div class="md:sp-flex md:sp-justify-between">
+                            <div>
+                                <button type="button"
+                                    class="sp-po-btn-lg sp-po-btn-orange sp-w-full sp-mb-4 md:sp-mb-0">刪除任務</button>
+                            </div>
+                            <div class="md:sp-flex md:sp-justify-end md:sp-space-x-2">
+                                <button type="button"
+                                    class="sp-po-btn-lg sp-po-btn-gray sp-w-full sp-mb-4 md:sp-mb-0 md:sp-w-auto">儲存為草稿</button>
+                                <button type="button"
+                                    class="sp-po-btn-lg sp-po-btn-purple sp-w-full sp-mb-4 md:sp-mb-0 md:sp-w-auto">計算刊登費用</button>
+                            </div>
+                        </div>
+                    </div>
                 </v-form>
-            </VCol>
-        </VRow>
-    </v-container>
+            </v-card>
+        </v-sheet>
+
+    </v-sheet>
     <v-dialog v-model="dialogIsOpen" width="auto">
         <v-card>
             <v-toolbar :color="dialogType" title="系統訊息"></v-toolbar>
@@ -131,6 +111,91 @@
             </v-card-actions>
         </v-card>
     </v-dialog>
+    <v-dialog v-model="feeDialogIsOpen" width="auto" class="fee-dialog">
+        <v-card rounded="lg" elevation="0" min-width="300px" max-width="600px">
+            <v-toolbar color="white" title="刊登費用支付" class="text-center border-b-sm">
+                <v-btn icon dark @click="feeDialogIsOpen = false">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+            </v-toolbar>
+            <v-card-text class="pa-4">
+                <table class="w-100 sp-align-middle">
+                    <tbody>
+                        <tr class="sp-border-b sp-h-12">
+                            <td class="sp-text-v-gray-dark sp-font-bold">目前持有超人幣</td>
+                            <td class="sp-text-end">10點</td>
+                        </tr>
+                        <tr class="sp-border-b sp-h-12">
+                            <td class="sp-text-v-gray-dark sp-font-bold">可折抵幫手幣</td>
+                            <td>
+                                <div class="d-flex align-center justify-end">
+                                    <span>40點</span>
+                                    <v-checkbox-btn class="" inline></v-checkbox-btn>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="sp-h-12">
+                            <td class="sp-text-v-gray-dark sp-font-bold">付款明細</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="pl-4">
+                                <table class="w-100 sp-align-middle">
+                                    <tbody>
+                                        <tr class="sp-h-10">
+                                            <td class="sp-text-v-gray-dark">曝光方案</td>
+                                            <td class="sp-text-end">50點</td>
+                                        </tr>
+                                        <tr class="sp-h-10">
+                                            <td class="sp-text-v-gray-dark">預扣薪水</td>
+                                            <td class="sp-text-end">50點</td>
+                                        </tr>
+                                        <tr class="sp-h-10">
+                                            <td class="sp-text-v-gray-dark">折抵幫手幣</td>
+                                            <td class="sp-text-end">50點</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="sp-bg-v-gray-light sp-h-12">
+                            <td class="sp-font-bold pl-2">總金額</td>
+                            <td class="sp-font-bold sp-text-v-orange sp-text-end sp-text-xl pe-2">110點</td>
+                        </tr>
+                        <tr class="sp-border-b sp-h-20">
+                            <td class="sp-text-v-orange">
+                                <v-icon class="mx-2">mdi-alert-circle</v-icon>超人幣餘額不足，請儲值
+                            </td>
+                            <td class="sp-text-end">
+                                <NuxtLink to="">
+                                    <button class="sp-po-btn-pill sp-po-btn-orange-dark">立即儲值</button>
+                                </NuxtLink>
+                            </td>
+                        </tr>
+                        <tr class="sp-border-b sp-h-20">
+                            <td>
+                                <v-checkbox-btn label="我已詳閱點數付款須知" class="" inline></v-checkbox-btn>
+                            </td>
+                            <td class="sp-text-end">
+                                <NuxtLink to="">
+                                    <button class="sp-po-btn sp-po-btn-purple-dark">確認刊登</button>
+                                </NuxtLink>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="my-2">
+                    <h6 class="mb-2">點數付款須知</h6>
+                    <ul class="sp-list-disc pl-5">
+                        <li>案主可使用幫手幣來代替超人幣刊登任務，兌換比例為1:1，幫手幣可透過每月任務回饋以及儲值取得。</li>
+                        <li>案主設定的任務薪水將於任務刊登時由系統自動從案主的點數帳戶預先扣除，待任務驗收完成後，系統會自動將任務薪水支付給幫手。</li>
+                        <li>如果任務超過刊登日無人接案或案主提前終止任務刊登，系統會自動將任務薪水退還到案主的點數帳戶，但案主刊登任務時所支付的曝光方案點數將不予退還。</li>
+                        <li>如付款時使用幫手幣折抵，退還點數幣別順序為幫手幣>超人幣，幫手幣退還完畢，才會退還超人幣。</li>
+                    </ul>
+                </div>
+            </v-card-text>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script setup>
@@ -143,6 +208,7 @@ const { checkRespStatus } = useHttp();
 const { logInfo, logError } = useLog();
 const { confirmBox } = useAlert()
 const _work = '刊登任務'
+// const { vueApp } = useNuxtApp()
 
 // - loading -
 const loading = ref(false);
@@ -158,7 +224,7 @@ function setLoading({
     publishBtnloading.value = publishBtn
 }
 
-// - 彈出視窗 -
+// - 訊息彈出視窗 -
 const dialogHeaderColor = {
     info: 'primary',
     error: 'error'
@@ -179,6 +245,9 @@ function setPostTaskDialog({
     dialogType.value = !HeaderColor ? dialogHeaderColor.info : HeaderColor
 }
 
+
+// - 費用彈出視窗 -
+const feeDialogIsOpen = ref(true)
 
 // - 表單宣告 -
 const postTaskForm = ref(null)
@@ -281,6 +350,17 @@ const submit = async (event) => {
         const validate = await validateFormResult(postTaskForm)
         logInfo(_work, 'validateFormResult', validate)
         if (!validate) {
+            // if (process.client) {
+            //     //console.log(vueApp._instance.ctx.$vuetify, 'postTaskForm.value')
+            //     const arr = postTaskForm.value.items.filter(item => item.isValid === false)
+            //     const id = arr[0].id
+            //     const heigh = document.getElementById(id).scrollHeight
+            //     console.log(heigh, 'scrollHeight')
+            //     window.scrollTo({
+            //         top: 0,
+            //         behavior: 'smooth'
+            //     })
+            // }
             _message = '表單驗證還沒有完成喔!';
             return;
         }
@@ -417,4 +497,9 @@ function clearDisc() {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+/* po:postTask */
+.po-title {
+    @apply sp-border-l-8 sp-border-secondary sp-pl-4 sp-font-bold sp-text-lg sp-text-primary
+}
+</style>

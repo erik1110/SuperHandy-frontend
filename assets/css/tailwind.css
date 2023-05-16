@@ -55,6 +55,59 @@
     line-height: 1.5;
     font-weight: 400;
   }
+
+  .sp-po-btn {
+    @apply sp-px-4 sp-py-2 sp-text-base sp-rounded-lg
+  }
+
+  .sp-po-btn-sm {
+    @apply sp-px-3 sp-py-1 sp-text-sm sp-rounded-lg
+  }
+
+  .sp-po-btn-lg {
+    @apply sp-px-5 sp-py-3 sp-text-lg sp-rounded-lg sp-font-bold
+  }
+
+  .sp-po-btn-pill {
+    @apply sp-px-4 sp-py-2 sp-rounded-full
+  }
+
+  .sp-po-btn-purple {
+    @apply sp-text-white sp-bg-purple
+    hover:sp-bg-primary-lighten hover:sp-text-purple
+    focus:sp-bg-primary-lighten focus:sp-text-purple
+  }
+
+  .sp-po-btn-orange {
+    @apply sp-text-v-orange sp-bg-v-gray-light
+    hover:sp-bg-v-orange hover:sp-text-white
+    focus:sp-bg-v-orange focus:sp-text-white
+  }
+
+  .sp-po-btn-gray {
+    @apply sp-text-v-gray-dark sp-bg-v-gray-light
+    hover:sp-bg-v-gray-dark hover:sp-text-white
+    focus:sp-bg-v-gray-dark focus:sp-text-white
+  }
+
+  .sp-po-btn-purple-dark {
+    @apply sp-text-white sp-bg-purple
+    hover:sp-bg-purple/90 hover:sp-text-white
+    focus:sp-bg-purple/90 focus:sp-text-white
+  }
+
+  .sp-po-btn-orange-dark {
+    @apply sp-text-white sp-bg-v-orange
+    hover:sp-bg-v-orange/90 hover:sp-text-white
+    focus:sp-bg-v-orange/90 focus:sp-text-white
+  }
+
+  .sp-po-btn-gray-dark {
+    @apply sp-text-white sp-bg-v-gray-dark
+    hover:sp-bg-v-gray-dark/90 hover:sp-text-white
+    focus:sp-bg-v-gray-dark/90 focus:sp-text-white
+  }
+
 }
 
 :root {
