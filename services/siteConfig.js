@@ -35,7 +35,7 @@ export const siteConfig = {
   //任務狀態
   taskStatus: {
     draft: "draft", //草稿區
-    publish: "publish", //發布任務
+    published: "published", //刊登任務(發布任務)
     // unpublished: "unpublished", //已下架
     // deleted: "deleted", //未成立
     // inProgess: "inProgess", //進行中

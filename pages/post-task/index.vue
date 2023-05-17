@@ -2,7 +2,7 @@
     <v-overlay v-model="loading"></v-overlay>
     <v-sheet class="pa-10 h-100" color="primary-lighten">
         <v-sheet max-width="1200" color="transparent" class="mx-auto">
-            <h1 class="mb-4 sp-text-2xl sp-font-bold">發布任務</h1>
+            <h1 class="mb-4 sp-text-2xl sp-font-bold">刊登任務</h1>
             <v-card class="mb-4 py-4 px-6" rounded="lg" elevation="0">
                 <h2 class="po-title"><span>任務內容</span>
 
@@ -87,7 +87,7 @@
                                     class='sp-mb-4 sp-w-full md:sp-mb-0 md:sp-w-auto' :disabled="loading"
                                     :loading="draftBtnloading">儲存為草稿</v-btn>
                                 <v-btn type='button' color="v-purple" class='sp-mb-4 sp-w-full md:sp-mb-0 md:sp-w-auto'
-                                    :disabled="loading" @click="openFeeDialog">立即刊登費用計算</v-btn>
+                                    :disabled="loading" @click="openFeeDialog">計算刊登費用</v-btn>
                             </div>
                         </div>
                     </div>
@@ -162,9 +162,9 @@
                                 </table>
                             </td>
                         </tr>
-                        <tr class="sp-bg-v-gray-light sp-h-12">
+                        <tr class="bg-v-gray-bg sp-h-12">
                             <td class="sp-font-bold pl-2">總金額</td>
-                            <td class="sp-font-bold sp-text-v-orange sp-text-end sp-text-xl pe-2">{{ total }}點</td>
+                            <td class="sp-font-bold text-v-orange sp-text-end sp-text-xl pe-2">{{ total }}點</td>
                         </tr>
                         <tr v-if="total === 0" class="sp-border-b sp-h-20">
                             <td class="sp-text-v-orange">
@@ -183,7 +183,7 @@
                             </td>
                             <td class="sp-text-end">
                                 <v-form @submit.prevent='submit'>
-                                    <v-btn color="v-purple" id="publish" type="submit" :loading="publishBtnloading"
+                                    <v-btn color="v-purple" id="published" type="submit" :loading="publishBtnloading"
                                         :disabled="publishBtnDisable">確認刊登</v-btn>
                                 </v-form>
                             </td>
@@ -213,7 +213,7 @@ import { postDraft, postPublish } from '@/services/apis/postTask';
 import { getAccountPoints } from '@/services/apis/point';
 const { checkRespStatus } = useHttp();
 const { logInfo, logError } = useLog();
-const { confirmBox } = useAlert()
+// const { confirmBox } = useAlert()
 const _work = '刊登任務'
 // const { vueApp } = useNuxtApp()
 
@@ -352,7 +352,7 @@ const validatePostTaskForm = async (status) => {
         case siteConfig.taskStatus.draft:
             rules.value = _draftRule
             break;
-        case siteConfig.taskStatus.publish:
+        case siteConfig.taskStatus.published:
             rules.value = _publishRule
             break;
         default:
@@ -397,12 +397,12 @@ const postFormData = async (status, data) => {
         case siteConfig.taskStatus.draft:
             logInfo(_work, 'draft data', data)
             return await postDraft(data);
-        case siteConfig.taskStatus.publish:
+        case siteConfig.taskStatus.published:
             data.taskTrans = {
                 superCoin: taskTrans.value.superCoin,
                 helperCoin: helperCoinCost.value
             }
-            logInfo(_work, 'publish data', data)
+            logInfo(_work, 'published data', data)
             return await postPublish(data);
         default:
             break;
@@ -415,7 +415,7 @@ const submit = async (event) => {
     setLoading({
         overlay: true,
         draftBtn: _submitter === siteConfig.taskStatus.draft,
-        publishBtn: _submitter === siteConfig.taskStatus.publish,
+        publishBtn: _submitter === siteConfig.taskStatus.published,
     })
     logInfo(_work, 'submitter', _submitter)
 
@@ -482,7 +482,7 @@ const submit = async (event) => {
 }
 const openFeeDialog = async (event) => {
     logInfo(_work, 'openFeeDialog')
-    if (await validatePostTaskForm(siteConfig.taskStatus.publish)) {
+    if (await validatePostTaskForm(siteConfig.taskStatus.published)) {
         feeDialogIsOpen.value = true
     }
 }
