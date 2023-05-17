@@ -87,7 +87,7 @@
                                     class='sp-mb-4 sp-w-full md:sp-mb-0 md:sp-w-auto' :disabled="loading"
                                     :loading="draftBtnloading">儲存為草稿</v-btn>
                                 <v-btn type='button' color="v-purple" class='sp-mb-4 sp-w-full md:sp-mb-0 md:sp-w-auto'
-                                    :disabled="loading" @click="openFeeDialog">立即刊登費用計算</v-btn>
+                                    :disabled="loading" @click="openFeeDialog">計算刊登費用</v-btn>
                             </div>
                         </div>
                     </div>
