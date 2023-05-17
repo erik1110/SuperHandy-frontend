@@ -318,18 +318,12 @@ const contactInfoEmail = ref('')
 const locationCity = ref('')
 const locationDist = ref('')
 const locationAddress = ref('')
-
-
-
-
-
-
-// - 刊登費用計算視窗 -
-const feeDialogIsOpen = ref(false)
 const taskTrans = ref({
     superCoin: 0,
     helperCoin: 0
 })
+
+
 
 
 // - 刊登費用計算視窗 -
@@ -589,13 +583,13 @@ watch(category, (nV, oV) => {
         return;
     }
     // 如果任務說明是空的，就直接帶入樣板
-    const newObj = taskCategories.value?.find((item) => item.name === nV)
+    const newObj = taskCategories.value?.find(item => item.name === nV)
     if (newObj && newObj.template && !description.value) {
         description.value = newObj.template
         return;
     }
     // 只要任務說明是樣板，就可以被替換
-    const index = descriptionTemplateList.findIndex(description.value)
+    const index = descriptionTemplateList.findIndex(item => item === description.value)
     if (index >= 0) {
         description.value = newObj.template
         return;
