@@ -7,7 +7,7 @@
                 <h2 class="po-title"><span>任務內容</span>
 
                 </h2>
-                <v-form @submit.prevent='submit' ref='postTaskForm' validate-on="blur">
+                <v-form @submit.prevent='submit' ref='postTaskForm' validate-on="input">
                     <div class='mt-4'>
                         <label class='text-v-gray-text pb-2 d-block' for='title'>任務標題</label>
                         <v-text-field v-model='title' :rules='postTaskFormRules.taskTitle.rule'
@@ -216,9 +216,9 @@ import { postDraft, postPublish } from '@/services/apis/postTask';
 import { getAccountPoints } from '@/services/apis/point';
 const { checkRespStatus } = useHttp();
 const { logInfo, logError } = useLog();
-// const { confirmBox } = useAlert()
 const _work = '刊登任務'
-// const { vueApp } = useNuxtApp()
+let descriptionTemplateList = []
+
 
 
 
@@ -331,6 +331,10 @@ const taskTrans = ref({
     helperCoin: 0
 })
 
+
+// - 刊登費用計算視窗 -
+const feeDialogIsOpen = ref(false)
+
 // 打開費用視窗
 const openFeeDialog = async (event) => {
     logInfo(_work, 'openFeeDialog')
@@ -370,7 +374,7 @@ function calculateHelperCoin(event) {
 // 計算本次花費總金額
 const total = computed(() => {
     //  本次花費總金額 = 超人幣-曝光費用-任務薪水+折抵幫手幣
-    return (exposurePlanCost.value - salary.value + helperCoinConfirm.value)
+    return (exposurePlanCost.value + salary.value - helperCoinConfirm.value)
 })
 
 
@@ -488,7 +492,7 @@ const submit = async (event) => {
     //3. 更新資料
     //4. 關閉loading & reset form
     let _message = ''
-    let _dialogType = ''
+    let _dialogType = dialogTypeOption.info
     let _isShowSuccessBtn = false
     try {
 
@@ -543,6 +547,7 @@ const submit = async (event) => {
 // - 取得任務類別 & 曝光方案  & 會員的超人幣和幫手幣-
 const exposurePlans = ref([])
 const taskCategories = ref([])
+
 function getAllData() {
     Promise.all([
         getExposurePlan(),
@@ -560,6 +565,11 @@ function getAllData() {
         exposurePlans.value = result[0].data
         taskCategories.value = result[1].data
         taskTrans.value = result[2].data
+
+        // 建立任務說明的樣板清單
+        descriptionTemplateList = result[1]?.data?.map(item => item.template)
+        logInfo(_work, '任務說明的樣板清單數量', descriptionTemplateList.length);
+
     }).catch(error => {
         logError('取得初始資料', error);
         openErrorDialog({
@@ -574,15 +584,19 @@ getAllData()
 
 // - 選擇服務類別帶出任務說明 -
 watch(category, (nV, oV) => {
+    // 動作是清空就離開
+    if (!nV) {
+        return;
+    }
+    // 如果任務說明是空的，就直接帶入樣板
     const newObj = taskCategories.value?.find((item) => item.name === nV)
-    const oldObj = taskCategories.value?.find((item) => item.name === oV)
-    // 1. 如果任務說明是空的，就直接帶入樣板
     if (newObj && newObj.template && !description.value) {
         description.value = newObj.template
         return;
     }
-    // 2. 如果任務說明已有資料，且跟樣板一樣才清空
-    if (oldObj && description.value && (description.value == oldObj.template)) {
+    // 只要任務說明是樣板，就可以被替換
+    const index = descriptionTemplateList.findIndex(description.value)
+    if (index >= 0) {
         description.value = newObj.template
         return;
     }
