@@ -13,6 +13,9 @@ dependencies:
   '@pinia/nuxt':
     specifier: ^0.4.9
     version: 0.4.9(vue@3.2.47)
+  leaflet:
+    specifier: ^1.9.3
+    version: 1.9.3
   moment:
     specifier: ^2.29.4
     version: 2.29.4
@@ -3349,6 +3352,10 @@ packages:
     dependencies:
       readable-stream: 2.3.8
     dev: true
+
+  /leaflet@1.9.3:
+    resolution: {integrity: sha512-iB2cR9vAkDOu5l3HAay2obcUHZ7xwUBBjph8+PGtmW/2lYhbLizWtG7nTeYht36WfOslixQF9D/uSIzhZgGMfQ==}
+    dev: false
 
   /lilconfig@2.1.0:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
