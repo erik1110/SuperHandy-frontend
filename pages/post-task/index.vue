@@ -7,7 +7,7 @@
                 <h2 class="po-title"><span>任務內容</span>
 
                 </h2>
-                <v-form @submit.prevent='submit' ref='postTaskForm' validate-on="input">
+                <v-form @submit.prevent='submit' ref='postTaskForm' validate-on="blur">
                     <div class='mt-4'>
                         <label class='text-v-gray-text pb-2 d-block' for='title'>任務標題</label>
                         <v-text-field v-model='title' :rules='postTaskFormRules.taskTitle.rule'
