@@ -4,9 +4,7 @@
         <v-sheet max-width="1200" color="transparent" class="mx-auto">
             <h1 class="mb-4 sp-text-2xl sp-font-bold">刊登任務</h1>
             <v-card class="mb-4 py-4 px-6" rounded="lg" elevation="0">
-                <h2 class="po-title"><span>任務內容</span>
-
-                </h2>
+                <h2 class="po-title"><span>任務內容</span></h2>
                 <v-form @submit.prevent='submit' ref='postTaskForm' validate-on="blur">
                     <div class='mt-4'>
                         <label class='text-v-gray-text pb-2 d-block' for='title'>任務標題</label>
@@ -130,7 +128,7 @@
                     <tbody>
                         <tr class="sp-border-b sp-h-12">
                             <td class="sp-text-v-gray-dark sp-font-bold">目前持有超人幣</td>
-                            <td class="sp-text-end">{{ taskTrans.superCoin }}點</td>
+                            <td class="sp-text-end">{{ userCoin.superCoin }}點</td>
                         </tr>
                         <tr class="sp-border-b sp-h-12">
                             <td class="sp-text-v-gray-dark sp-font-bold">可折抵幫手幣</td>
@@ -151,7 +149,7 @@
                                     <tbody>
                                         <tr class="sp-h-10">
                                             <td class="sp-text-v-gray-dark">曝光方案</td>
-                                            <td class="sp-text-end">{{ exposurePlanCost }}點</td>
+                                            <td class="sp-text-end">{{ exposurePlanPoint }}點</td>
                                         </tr>
                                         <tr class="sp-h-10">
                                             <td class="sp-text-v-gray-dark">預扣薪水</td>
@@ -214,6 +212,8 @@ import { siteConfig } from '@/services/siteConfig'
 import { getCategories, getExposurePlan } from '@/services/apis/general';
 import { postDraft, postPublish } from '@/services/apis/postTask';
 import { getAccountPoints } from '@/services/apis/point';
+const { formRules, rulePhone, ruleEmail, ruleAddress, ruleRequired, validateFormResult, isNumber } = useFormUtil()
+const postTaskFormRules = formRules()
 const { checkRespStatus } = useHttp();
 const { logInfo, logError } = useLog();
 const _work = '刊登任務'
@@ -318,7 +318,7 @@ const contactInfoEmail = ref('')
 const locationCity = ref('')
 const locationDist = ref('')
 const locationAddress = ref('')
-const taskTrans = ref({
+const userCoin = ref({
     superCoin: 0,
     helperCoin: 0
 })
@@ -334,19 +334,21 @@ const openFeeDialog = async (event) => {
     logInfo(_work, 'openFeeDialog')
     const result = await validatePostTaskForm(siteConfig.taskStatus.published)
     if (result) {
+        const response = await getAccountPoints()
+        userCoin.value = response.data
         feeDialogIsOpen.value = true
     }
 }
 
 // 取得曝光方案的點數
-const exposurePlanCost = computed(() => {
+const exposurePlanPoint = computed(() => {
     const planCost = exposurePlans.value?.find(item => item.title === exposurePlan.value)
-    return planCost.price
+    return planCost?.price
 })
 
 // 計算可折抵的幫手幣金額
 const helperCoinEstimate = computed(() => {
-    const helperCoin = taskTrans.value.helperCoin
+    const helperCoin = userCoin.value.helperCoin
     const planCost = exposurePlans.value?.find(item => item.title === exposurePlan.value)
     if (helperCoin && planCost) {
         return helperCoin >= planCost.price ? planCost.price : helperCoin
@@ -367,8 +369,10 @@ function calculateHelperCoin(event) {
 
 // 計算本次花費總金額
 const total = computed(() => {
-    //  本次花費總金額 = 超人幣-曝光費用-任務薪水+折抵幫手幣
-    return (exposurePlanCost.value + salary.value - helperCoinConfirm.value)
+    //  本次花費的超人幣總金額 = 超人幣-曝光費用-任務薪水+折抵幫手幣
+    const value = (exposurePlanPoint.value + salary.value - helperCoinConfirm.value)
+    logInfo(_work, '本次花費的超人幣總金額', value)
+    return isNumber(value) ? value : 0
 })
 
 
@@ -378,12 +382,10 @@ const publishBtnDisable = ref(true);
 
 
 // - 表單驗證 -
-const { formRules, ruleSuperCoin, rulePhone, ruleEmail, ruleAddress, ruleRequired, validateFormResult } = useFormUtil()
-const postTaskFormRules = formRules()
 const _draftRule = {
     category: [],
     description: postTaskFormRules.taskDescription.rule,
-    salary: [ruleSuperCoin],
+    salary: [postTaskFormRules.taskSalary.rule[1]],
     exposurePlan: [],
     contactInfoName: [],
     contactInfoPhone: [rulePhone],
@@ -395,7 +397,7 @@ const _draftRule = {
 const _publishRule = {
     category: [ruleRequired],
     description: [ruleRequired, postTaskFormRules.taskDescription.rule[0]],
-    salary: [ruleSuperCoin],
+    salary: postTaskFormRules.taskSalary.rule,
     exposurePlan: [(v) => (!!v && v.length > 1) || "必填欄位"],
     contactInfoName: [ruleRequired, postTaskFormRules.name.rule[0]],
     contactInfoPhone: [ruleRequired, rulePhone],
@@ -447,6 +449,7 @@ const validatePostTaskForm = async (status) => {
 const resetForm = () => {
     postTaskForm.value?.reset()
     salary.value = 0
+    feeDialogIsOpen.value = false
 }
 const postFormData = async (status, data) => {
     switch (status) {
@@ -455,7 +458,7 @@ const postFormData = async (status, data) => {
             return await postDraft(data);
         case siteConfig.taskStatus.published:
             data.taskTrans = {
-                superCoin: taskTrans.value.superCoin,
+                superCoin: total.value,
                 helperCoin: helperCoinConfirm.value
             }
             logInfo(_work, 'published data', data)
@@ -538,7 +541,7 @@ const submit = async (event) => {
 
 
 
-// - 取得任務類別 & 曝光方案  & 會員的超人幣和幫手幣-
+// - 取得任務類別 & 曝光方案 -
 const exposurePlans = ref([])
 const taskCategories = ref([])
 
@@ -546,7 +549,7 @@ function getAllData() {
     Promise.all([
         getExposurePlan(),
         getCategories(),
-        getAccountPoints()
+        //getAccountPoints()
     ]).then(result => {
         //console.log(result, 'result')
         //必須先檢查status是否="success",否則顯示後端給的錯誤訊息
@@ -558,7 +561,7 @@ function getAllData() {
 
         exposurePlans.value = result[0].data
         taskCategories.value = result[1].data
-        taskTrans.value = result[2].data
+        //taskTrans.value = result[2].data
 
         // 建立任務說明的樣板清單
         descriptionTemplateList = result[1]?.data?.map(item => item.template)
