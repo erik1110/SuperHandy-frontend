@@ -97,8 +97,17 @@ export const useFormUtil = () => {
           (v) => !v || v.length <= _counter[4] || _replace(_error, _counter[4]),
         ],
       },
+      taskSalary:{
+        rule: [
+          ruleSuperCoin,
+          (v) => !v || v > 10 || "最少需要 10 點超人幣",
+        ],
+      }
     };
   };
+
+
+  const isNumber = n => (typeof (n) === 'number' || n instanceof Number);
 
   return {
     ruleRequired,
@@ -112,5 +121,6 @@ export const useFormUtil = () => {
     ruleSuperCoin,
     validateFormResult,
     formRules,
+    isNumber
   };
 };
