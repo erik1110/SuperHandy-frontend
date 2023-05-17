@@ -29,7 +29,7 @@ export const useLog = function () {
   function logError() {
     if (!process.client) return;
     if (arguments) {
-      arguments[0] = `${arguments[0]}發生錯誤:`;
+      arguments[0] = `${arguments[0]}發生意外錯誤:`;
     }
     _consoleLog(
       {
