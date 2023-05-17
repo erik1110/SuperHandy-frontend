@@ -1,6 +1,7 @@
 <template>
   <section class="sp-relative sp-py-10" :class="bgColor ? bgColor : ''">
-    <div class="sp-flex-center secContainer sp-max-w-screen-xl">
+    <div class="sp-flex-center sp-flex-wrap secContainer sp-max-w-screen-xl"
+      :class="$attrs.nowrap ? 'lg:sp-flex-nowrap' : ''">
       <slot></slot>
     </div>
   </section>
@@ -14,6 +15,6 @@ const { bgColor } = defineProps({
 
 <style lang="postcss" scoped>
 .secContainer {
-  @apply sp-flex sp-flex-row sp-mx-auto sp-flex-wrap sp-px-8
+  @apply sp-flex sp-flex-row sp-mx-auto sp-px-8
 }
 </style>

@@ -93,5 +93,5 @@
 }
 /* Card Wrapper */
 .sp-card-wrapper{
-  @apply sp-mx-auto sp-rounded-2xl sp-shadow-lg;
+  @apply sp-mx-auto sp-rounded-2xl sp-shadow-md;
 }

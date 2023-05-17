@@ -7,9 +7,7 @@
       <v-card-text class="py-2 px-0">
         <slot />
       </v-card-text>
-      <!-- <v-card-actions class="px-6"> -->
       <slot name="actions"></slot>
-      <!-- </v-card-actions> -->
     </v-card>
   </v-dialog>
 </template>

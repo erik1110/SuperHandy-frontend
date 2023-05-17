@@ -56,16 +56,32 @@
     </HomeSecWrapper>
 
     <!-- Sec-5-Helpers -->
-    <HomeSecWrapper bgColor="sp-bg-primary-lighten" class="sp-py-32">
-      <div class="sp-border-l-[12px] sp-border-primary sp-pl-4">
+    <HomeSecWrapper bgColor="sp-bg-primary-lighten" class="sm:sp-py-32" nowrap="true">
+      <div class="sp-flex-none sp-border-l-[12px] sp-border-primary sp-pl-4 sp-mb-4 sp-w-full sm:sp-w-auto sm:sp-mr-20 ">
         <h2 class="sp-text-h2 sp-mb-4">最優秀的超<br />人幫手</h2>
         <p>讓超人幫手成為你的得力助手</p>
       </div>
-      <div class="sp-bg-purple sp-flex-grow sp-m-4">
-        <div class="sp-text-h3">Carousels
-        </div>
-        <span v-for="(h, idx) in helpers" :key="idx">{{ h.name }}</span>
+      <div
+        class="sp-flex-initial sp-max-w-full md:sp-max-w-md lg:sp-max-w-lg xl:sp-max-w-4xl   sp-items-center sp-hidden sm:sp-flex">
+        <Swiper :slides-per-view="4" :space-between="10" :loop="true" :modules="[SwiperNavigation]"
+          :navigation="{ nextEl: '.slideNext-btn' }" :breakpoints="{
+            '320': {
+              slidesPerView: 2
+            },
+            '1280': {
+              slidesPerView: 4
+            },
+          }">
+          <SwiperSlide v-for="(h, idx) in helpers" :key="idx">
+            <HomeHelperCard @click="openUserDialog(h)" v-bind="h" />
+          </SwiperSlide>
+        </Swiper>
+        <v-btn class="slideNext-btn ml-5" color="#fff" density="comfortable" icon="mdi-arrow-right"></v-btn>
       </div>
+      <div class="sp-flex-initial sp-basis-full sm:sp-hidden">
+        <HomeHelperCard @click="openUserDialog(h)" v-for="(h, idx) in helpersSm" :key="idx" v-bind="h" />
+      </div>
+
     </HomeSecWrapper>
 
     <!-- Sec-6-Comments -->
@@ -74,10 +90,13 @@
         超過 <span class="sp-text-purple">500+</span> 則真實評價
       </div>
       <div class="s6_right sm:sp-justify-between">
-        <HomeCommentCard v-bind="c" v-for="(c, idx) in comments" :key="idx" />
+        <HomeCommentCard class="hover:sp--translate-y-2 sp-transition-all" v-bind="c" v-for="(c, idx) in comments"
+          :key="idx" />
       </div>
       <Bg_s6 class="s6_bg" />
     </HomeSecWrapper>
+    <!-- UserModal -->
+    <HomeUserModal :dialog="userDialog" :data="helper" @close="userDialog = false" />
   </div>
 </template>
 
@@ -101,6 +120,45 @@ onMounted(async () => {
   observerSec3()
 })
 /* 
+  Init Data
+*/
+const completedCaseData = ref([])
+const helpers = ref([])
+const helpersSm = computed(() => {
+  if (helpers.value.length > 4) {
+    return helpers.value.slice(0, 4)
+  } else {
+    return helpers.value
+  }
+})
+const comments = ref([])
+const fetchCompletedCases = async () => {
+  try {
+    let { data } = await getCompletedCases()
+    completedCaseData.value = data.slice(0, 5)
+  } catch (err) {
+    console.log({ err });
+  }
+}
+const fetchTaskStats = async () => {
+  let res = await getTaskStats()
+  console.log({ res });
+}
+const fetchExcellentHelpers = async () => {
+  let { data } = await getExcellentHelpers()
+  helpers.value = data
+}
+const fetchCompletedReviews = async () => {
+  let { data } = await getCompletedReviews()
+  comments.value = data
+}
+const initData = async () => {
+  await fetchCompletedCases()
+  await fetchTaskStats()
+  await fetchExcellentHelpers()
+  await fetchCompletedReviews()
+}
+/* 
   sec1-滾動視差
 */
 let windowMousewheel = () => {
@@ -113,7 +171,7 @@ let windowMousewheel = () => {
   }
 }
 const parallaxInit = () => {
-  window.addEventListener('mousewheel', windowMousewheel)
+  window.addEventListener('mousewheel', windowMousewheel, { passive: true })
 }
 onUnmounted(async () => {
   window.removeEventListener("mousewheel", windowMousewheel);
@@ -179,37 +237,16 @@ const countDown = async (item) => {
 
 }
 /* 
-  Init Data
+  sec5-Helpers
 */
-const completedCaseData = ref([])
-const helpers = ref([])
-const comments = ref([])
-const fetchCompletedCases = async () => {
-  try {
-    let { data } = await getCompletedCases()
-    completedCaseData.value = data.slice(0, 5)
-  } catch (err) {
-    console.log({ err });
-  }
+// modal
+const helper = ref({})
+const userDialog = ref(false)
+const openUserDialog = (item) => {
+  userDialog.value = true
+  helper.value = item
 }
-const fetchTaskStats = async () => {
-  let res = await getTaskStats()
-  console.log({ res });
-}
-const fetchExcellentHelpers = async () => {
-  let { data } = await getExcellentHelpers()
-  helpers.value = data
-}
-const fetchCompletedReviews = async () => {
-  let { data } = await getCompletedReviews()
-  comments.value = data
-}
-const initData = async () => {
-  await fetchCompletedCases()
-  await fetchTaskStats()
-  await fetchExcellentHelpers()
-  await fetchCompletedReviews()
-}
+
 
 
 </script>

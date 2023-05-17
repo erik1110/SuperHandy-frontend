@@ -28,6 +28,9 @@ dependencies:
   sweetalert2:
     specifier: ^11.7.3
     version: 11.7.3
+  vue-star-rating:
+    specifier: ^2.1.0
+    version: 2.1.0
   vuetify:
     specifier: ^3.1.13
     version: 3.1.13(vue@3.2.47)
@@ -5714,6 +5717,12 @@ packages:
       '@vue/devtools-api': 6.5.0
       vue: 3.2.47
     dev: true
+
+  /vue-star-rating@2.1.0:
+    resolution: {integrity: sha512-LnhuQPi4hkRg7egKls+iqtL1U0RTN2gQkdLsJN7acyynMsSc9epHLzk8McJS+bR0OzfG98zNFq7mxAyuSb/okQ==}
+    dependencies:
+      vue: 3.2.47
+    dev: false
 
   /vue@3.2.47:
     resolution: {integrity: sha512-60188y/9Dc9WVrAZeUVSDxRQOZ+z+y5nO2ts9jWXSTkMvayiWxCWOWtBQoYjLeccfXkiiPZWAHcV+WTPhkqJHQ==}
