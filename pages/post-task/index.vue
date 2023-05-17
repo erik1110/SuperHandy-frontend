@@ -162,9 +162,9 @@
                                 </table>
                             </td>
                         </tr>
-                        <tr class="sp-bg-v-gray-light sp-h-12">
+                        <tr class="bg-v-gray-bg sp-h-12">
                             <td class="sp-font-bold pl-2">總金額</td>
-                            <td class="sp-font-bold sp-text-v-orange sp-text-end sp-text-xl pe-2">{{ total }}點</td>
+                            <td class="sp-font-bold text-v-orange sp-text-end sp-text-xl pe-2">{{ total }}點</td>
                         </tr>
                         <tr v-if="total === 0" class="sp-border-b sp-h-20">
                             <td class="sp-text-v-orange">
