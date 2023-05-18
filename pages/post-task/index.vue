@@ -85,7 +85,7 @@
                                     class='sp-mb-4 sp-w-full md:sp-mb-0 md:sp-w-auto' :disabled="loading"
                                     :loading="draftBtnloading">儲存為草稿</v-btn>
                                 <v-btn type='button' color="v-purple" class='sp-mb-4 sp-w-full md:sp-mb-0 md:sp-w-auto'
-                                    :disabled="loading" @click="openFeeDialog">計算刊登費用</v-btn>
+                                    :disabled="loading" @click="openFeeModal">計算刊登費用</v-btn>
                             </div>
                         </div>
                     </div>
@@ -96,113 +96,10 @@
             </v-card>
         </v-sheet>
     </v-sheet>
-    <v-dialog v-model="dialogIsOpen" width="auto">
-        <v-card>
-            <v-toolbar :color="dialogType" title="系統訊息"></v-toolbar>
-            <v-card-text>
-                {{ dialogMessage }}
-            </v-card-text>
-            <v-card-actions v-if="dialogShowSuccessBtn" class="mt-2 justify-center">
-                <v-btn color="primary me-2" @click="dialogIsOpen = false">繼續刊登</v-btn>
-                <NuxtLink :to="siteConfig.linkPaths.tasks.to">
-                    <v-btn color="primary">前往任務管理</v-btn>
-                </NuxtLink>
-            </v-card-actions>
-            <v-card-actions v-else-if="dialogShowGoIndex" class="mt-2">
-                <v-btn color="error me-2 " @click="navigateTo(siteConfig.linkPaths.home.to)" block>前往首頁</v-btn>
-            </v-card-actions>
-            <v-card-actions v-else class="mt-2">
-                <v-btn color="primary me-2 " @click="dialogIsOpen = false" block>關閉</v-btn>
-            </v-card-actions>
-        </v-card>
-    </v-dialog>
-    <v-dialog v-model="feeDialogIsOpen" width="auto" class="fee-dialog">
-        <v-card rounded="lg" elevation="0" min-width="300px" max-width="600px">
-            <v-toolbar color="white" title="刊登費用支付" class="text-center border-b-sm">
-                <v-btn icon dark @click="feeDialogIsOpen = false">
-                    <v-icon>mdi-close</v-icon>
-                </v-btn>
-            </v-toolbar>
-            <v-card-text class="pa-4">
-                <table class="w-100 sp-align-middle">
-                    <tbody>
-                        <tr class="sp-border-b sp-h-12">
-                            <td class="sp-text-v-gray-dark sp-font-bold">目前持有超人幣</td>
-                            <td class="sp-text-end">{{ userCoin.superCoin }}點</td>
-                        </tr>
-                        <tr class="sp-border-b sp-h-12">
-                            <td class="sp-text-v-gray-dark sp-font-bold">可折抵幫手幣</td>
-                            <td>
-                                <div class="d-flex align-center justify-end">
-                                    <span>{{ helperCoinEstimate }}點</span>
-                                    <v-checkbox-btn @update:modelValue="calculateHelperCoin"></v-checkbox-btn>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="sp-h-12">
-                            <td class="sp-text-v-gray-dark sp-font-bold">付款明細</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" class="pl-4">
-                                <table class="w-100 sp-align-middle">
-                                    <tbody>
-                                        <tr class="sp-h-10">
-                                            <td class="sp-text-v-gray-dark">曝光方案</td>
-                                            <td class="sp-text-end">{{ exposurePlanPoint }}點</td>
-                                        </tr>
-                                        <tr class="sp-h-10">
-                                            <td class="sp-text-v-gray-dark">預扣薪水</td>
-                                            <td class="sp-text-end">{{ salary }}點</td>
-                                        </tr>
-                                        <tr class="sp-h-10">
-                                            <td class="sp-text-v-gray-dark">折抵幫手幣</td>
-                                            <td class="sp-text-end"> - {{ helperCoinConfirm }}點</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr class="bg-v-gray-bg sp-h-12">
-                            <td class="sp-font-bold pl-2">總金額</td>
-                            <td class="sp-font-bold text-v-orange sp-text-end sp-text-xl pe-2">{{ total }}點</td>
-                        </tr>
-                        <tr v-if="total === 0" class="sp-border-b sp-h-20">
-                            <td class="sp-text-v-orange">
-                                <v-icon class="mx-2">mdi-alert-circle</v-icon>超人幣餘額不足，請儲值
-                            </td>
-                            <td class="sp-text-end">
-                                <NuxtLink :to="siteConfig.linkPaths.points.to" target="_blank">
-                                    <v-btn color="v-orange" class="rounded-pill">立即儲值</v-btn>
-                                </NuxtLink>
-                            </td>
-                        </tr>
-                        <tr v-else class="sp-border-b sp-h-20">
-                            <td>
-                                <v-checkbox-btn label="我已詳閱點數付款須知"
-                                    @update:modelValue="publishBtnDisable = !$event"></v-checkbox-btn>
-                            </td>
-                            <td class="sp-text-end">
-                                <v-form @submit.prevent='submit'>
-                                    <v-btn color="v-purple" id="published" type="submit" :loading="publishBtnloading"
-                                        :disabled="publishBtnDisable">確認刊登</v-btn>
-                                </v-form>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="my-2">
-                    <h6 class="mb-2">點數付款須知</h6>
-                    <ul class="sp-list-disc pl-5">
-                        <li>案主可使用幫手幣來代替超人幣刊登任務，兌換比例為1:1，幫手幣可透過每月任務回饋以及儲值取得。</li>
-                        <li>案主設定的任務薪水將於任務刊登時由系統自動從案主的點數帳戶預先扣除，待任務驗收完成後，系統會自動將任務薪水支付給幫手。</li>
-                        <li>如果任務超過刊登日無人接案或案主提前終止任務刊登，系統會自動將任務薪水退還到案主的點數帳戶，但案主刊登任務時所支付的曝光方案點數將不予退還。</li>
-                        <li>如付款時使用幫手幣折抵，退還點數幣別順序為幫手幣>超人幣，幫手幣退還完畢，才會退還超人幣。</li>
-                    </ul>
-                </div>
-            </v-card-text>
-        </v-card>
-    </v-dialog>
+    <PostTaskFeeModal :dialog="postTaskFeeModal" :option="feeModalOption" :loading="publishBtnloading"
+        @aClose="postTaskFeeModal = false" @aSubmit="submit">
+    </PostTaskFeeModal>
+    <PostTaskModal :option="modalOption" @close="postTaskModal = false"></PostTaskModal>
 </template>
 
 <script setup>
@@ -244,62 +141,51 @@ function closeLoading() {
 
 
 // - 訊息彈出視窗 -
-const dialogTypeOption = {
-    info: 'primary',
-    error: 'error'
-}
-const dialogType = ref('')
-const dialogIsOpen = ref(false)
-const dialogMessage = ref('')
-const dialogShowSuccessBtn = ref(false)
-const dialogShowGoIndex = ref(false)
-function openMessageDialog({
-    type,
-    message,
-    successBtn,
-    gotoIndexBtn
-}) {
-
-    const _options = {
-        _type: type ?? dialogTypeOption.error,
-        _message: message ?? '發生意外錯誤',
-        _button: {
-            success: successBtn ?? false,
-            gotoIndex: gotoIndexBtn ?? false,
-        }
+const postTaskModal = useState("postTaskModal", () => ref(false));
+const modalOption = ref({
+    type: '',
+    message: '',
+    isShowSuccessBtn: false,
+    isShowGoIndexBtn: false,
+})
+const openModal = (option) => {
+    const _option = {
+        type: option.type ?? '',
+        message: option.message ?? '',
+        isShowSuccessBtn: option.isShowSuccessBtn ?? false,
+        isShowGoIndexBtn: option.isShowGoIndexBtn ?? false,
     }
-
-    dialogIsOpen.value = true
-    dialogType.value = _options._type
-    dialogMessage.value = _options._message
-    dialogShowSuccessBtn.value = _options._button.success
-    dialogShowGoIndex.value = _options._button.gotoIndex
-
-}
-function openErrorDialog({
-    message,
-    gotoIndexBtn
-}) {
-
-    dialogIsOpen.value = true
-    dialogType.value = dialogTypeOption.error
-    dialogShowSuccessBtn.value = false
-    dialogMessage.value = message ?? '發生意外錯誤'
-    dialogShowGoIndex.value = gotoIndexBtn ?? false
+    modalOption.value.type = _option.type
+    modalOption.value.message = _option.message
+    modalOption.value.isShowSuccessBtn = _option.isShowSuccessBtn
+    modalOption.value.isShowGoIndexBtn = _option.isShowGoIndexBtn
+    postTaskModal.value = true
 
 }
-function openInfoDialog({
-    message,
-    successBtn,
-    gotoIndexBtn
-}) {
 
-    dialogIsOpen.value = true
-    dialogType.value = dialogTypeOption.info
-    dialogShowSuccessBtn.value = successBtn ?? false
-    dialogMessage.value = message ?? '發生意外錯誤'
-    dialogShowGoIndex.value = gotoIndexBtn ?? false
 
+// - 刊登費用計算視窗 -
+const postTaskFeeModal = useState("postTaskFeeModal", () => ref(false));
+const feeModalOption = ref({
+    userCoin: {
+        superCoin: 0,
+        helperCoin: 0
+    },
+    exposurePlanPoint: 0,
+    salary: 0
+})
+const openFeeModal = async () => {
+    logInfo(_work, 'openFeeDialog')
+    const result = await validatePostTaskForm(siteConfig.taskStatus.published)
+    if (result) {
+        const response = await getAccountPoints()
+        const exPlan = exposurePlans.value.find(item => item.title === exposurePlan.value)
+
+        feeModalOption.value.userCoin = response.data
+        feeModalOption.value.exposurePlanPoint = exPlan.price
+        feeModalOption.value.salary = salary.value
+        postTaskFeeModal.value = true
+    }
 }
 
 
@@ -318,66 +204,6 @@ const contactInfoEmail = ref('')
 const locationCity = ref('')
 const locationDist = ref('')
 const locationAddress = ref('')
-const userCoin = ref({
-    superCoin: 0,
-    helperCoin: 0
-})
-
-
-
-
-// - 刊登費用計算視窗 -
-const feeDialogIsOpen = ref(false)
-
-// 打開費用視窗
-const openFeeDialog = async (event) => {
-    logInfo(_work, 'openFeeDialog')
-    const result = await validatePostTaskForm(siteConfig.taskStatus.published)
-    if (result) {
-        const response = await getAccountPoints()
-        userCoin.value = response.data
-        feeDialogIsOpen.value = true
-    }
-}
-
-// 取得曝光方案的點數
-const exposurePlanPoint = computed(() => {
-    const planCost = exposurePlans.value?.find(item => item.title === exposurePlan.value)
-    return planCost?.price
-})
-
-// 計算可折抵的幫手幣金額
-const helperCoinEstimate = computed(() => {
-    const helperCoin = userCoin.value.helperCoin
-    const planCost = exposurePlans.value?.find(item => item.title === exposurePlan.value)
-    if (helperCoin && planCost) {
-        return helperCoin >= planCost.price ? planCost.price : helperCoin
-    }
-    return 0
-})
-
-// 確認要折抵的幫手幣金額
-const helperCoinConfirm = ref(0)
-function calculateHelperCoin(event) {
-    //console.log(event, 'calculateHelperCoin')
-    if (event) {
-        helperCoinConfirm.value = helperCoinEstimate.value
-    } else {
-        helperCoinConfirm.value = 0
-    }
-}
-
-// 計算本次花費總金額
-const total = computed(() => {
-    //  本次花費的超人幣總金額 = 超人幣-曝光費用-任務薪水+折抵幫手幣
-    const value = (exposurePlanPoint.value + salary.value - helperCoinConfirm.value)
-    logInfo(_work, '本次花費的超人幣總金額', value)
-    return isNumber(value) ? value : 0
-})
-
-
-// 是否勾選 "我已詳閱點數付款通知"
-const publishBtnDisable = ref(true);
 
 
 
@@ -438,7 +264,11 @@ const validatePostTaskForm = async (status) => {
     //         behavior: 'smooth'
     //     })
     // }
-    openErrorDialog({
+    // openErrorDialog({
+    //     message: '表單驗證還沒有完成喔!',
+    // })
+    openModal({
+        type: siteConfig.dialogType.error,
         message: '表單驗證還沒有完成喔!',
     })
     return false;
@@ -449,7 +279,7 @@ const validatePostTaskForm = async (status) => {
 const resetForm = () => {
     postTaskForm.value?.reset()
     salary.value = 0
-    feeDialogIsOpen.value = false
+    postTaskFeeModal.value = false
 }
 const postFormData = async (status, data) => {
     switch (status) {
@@ -457,26 +287,23 @@ const postFormData = async (status, data) => {
             logInfo(_work, 'draft data', data)
             return await postDraft(data);
         case siteConfig.taskStatus.published:
-            data.taskTrans = {
-                superCoin: total.value,
-                helperCoin: helperCoinConfirm.value
-            }
             logInfo(_work, 'published data', data)
             return await postPublish(data);
         default:
             break;
     }
 }
-const submit = async (event) => {
+const submit = async (event, taskTrans) => {
 
-    // 1. 開啟loading & disable btns
+
+    //1. 開啟loading & disable btns
     const _submitter = event.submitter.id
     openLoading({
         overlay: true,
         draftBtn: _submitter === siteConfig.taskStatus.draft,
         publishBtn: _submitter === siteConfig.taskStatus.published,
     })
-    logInfo(_work, 'submitter', _submitter)
+    logInfo(_work, 'submit', _submitter, taskTrans)
 
 
     // 2.表單檢查
@@ -489,7 +316,7 @@ const submit = async (event) => {
     //3. 更新資料
     //4. 關閉loading & reset form
     let _message = ''
-    let _dialogType = dialogTypeOption.info
+    let _dialogType = siteConfig.dialogType.info
     let _isShowSuccessBtn = false
     try {
 
@@ -511,42 +338,47 @@ const submit = async (event) => {
                 address: locationAddress.value,
             }
         }
+        if (taskTrans) {
+            data.taskTrans = {
+                superCoin: taskTrans.superCoin,
+                helperCoin: taskTrans.helperCoin
+            }
+        }
         const response = await postFormData(_submitter, data)
         logInfo(_work, 'response', response);
         if (response && checkRespStatus(response)) {
             resetForm()
             _isShowSuccessBtn = true
         } else {
-            _dialogType = dialogTypeOption.error
+            _dialogType = siteConfig.dialogType.error
         }
         _message = response.message
 
     } catch (error) {
 
         _message = '刊登任務失敗'
-        _dialogType = dialogTypeOption.error
+        _dialogType = siteConfig.dialogType.error
         logError(_work, { error });
 
     } finally {
 
         closeLoading()
-        openMessageDialog({
+        openModal({
             type: _dialogType,
             message: _message,
-            successBtn: _isShowSuccessBtn
+            isShowSuccessBtn: _isShowSuccessBtn
         })
 
     }
 }
 
 
-
 // - 取得任務類別 & 曝光方案 -
 const exposurePlans = ref([])
 const taskCategories = ref([])
-
-function getAllData() {
-    Promise.all([
+const getAllData = async function () {
+    //Promise.all是這裡並發方法的最佳選擇
+    await Promise.all([
         getExposurePlan(),
         getCategories(),
         //getAccountPoints()
@@ -565,14 +397,15 @@ function getAllData() {
 
         // 建立任務說明的樣板清單
         descriptionTemplateList = result[1]?.data?.map(item => item.template)
-        logInfo(_work, '任務說明的樣板清單數量', descriptionTemplateList.length);
+        logInfo(_work, '取得初始資料', 'success');
 
     }).catch(error => {
         logError('取得初始資料', error);
-        openErrorDialog({
-            message: error ?? '取得初始資料發生意外錯誤',
-            gotoIndexBtn: true
-        })
+        // openModal({
+        //     type: siteConfig.dialogType.info,
+        //     message: error ?? '取得初始資料發生意外錯誤',
+        //     isShowGoIndexBtn: true,
+        // })
     })
 }
 getAllData()
