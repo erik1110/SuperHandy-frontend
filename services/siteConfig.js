@@ -44,4 +44,10 @@ export const siteConfig = {
     // expired: "expired", //任務過期
     // completed: "completed", //雙方評價完成
   },
+
+
+  dialogType: {
+    info: 'primary',
+    error: 'error'
+  }
 };
