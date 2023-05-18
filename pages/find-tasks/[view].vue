@@ -22,31 +22,50 @@
               :lat-lng="[t.location.latitude, t.location.longitude]"
             >
               <LIcon
-                :icon-url="pinImg"
+                :icon-url="t.isUrgent ? pinUrgentImg : pinImg"
                 :icon-size="[32, 44]"
                 :icon-anchor="[16, 43]"
                 :popup-anchor="[0, -40]"
               />
               <LPopup>
-                <h3 class="sp-text-h5">{{ t.title }}</h3>
-                <div class="sp-flex sp-items-end sp-my-2">
-                  <MapPinIcon class="sp-icon-sm sp-mr-1 sp-text-purple" />
+                <div class="sp-flex sp-justify-between sp-items-center sp-mb-3">
+                  <h3 class="sp-text-h5 sp-whitespace-nowrap sp-mr-2">
+                    {{ t.title }}
+                  </h3>
+                  <div v-if="t.isUrgent" class="fireIcon sp-flex-center">
+                    <FireIcon class="sp-icon-sm sp-text-white" />
+                  </div>
+                </div>
+                <div class="sp-flex sp-items-center sp-my-2">
+                  <MapPinIcon class="sp-icon-xs sp-mr-1 sp-text-purple" />
                   {{ t.location.city }}{{ t.location.dist }}
                 </div>
 
-                <p>服務類型 # {{ t.category }}</p>
-                <p>案主 {{ t.poster }} **</p>
-                <p>聯絡電話 09-26XXX-XXX</p>
-                <p>
-                  案件預算
+                <p class="my-3">
+                  <span class="tile">服務類型</span># {{ t.category }}
+                </p>
+                <p class="my-3">
+                  <span class="tile">案主</span>{{ t.poster }} **
+                </p>
+                <p class="my-3">
+                  <span class="tile">聯絡電話</span>09-26XXX-XXX
+                </p>
+                <p class="my-3">
+                  <span class="tile">案件預算</span>
                   <span class="sp-text-purple sp-font-semibold sp-text-body-sm"
                     >{{ t.salary }} 超人幣</span
                   >
                 </p>
                 <p class="sp-text-caption sp-text-slate-500">
-                  刊登時間 10 分鐘前 {{ t.inquiriesCount }} 人詢問
+                  <span class="sp-pr-2 sp-mr-1 sp-border-r sp-border-slate-400"
+                    >刊登時間 10 分鐘前</span
+                  >
+                  {{ t.inquiriesCount }} 人詢問
                 </p>
-                <v-btn color="v-purple">查看詳情</v-btn>
+                <v-btn color="v-purple">
+                  <v-icon class="mr-1">mdi-cursor-pointer</v-icon>
+                  查看詳情</v-btn
+                >
               </LPopup>
             </LMarker>
             <LTileLayer
@@ -69,61 +88,46 @@ import {
   LIcon,
   LPopup,
 } from "@vue-leaflet/vue-leaflet";
-import { MapPinIcon } from "@heroicons/vue/24/solid";
+import { MapPinIcon, FireIcon } from "@heroicons/vue/24/solid";
 import pinImg from "@/assets/images/pin.png";
 import pinUrgentImg from "@/assets/images/pin_urgent.png";
+import tasksMock from "@/static/tasks_mock.json";
 
 const { $L } = useNuxtApp();
 const route = useRoute();
 const view = route.params.view;
-const tasks = ref([
-  {
-    category: "生活服務",
-    imageUrl: "https://example.com/task_image.jpg",
-    title: "幫我打掃房間",
-    description: "需要清潔房間，包括掃地、拖地、擦窗戶",
-    poster: "王",
-    salary: 5000,
-    publishedAt: "2023-04-10T10:00:00Z",
-    inquiriesCount: 3,
-    isUrgent: false,
-    location: {
-      city: "台中市",
-      dist: "西屯區",
-      landmark: "",
-      longitude: 121.56613406328003,
-      latitude: 25.034638032224173,
-    },
-  },
-  {
-    category: "水電裝修",
-    imageUrl: "https://example.com/task_image.jpg",
-    title: "換馬桶跟洗臉台",
-    description: "需要拆除現有馬桶和洗臉台，並且安裝新的馬桶和洗臉台",
-    poster: "張",
-    salary: 8000,
-    publishedAt: "2023-04-09T09:00:00Z",
-    inquiriesCount: 1,
-    isUrgent: true,
-    location: {
-      city: "台北市",
-      dist: "大安區",
-      landmark: "大安森林公園",
-      longitude: 121.56407163196346,
-      latitude: 25.034436016196786,
-    },
-  },
-]);
+const tasks = ref(tasksMock);
 onMounted(() => {
   if (view !== "list" && view !== "map") {
     navigateTo("/find-tasks/list");
   }
+  checkCenter();
 });
 /*
   Map
 */
-const zoomLevel = ref(13);
+const zoomLevel = ref(16);
 const mapCenter = ref([25.034436016196786, 121.56407163196346]);
+const checkCenter = () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      var latitude = position.coords.latitude;
+      var longitude = position.coords.longitude;
+      console.log("Latitude: " + latitude + ", Longitude: " + longitude);
+      mapCenter.value = [latitude, longitude];
+    });
+  } else {
+    console.log("Geolocation is not supported by this browser.");
+    mapCenter.value = [25.034436016196786, 121.56407163196346];
+  }
+};
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="postcss" scoped>
+.fireIcon {
+  @apply sp-bg-warning sp-rounded-md sp-w-8 sp-h-8;
+}
+.tile {
+  @apply sp-text-body-sm sp-font-medium sp-text-slate-500 sp-w-16 sp-inline-block sp-mr-1;
+}
+</style>

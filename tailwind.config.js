@@ -14,6 +14,7 @@ module.exports = {
         secondary: "#B7EEEE",
         purple: "#5658FB",
         "gray-border": "#DDDDDD",
+        "warning" : "#FF7A50"
       },
     },
   },
