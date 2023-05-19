@@ -137,7 +137,7 @@ const postTaskForm = ref(null)
 const title = ref('');
 const category = ref('');
 const description = ref('');
-const salary = ref(0)
+const salary = ref(10)
 const exposurePlan = ref('')
 const imagesUrl = ref([])
 const contactInfoName = ref('')
@@ -215,7 +215,7 @@ const closeModal = () => {
   if (process.client) {
     postTaskModal.value = false
     // 關閉訊息後一律導向
-    navigateTo(`/post-task/-1`)
+    navigateTo(siteConfig.linkPaths.postTask.to)
     //更新時路由切換但元件無法刷新
     // const route = useRoute()
     // if (route.path.indexOf(taskId) >= 0) {
@@ -312,6 +312,7 @@ const validatePostTaskForm = async (status) => {
       rules.value = _draftRule
       break;
     case siteConfig.taskStatus.published:
+    case siteConfig.taskStatus.publishFromDraft:
       rules.value = _publishRule
       break;
     default:
@@ -335,7 +336,7 @@ const validatePostTaskForm = async (status) => {
 // - 表單送出 -
 const resetForm = () => {
   postTaskForm.value?.reset() //防止postTaskForm null
-  salary.value = 0
+  salary.value = 10
   postTaskFeeModal.value = false
   postTaskModal.value = false
 }
@@ -344,15 +345,19 @@ const postFormData = async (status, data) => {
     case siteConfig.taskStatus.addDraft:
       logInfo(_work, 'add draft data', data)
       return await postDraft(data);
+
     case siteConfig.taskStatus.updateDraft:
       logInfo(_work, 'update draft data', data)
       return await putDraftById(taskId, data);
+
     case siteConfig.taskStatus.published:
       logInfo(_work, 'published data', data)
       return await postPublish(data);
+
     case siteConfig.taskStatus.publishFromDraft:
       logInfo(_work, 'published from draft data ', data)
       return await postPublishFromDraft(taskId, data);
+
     default:
       break;
   }
@@ -428,6 +433,7 @@ const submit = async (event, taskTrans) => {
     logError(_work, 'submit', { error });
 
   } finally {
+
     resetForm()
     closeLoading()
     excuteAsyncFunc(getAccountPoints, setUserSuperCoinTotal)
@@ -438,6 +444,7 @@ const submit = async (event, taskTrans) => {
         isShowSuccessBtn: _isShowSuccessBtn
       })
     }
+
   }
 }
 
@@ -505,9 +512,8 @@ const excuteAsyncFunc = async (excuteFunc, params, successFunc) => {
 // - 選擇服務類別帶出任務說明 -
 watch(category, (nV, oV) => {
   // 動作是清空就離開
-  if (!nV) {
-    return;
-  }
+  if (!nV) return;
+
   // 如果任務說明是空的，就直接帶入樣板
   const newObj = taskCategories.value?.find(item => item.name === nV)
   if (newObj && newObj.template && !description.value) {

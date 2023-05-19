@@ -235,7 +235,7 @@ const parallaxInit = () => {
 onUnmounted(async () => {
   window.removeEventListener("mousewheel", windowMousewheel);
 });
-/* 
+/*
   sec2-IntroCard動畫
 */
 const sec2Img = ref(null);

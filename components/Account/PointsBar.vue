@@ -67,12 +67,12 @@
         <SwiperSlide>
           <AccountStatusBox
             text="案主評價"
-            :number="status.ratingPoster.toFixed(2)"
+            :number="status.ratingPoster"
             icon="mdi-star"
           ></AccountStatusBox>
           <AccountStatusBox
             text="幫手評價"
-            :number="status.ratingHelper.toFixed(2)"
+            :number="status.ratingHelper"
             icon="mdi-star"
           ></AccountStatusBox>
         </SwiperSlide>
@@ -100,6 +100,16 @@
     const response = await getProfileStatus();
     if (response && checkRespStatus(response)) {
       status.value = response.data;
+      if (status.value.ratingPoster) {
+        status.value.ratingPoster = status.value.ratingPoster.toFixed(2);
+      } else {
+        status.value.ratingPoster = "0.00";
+      }
+      if (status.value.ratingHelper) {
+        status.value.ratingHelper = status.value.ratingHelper.toFixed(2);
+      } else {
+        status.value.ratingHelper = "0.00";
+      }
       pointBarSwiperShow.value = true;
     }
     logInfo(_work, response);
