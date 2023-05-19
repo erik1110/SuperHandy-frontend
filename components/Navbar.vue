@@ -9,7 +9,7 @@
       <NuxtLink to="/find-tasks/list">
         <v-btn>找任務</v-btn>
       </NuxtLink>
-      <NuxtLink to="/post-task">
+      <NuxtLink to="/post-task/-1">
         <v-btn>刊登任務</v-btn>
       </NuxtLink>
       <v-btn v-if="_storeAuth.loginToken" icon size="small"
