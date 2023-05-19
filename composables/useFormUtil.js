@@ -2,7 +2,7 @@ const pattern = {
   email:
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   phone: /^09[0-9]{8}$/,
-  superCoin: /^([1-9]\d*|[0]{1,1})$/, //含0的正整數
+  positiveInteger: /^([1-9]\d*|[0]{1,1})$/, //含0的正整數
 };
 
 export const useFormUtil = () => {
@@ -17,7 +17,7 @@ export const useFormUtil = () => {
   const ruleAddress = (v) =>
     //(!!v && v.length > 2 && v.indexOf("號") != -1) || "地址填寫不完整";
     (!!v && v.length > 0) || "地址填寫不完整";
-  const ruleSuperCoin = (v) => !v || pattern.superCoin.test(v) || "金額輸入不正確";
+  const ruleSuperCoin = (v) => !v || pattern.positiveInteger.test(v) || "金額輸入不正確";
   const validateFormResult = async function (form) {
     let result = false;
     if (!form.value) return result;
@@ -100,14 +100,14 @@ export const useFormUtil = () => {
       taskSalary:{
         rule: [
           ruleSuperCoin,
-          (v) => !v || v > 10 || "最少需要 10 點超人幣",
+          (v) => !v || v >= 10 || "最少需要 10 點超人幣",
+          'checkUserCoin'
         ],
       }
     };
   };
 
-
-  const isNumber = n => (typeof (n) === 'number' || n instanceof Number);
+  const isNumber = n => (typeof (n) === 'number' || n instanceof Number );
 
   return {
     ruleRequired,
