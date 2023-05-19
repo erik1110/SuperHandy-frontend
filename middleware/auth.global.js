@@ -15,4 +15,9 @@ export default defineNuxtRouteMiddleware((to, from) => {
   ) {
     return navigateTo(siteConfig.linkPaths.login.to);
   }
+
+  // 如果是/post-task 就導向 /post-task/-1
+  if(to.fullPath === '/post-task'){
+    return navigateTo(`${to.fullPath}/-1`);
+  }
 });
