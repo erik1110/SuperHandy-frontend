@@ -67,12 +67,12 @@
         <SwiperSlide>
           <AccountStatusBox
             text="案主評價"
-            :number="status.ratingPoster.toFixed(2)"
+            :number="status.ratingPoster"
             icon="mdi-star"
           ></AccountStatusBox>
           <AccountStatusBox
             text="幫手評價"
-            :number="status.ratingHelper.toFixed(2)"
+            :number="status.ratingHelper"
             icon="mdi-star"
           ></AccountStatusBox>
         </SwiperSlide>
