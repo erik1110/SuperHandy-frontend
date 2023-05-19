@@ -5,14 +5,24 @@
       {{ option?.message }}
     </p>
     <template #actions>
+
       <div class="text-center sp-mt-8" :class="!option?.isShowSuccessBtn ? 'd-none' : ''">
-        <v-btn color="primary me-4" @click="postTaskModal = false">繼續刊登任務</v-btn>
+        <!-- <NuxtLink :to="siteConfig.linkPaths.postTask.to">
+          <v-btn color="primary me-4">刊登新的任務</v-btn>
+        </NuxtLink> -->
+        <!-- <v-btn color="primary me-4" @click="postTaskModal = false">繼續刊登任務</v-btn> -->
         <NuxtLink :to="siteConfig.linkPaths.tasks.to">
           <v-btn color="primary">前往任務管理</v-btn>
         </NuxtLink>
       </div>
+
       <div class="sp-mt-8" :class="!option?.isShowGoIndexBtn ? 'd-none' : ''">
         <v-btn color="primary" @click="navigateTo(siteConfig.linkPaths.home.to)" block>前往首頁</v-btn>
+      </div>
+
+      <div class="text-center sp-mt-8" :class="!option?.isShowConfirmBtn ? 'd-none' : ''">
+        <v-btn color="primary me-4" @click="$emit('aDeleteDraft')">確認</v-btn>
+        <v-btn color="v-gray-placeholder" @click="postTaskModal = false">取消</v-btn>
       </div>
     </template>
   </DialogModal>

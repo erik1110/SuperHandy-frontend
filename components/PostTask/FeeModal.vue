@@ -66,11 +66,21 @@
                                     @update:modelValue="publishBtnDisable = !$event"></v-checkbox-btn>
                             </td>
                             <td class="sp-text-end">
-                                <v-form
-                                    @submit.prevent="$emit('aSubmit', $event, { superCoin: total, helperCoin: helperCoinConfirm })">
-                                    <v-btn color="v-purple" id="published" type="submit" :loading="loading"
-                                        :disabled="publishBtnDisable">確認刊登</v-btn>
-                                </v-form>
+                                <div v-if="_option.isDraft">
+                                    <v-form
+                                        @submit.prevent="$emit('aSubmit', $event, { superCoin: total, helperCoin: helperCoinConfirm })">
+                                        <v-btn color="v-purple" id="publishFromDraft" type="submit" :loading="loading"
+                                            :disabled="publishBtnDisable">確認刊登</v-btn>
+                                    </v-form>
+                                </div>
+                                <div v-else>
+                                    <v-form
+                                        @submit.prevent="$emit('aSubmit', $event, { superCoin: total, helperCoin: helperCoinConfirm })">
+                                        <v-btn color="v-purple" id="publish" type="submit" :loading="loading"
+                                            :disabled="publishBtnDisable">確認刊登</v-btn>
+                                    </v-form>
+                                </div>
+
                             </td>
                         </tr>
                     </tbody>

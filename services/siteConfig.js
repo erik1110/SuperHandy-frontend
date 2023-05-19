@@ -26,7 +26,7 @@ export const siteConfig = {
   linkPaths: {
     home: { title: "首頁", to: "/" },
     login: { title: "登入", to: "/auth/login" },
-    postTask: { title: "刊登任務", to: "/post-task" },
+    postTask: { title: "刊登任務", to: "/post-task/-1" },
     account: { title: "會員帳號", to: "/account" },
     tasks: { title: "任務管理", to: "/account/tasks" },
     points: { title: "點數管理", to: "/account/points" },
@@ -34,15 +34,12 @@ export const siteConfig = {
 
   //任務狀態
   taskStatus: {
-    draft: "draft", //草稿區
-    published: "published", //刊登任務(發布任務)
-    // unpublished: "unpublished", //已下架
-    // deleted: "deleted", //未成立
-    // inProgess: "inProgess", //進行中
-    // submitted: "submitted", //幫手提交驗收內容
-    // confirmed: "confirmed", //案主點確認驗收
-    // expired: "expired", //任務過期
-    // completed: "completed", //雙方評價完成
+    addDraft: "addDraft", //新增草稿
+    updateDraft: "updateDraft", //更新草稿
+    deleteDraft: "deleteDraft", //刪除草稿
+    publishFromDraft: "publishFromDraft", //從草稿刊登任務
+    published: "published", //直接刊登任務
+    republish: "republish", //重新刊登任務
   },
 
 
