@@ -17,7 +17,6 @@ export const useFormUtil = () => {
   const ruleAddress = (v) =>
     //(!!v && v.length > 2 && v.indexOf("號") != -1) || "地址填寫不完整";
     (!!v && v.length > 0) || "地址填寫不完整";
-  const ruleSuperCoin = (v) => !v || pattern.positiveInteger.test(v) || "金額輸入不正確";
   const validateFormResult = async function (form) {
     let result = false;
     if (!form.value) return result;
@@ -99,11 +98,11 @@ export const useFormUtil = () => {
       },
       taskSalary:{
         rule: [
-          ruleSuperCoin,
-          (v) => !v || v >= 10 || "最少需要 10 點超人幣",
+          (v) => pattern.positiveInteger.test(v) || "金額輸入不正確",
+          (v) => v >= 10 || "最少需要 10 點超人幣",
           'checkUserCoin'
         ],
-      }
+      },
     };
   };
 
@@ -118,7 +117,6 @@ export const useFormUtil = () => {
     rulePhone,
     ruleConfirmPassword,
     ruleAddress,
-    ruleSuperCoin,
     validateFormResult,
     formRules,
     isNumber
