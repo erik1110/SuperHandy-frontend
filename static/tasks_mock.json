@@ -1,0 +1,97 @@
+[
+    {
+        "taskId": 1,
+        "category": "生活服務",
+        "imageUrl": "https://example.com/task_image.jpg",
+        "title": "幫我打掃房間",
+        "description": "需要清潔房間，包括掃地、拖地、擦窗戶",
+        "poster": "王",
+        "salary": 5000,
+        "publishedAt": "2023-04-10T10:00:00Z",
+        "inquiriesCount": 3,
+        "isUrgent": false,
+        "location": {
+        "city": "台中市",
+        "dist": "西屯區",
+        "landmark": "",
+        "longitude": 121.56613406328003,
+        "latitude": 25.034638032224173
+        }
+    },
+    {
+        "taskId": 2,
+        "category": "水電裝修",
+        "imageUrl": "https://example.com/task_image.jpg",
+        "title": "換馬桶跟洗臉台",
+        "description": "需要拆除現有馬桶和洗臉台，並且安裝新的馬桶和洗臉台",
+        "poster": "張",
+        "salary": 8000,
+        "publishedAt": "2023-04-09T09:00:00Z",
+        "inquiriesCount": 1,
+        "isUrgent": true,
+        "location": {
+        "city": "台北市",
+        "dist": "大安區",
+        "landmark": "大安森林公園",
+        "longitude": 121.56407163196346,
+        "latitude": 25.034436016196786
+        }
+    },
+    {
+        "taskId": 3,
+        "category": "在家兼職",
+        "imageUrl": "https://example.com/task_image.jpg",
+        "title": "PPT製作關於韓國烤肉餐廳",
+        "description": "製作PPT關於開間韓國烤肉的餐廳所需準備的事項、供應商等等，要附講稿上台報告，會有一個的檔案可以參考",
+        "poster": "楊",
+        "salary": 450,
+        "publishedAt": "2023-04-09T09:00:00Z",
+        "inquiriesCount": 11,
+        "isUrgent": false,
+        "location": {
+        "city": "台北市",
+        "dist": "松山區",
+        "landmark": "松山車站",
+        "longitude": 121.56325471415506,
+        "latitude": 25.037586162811493
+        }
+    },
+    {
+        "taskId": 4,
+        "category": "生活服務",
+        "imageUrl": "https://example.com/task_image.jpg",
+        "title": "協助搬家，整理物件（2h內）",
+        "description": "協助搬家，把物品搬到地下室",
+        "poster": "蔣",
+        "salary": 500,
+        "publishedAt": "2023-04-09T09:00:00Z",
+        "inquiriesCount": 5,
+        "isUrgent": false,
+        "location": {
+        "city": "新北市",
+        "dist": "新店區",
+        "landmark": "新北市新店區安祥路108巷",
+        "longitude": 121.56297482768312,
+        "latitude": 25.031487139774637
+        }
+    },
+    {
+        "taskId": 5,
+        "category": "生活服務",
+        "imageUrl": "https://example.com/task_image.jpg",
+        "title": "宇宙人演唱會搶票",
+        "description": "【幫忙事項】：5/20 12:00 台中場搶票【注意事項】：確認搶到票才會付款",
+        "poster": "周",
+        "salary": 200,
+        "publishedAt": "2023-04-09T09:00:00Z",
+        "inquiriesCount": 3,
+        "isUrgent": true,
+        "location": {
+        "city": "台北市",
+        "dist": "大安區",
+        "landmark": "大安森林公園",
+        "longitude": 121.56185811889839,
+        "latitude": 25.031866572562887
+        }
+    }
+]

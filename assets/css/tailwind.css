@@ -82,6 +82,9 @@
   @apply sp-flex sp-justify-center sp-items-center
 }
 /* Icons */
+.sp-icon-xs{
+  @apply sp-w-4 sp-h-4
+}
 .sp-icon-sm{
   @apply sp-w-5 sp-h-5
 }

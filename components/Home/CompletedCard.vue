@@ -18,7 +18,9 @@
               }}
             </p>
 
-            <p class="cardItem sp-ml-4 hover:sp-text-purple hover:sp-cursor-pointer">
+            <p
+              class="cardItem sp-ml-4 hover:sp-text-purple hover:sp-cursor-pointer"
+            >
               <MapPinIcon class="sp-icon-sm sp-mr-1 sp-text-purple" />
               {{ location.landmark }}
             </p>

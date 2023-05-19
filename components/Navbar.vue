@@ -51,23 +51,22 @@
   </v-app-bar>
 </template>
 <script setup>
-  // Account Menu Data
-  const items = [
-    { title: "我的帳號", to: "/account" },
-    { title: "任務管理", to: "/account/tasks" },
-    { title: "評價查看", to: "/account/comments" },
-    { title: "點數管理", to: "/account/points" },
-    // { title: "登出", to: "/auth/login" },
-  ];
-  // Auth
-  import { storeAuth } from "@/stores/storeAuth";
-  const _storeAuth = storeAuth();
+// Account Menu Data
+const items = [
+  { title: "我的帳號", to: "/account" },
+  { title: "任務管理", to: "/account/tasks" },
+  { title: "評價查看", to: "/account/comments" },
+  { title: "點數管理", to: "/account/points" },
+  // { title: "登出", to: "/auth/login" },
+];
+// Auth
+import { storeAuth } from "@/stores/storeAuth";
+const _storeAuth = storeAuth();
 
-  const logout = () => {
-    _storeAuth.setLoginToken("");
-    navigateTo("/auth/login");
-  };
+const logout = () => {
+  _storeAuth.setLoginToken("");
+  navigateTo("/auth/login");
+};
 </script>
 
 <style scoped></style>
-
