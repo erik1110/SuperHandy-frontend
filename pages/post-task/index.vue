@@ -10,7 +10,7 @@
                         <label class='text-v-gray-text pb-2 d-block' for='title'>任務標題</label>
                         <v-text-field v-model='title' :rules='postTaskFormRules.taskTitle.rule'
                             :counter='postTaskFormRules.taskTitle.counter' :hint='postTaskFormRules.taskTitle.hint'
-                            placeholder="請輸入任務標題" id="title" />
+                            placeholder="請輸入任務標題" id="title" @keypress.enter.prevent />
                     </div>
                     <div class='mt-4'>
                         <label class='text-v-gray-text pb-2 d-block' for='category'>服務類別</label>
@@ -26,15 +26,16 @@
                     </div>
                     <div class='mt-4 md:sp-w-1/2 lg:sp-w-1/3'>
                         <label class='text-v-gray-text pb-2 d-block' for='salary'>任務薪水</label>
-                        <v-text-field v-model='salary' :rules='rules.salary' type='number' prefix=$ suffix=超人幣
-                            id="salary" />
+                        <v-text-field v-model='salary' :rules='rules.salary' type='number' prefix=$ suffix=超人幣 id="salary"
+                            @keypress.enter.prevent />
                     </div>
                     <div class='mt-4'>
                         <label class='text-v-gray-text pb-2 d-block'>曝光方案</label>
                         <div class='d-md-flex'>
                             <v-radio-group v-for='(item, index) in exposurePlans' :key='index' v-model='exposurePlan'
                                 :rules='rules.exposurePlan'>
-                                <v-radio :label='`${item.title} ${item.price}點`' :value='item.title'></v-radio>
+                                <v-radio :label='`${item.title} ${item.price}點`' :value='item.title'
+                                    @keypress.enter.prevent></v-radio>
                             </v-radio-group>
                         </div>
                     </div>
@@ -48,15 +49,17 @@
                         <label class='text-v-gray-text pb-2 d-block' for="contactInfoName">姓名</label>
                         <v-text-field v-model='contactInfoName' :rules='rules.contactInfoName'
                             :counter='postTaskFormRules.name.counter' :hint='postTaskFormRules.name.hint'
-                            id="contactInfoName" />
+                            id="contactInfoName" @keypress.enter.prevent />
                     </div>
                     <div class='mt-4 md:sp-w-1/2'>
                         <label class='text-v-gray-text pb-2 d-block' for="contactInfoPhone">電話</label>
-                        <v-text-field v-model='contactInfoPhone' :rules='rules.contactInfoPhone' id="contactInfoPhone" />
+                        <v-text-field v-model='contactInfoPhone' :rules='rules.contactInfoPhone' id="contactInfoPhone"
+                            @keypress.enter.prevent />
                     </div>
                     <div class='mt-4 md:sp-w-1/2'>
                         <label class='text-v-gray-text pb-2 d-block' for="contactInfoEmail">Email</label>
-                        <v-text-field v-model='contactInfoEmail' :rules='rules.contactInfoEmail' id="contactInfoEmail" />
+                        <v-text-field v-model='contactInfoEmail' :rules='rules.contactInfoEmail' id="contactInfoEmail"
+                            @keypress.enter.prevent />
                     </div>
                     <div class='mt-4'>
                         <label class='text-v-gray-text pb-2 d-block'>地址</label>
@@ -71,7 +74,8 @@
                                 </v-select>
                             </div>
                             <v-text-field :rules='rules.locationAddress' v-model='locationAddress'
-                                :counter='postTaskFormRules.address.counter' :hint='postTaskFormRules.address.hint' />
+                                :counter='postTaskFormRules.address.counter' :hint='postTaskFormRules.address.hint'
+                                @keypress.enter.prevent />
                         </div>
                     </div>
                     <div class='my-8'>
@@ -109,13 +113,35 @@ import { siteConfig } from '@/services/siteConfig'
 import { getCategories, getExposurePlan } from '@/services/apis/general';
 import { postDraft, postPublish } from '@/services/apis/postTask';
 import { getAccountPoints } from '@/services/apis/point';
-const { formRules, rulePhone, ruleEmail, ruleAddress, ruleRequired, validateFormResult, isNumber } = useFormUtil()
+const { formRules, rulePhone, ruleEmail, ruleAddress, ruleRequired, validateFormResult, converCurrency } = useFormUtil()
 const postTaskFormRules = formRules()
 const { checkRespStatus } = useHttp();
 const { logInfo, logError } = useLog();
 const _work = '刊登任務'
 let descriptionTemplateList = []
+let userSuperCoinTotal = 0
 
+
+// - 表單宣告 -
+const postTaskForm = ref(null)
+const title = ref('');
+const category = ref('');
+const description = ref('');
+const salary = ref(0)
+const exposurePlan = ref('')
+const imagesUrl = ref([])
+const contactInfoName = ref('')
+const contactInfoPhone = ref('')
+const contactInfoEmail = ref('')
+const locationCity = ref('')
+const locationDist = ref('')
+const locationAddress = ref('')
+const userCoin = ref({
+    superCoin: 0,
+    helperCoin: 0
+})
+const exposurePlans = ref([])
+const taskCategories = ref([])
 
 
 
@@ -128,9 +154,9 @@ function openLoading({
     draftBtn,
     publishBtn
 }) {
-    loading.value = overlay;
-    draftBtnloading.value = draftBtn;
-    publishBtnloading.value = publishBtn
+    loading.value = overlay ?? true;
+    draftBtnloading.value = draftBtn ?? false;
+    publishBtnloading.value = publishBtn ?? false;
 }
 function closeLoading() {
     loading.value = false;
@@ -155,55 +181,35 @@ const openModal = (option) => {
         isShowSuccessBtn: option.isShowSuccessBtn ?? false,
         isShowGoIndexBtn: option.isShowGoIndexBtn ?? false,
     }
+
     modalOption.value.type = _option.type
     modalOption.value.message = _option.message
     modalOption.value.isShowSuccessBtn = _option.isShowSuccessBtn
     modalOption.value.isShowGoIndexBtn = _option.isShowGoIndexBtn
-    postTaskModal.value = true
-
+    if (process.client) {
+        postTaskModal.value = true
+    }
 }
-
 
 // - 刊登費用計算視窗 -
 const postTaskFeeModal = useState("postTaskFeeModal", () => ref(false));
 const feeModalOption = ref({
-    userCoin: {
-        superCoin: 0,
-        helperCoin: 0
-    },
+    superCoin: 0,
+    helperCoin: 0,
     exposurePlanPoint: 0,
     salary: 0
 })
 const openFeeModal = async () => {
-    logInfo(_work, 'openFeeDialog')
     const result = await validatePostTaskForm(siteConfig.taskStatus.published)
-    if (result) {
-        const response = await getAccountPoints()
-        const exPlan = exposurePlans.value.find(item => item.title === exposurePlan.value)
-
-        feeModalOption.value.userCoin = response.data
-        feeModalOption.value.exposurePlanPoint = exPlan.price
-        feeModalOption.value.salary = salary.value
-        postTaskFeeModal.value = true
-    }
+    if (!result) return;
+    const exPlan = exposurePlans.value.find(item => item.title === exposurePlan.value)
+    feeModalOption.value.exposurePlanPoint = exPlan.price
+    feeModalOption.value.salary = salary.value
+    feeModalOption.value.superCoin = userCoin.value.superCoin
+    feeModalOption.value.helperCoin = userCoin.value.helperCoin
+    postTaskFeeModal.value = true
+    logInfo(_work, 'openFeeDialog', feeModalOption)
 }
-
-
-
-// - 表單宣告 -
-const postTaskForm = ref(null)
-const title = ref('');
-const category = ref('');
-const description = ref('');
-const salary = ref(0)
-const exposurePlan = ref('')
-const imagesUrl = ref([])
-const contactInfoName = ref('')
-const contactInfoPhone = ref('')
-const contactInfoEmail = ref('')
-const locationCity = ref('')
-const locationDist = ref('')
-const locationAddress = ref('')
 
 
 
@@ -211,7 +217,7 @@ const locationAddress = ref('')
 const _draftRule = {
     category: [],
     description: postTaskFormRules.taskDescription.rule,
-    salary: [postTaskFormRules.taskSalary.rule[1]],
+    salary: postTaskFormRules.taskSalary.rule,
     exposurePlan: [],
     contactInfoName: [],
     contactInfoPhone: [rulePhone],
@@ -233,6 +239,8 @@ const _publishRule = {
     locationAddress: [ruleAddress]
 }
 const rules = ref(_draftRule)
+//增加任務薪水檢查規則
+const checkUserSuperCoinTotal = (v) => v > userCoin.value.superCoin ? false : true
 const validatePostTaskForm = async (status) => {
 
     switch (status) {
@@ -269,7 +277,7 @@ const validatePostTaskForm = async (status) => {
     // })
     openModal({
         type: siteConfig.dialogType.error,
-        message: '表單驗證還沒有完成喔!',
+        message: '表單驗證還沒有完成',
     })
     return false;
 }
@@ -277,7 +285,7 @@ const validatePostTaskForm = async (status) => {
 
 // - 表單送出 -
 const resetForm = () => {
-    postTaskForm.value?.reset()
+    postTaskForm.value?.reset() //防止postTaskForm null
     salary.value = 0
     postTaskFeeModal.value = false
 }
@@ -295,6 +303,9 @@ const postFormData = async (status, data) => {
 }
 const submit = async (event, taskTrans) => {
 
+    let _message = ''
+    let _dialogType = siteConfig.dialogType.info
+    let _isShowSuccessBtn = false
 
     //1. 開啟loading & disable btns
     const _submitter = event.submitter.id
@@ -303,7 +314,7 @@ const submit = async (event, taskTrans) => {
         draftBtn: _submitter === siteConfig.taskStatus.draft,
         publishBtn: _submitter === siteConfig.taskStatus.published,
     })
-    logInfo(_work, 'submit', _submitter, taskTrans)
+    logInfo(_work, 'submit', event, taskTrans)
 
 
     // 2.表單檢查
@@ -315,11 +326,7 @@ const submit = async (event, taskTrans) => {
 
     //3. 更新資料
     //4. 關閉loading & reset form
-    let _message = ''
-    let _dialogType = siteConfig.dialogType.info
-    let _isShowSuccessBtn = false
     try {
-
         const data = {
             title: title.value,
             category: category.value,
@@ -344,8 +351,9 @@ const submit = async (event, taskTrans) => {
                 helperCoin: taskTrans.helperCoin
             }
         }
+
         const response = await postFormData(_submitter, data)
-        logInfo(_work, 'response', response);
+        logInfo(_work, 'submit.response', response);
         if (response && checkRespStatus(response)) {
             resetForm()
             _isShowSuccessBtn = true
@@ -358,57 +366,75 @@ const submit = async (event, taskTrans) => {
 
         _message = '刊登任務失敗'
         _dialogType = siteConfig.dialogType.error
-        logError(_work, { error });
+        logError(_work, 'submit', { error });
 
     } finally {
-
         closeLoading()
-        openModal({
-            type: _dialogType,
-            message: _message,
-            isShowSuccessBtn: _isShowSuccessBtn
-        })
-
+        excuteAsyncFunc(getAccountPoints, setUserSuperCoinTotal)
+        if (_message) {
+            openModal({
+                type: _dialogType,
+                message: _message,
+                isShowSuccessBtn: _isShowSuccessBtn
+            })
+        }
     }
 }
 
 
-// - 取得任務類別 & 曝光方案 -
-const exposurePlans = ref([])
-const taskCategories = ref([])
-const getAllData = async function () {
-    //Promise.all是這裡並發方法的最佳選擇
-    await Promise.all([
-        getExposurePlan(),
-        getCategories(),
-        //getAccountPoints()
-    ]).then(result => {
-        //console.log(result, 'result')
-        //必須先檢查status是否="success",否則顯示後端給的錯誤訊息
-        result.forEach(item => {
-            if (!checkRespStatus(item)) {
-                throw item.message
-            }
-        })
-
-        exposurePlans.value = result[0].data
-        taskCategories.value = result[1].data
-        //taskTrans.value = result[2].data
-
-        // 建立任務說明的樣板清單
-        descriptionTemplateList = result[1]?.data?.map(item => item.template)
-        logInfo(_work, '取得初始資料', 'success');
-
-    }).catch(error => {
-        logError('取得初始資料', error);
-        // openModal({
-        //     type: siteConfig.dialogType.info,
-        //     message: error ?? '取得初始資料發生意外錯誤',
-        //     isShowGoIndexBtn: true,
-        // })
-    })
+// 設定會員的超人幣和幫手幣
+const setUserSuperCoinTotal = (response) => {
+    userCoin.value = response.data
+    //增加任務薪水檢查規則
+    const index = postTaskFormRules.taskSalary.rule.findIndex((item) => item == 'checkUserCoin')
+    if (index >= 0) {
+        postTaskFormRules.taskSalary.rule[index] = ((v) => checkUserSuperCoinTotal(v) || `不可超過目前帳戶儲值餘額 ${userCoin.value.superCoin} 點超人幣`)
+    }
+    logInfo(_work, 'setUserSuperCoinTotal', userCoin.value, postTaskFormRules.taskSalary.rule)
 }
-getAllData()
+// 設定曝光方案
+const setExposurePlan = (response) => {
+    exposurePlans.value = response.data
+    descriptionTemplateList = response.data.map(item => item.template)
+}
+// 有錯誤訊息才顯示
+const excuteAsyncFunc = async (excuteFunc, successFunc) => {
+
+    if (!excuteFunc || typeof excuteFunc !== 'function') {
+        return;
+    }
+
+    let _message = ''
+    openLoading({ overlay: true })
+    try {
+        const response = await excuteFunc()
+        if (response && !checkRespStatus(response)) {
+            _message = response.message
+        } else {
+            if (successFunc && typeof successFunc === 'function') {
+                successFunc(response)
+            }
+        }
+        logInfo(_work, 'excuteAsyncFunc', 'success');
+    } catch (error) {
+        _message = '執行失敗'
+        logError(_work, 'asyncFunc', { error });
+    } finally {
+        closeLoading()
+        if (_message) {
+            openModal({
+                type: siteConfig.dialogType.error,
+                message: _message,
+            })
+        }
+    }
+}
+
+
+// Init
+excuteAsyncFunc(getExposurePlan, setExposurePlan)
+excuteAsyncFunc(getCategories, (response) => taskCategories.value = response.data)
+excuteAsyncFunc(getAccountPoints, setUserSuperCoinTotal)
 
 
 
@@ -431,7 +457,6 @@ watch(category, (nV, oV) => {
         return;
     }
 })
-
 
 
 // - 跟據縣市顯示地區選單 -
@@ -480,6 +505,7 @@ function fakeData() {
     contactInfoEmail.value = 'test@gmail.com'
 }
 
+
 </script>
 
 <style scoped>
@@ -487,3 +513,6 @@ function fakeData() {
     @apply sp-border-l-8 sp-border-secondary sp-pl-4 sp-font-bold sp-text-lg sp-text-primary
 }
 </style>
+
+
+

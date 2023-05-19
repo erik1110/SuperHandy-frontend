@@ -11,7 +11,7 @@
                     <tbody>
                         <tr class="sp-border-b sp-h-12">
                             <td class="sp-text-v-gray-dark sp-font-bold">目前持有超人幣</td>
-                            <td class="sp-text-end">{{ option.userCoin.superCoin }}點</td>
+                            <td class="sp-text-end">{{ _option.superCoin }}點</td>
                         </tr>
                         <tr class="sp-border-b sp-h-12">
                             <td class="sp-text-v-gray-dark sp-font-bold">可折抵幫手幣</td>
@@ -32,11 +32,11 @@
                                     <tbody>
                                         <tr class="sp-h-10">
                                             <td class="sp-text-v-gray-dark">曝光方案</td>
-                                            <td class="sp-text-end">{{ option.exposurePlanPoint }}點</td>
+                                            <td class="sp-text-end">{{ _option.exposurePlanPoint }}點</td>
                                         </tr>
                                         <tr class="sp-h-10">
                                             <td class="sp-text-v-gray-dark">預扣薪水</td>
-                                            <td class="sp-text-end">{{ option.salary }}點</td>
+                                            <td class="sp-text-end">{{ _option.salary }}點</td>
                                         </tr>
                                         <tr class="sp-h-10">
                                             <td class="sp-text-v-gray-dark">折抵幫手幣</td>
@@ -51,7 +51,7 @@
                             <td class="sp-font-bold text-v-orange sp-text-end sp-text-xl pe-2">{{ total }}點</td>
                         </tr>
                         <tr v-if="total === 0" class="sp-border-b sp-h-20">
-                            <td class="sp-text-v-orange">
+                            <td class="text-v-orange">
                                 <v-icon class="mx-2">mdi-alert-circle</v-icon>超人幣餘額不足，請儲值
                             </td>
                             <td class="sp-text-end">
@@ -93,12 +93,13 @@ import { siteConfig } from '@/services/siteConfig'
 const { isNumber } = useFormUtil()
 const postTaskFeeModal = useState("postTaskFeeModal");
 const props = defineProps(['option', 'loading']);
-
+const _option = ref(props.option)
+//console.log(_option.value, '_option')
 
 // 計算可折抵的幫手幣金額
 const helperCoinEstimate = computed(() => {
-    const helperCoin = props.option.userCoin.helperCoin
-    const planPoint = props.option.exposurePlanPoint
+    const helperCoin = _option.value.helperCoin
+    const planPoint = _option.value.exposurePlanPoint
     if (helperCoin && planPoint) {
         return helperCoin >= planPoint ? planPoint : helperCoin
     }
@@ -118,12 +119,23 @@ function calculateHelperCoin(event) {
 
 // 計算本次花費總金額
 const total = computed(() => {
-    //  本次花費的超人幣總金額 = 超人幣-曝光費用-任務薪水+折抵幫手幣
-    const value = (props.option.exposurePlanPoint + props.option.salary - helperCoinConfirm.value)
+    //  本次花費的超人幣總金額 = 曝光費用+任務薪水-折抵幫手幣
+    const value = Number(_option.value.exposurePlanPoint) + Number(_option.value.salary) - helperCoinConfirm.value
     return isNumber(value) ? value : 0
 })
 
 
 // 是否勾選 "我已詳閱點數付款通知"
 const publishBtnDisable = ref(true);
+
+
+// Reset
+watch(
+    () => postTaskFeeModal.value,
+    (val) => {
+        if (!val) {
+            console.log(_option.value, 'modal close')
+        }
+    }
+);
 </script>
