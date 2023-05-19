@@ -137,7 +137,7 @@ const postTaskForm = ref(null)
 const title = ref('');
 const category = ref('');
 const description = ref('');
-const salary = ref(0)
+const salary = ref(10)
 const exposurePlan = ref('')
 const imagesUrl = ref([])
 const contactInfoName = ref('')
@@ -312,6 +312,7 @@ const validatePostTaskForm = async (status) => {
       rules.value = _draftRule
       break;
     case siteConfig.taskStatus.published:
+    case siteConfig.taskStatus.publishFromDraft:
       rules.value = _publishRule
       break;
     default:
@@ -335,7 +336,7 @@ const validatePostTaskForm = async (status) => {
 // - 表單送出 -
 const resetForm = () => {
   postTaskForm.value?.reset() //防止postTaskForm null
-  salary.value = 0
+  salary.value = 10
   postTaskFeeModal.value = false
   postTaskModal.value = false
 }
@@ -344,15 +345,19 @@ const postFormData = async (status, data) => {
     case siteConfig.taskStatus.addDraft:
       logInfo(_work, 'add draft data', data)
       return await postDraft(data);
+
     case siteConfig.taskStatus.updateDraft:
       logInfo(_work, 'update draft data', data)
       return await putDraftById(taskId, data);
+
     case siteConfig.taskStatus.published:
       logInfo(_work, 'published data', data)
       return await postPublish(data);
+
     case siteConfig.taskStatus.publishFromDraft:
       logInfo(_work, 'published from draft data ', data)
       return await postPublishFromDraft(taskId, data);
+
     default:
       break;
   }
