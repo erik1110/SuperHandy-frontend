@@ -23,6 +23,7 @@
     "@mdi/font": "^7.2.96",
     "@nuxtjs/google-fonts": "^3.0.0",
     "@pinia/nuxt": "^0.4.9",
+    "default-passive-events": "^2.0.0",
     "leaflet": "^1.9.3",
     "moment": "^2.29.4",
     "nuxt-swiper": "^1.1.0",

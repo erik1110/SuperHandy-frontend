@@ -14,7 +14,7 @@
           <div class="sp-flex">
             <p class="cardItem">
               <ClockIcon class="sp-icon-sm sp-mr-1 sp-text-purple" />{{
-                timeFormat(completedAt)
+                completedAt && timeFormat(completedAt)
               }}
             </p>
 
@@ -22,7 +22,7 @@
               class="cardItem sp-ml-4 hover:sp-text-purple hover:sp-cursor-pointer"
             >
               <MapPinIcon class="sp-icon-sm sp-mr-1 sp-text-purple" />
-              <!-- {{ location.landmark }} -->
+              {{ address }}
             </p>
           </div>
         </div>
@@ -41,7 +41,7 @@ import { ClockIcon, MapPinIcon } from "@heroicons/vue/24/solid";
 const { cardData } = defineProps({
   cardData: Object,
 });
-const { location, title, salary, completedAt } = cardData;
+const { address, title, salary, completedAt } = cardData;
 // Moment
 const { timeFormat } = useMoment();
 </script>
