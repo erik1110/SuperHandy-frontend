@@ -45,7 +45,7 @@
       </div>
       <div class="sp-basis-full sp-mt-8">
         <div class="sp-flex-center sp-mb-20 ">
-          <NuxtLink to="/post-task">
+          <NuxtLink to="/post-task/-1">
             <v-btn class="text-white" max-width="200" color="v-purple" rounded>立即刊登任務
               <v-icon class="mt-1">mdi-arrow-right</v-icon>
             </v-btn>
@@ -119,7 +119,7 @@ onMounted(async () => {
   observerSec2()
   observerSec3()
 })
-/* 
+/*
   Init Data
 */
 const completedCaseData = ref([])
@@ -158,7 +158,7 @@ const initData = async () => {
   await fetchExcellentHelpers()
   await fetchCompletedReviews()
 }
-/* 
+/*
   sec1-滾動視差
 */
 let windowMousewheel = () => {
@@ -176,7 +176,7 @@ const parallaxInit = () => {
 onUnmounted(async () => {
   window.removeEventListener("mousewheel", windowMousewheel);
 });
-/* 
+/*
   sec2-IntroCard動畫
 */
 const sec2Img = ref(null)
@@ -187,7 +187,7 @@ const observerSec2 = () => {
   const observer = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        // section2 left 
+        // section2 left
         sec2Img.value.classList.add('animate__animated', 'animate__pulse')
         // section2 right
         animateEl.forEach((el, idx) => {
@@ -205,7 +205,7 @@ const observerSec2 = () => {
   // 監聽 .animate 元素是否進入可視區域
   observer.observe(showIntroCard.value);
 }
-/* 
+/*
   sec3-動畫+counter
 */
 const startCount = ref(null)
@@ -236,7 +236,7 @@ const countDown = async (item) => {
   }, 2);
 
 }
-/* 
+/*
   sec5-Helpers
 */
 // modal
