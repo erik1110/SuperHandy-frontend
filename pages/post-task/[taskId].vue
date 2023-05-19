@@ -215,7 +215,7 @@ const closeModal = () => {
   if (process.client) {
     postTaskModal.value = false
     // 關閉訊息後一律導向
-    navigateTo(`/post-task/-1`)
+    navigateTo(siteConfig.linkPaths.postTask.to)
     //更新時路由切換但元件無法刷新
     // const route = useRoute()
     // if (route.path.indexOf(taskId) >= 0) {
@@ -428,6 +428,7 @@ const submit = async (event, taskTrans) => {
     logError(_work, 'submit', { error });
 
   } finally {
+
     resetForm()
     closeLoading()
     excuteAsyncFunc(getAccountPoints, setUserSuperCoinTotal)
@@ -438,6 +439,7 @@ const submit = async (event, taskTrans) => {
         isShowSuccessBtn: _isShowSuccessBtn
       })
     }
+
   }
 }
 
@@ -505,9 +507,8 @@ const excuteAsyncFunc = async (excuteFunc, params, successFunc) => {
 // - 選擇服務類別帶出任務說明 -
 watch(category, (nV, oV) => {
   // 動作是清空就離開
-  if (!nV) {
-    return;
-  }
+  if (!nV) return;
+
   // 如果任務說明是空的，就直接帶入樣板
   const newObj = taskCategories.value?.find(item => item.name === nV)
   if (newObj && newObj.template && !description.value) {
