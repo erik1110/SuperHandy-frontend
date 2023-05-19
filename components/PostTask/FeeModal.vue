@@ -76,7 +76,7 @@
                                 <div v-else>
                                     <v-form
                                         @submit.prevent="$emit('aSubmit', $event, { superCoin: total, helperCoin: helperCoinConfirm })">
-                                        <v-btn color="v-purple" id="publish" type="submit" :loading="loading"
+                                        <v-btn color="v-purple" id="published" type="submit" :loading="loading"
                                             :disabled="publishBtnDisable">確認刊登</v-btn>
                                     </v-form>
                                 </div>
