@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <VContainer class="sp-max-w-[1000px]" fluid v-if="!isLoading">
+  <div class="sp-max-w-[1000px]">
+    <VContainer fluid v-if="!isLoading">
       <VRow>
         <VCol cols="12" class="sp-flex">
           <VCard class="sp-flex-1">
