@@ -3,8 +3,8 @@
     <!-- Sec-1-CTA -->
     <div class="wrapper 2xl:sp-min-h-[85vh]">
       <header>
-        <img src="../assets/images/bg/bg-1.png" class="back" />
-        <img src="../assets/images/bg/bg-2.png" class="fore" />
+        <img src="../assets/images/bg/bg-1-compact.png" class="back" />
+        <img src="../assets/images/bg/bg-2-compact.png" class="fore" />
         <div class="sp-flex sp-flex-col sp-items-center">
           <img
             src="../assets/images/bg/slogon.png"
