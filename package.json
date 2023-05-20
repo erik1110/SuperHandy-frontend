@@ -23,14 +23,12 @@
     "@heroicons/vue": "^2.0.18",
     "@mdi/font": "^7.2.96",
     "@pinia/nuxt": "^0.4.9",
-    "default-passive-events": "^2.0.0",
     "leaflet": "^1.9.3",
     "moment": "^2.29.4",
     "nuxt-swiper": "^1.1.0",
     "pinia": "^2.0.35",
     "sass": "^1.62.0",
     "sweetalert2": "^11.7.3",
-    "vue-star-rating": "^2.1.0",
     "vuetify": "^3.1.13"
   }
 }

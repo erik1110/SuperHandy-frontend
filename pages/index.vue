@@ -10,6 +10,7 @@
             preload
             src="/images/slogon.png"
             class="sp-max-w-sm sp-mb-4"
+            alt="來一場地圖尋寶，找到你的任務機會"
           />
           <NuxtLink to="/find-tasks/list">
             <v-btn class="text-white" max-width="100" color="v-purple" rounded

@@ -70,31 +70,38 @@
   left: 0;
 }
 .logo::after {
-  content: '';
+  content: "";
   position: absolute;
-  background-image: url('@/assets/images/logo.svg');
+  background-image: url("@/assets/images/logo.svg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;
 }
 /* 置中 */
-.sp-flex-center{
-  @apply sp-flex sp-justify-center sp-items-center
+.sp-flex-center {
+  @apply sp-flex sp-justify-center sp-items-center;
 }
 /* Icons */
-.sp-icon-xs{
-  @apply sp-w-4 sp-h-4
+.sp-icon-xs {
+  @apply sp-w-4 sp-h-4;
 }
-.sp-icon-sm{
-  @apply sp-w-5 sp-h-5
+.sp-icon-sm {
+  @apply sp-w-5 sp-h-5;
 }
-.sp-icon-md{
-  @apply sp-w-10 sp-h-10
+.sp-icon-md {
+  @apply sp-w-10 sp-h-10;
 }
-.sp-icon-lg{
-  @apply sp-w-12 sp-h-12
+.sp-icon-lg {
+  @apply sp-w-12 sp-h-12;
 }
 /* Card Wrapper */
-.sp-card-wrapper{
+.sp-card-wrapper {
   @apply sp-mx-auto sp-rounded-2xl sp-shadow-md;
+}
+/* vuetify select */
+.v-input {
+  touch-action: none;
+}
+.v-select .v-field {
+  border-radius: 8px;
 }
