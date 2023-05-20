@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@lewebsimple/nuxt3-svg": "^0.2.2",
+    "@nuxt/image-edge": "^1.0.0-28059208.2abef1b",
     "@nuxtjs/tailwindcss": "^6.6.6",
     "@types/node": "^18",
     "@vue-leaflet/vue-leaflet": "^0.9.0",
