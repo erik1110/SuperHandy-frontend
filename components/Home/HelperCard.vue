@@ -12,19 +12,16 @@
       ></v-img>
     </div>
     <div class="sp-text-h5 sp-text-slate-800 sp-my-2 sp-ml-1">{{ name }}**</div>
-    <div class="sp-w-full">
-      <StarRating
-        :star-size="20"
-        :rating="rating.overall"
-        :read-only="true"
-        :rounded-corners="true"
-        :padding="2"
-        :active-color="['#5658FB']"
-        :active-border-color="['#fff']"
-        :increment="0.1"
-        :fixed-points="1"
-        :animate="true"
-      />
+    <div class="sp-w-full sp-flex sp-items-center">
+      <v-rating
+        v-model="rating.overall"
+        class="ma-2"
+        density="compact"
+        size="small"
+        color="v-purple"
+        half-increments
+      ></v-rating>
+      {{ rating.overall }}
     </div>
   </div>
 </template>

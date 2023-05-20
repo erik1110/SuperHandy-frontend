@@ -6,3 +6,6 @@
     </NuxtLayout>
   </v-app>
 </template>
+<script setup>
+onMounted(() => {});
+</script>
