@@ -102,6 +102,13 @@
 .v-input {
   touch-action: none;
 }
+.v-autocomplete .v-field,
 .v-select .v-field {
   border-radius: 8px;
+}
+.v-autocomplete .v-field__outline::before,
+.v-autocomplete .v-field__outline::after,
+.v-select .v-field__outline::before,
+.v-select .v-field__outline::after {
+  border-bottom: 0 !important;
 }
