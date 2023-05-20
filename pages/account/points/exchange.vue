@@ -7,6 +7,7 @@
             v-model="form"
             @submit.prevent="submit"
             class="sp-max-w-[400px]"
+            ref="exchangeForm"
           >
             <VRow>
               <VCol>
@@ -55,8 +56,12 @@
     postAccountPointsCashback,
     getAccountPoints,
   } from "@/services/apis/point";
+  import { storeGlobal } from "@/stores/storeGlobal";
+  const _storeGlobal = storeGlobal();
   const { ruleRequired, ruleBankAcctLen, rulePointExchange } = useFormUtil();
+
   const form = ref(false);
+  const exchangeForm = ref(null);
   const bankList = ref(data);
   const bankNo = ref(null);
   const bankAcct = ref(null);
@@ -84,6 +89,12 @@
     console.log(data);
     let res = await postAccountPointsCashback(data);
     if (!res.error) {
+      exchangeForm.value.reset();
+      _storeGlobal.confirmHandler({
+        open: true,
+        title: "點數兌換成功",
+        content: "已成功將點數兌換成現金，請去帳戶內確認金額，謝謝。",
+      });
     } else {
       console.log(res);
     }
