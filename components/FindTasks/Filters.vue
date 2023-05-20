@@ -117,70 +117,71 @@
 </template>
 
 <script setup>
-import { FunnelIcon } from "@heroicons/vue/24/outline";
-import countyData from "@/static/tw_county.json";
-import townData from "@/static/tw_town.json";
-import { getCategories } from "@/services/apis/general";
+  import { FunnelIcon } from "@heroicons/vue/24/outline";
+  import countyData from "@/static/tw_county.json";
+  import townData from "@/static/tw_town.json";
+  import { getCategories } from "@/services/apis/general";
 
-// 進階篩選資料
-const countyItems = computed(() => countyData);
-const townItems = ref([]);
-const cateItems = ref([]);
-const filterData = reactive({
-  sort: "latest",
-  county: null,
-  town: null,
-  cate: null,
-  urgent: false,
-});
-watch(
-  () => filterData.county,
-  (val) => {
-    filterData.town = null;
-    townItems.value = townData.reduce((acc, cur) => {
-      if (cur.city == val) {
-        acc.push(cur.dist);
-      }
-      return acc;
-    }, []);
-  }
-);
-const fetchCategories = async () => {
-  let res = await getCategories();
-  console.log({ res });
-  cateItems.value = res.data.reduce((acc, cur) => {
-    acc.push(cur.name);
-    return acc;
-  }, []);
-};
-onMounted(() => {
-  fetchCategories();
-});
-// reset
-const resetFilter = () => {
-  Object.assign(filterData, {
+  // 進階篩選資料
+  const countyItems = computed(() => countyData);
+  const townItems = ref([]);
+  const cateItems = ref([]);
+  const filterData = reactive({
     sort: "latest",
     county: null,
     town: null,
     cate: null,
     urgent: false,
   });
-};
+  watch(
+    () => filterData.county,
+    (val) => {
+      filterData.town = null;
+      townItems.value = townData.reduce((acc, cur) => {
+        if (cur.city == val) {
+          acc.push(cur.dist);
+        }
+        return acc;
+      }, []);
+    }
+  );
+  const fetchCategories = async () => {
+    let res = await getCategories();
+    console.log({ res });
+    cateItems.value = res.data.reduce((acc, cur) => {
+      acc.push(cur.name);
+      return acc;
+    }, []);
+  };
+  onMounted(() => {
+    fetchCategories();
+  });
+  // reset
+  const resetFilter = () => {
+    Object.assign(filterData, {
+      sort: "latest",
+      county: null,
+      town: null,
+      cate: null,
+      urgent: false,
+    });
+  };
 </script>
 
 <style lang="postcss" scoped>
-.filter {
-  @apply sp-bg-white sp-rounded-2xl;
-}
-.wrap {
-  @apply sp-flex sp-p-3;
-}
-.v-autocomplete {
-  &:deep(.v-autocomplete__selection) {
-    @apply sp-text-body-sm sp-leading-6;
+  @import url("@/assets/css/tailwind.css");
+  .filter {
+    @apply sp-bg-white sp-rounded-2xl;
   }
-  &:deep(input) {
-    @apply sp-text-body-sm sp-leading-6;
+  .wrap {
+    @apply sp-flex sp-p-3;
   }
-}
+  .v-autocomplete {
+    &:deep(.v-autocomplete__selection) {
+      @apply sp-text-body-sm sp-leading-6;
+    }
+    &:deep(input) {
+      @apply sp-text-body-sm sp-leading-6;
+    }
+  }
 </style>

@@ -59,22 +59,23 @@
 </template>
 
 <script setup>
-const role = ref("幫手");
-const props = defineProps({
-  avatar: String,
-  completedTasks: Number,
-  completionRate: Number,
-  name: String,
-  rating: Object,
-});
+  const role = ref("幫手");
+  const props = defineProps({
+    avatar: String,
+    completedTasks: Number,
+    completionRate: Number,
+    name: String,
+    rating: Object,
+  });
 </script>
 
 <style lang="postcss" scoped>
-.card {
-  @apply sp-p-4 sp-bg-white sp-max-w-[400px] sp-min-w-[320px] sp-rounded-2xl sp-border;
-}
+  @import url("@/assets/css/tailwind.css");
+  .card {
+    @apply sp-p-4 sp-bg-white sp-max-w-[400px] sp-min-w-[320px] sp-rounded-2xl sp-border;
+  }
 
-.num {
-  @apply sp-text-h4 sp-text-primary;
-}
+  .num {
+    @apply sp-text-h4 sp-text-primary;
+  }
 </style>
