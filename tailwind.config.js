@@ -5,7 +5,7 @@ module.exports = {
     fontFamily: {
       sans: ['"Noto Sans TC"', "sans-serif"],
       // serif: ['Georgia', 'serif'],
-      cursive: ["'Sigmar'", "cursive"],
+      // cursive: ["'Sigmar'", "cursive"],
     },
     extend: {
       colors: {

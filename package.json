@@ -21,7 +21,6 @@
   "dependencies": {
     "@heroicons/vue": "^2.0.18",
     "@mdi/font": "^7.2.96",
-    "@nuxtjs/google-fonts": "^3.0.0",
     "@pinia/nuxt": "^0.4.9",
     "default-passive-events": "^2.0.0",
     "leaflet": "^1.9.3",
