@@ -54,7 +54,6 @@
             single-line
             class="px-1"
             hide-details
-            :menu-props="{ location: 'bottom' }"
           >
             <template #label>
               <span class="sp-text-body-sm"> 縣市 </span>

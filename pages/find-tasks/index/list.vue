@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>列表模式</h2>
+    <FindTasksCard v-for="(el, idx) in 3" :key="idx" />
   </div>
 </template>
 

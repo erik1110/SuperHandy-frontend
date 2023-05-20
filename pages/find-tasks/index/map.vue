@@ -14,14 +14,12 @@
             :popup-anchor="[0, -40]"
           />
           <LPopup>
-            <div class="sp-flex sp-justify-between sp-items-center sp-mb-3">
-              <h3 class="sp-text-h5 sp-whitespace-nowrap sp-mr-2">
-                {{ t.title }}
-              </h3>
+            <FindTasksTitleWrap :title="t.title">
               <div v-if="t.isUrgent" class="fireIcon sp-flex-center">
                 <FireIcon class="sp-icon-sm sp-text-white" />
               </div>
-            </div>
+            </FindTasksTitleWrap>
+
             <div class="sp-flex sp-items-center sp-my-2">
               <MapPinIcon class="sp-icon-xs sp-mr-1 sp-text-purple" />
               {{ t.location.city }}{{ t.location.dist }}
