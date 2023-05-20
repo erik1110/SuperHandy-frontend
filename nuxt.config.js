@@ -32,17 +32,20 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "nuxt-swiper",
     "@lewebsimple/nuxt3-svg",
-    [
-      "@nuxtjs/google-fonts",
-      {
-        families: {
-          Sigmar: true,
-          "Noto Sans TC": {
-            wght: [100, 300, 400, 500, 700, 900],
-          },
-          download: true,
-        },
-      },
-    ],
+  //   [
+  //     "@nuxtjs/google-fonts",
+  //     {
+  //       families: {
+  //         Sigmar: true,
+  //         "Noto Sans TC": {
+  //           wght: [100, 300, 400, 500, 700, 900],
+  //         },
+  //         download: true,
+  //       },
+  //     },
+  //   ],
   ],
+  experimental: {
+      writeEarlyHints: false,
+  },
 });
