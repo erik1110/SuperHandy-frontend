@@ -71,14 +71,15 @@
 </template>
 
 <script setup>
-import { MapPinIcon, FireIcon } from "@heroicons/vue/24/solid";
+  import { MapPinIcon, FireIcon } from "@heroicons/vue/24/solid";
 </script>
 
 <style lang="postcss" scoped>
-.fireIcon {
-  @apply sp-bg-warning sp-rounded-md sp-w-10 sp-h-10;
-}
-.tile {
-  @apply sp-text-body-sm sp-font-medium sp-text-slate-500 sp-w-16 sp-inline-block sp-mr-1;
-}
+  @import url("@/assets/css/tailwind.css");
+  .fireIcon {
+    @apply sp-bg-warning sp-rounded-md sp-w-10 sp-h-10;
+  }
+  .tile {
+    @apply sp-text-body-sm sp-font-medium sp-text-slate-500 sp-w-16 sp-inline-block sp-mr-1;
+  }
 </style>

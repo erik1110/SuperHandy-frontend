@@ -23,7 +23,10 @@
         </div>
         <div class="sp-text-body">地點：{{ item.address }}</div>
         <div class="sp-text-body">薪水：${{ item.salary }}</div>
-        <span class="sp-text-body">
+        <span
+          class="sp-text-body"
+          :class="{ 'sp-invisible': !item.publishedAt }"
+        >
           刊登：{{ new Date(item.publishedAt).toLocaleString() }}
           <span class="sp-color-red-0 sp-text-red-800"
             >(${{ new Date(item.expiredAt).toLocaleString() }}
@@ -34,6 +37,11 @@
           color="primary"
           outlined
           class="sp--translate-y-2 sp-px-4 sp-py-2 sp-text-center sp-border-2 sp-border-black sp-border-solid sp-float-right"
+          @click="
+            item.status == '草稿'
+              ? toDraftPage(item.taskId)
+              : toDetailPage(item.taskId)
+          "
         >
           {{ item.status == "草稿" ? "編輯草稿" : "查看詳情" }}
         </v-btn>
@@ -101,5 +109,11 @@
   onMounted(() => {
     FuncGetTasksPosterManagement();
   });
+  const toDraftPage = function (taskId) {
+    navigateTo(`/post-task/${taskId}`);
+  };
+  const toDetailPage = function (taskId) {
+    navigateTo(`/account/tasks/${taskId}`);
+  };
 </script>
 <style></style>
