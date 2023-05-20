@@ -3,11 +3,12 @@
     <!-- Sec-1-CTA -->
     <div class="wrapper 2xl:sp-min-h-[85vh]">
       <header>
-        <img src="../assets/images/bg/bg-1-compact.png" class="back" />
-        <img src="../assets/images/bg/bg-2-compact.png" class="fore" />
+        <nuxt-img preload src="/images/bg-1-compact.png" class="back" />
+        <nuxt-img preload src="/images/bg-2-compact.png" class="fore" />
         <div class="sp-flex sp-flex-col sp-items-center">
-          <img
-            src="../assets/images/bg/slogon.png"
+          <nuxt-img
+            preload
+            src="/images/slogon.png"
             class="sp-max-w-sm sp-mb-4"
           />
           <NuxtLink to="/find-tasks/list">
@@ -37,8 +38,8 @@
           <HomeIntroCard :card-data="cardData" />
         </div>
       </div>
+      <div ref="showIntroCard"></div>
     </HomeSecWrapper>
-    <div ref="showIntroCard"></div>
 
     <!-- Sec-3-Counters -->
     <HomeSecWrapper bgColor="sp-bg-primary">
@@ -265,7 +266,7 @@ const observerSec2 = () => {
       {
         root: null,
         rootMargin: "30px",
-        threshold: 1,
+        threshold: 0,
       }
     );
   });

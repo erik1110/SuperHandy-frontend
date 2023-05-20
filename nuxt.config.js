@@ -32,6 +32,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "nuxt-swiper",
     "@lewebsimple/nuxt3-svg",
+    "@nuxt/image-edge",
   //   [
   //     "@nuxtjs/google-fonts",
   //     {
