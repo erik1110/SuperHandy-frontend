@@ -79,8 +79,8 @@
             </div>
           </div>
           <div class='my-8'>
-            <div class="md:sp-flex md:sp-justify-between">
-              <div>
+            <div :class="!checkTaskId(taskId) ? 'md:sp-flex md:sp-justify-between' : 'md:sp-flex md:sp-justify-end'">
+              <div v-if="!checkTaskId(taskId)">
                 <v-btn color="v-orange" type='button' class='sp-mb-4 sp-w-full md:sp-mb-0' @click="resetForm">全部清除</v-btn>
               </div>
               <div class="md:sp-flex md:sp-justify-end md:sp-space-x-2">
@@ -109,10 +109,11 @@
       </v-card>
     </v-sheet>
   </v-sheet>
-  <PostTaskFeeModal :dialog="postTaskFeeModal" :option="feeModalOption" :loading="publishBtnloading"
-    @aClose="postTaskFeeModal = false" @aSubmit="submit">
+  <PostTaskFeeModal :option="feeModalOption" :loading="publishBtnloading" @aClose="postTaskFeeModal = false"
+    @aSubmit="submit">
   </PostTaskFeeModal>
-  <PostTaskModal :option="modalOption" @close="closeModal" @aDeleteDraft="deleteDraft"></PostTaskModal>
+  <PostTaskModal :option="modalOption" @close="closeModal" @aDeleteDraft="deleteDraft">
+  </PostTaskModal>
 </template>
 
 <script setup>
@@ -130,6 +131,7 @@ const _work = '刊登任務'
 let descriptionTemplateList = []
 // let userSuperCoinTotal = 0
 let taskId = ''
+
 
 
 // - 表單宣告 -
@@ -161,7 +163,7 @@ const draftAddBtnloading = ref(false);//儲存為草稿
 const draftUpdateBtnloading = ref(false);//更新草稿
 const draftDeleteBtnloading = ref(false);//刪除草稿
 const publishBtnloading = ref(false);
-function openLoading({
+function openLoading ({
   overlay,
   draftAdd,
   draftUpdate,
@@ -174,7 +176,7 @@ function openLoading({
   draftDeleteBtnloading.value = draftDelete ?? false;
   publishBtnloading.value = publishBtn ?? false;
 }
-function closeLoading() {
+function closeLoading () {
   loading.value = false
   draftAddBtnloading.value = false
   draftUpdateBtnloading.value = false
@@ -189,7 +191,7 @@ const postTaskModal = useState("postTaskModal", () => ref(false));
 const modalOption = ref({
   type: '',
   message: '',
-  isShowSuccessBtn: false,
+  isShowGoTaskBtn: false,
   isShowGoIndexBtn: false,
   isShowConfirmBtn: false
 })
@@ -197,37 +199,40 @@ const openModal = (option) => {
   const _option = {
     type: option.type ?? '',
     message: option.message ?? '',
-    isShowSuccessBtn: option.isShowSuccessBtn ?? false,
+    isShowGoTaskBtn: option.isShowGoTaskBtn ?? false,
     isShowGoIndexBtn: option.isShowGoIndexBtn ?? false,
     isShowConfirmBtn: option.isShowConfirmBtn ?? false,
   }
 
   modalOption.value.type = _option.type
   modalOption.value.message = _option.message
-  modalOption.value.isShowSuccessBtn = _option.isShowSuccessBtn
+  modalOption.value.isShowGoTaskBtn = _option.isShowGoTaskBtn
   modalOption.value.isShowGoIndexBtn = _option.isShowGoIndexBtn
   modalOption.value.isShowConfirmBtn = _option.isShowConfirmBtn
-  if (process.client) {
-    postTaskModal.value = true
-  }
+  postTaskModal.value = true
+
 }
 const closeModal = () => {
-  if (process.client) {
-    postTaskModal.value = false
-    // 關閉訊息後一律導向
+  postTaskModal.value = false
+  if (!modalOption.value.isShowConfirmBtn) {
     navigateTo(siteConfig.linkPaths.postTask.to)
+    // 關閉訊息後一律導向
+    // if (!modalOption.value.isShowGoTaskBtn) {
+    //   navigateTo(siteConfig.linkPaths.postTask.to)
+    // }
     //更新時路由切換但元件無法刷新
     // const route = useRoute()
     // if (route.path.indexOf(taskId) >= 0) {
     //   Init()
     //   return;
     // }
-    // if (modalOption.value.isShowSuccessBtn && checkTaskId(taskId)) {
+    // if (modalOption.value.isShowGoTaskBtn && checkTaskId(taskId)) {
     //   navigateTo({ path: `/post-task/${taskId}` })
     // } else {
     //   navigateTo(`/post-task/-1`)
     // }
   }
+
 }
 
 // 監看router變化
@@ -267,9 +272,7 @@ const openFeeModal = async () => {
   feeModalOption.value.superCoin = userCoin.value.superCoin
   feeModalOption.value.helperCoin = userCoin.value.helperCoin
   feeModalOption.value.isDraft = checkTaskId(taskId)
-  if (process.client) {
-    postTaskFeeModal.value = true
-  }
+  postTaskFeeModal.value = true
   logInfo(_work, 'openFeeDialog', feeModalOption)
 }
 
@@ -366,7 +369,7 @@ const submit = async (event, taskTrans) => {
 
   let _message = ''
   let _dialogType = siteConfig.dialogType.info
-  let _isShowSuccessBtn = false
+  let _isShowGoTaskBtn = false
 
   //1. 開啟loading & disable btns
   const _submitter = event.submitter.id
@@ -417,7 +420,7 @@ const submit = async (event, taskTrans) => {
     const response = await postFormData(_submitter, data)
     logInfo(_work, 'submit.response', response);
     if (response && checkRespStatus(response)) {
-      _isShowSuccessBtn = true
+      _isShowGoTaskBtn = true
       //更新taskId
       // taskId = checkTaskId(taskId) ? taskId : response.data.taskId
       // console.log(taskId, 'taskId')
@@ -441,7 +444,7 @@ const submit = async (event, taskTrans) => {
       openModal({
         type: _dialogType,
         message: _message,
-        isShowSuccessBtn: _isShowSuccessBtn
+        isShowGoTaskBtn: _isShowGoTaskBtn
       })
     }
 
@@ -499,10 +502,10 @@ const excuteAsyncFunc = async (excuteFunc, params, successFunc) => {
   } finally {
     closeLoading()
     if (_message) {
-      openModal({
-        type: siteConfig.dialogType.error,
-        message: _message,
-      })
+      // openModal({
+      //   type: siteConfig.dialogType.error,
+      //   message: _message,
+      // })
     }
   }
 }
@@ -557,7 +560,7 @@ watch(locationCity, (nV, oV) => {
     clearDist()
   }
 })
-function clearDist() {
+function clearDist () {
   locationDist.value = ''
 }
 
@@ -613,13 +616,14 @@ const deleteDraft = () => {
     closeLoading()
     openModal({
       message: response.message,
+      isShowGoTaskBtn: true
     })
   })
 }
 
 
 // - 假資料 -
-function fakeData() {
+function fakeData () {
   title.value = '測試任務'
   category.value = '到府驅蟲'
   description.value = 'test'
