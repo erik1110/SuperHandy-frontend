@@ -118,7 +118,7 @@ const helperCoinEstimate = computed(() => {
 
 // 確認要折抵的幫手幣金額
 const helperCoinConfirm = ref(0)
-function calculateHelperCoin(event) {
+function calculateHelperCoin (event) {
     //console.log(event, 'calculateHelperCoin')
     if (event) {
         helperCoinConfirm.value = helperCoinEstimate.value
@@ -143,9 +143,7 @@ const publishBtnDisable = ref(true);
 watch(
     () => postTaskFeeModal.value,
     (val) => {
-        if (!val) {
-            console.log(_option.value, 'modal close')
-        }
+        //console.log(_option.value, 'modal close')
     }
 );
 </script>
