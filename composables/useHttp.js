@@ -1,3 +1,6 @@
+import { storeGlobal } from "@/stores/storeGlobal";
+import { storeAuth } from "@/stores/storeAuth";
+
 const { VITE_BACKEND_ROOT_DEV, VITE_BACKEND_ROOT_PROD } = import.meta.env;
 export const useHttp = () => {
   const _fetch = async function (url, options) {
@@ -26,6 +29,24 @@ export const useHttp = () => {
         return response._data;
       },
       onResponseError({ request, options, response }) {
+        const _storeGlobal = storeGlobal();
+        const _storeAuth = storeAuth();
+        if (
+          response._data.error.name == "40300" ||
+          response._data.error.name == "40200"
+        ) {
+          _storeGlobal.confirmHandler({
+            open: true,
+            title: "系統通知",
+            content: "請重新登入，謝謝。",
+            closeHandle: function () {
+              _storeAuth.setLoginToken("");
+              navigateTo("/auth/login");
+            },
+          });
+        } else if (response._data.error.name == "40302") {
+          navigateTo("/");
+        }
         console.log(response, "onResponseError");
       },
     });

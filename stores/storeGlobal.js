@@ -6,11 +6,15 @@ export const storeGlobal = defineStore("global", () => {
     open: false,
     title: "",
     content: "",
+    closeHandle: null,
   });
   const confirmHandler = (val) => {
     confirmDialog.value = val;
   };
   const closeConfirm = () => {
+    if (typeof confirmDialog.value.closeHandle == "function") {
+      confirmDialog.value.closeHandle();
+    }
     confirmDialog.value = {
       open: false,
     };
