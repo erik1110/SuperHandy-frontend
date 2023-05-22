@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="sp-h-[100%]">
     <NuxtPage />
   </div>
 </template>

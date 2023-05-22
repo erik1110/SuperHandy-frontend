@@ -1,17 +1,26 @@
 <template>
   <div>
-    <v-tabs v-model="groupTab" color="secondary">
-      <v-tab value="all">全部 [{{ postList.all.length }}]</v-tab>
-      <v-tab value="published">媒合中 [{{ postList.published.length }}]</v-tab>
-      <v-tab value="inProgressed"
-        >進行中 [{{ postList.inProgressed.length }}]</v-tab
-      >
-      <v-tab value="confirmed">已完成 [{{ postList.confirmed.length }}]</v-tab>
-      <v-tab value="unpublished"
-        >已下架 [{{ postList.unpublished.length }}]</v-tab
-      >
-      <v-tab value="other">未成立 [{{ postList.other.length }}]</v-tab>
-    </v-tabs>
+    <VCard class="sp-mb-4">
+      <VCardText>
+        <v-tabs v-model="groupTab" color="secondary">
+          <v-tab value="all">全部 [{{ postList.all.length }}]</v-tab>
+          <v-tab value="published"
+            >媒合中 [{{ postList.published.length }}]</v-tab
+          >
+          <v-tab value="inProgressed"
+            >進行中 [{{ postList.inProgressed.length }}]</v-tab
+          >
+          <v-tab value="confirmed"
+            >已完成 [{{ postList.confirmed.length }}]</v-tab
+          >
+          <v-tab value="unpublished"
+            >已下架 [{{ postList.unpublished.length }}]</v-tab
+          >
+          <v-tab value="other">未成立 [{{ postList.other.length }}]</v-tab>
+        </v-tabs>
+      </VCardText>
+    </VCard>
+
     <v-card class="sp-mb-4" v-for="(item, index) in postList[groupTab]">
       <v-card-text>
         <h4 class="sp-text-h4 sp-inline-block sp-mb-2">{{ item.title }}</h4>

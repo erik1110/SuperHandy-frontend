@@ -4,6 +4,7 @@
       <VRow>
         <VCol>
           <AccountTasksProgress></AccountTasksProgress>
+          <AccountTasksInfo class="sp-my-4"></AccountTasksInfo>
         </VCol>
       </VRow>
     </VContainer>
