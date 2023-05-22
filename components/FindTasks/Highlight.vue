@@ -19,10 +19,10 @@
       density="comfortable"
       icon="mdi-arrow-left"
     ></v-btn>
+
     <Swiper
       :slides-per-view="1"
       :space-between="30"
-      :loop="true"
       :modules="[SwiperNavigation]"
       :navigation="{ prevEl: '.slidePrev-btn', nextEl: '.slideNext-btn' }"
       :breakpoints="{
@@ -37,6 +37,7 @@
         },
       }"
     >
+      <!-- @reach-beginning="showPrevBtn = true" @reach-end="showNextBtn = false" -->
       <SwiperSlide
         v-for="h in highlightTasks"
         :key="h.taskId"
@@ -66,6 +67,9 @@ const fetchTasksHighlight = async () => {
 onMounted(() => {
   fetchTasksHighlight();
 });
+
+const showPrevBtn = ref(false);
+const showNextBtn = ref(true);
 </script>
 
 <style lang="scss" scoped></style>
