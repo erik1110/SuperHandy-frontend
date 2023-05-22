@@ -30,7 +30,6 @@
         id="map"
         :zoom="zoomLevel"
         :center="mapCenter"
-        :bounds="bounds"
         @update:zoom="zoomUpdated"
         @update:bounds="boundsUpdated"
       >
@@ -127,7 +126,6 @@ const map = ref(null);
 const zoomLevel = ref(16);
 const mapCenter = ref([25.034436016196786, 121.56407163196346]);
 const mapCenterBackup = ref([25.034436016196786, 121.56407163196346]);
-const bounds = ref(null);
 const showReFetch = ref({ b: false, z: false });
 const getPosition = async () => {
   if (navigator.geolocation) {
