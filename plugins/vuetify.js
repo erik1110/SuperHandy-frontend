@@ -11,6 +11,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       primary: "#0C0D50",
       "primary-lighten": "#DFDFFF",
       secondary: "#B7EEEE",
+      "secondary-darken": "#60c4c4",
       "v-purple": "#5658FB",
       "v-orange": "#E68244",
       "v-gray-text": "#222222",

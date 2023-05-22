@@ -1,14 +1,10 @@
 <template>
-  <div class="sp-h-full">
-    <v-container class="sp-flex sp-px-5 sp-pb-12">
-      <div
-        class="sp-border-l-[12px] sp-border-secondary sp-text-primary sp-pl-4"
-      >
-        <h1 class="sp-text-h2">找任務</h1>
-        <p>各項任務由你大展身手！</p>
-        <p>超人幫手限時推薦👏</p>
-      </div>
-    </v-container>
+  <div>
+    <div
+      class="sp-max-w-[1680px] sp-mx-auto sp-flex sp-flex-wrap sp-items-center sp-justify-center sm:sp-justify-start lg:sp-justify-around lg:sp-flex-nowrap sp-px-5 sp-pb-12"
+    >
+      <FindTasksHighlight />
+    </div>
     <div class="sp-bg-gray-bg sp-h-full sp-pt-4">
       <v-container
         class="sp-flex sp-flex-wrap sm:sp-flex-nowrap sp-content-start"
