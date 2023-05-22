@@ -166,8 +166,6 @@ const zoomUpdated = (zoom) => {
   console.log({ zoom });
   if (zoom < 15) {
     showReFetch.value.z = true;
-  } else {
-    showReFetch.value.z = false;
   }
 };
 </script>
