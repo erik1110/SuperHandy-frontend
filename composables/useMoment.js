@@ -15,7 +15,9 @@ export const useMoment = () => {
     // 判斷時間差是否小於一天
     if (duration.asHours() < 24) {
       // 如果小於一天，顯示 XX小時前
-      return moment(time).startOf("hour").fromNow();
+      // return moment(time).startOf("hour").fromNow();
+      return moment(time).fromNow();
+
     } else {
       // 如果大於等於一天，顯示正常時間
       return moment(time).format("YYYY-MM-DD HH:mm:ss");
