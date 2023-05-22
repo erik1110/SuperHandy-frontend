@@ -7,7 +7,7 @@
       <!-- <v-img :src="avatar" class="sp-w-full"></v-img> -->
       <!-- -----Test------ -->
       <v-img
-        src="https://source.unsplash.com/random/600x600/?person"
+        src="https://source.unsplash.com/random/300x300/?person"
         class="sp-w-full"
       ></v-img>
     </div>

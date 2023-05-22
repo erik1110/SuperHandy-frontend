@@ -77,16 +77,36 @@
         <v-autocomplete
           v-model="filterData.cate"
           :items="cateItems"
-          label="服務類型"
           density="compact"
           single-line
           hide-details
-          class="px-1"
+          class="px-1 mb-2"
+          multiple
         >
           <template #label>
-            <span class="sp-text-body-sm"> 服務類型 </span>
+            <span v-if="filterData.cate.length === 0" class="sp-text-body-sm">
+              服務類型
+            </span>
+          </template>
+          <template #selection="{ index }">
+            <span
+              v-if="index === 0 && filterData.cate.length > 0"
+              class="sp-text-body-sm"
+            >
+              服務類型
+            </span>
           </template>
         </v-autocomplete>
+        <v-chip
+          color="secondary"
+          class="my-1"
+          closable
+          @click:close="closeCates(c)"
+          style="color: #60c4c4 !important"
+          v-for="c in filterData.cate"
+          :key="c"
+          >{{ c }}</v-chip
+        >
       </div>
     </div>
     <!-- 急件 -->
@@ -108,7 +128,7 @@
     </div>
     <!-- actions -->
     <div class="wrap">
-      <v-btn @click="resetFilter" class="ml-auto" variant="plain"
+      <v-btn @click="resetFilter" class="ml-auto mr-2" variant="plain"
         >全部重設</v-btn
       >
       <v-btn color="v-purple" rounded="lg">套用</v-btn>
@@ -117,71 +137,77 @@
 </template>
 
 <script setup>
-  import { FunnelIcon } from "@heroicons/vue/24/outline";
-  import countyData from "@/static/tw_county.json";
-  import townData from "@/static/tw_town.json";
-  import { getCategories } from "@/services/apis/general";
+import { FunnelIcon } from "@heroicons/vue/24/outline";
+import countyData from "@/static/tw_county.json";
+import townData from "@/static/tw_town.json";
+import { getCategories } from "@/services/apis/general";
 
-  // 進階篩選資料
-  const countyItems = computed(() => countyData);
-  const townItems = ref([]);
-  const cateItems = ref([]);
-  const filterData = reactive({
+// 進階篩選資料
+const countyItems = computed(() => countyData);
+const townItems = ref([]);
+const cateItems = ref([]);
+const filterData = reactive({
+  sort: "latest",
+  county: null,
+  town: null,
+  cate: [],
+  urgent: false,
+});
+watch(
+  () => filterData.county,
+  (val) => {
+    filterData.town = null;
+    townItems.value = townData.reduce((acc, cur) => {
+      if (cur.city == val) {
+        acc.push(cur.dist);
+      }
+      return acc;
+    }, []);
+  }
+);
+const fetchCategories = async () => {
+  let res = await getCategories();
+  console.log({ res });
+  cateItems.value = res.data.reduce((acc, cur) => {
+    acc.push(cur.name);
+    return acc;
+  }, []);
+};
+onMounted(() => {
+  fetchCategories();
+});
+
+const closeCates = (item) => {
+  // console.log(filterData.cate);
+  filterData.cate = filterData.cate.filter((el) => el != item);
+};
+
+// reset
+const resetFilter = () => {
+  Object.assign(filterData, {
     sort: "latest",
     county: null,
     town: null,
-    cate: null,
+    cate: [],
     urgent: false,
   });
-  watch(
-    () => filterData.county,
-    (val) => {
-      filterData.town = null;
-      townItems.value = townData.reduce((acc, cur) => {
-        if (cur.city == val) {
-          acc.push(cur.dist);
-        }
-        return acc;
-      }, []);
-    }
-  );
-  const fetchCategories = async () => {
-    let res = await getCategories();
-    console.log({ res });
-    cateItems.value = res.data.reduce((acc, cur) => {
-      acc.push(cur.name);
-      return acc;
-    }, []);
-  };
-  onMounted(() => {
-    fetchCategories();
-  });
-  // reset
-  const resetFilter = () => {
-    Object.assign(filterData, {
-      sort: "latest",
-      county: null,
-      town: null,
-      cate: null,
-      urgent: false,
-    });
-  };
+};
 </script>
 
 <style lang="postcss" scoped>
-  @import url("@/assets/css/tailwind.css");
-  .filter {
-    @apply sp-bg-white sp-rounded-2xl;
+@import url("@/assets/css/tailwind.css");
+.filter {
+  @apply sp-bg-white sp-rounded-2xl;
+}
+.wrap {
+  @apply sp-flex sp-p-3;
+}
+.v-autocomplete {
+  &:deep(.v-autocomplete__selection) {
+    @apply sp-text-body-sm sp-leading-6;
   }
-  .wrap {
-    @apply sp-flex sp-p-3;
+  &:deep(input) {
+    @apply sp-text-body-sm sp-leading-6;
   }
-  .v-autocomplete {
-    &:deep(.v-autocomplete__selection) {
-      @apply sp-text-body-sm sp-leading-6;
-    }
-    &:deep(input) {
-      @apply sp-text-body-sm sp-leading-6;
-    }
-  }
+}
 </style>
