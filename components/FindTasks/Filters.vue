@@ -75,7 +75,7 @@
           </v-autocomplete>
         </div>
         <v-autocomplete
-          v-model="_storeFindTasks.filterData.services"
+          v-model="_storeFindTasks.filterData.selectedCates"
           :items="servicesItems"
           density="compact"
           single-line
@@ -85,7 +85,7 @@
         >
           <template #label>
             <span
-              v-if="_storeFindTasks.filterData.services.length === 0"
+              v-if="_storeFindTasks.filterData.selectedCates.length === 0"
               class="sp-text-body-sm"
             >
               服務類型
@@ -94,7 +94,8 @@
           <template #selection="{ index }">
             <span
               v-if="
-                index === 0 && _storeFindTasks.filterData.services.length > 0
+                index === 0 &&
+                _storeFindTasks.filterData.selectedCates.length > 0
               "
               class="sp-text-body-sm"
             >
@@ -108,7 +109,7 @@
           closable
           @click:close="deleteService(c)"
           style="color: #60c4c4 !important"
-          v-for="c in _storeFindTasks.filterData.services"
+          v-for="c in _storeFindTasks.filterData.selectedCates"
           :key="c"
           >{{ c }}</v-chip
         >
@@ -182,8 +183,8 @@ onMounted(() => {
 });
 
 const deleteService = (item) => {
-  _storeFindTasks.filterData.services =
-    _storeFindTasks.filterData.services.filter((el) => el != item);
+  _storeFindTasks.filterData.selectedCates =
+    _storeFindTasks.filterData.selectedCates.filter((el) => el != item);
 };
 
 const submitFilters = () => {

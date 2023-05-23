@@ -15,15 +15,21 @@ export const storeFindTasks = defineStore("findTasks", () => {
     sortBy: "newest",
     city: null,
     dist: null,
-    services: [],
+    selectedCates: [],
     isUrgent: false,
   })
+  watch(()=>filterData.selectedCates, (val) => {
+    Object.assign(filterData, {
+      ...filterData,
+      services: val.join()
+    });
+  });
   const resetFilter = () => {
     Object.assign(filterData, {
       sortBy: "newest",
       city: null,
       dist: null,
-      services: [],
+      selectedCates: [],
       isUrgent: false,
     });
     fetchListViewTasks();
@@ -40,6 +46,7 @@ export const storeFindTasks = defineStore("findTasks", () => {
       limit: 3,
     };
     payload = {...payload,...filters}
+    delete payload.selectedCates
     let { data } = await getListViewTasks(payload);
     console.log({ data });
     listViewTasks.value = data.tasks;
