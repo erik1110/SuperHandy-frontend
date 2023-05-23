@@ -13,7 +13,7 @@
   <!-- sp-max-w-full md:sp-max-w-2xl lg:sp-max-w-3xl xl:sp-max-w-5xl 2xl:sp-max-w-6xl -->
   <!-- <FindTasksSwiper /> -->
   <Swiper
-    :slides-per-view="4"
+    :slides-per-view="3"
     :loop="true"
     :space-between="30"
     :modules="[SwiperNavigation, SwiperAutoplay, SwiperEffectCreative]"
@@ -41,7 +41,7 @@
       '768': {
         slidesPerView: 3,
       },
-      '1280': {
+      '2560': {
         slidesPreView: 4,
       },
     }"
@@ -91,6 +91,18 @@ const highlightTasks = ref([
     imgUrls: "https://example.com/switch.jpg",
     category: "人力派遣",
   },
+  {
+    taskId: "646c8aa6f48df43c2esaddd23",
+    title: "幫忙打王國之淚的Boss4",
+    imgUrls: "https://example.com/switch.jpg",
+    category: "人力派遣",
+  },
+  {
+    taskId: "646c8aa6f48df43c2esadd2e23",
+    title: "幫忙打王國之淚的Boss5",
+    imgUrls: "https://example.com/switch.jpg",
+    category: "人力派遣",
+  },
 ]);
 const fetchTasksHighlight = async () => {
   let { data } = await getTasksHighlight();
@@ -98,7 +110,7 @@ const fetchTasksHighlight = async () => {
   highlightTasks.value = data.tasks;
 };
 onMounted(() => {
-  // fetchTasksHighlight();
+  fetchTasksHighlight();
 });
 
 const showPrevBtn = ref(false);
