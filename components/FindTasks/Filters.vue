@@ -12,23 +12,23 @@
         排序
       </p>
       <v-radio-group
-        v-model="filterData.sort"
+        v-model="_storeFindTasks.filterData.sortBy"
         color="v-purple"
         inline
         hide-details
         density="compact"
       >
-        <v-radio value="latest" class="mr-1">
+        <v-radio value="newest" class="mr-1">
           <template #label>
             <span class="sp-text-body-sm">最新刊登 </span>
           </template>
         </v-radio>
-        <v-radio value="salary" class="mr-1">
+        <v-radio value="highestSalary" class="mr-1">
           <template #label>
             <span class="sp-text-body-sm">最高薪水 </span>
           </template>
         </v-radio>
-        <v-radio value="query" class="mr-1">
+        <v-radio value="mostEnquiries" class="mr-1">
           <template #label>
             <span class="sp-text-body-sm">最多詢問 </span>
           </template>
@@ -45,8 +45,8 @@
       <div class="sp-flex-auto">
         <div class="d-flex pb-3">
           <v-autocomplete
-            v-model="filterData.county"
-            :items="countyItems"
+            v-model="_storeFindTasks.filterData.city"
+            :items="cityItems"
             item-title="city"
             item-value="city"
             label="縣市"
@@ -60,14 +60,14 @@
             </template>
           </v-autocomplete>
           <v-autocomplete
-            v-model="filterData.town"
-            :items="townItems"
+            v-model="_storeFindTasks.filterData.dist"
+            :items="distItems"
             label="地區"
             density="compact"
             single-line
             class="px-1"
             hide-details
-            :disabled="!filterData.county"
+            :disabled="!_storeFindTasks.filterData.city"
           >
             <template #label>
               <span class="sp-text-body-sm"> 地區 </span>
@@ -75,8 +75,8 @@
           </v-autocomplete>
         </div>
         <v-autocomplete
-          v-model="filterData.cate"
-          :items="cateItems"
+          v-model="_storeFindTasks.filterData.services"
+          :items="servicesItems"
           density="compact"
           single-line
           hide-details
@@ -84,13 +84,18 @@
           multiple
         >
           <template #label>
-            <span v-if="filterData.cate.length === 0" class="sp-text-body-sm">
+            <span
+              v-if="_storeFindTasks.filterData.services.length === 0"
+              class="sp-text-body-sm"
+            >
               服務類型
             </span>
           </template>
           <template #selection="{ index }">
             <span
-              v-if="index === 0 && filterData.cate.length > 0"
+              v-if="
+                index === 0 && _storeFindTasks.filterData.services.length > 0
+              "
               class="sp-text-body-sm"
             >
               服務類型
@@ -101,9 +106,9 @@
           color="secondary"
           class="my-1"
           closable
-          @click:close="closeCates(c)"
+          @click:close="deleteService(c)"
           style="color: #60c4c4 !important"
-          v-for="c in filterData.cate"
+          v-for="c in _storeFindTasks.filterData.services"
           :key="c"
           >{{ c }}</v-chip
         >
@@ -117,7 +122,7 @@
         急件
       </p>
       <v-checkbox
-        v-model="filterData.urgent"
+        v-model="_storeFindTasks.filterData.isUrgent"
         hide-details
         density="comfortable"
       >
@@ -128,36 +133,35 @@
     </div>
     <!-- actions -->
     <div class="wrap">
-      <v-btn @click="resetFilter" class="ml-auto mr-2" variant="plain"
+      <v-btn
+        @click="_storeFindTasks.resetFilter"
+        class="ml-auto mr-2"
+        variant="plain"
         >全部重設</v-btn
       >
-      <v-btn color="v-purple" rounded="lg">套用</v-btn>
+      <v-btn @click="submitFilters" color="v-purple" rounded="lg">套用</v-btn>
     </div>
+    <!-- {{ _storeFindTasks.filterData }} -->
   </div>
 </template>
 
 <script setup>
 import { FunnelIcon } from "@heroicons/vue/24/outline";
-import countyData from "@/static/tw_county.json";
-import townData from "@/static/tw_town.json";
+import cityData from "@/static/tw_county.json";
+import distData from "@/static/tw_town.json";
 import { getCategories } from "@/services/apis/general";
-
+import { storeFindTasks } from "~/stores/storeFindTasks";
+const _storeFindTasks = storeFindTasks();
 // 進階篩選資料
-const countyItems = computed(() => countyData);
-const townItems = ref([]);
-const cateItems = ref([]);
-const filterData = reactive({
-  sort: "latest",
-  county: null,
-  town: null,
-  cate: [],
-  urgent: false,
-});
+const cityItems = computed(() => cityData);
+const distItems = ref([]);
+const servicesItems = ref([]);
+
 watch(
-  () => filterData.county,
+  () => _storeFindTasks.filterData.city,
   (val) => {
-    filterData.town = null;
-    townItems.value = townData.reduce((acc, cur) => {
+    _storeFindTasks.filterData.dist = null;
+    distItems.value = distData.reduce((acc, cur) => {
       if (cur.city == val) {
         acc.push(cur.dist);
       }
@@ -165,32 +169,26 @@ watch(
     }, []);
   }
 );
-const fetchCategories = async () => {
+const fetchServices = async () => {
   let res = await getCategories();
   console.log({ res });
-  cateItems.value = res.data.reduce((acc, cur) => {
+  servicesItems.value = res.data.reduce((acc, cur) => {
     acc.push(cur.name);
     return acc;
   }, []);
 };
 onMounted(() => {
-  fetchCategories();
+  fetchServices();
 });
 
-const closeCates = (item) => {
-  // console.log(filterData.cate);
-  filterData.cate = filterData.cate.filter((el) => el != item);
+const deleteService = (item) => {
+  _storeFindTasks.filterData.services =
+    _storeFindTasks.filterData.services.filter((el) => el != item);
 };
 
-// reset
-const resetFilter = () => {
-  Object.assign(filterData, {
-    sort: "latest",
-    county: null,
-    town: null,
-    cate: [],
-    urgent: false,
-  });
+const submitFilters = () => {
+  _storeFindTasks.page = 1;
+  _storeFindTasks.fetchListViewTasks(_storeFindTasks.filterData);
 };
 </script>
 

@@ -177,7 +177,7 @@ onMounted(async () => {
   observerSec2();
   observerSec3();
 });
-/* 
+/*
   Init Data
 */
 const completedCaseData = ref([]);
@@ -216,7 +216,7 @@ const initData = async () => {
   await fetchExcellentHelpers();
   await fetchCompletedReviews();
 };
-/* 
+/*
   sec1-滾動視差
 */
 let windowMousewheel = () => {
@@ -246,41 +246,35 @@ const observerSec2 = () => {
   const animateEl = document.querySelectorAll(".introCard"); // 取得 .animate 元素
   // 創建一個新的 IntersectionObserver 監聽器
   const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach(
-      (entry) => {
-        if (entry.isIntersecting) {
-          // section2 left
-          sec2Img.value.classList.add("animate__animated", "animate__pulse");
-          // section2 right
-          animateEl.forEach((el, idx) => {
-            el.classList.remove("sp-hidden");
-            el.classList.add(
-              "animate__animated",
-              "animate__slideInRight",
-              "animate__fast",
-              `animate__delay-${idx}s`
-            );
-          }); // 元素進入可視區域，添加 .animated 類別
-          observer.unobserve(entry.target); // 停止監聽該元素
-        }
-      },
-      {
-        root: null,
-        rootMargin: "30px",
-        threshold: 0,
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        // section2 left
+        sec2Img.value.classList.add("animate__animated", "animate__pulse");
+        // section2 right
+        animateEl.forEach((el, idx) => {
+          el.classList.remove("sp-hidden");
+          el.classList.add(
+            "animate__animated",
+            "animate__slideInRight",
+            "animate__fast",
+            `animate__delay-${idx}s`
+          );
+        }); // 元素進入可視區域，添加 .animated 類別
+        observer.unobserve(entry.target); // 停止監聽該元素
       }
-    );
+    });
   });
   // 監聽 .animate 元素是否進入可視區域
   observer.observe(showIntroCard.value);
 };
-/* 
+/*
   sec3-動畫+counter
 */
 const startCount = ref(null);
 const _countData = ref(countData);
 const observerSec3 = () => {
   const animateEl = document.querySelectorAll(".counterItem");
+  if (!animateEl) return;
   const observer = new IntersectionObserver((entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -308,7 +302,7 @@ const countDown = async (item) => {
     }
   }, 2);
 };
-/* 
+/*
   sec5-Helpers
 */
 // modal

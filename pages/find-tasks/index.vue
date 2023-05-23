@@ -16,7 +16,7 @@
         <!-- Main Content -->
         <div class="sp-flex-auto">
           <FindTasksTabs />
-          <NuxtPage />
+          <NuxtPage :keepalive="{}" />
         </div>
       </v-container>
     </div>

@@ -52,6 +52,8 @@
           class="sp-mx-2 sp-rounded-lg sp-overflow-hidden sp-w-[90px] sp-h-[90px]"
         >
           <v-img
+            placeholder="blur"
+            blurDataURL="{'https://images.unsplash.com/photo-1683656017639-bc622715c153?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDE0fDZzTVZqVExTa2VRfHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=800&q=60'}"
             cover
             src="https://images.unsplash.com/photo-1683656017639-bc622715c153?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDE0fDZzTVZqVExTa2VRfHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
           />

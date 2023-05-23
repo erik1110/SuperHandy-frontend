@@ -1,7 +1,7 @@
 <template>
   <div class="tabBar">
     <p class="sp-gray-placeholder sp-text-body-sm">
-      共 {{ _storeFindTasks.totalTasks }} 則結果
+      共 {{ _storeFindTasks.taskMeta.totalTasks }} 則結果
     </p>
     <v-tabs
       color="v-purple"
