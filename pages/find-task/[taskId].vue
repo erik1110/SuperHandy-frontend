@@ -14,12 +14,13 @@
       {{ message }}
     </v-alert>
     <div class="sp-bg-gray-bg sp-pt-4 sp-min-h-[calc(100vh-162px)]">
-      <v-container class="md:sp-flex">
+      <v-container class="lg:sp-flex">
         <div class="sp-mb-3">
           <FindTaskDetailPosterInfo :posterInfoData="posterInfoData"></FindTaskDetailPosterInfo>
         </div>
         <div class="sp-flex-auto">
-          <FindTaskDetailCard :taskData="taskData" @aApply="apply" :loading="loading"></FindTaskDetailCard>
+          <FindTaskDetailCard :taskData="taskData" :loading="loading" @aApply="apply">
+          </FindTaskDetailCard>
         </div>
       </v-container>
     </div>

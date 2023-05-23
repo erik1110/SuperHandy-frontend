@@ -1,5 +1,5 @@
 <template>
-    <div class="sp-bg-white sp-rounded-2xl md:sp-mr-6 md:sp-w-[250px]">
+    <div class="sp-bg-white sp-rounded-2xl lg:sp-mr-6 lg:sp-w-[250px]">
         <div class="wrap sp-items-center sp-border-b sp-border-slate-300">
             <p class="sp-font-bold">案主資訊</p>
         </div>
@@ -8,7 +8,9 @@
                 姓名
             </p>
             <p v-if="posterInfoData.lastName">
-                {{ posterInfoData.lastName }}**
+                <a class="sp-text-purple hover:sp-cursor-pointer" @click="openUserModel">
+                    {{ posterInfoData.lastName }}**
+                </a>
             </p>
         </div>
         <div class="wrap">
@@ -33,10 +35,14 @@
             </v-btn>
         </div>
     </div>
+    <!-- <HomeUserModal :dialog="userDialog" :data="userData" @close="userDialog = false"></HomeUserModal> -->
 </template>
 
 <script setup>
 const { posterInfoData } = defineProps(["posterInfoData"]);
+const openUserModel = () => {
+    alert('api?')
+}
 </script>
 
 <style lang="postcss" scoped>
