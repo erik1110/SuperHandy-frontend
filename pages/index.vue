@@ -243,7 +243,6 @@ onUnmounted(async () => {
 const sec2Img = ref(null);
 const showIntroCard = ref(null);
 const observerSec2 = () => {
-  console.log("showIntroCard", showIntroCard.value);
   const animateEl = document.querySelectorAll(".introCard"); // 取得 .animate 元素
   // 創建一個新的 IntersectionObserver 監聽器
   const observer = new IntersectionObserver((entries, observer) => {

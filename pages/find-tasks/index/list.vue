@@ -1,22 +1,35 @@
 <template>
   <div>
-    <FindTasksCard :taskData="el" v-for="(el, idx) in tasks" :key="idx" />
+    <div v-if="listViewTasks.length != 0">
+      <FindTasksCard
+        :taskData="el"
+        v-for="(el, idx) in listViewTasks"
+        :key="idx"
+      />
+      <v-pagination
+        v-model="page"
+        :length="taskMeta.totalPages"
+        :total-visible="5"
+      ></v-pagination>
+    </div>
+    <div
+      v-else
+      class="sp-text-center sp-card-wrapper sp-bg-gray-bg sp-p-4 sp-bg-white sp-text-gray-placeholder"
+    >
+      <p>沒有符合條件的任務，請重新搜尋</p>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { getListViewTasks } from "@/services/apis/findTasks";
+import { storeToRefs } from "pinia";
 import { storeFindTasks } from "~/stores/storeFindTasks";
 const _storeFindTasks = storeFindTasks();
-const tasks = ref([]);
-const fetchListViewTasks = async () => {
-  let { data } = await getListViewTasks();
-  console.log({ data });
-  tasks.value = data.tasks;
-  _storeFindTasks.totalTasks = data.total_tasks;
-};
-onMounted(() => {
-  fetchListViewTasks();
+const { listViewTasks, taskMeta, page } = storeToRefs(_storeFindTasks);
+
+onMounted(async () => {
+  // _storeFindTasks.filterData.page = 1;
+  await _storeFindTasks.fetchListViewTasks();
 });
 </script>
 
