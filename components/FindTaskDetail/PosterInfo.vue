@@ -19,16 +19,18 @@
                 電話
             </p>
         </div>
-        <div class="wrap sp-border-b sp-border-slate-200">
+        <div class="wrap">
             <p class="sp-min-w-[44px] sp-text-body-sm sp-text-gray-placeholder sp-font-bold">
                 Email
             </p>
-            <p class="sp-min-w-[36px] sp-text-body-sm sp-text-gray-placeholder sp-font-bold">
+            <p class="sp-text-body-sm sp-text-gray-placeholder sp-font-bold">
                 Email
             </p>
         </div>
-        <div>
-
+        <div class="wrap justify-center">
+            <v-btn type='button' color="v-orange" class="px-4" rounded=" xl">
+                <v-icon class="mt-1">mdi-message-reply-text-outline</v-icon>案主聊天室
+            </v-btn>
         </div>
     </div>
 </template>
