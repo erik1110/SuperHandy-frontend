@@ -1,5 +1,5 @@
 <template>
-    <div class="sp-bg-white sp-rounded-2xl sm:sp-mr-6 sp-min-w-[250px] sm:sp-max-w-[300px]">
+    <div class="sp-bg-white sp-rounded-2xl md:sp-mr-6 md:sp-w-[250px]">
         <div class="wrap sp-items-center sp-border-b sp-border-slate-300">
             <p class="sp-font-bold">案主資訊</p>
         </div>
@@ -7,8 +7,8 @@
             <p class="sp-w-[56px] title">
                 姓名
             </p>
-            <p>
-                姓名
+            <p v-if="posterInfoData.lastName">
+                {{ posterInfoData.lastName }}**
             </p>
         </div>
         <div class="wrap">
@@ -16,18 +16,18 @@
                 電話
             </p>
             <p>
-                電話
+                {{ posterInfoData.phone }}
             </p>
         </div>
         <div class="wrap">
-            <p class="sp-w-[56px] title">
+            <p class="sp-min-w-[56px] title">
                 Email
             </p>
             <p>
-                Email
+                {{ posterInfoData.email }}
             </p>
         </div>
-        <div class="wrap justify-center">
+        <div class="wrap justify-center pb-4">
             <v-btn type='button' color="v-orange" class="px-4" rounded=" xl">
                 <v-icon class="mt-1">mdi-message-reply-text-outline</v-icon>案主聊天室
             </v-btn>
@@ -36,13 +36,14 @@
 </template>
 
 <script setup>
+const { posterInfoData } = defineProps(["posterInfoData"]);
 </script>
 
 <style lang="postcss" scoped>
 @import url("@/assets/css/tailwind.css");
 
 .wrap {
-    @apply sp-flex sp-p-3;
+    @apply sp-flex sp-px-6 sp-py-3;
 }
 
 .title {
