@@ -1,11 +1,20 @@
 <template>
-    <div class="sp-card-wrapper sp-bg-white sp-p-4 lg:sp-p-6 sp-mb-4">
-        <FindTasksTitleWrap :title="AAA">
+    <div class="sp-card-wrapper sp-bg-white sp-p-6 sp-relative">
+        <!-- <div class="sp-mb-4 sp-flex sp-justify-between sp-items-center">
+
+            <p class="sp-text-body-sm sp-mb-1">任務類型</p>
+            <div class="sp-text-body-sm sp-whitespace-pre-line sp-text-gray-placeholder">
+
+            </div>
             <div class="fireIcon sp-flex-center sp-flex-col">
                 <FireIcon class="sp-icon-md sp-text-white" />
                 <p class="sp-text-caption sp-text-white">急件</p>
             </div>
-        </FindTasksTitleWrap>
+        </div> -->
+        <div class="fireIcon sp-flex-center sp-flex-col sp-absolute sp-right-6">
+            <FireIcon class="sp-icon-md sp-text-white" />
+            <p class="sp-text-caption sp-text-white">急件</p>
+        </div>
         <div class="sp-mb-4">
             <p class="sp-text-body-sm sp-mb-1">任務類型</p>
             <div class="sp-text-body-sm sp-whitespace-pre-line sp-text-gray-placeholder">

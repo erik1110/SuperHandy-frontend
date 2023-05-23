@@ -1,10 +1,11 @@
 <template>
   <div>
-    <div
-      class="sp-max-w-[1680px] sp-mx-auto sp-flex sp-flex-wrap sp-items-center sp-justify-center sm:sp-justify-start lg:sp-justify-around lg:sp-flex-nowrap sp-px-5 sp-pb-12">
-      <!-- <FindTasksHighlight /> -->
-    </div>
-    <div class="sp-bg-gray-bg sp-h-screen sp-pt-4">
+    <v-container class="bg-white sp-min-h-[112px]">
+      <h1 class="sp-text-h4 md:sp-text-h2 sp-border-l-[12px] sp-border-secondary sp-pl-4 sp-my-4">
+        任務標題
+      </h1>
+    </v-container>
+    <div class="sp-bg-gray-bg sp-pt-4 sp-min-h-[calc(100vh-214px)]">
       <v-container class="sp-flex sp-flex-wrap sm:sp-flex-nowrap sp-content-start">
         <!-- Filter -->
         <div class="sp-mb-3 sp-flex-auto sm:sp-flex-initial">
@@ -12,7 +13,7 @@
         </div>
         <!-- Main Content -->
         <div class="sp-flex-auto">
-          <FindTaskDetailCard :aTaskData="">
+          <FindTaskDetailCard />
         </div>
       </v-container>
     </div>
