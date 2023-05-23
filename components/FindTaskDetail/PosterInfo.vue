@@ -4,26 +4,26 @@
             <p class="sp-font-bold">案主資訊</p>
         </div>
         <div class="wrap">
-            <p class="sp-min-w-[44px] sp-text-body-sm sp-text-gray-placeholder sp-font-bold">
+            <p class="sp-w-[56px] title">
                 姓名
             </p>
-            <p class="sp-text-body-sm sp-text-gray-placeholder sp-font-bold">
+            <p>
                 姓名
             </p>
         </div>
         <div class="wrap">
-            <p class="sp-min-w-[44px] sp-text-body-sm sp-text-gray-placeholder sp-font-bold">
+            <p class="sp-w-[56px] title">
                 電話
             </p>
-            <p class="sp-text-body-sm sp-text-gray-placeholder sp-font-bold">
+            <p>
                 電話
             </p>
         </div>
         <div class="wrap">
-            <p class="sp-min-w-[44px] sp-text-body-sm sp-text-gray-placeholder sp-font-bold">
+            <p class="sp-w-[56px] title">
                 Email
             </p>
-            <p class="sp-text-body-sm sp-text-gray-placeholder sp-font-bold">
+            <p>
                 Email
             </p>
         </div>
@@ -43,5 +43,9 @@
 
 .wrap {
     @apply sp-flex sp-p-3;
+}
+
+.title {
+    @apply sp-text-gray-placeholder sp-font-bold
 }
 </style>
