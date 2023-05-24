@@ -1,23 +1,4 @@
 <template>
-  <!-- <div class="filter sp-mb-4 sm:sp-mr-6 sp-min-w-[280px] sm:sp-max-w-[300px]">
-    <div class="wrap sp-items-center">
-      <FunnelIcon class="sp-icon-sm sp-text-purple sp-mr-1" />
-      <p class="sp-font-bold">任務搜尋</p>
-    </div>
-    <div class="sp-pb-3 sp-px-4">
-      <v-text-field
-        v-model="_storeFindTasks.keyword"
-        label="請輸入關鍵字"
-        append-inner-icon="mdi-magnify"
-        density="compact"
-        hide-details
-        single-line
-        clearable
-        @keyup.enter="_storeFindTasks.fetchListViewTasks"
-        @click:append-inner="_storeFindTasks.fetchListViewTasks"
-      ></v-text-field>
-    </div>
-  </div> -->
   <div class="filter sm:sp-mr-6 sp-min-w-[250px] sm:sp-max-w-[300px]">
     <div class="wrap sp-items-center sp-border-b sp-border-slate-300">
       <FunnelIcon class="sp-icon-sm sp-text-purple sp-mr-1" />
