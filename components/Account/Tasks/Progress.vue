@@ -15,7 +15,7 @@
               </div>
             </div>
           </div>
-          <div class="stpper-line"></div>
+          <div class="sp-hidden md:sp-block stpper-line"></div>
           <div class="stpper-item" :class="progressObject.inProgressAt.class">
             <div class="stpper-item-icon">
               <CheckIcon class="stpper-item-icon-svg" />
@@ -28,7 +28,7 @@
               </div>
             </div>
           </div>
-          <div class="stpper-line"></div>
+          <div class="sp-hidden md:sp-block stpper-line"></div>
           <div class="stpper-item" :class="progressObject.submittedAt.class">
             <div class="stpper-item-icon">
               <CheckIcon class="stpper-item-icon-svg" />
@@ -41,7 +41,7 @@
               </div>
             </div>
           </div>
-          <div class="stpper-line"></div>
+          <div class="sp-hidden md:sp-block stpper-line"></div>
           <div class="stpper-item" :class="progressObject.confirmedAt.class">
             <div class="stpper-item-icon">
               <CheckIcon class="stpper-item-icon-svg" />
@@ -54,14 +54,14 @@
               </div>
             </div>
           </div>
-          <div class="stpper-line"></div>
+          <div class="sp-hidden md:sp-block stpper-line"></div>
           <div class="stpper-item" :class="progressObject.completedAt.class">
             <div class="stpper-item-icon">
               <CheckIcon class="stpper-item-icon-svg" />
               <span class="stpper-item-icon-text">5</span>
             </div>
             <div class="stpper-item-content">
-              <div class="stpper-item-content-title sp-text-h4">任務結案</div>
+              <div class="stpper-item-content-title sp-text-h4">雙方評價</div>
               <div class="stpper-item-content-end_time sp-text-caption">
                 {{ progressObject.completedAt.time }}
               </div>
