@@ -1,36 +1,36 @@
 <template>
-  <div>
+  <div class="sp-bg-gray-bg sp-min-h-[calc(100vh-104px)]">
     <v-overlay v-model="loading" class="align-center justify-center">
       <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
     </v-overlay>
-    <v-container v-if="!message" class="bg-white sp-min-h-[112px]">
-      <h1 class="sp-text-h4 md:sp-text-h2 sp-border-l-[12px] sp-border-secondary sp-pl-4 sp-my-4">
-        {{ taskData.title }}
-      </h1>
-    </v-container>
-    <v-alert v-else :color="isSuccess ? 'deep-purple-accent-4' : 'error'" variant="tonal" class="text-center" closable>
-      <v-icon v-if="isSuccess">mdi-check-circle</v-icon>
-      <v-icon v-else>mdi-alert-circle</v-icon>
-      {{ message }}
-    </v-alert>
-    <div class="sp-bg-gray-bg sp-pt-4 sp-min-h-[calc(100vh-162px)]">
-      <v-container class="lg:sp-flex">
-        <div class="sp-mb-3">
-          <FindTaskDetailPosterInfo :posterInfoData="posterInfoData"></FindTaskDetailPosterInfo>
-        </div>
-        <div class="sp-flex-auto">
-          <FindTaskDetailCard :taskData="taskData" :loading="loading" @aApply="apply">
-          </FindTaskDetailCard>
-        </div>
+    <div class="sp-bg-white">
+      <v-container v-if="!message" class="bg-white sp-min-h-[112px]">
+        <h1 class="sp-text-h4 md:sp-text-h2 sp-border-l-[12px] sp-border-secondary sp-pl-4 sp-my-4">
+          {{ taskData.title }}
+        </h1>
       </v-container>
+      <v-alert v-else :color="isSuccess ? 'deep-purple-accent-4' : 'error'" variant="tonal" class="text-center" closable>
+        <v-icon v-if="isSuccess">mdi-check-circle</v-icon>
+        <v-icon v-else>mdi-alert-circle</v-icon>
+        {{ message }}
+      </v-alert>
     </div>
+    <v-container class="lg:sp-flex">
+      <div class="sp-mb-3">
+        <FindTaskDetailPosterInfo :posterInfoData="posterInfoData"></FindTaskDetailPosterInfo>
+      </div>
+      <div class="sp-flex-auto">
+        <FindTaskDetailCard :taskData="taskData" :loading="loading" @aApply="apply">
+        </FindTaskDetailCard>
+      </div>
+    </v-container>
   </div>
 </template>
 
 <script setup>
 import { getTasksDetail, postApplyTask } from '@/services/apis/findTasks'
 import { siteConfig } from '@/services/siteConfig'
-const { checkRespStatus, checkTaskId, checkIsLogin } = useSpUtility()
+const { checkRespStatus, checkTaskId, checkIsLogin, getTaskId } = useSpUtility()
 const { logInfo, logError } = useLog();
 const taskData = ref({});
 const posterInfoData = ref({});
@@ -47,6 +47,7 @@ const apply = async () => {
     navigateTo(siteConfig.linkPaths.login.to)
   }
   try {
+    logInfo(_work, 'apply.taskId', taskId)
     if (!checkTaskId(taskId)) {
       message.value = "任務編號不正確"
       return;
@@ -70,9 +71,8 @@ const apply = async () => {
 
 const init = async () => {
   try {
-    const route = useRoute();
-    taskId = route.params.taskId
-    logInfo(_work, 'taskId', taskId)
+    taskId = getTaskId()
+    logInfo(_work, 'init.taskId', taskId)
     if (!checkTaskId(taskId)) {
       message.value = "任務編號不正確"
       return;
