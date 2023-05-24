@@ -27,10 +27,11 @@ export const siteConfig = {
     home: { title: "首頁", to: "/" },
     login: { title: "登入", to: "/auth/login" },
     postTask: { title: "刊登任務", to: "/post-task/-1" },
+    findTasksList: { title: "任務列表", to: "/find-tasks/list" },
     account: { title: "會員帳號", to: "/account" },
     tasks: { title: "任務管理", to: "/account/tasks" },
     points: { title: "點數管理", to: "/account/points" },
-    findTasksList: { title: "任務列表", to: "/find-tasks/list" },
+    comments: { title: "評價查看", to: "/account/comments" },
   },
 
   //任務狀態
