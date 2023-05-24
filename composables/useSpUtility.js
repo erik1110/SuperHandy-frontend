@@ -1,5 +1,7 @@
 export const useSpUtility = () => {
     const isNumber = n => (typeof (n) === 'number' || n instanceof Number );
+    const checkTaskId = (taskId) => taskId && taskId.length == 24 ? true : false
+    const checkIsLogin = () => useCookie("spToken").value?.length > 0 ?? false
     const checkRespStatus = (res) => {
         const _status = {
           false: "false",
@@ -15,9 +17,16 @@ export const useSpUtility = () => {
         };
 
         return _check();
-    };
-    const checkTaskId = (taskId) => taskId && taskId.length == 24 ? true : false
-    const checkIsLogin = () => useCookie("spToken").value.length > 0 ?? false
+    }
+    const getTaskId = () =>{
+      const route = useRoute();
+      const taskId = route.params.taskId
+      if(checkTaskId(taskId)){
+        return taskId
+      }
+      return '-1'
+    }
+
 
 
 
@@ -26,5 +35,6 @@ export const useSpUtility = () => {
         checkRespStatus,
         checkTaskId,
         checkIsLogin,
+        getTaskId
     }
 }

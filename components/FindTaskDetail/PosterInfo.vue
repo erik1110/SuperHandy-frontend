@@ -7,9 +7,9 @@
             <p class="sp-w-[56px] title">
                 姓名
             </p>
-            <p v-if="posterInfoData.lastName">
-                <a class="sp-text-purple hover:sp-cursor-pointer" @click="openUserModel">
-                    {{ posterInfoData.lastName }}**
+            <p v-if="posterInfoData.name">
+                <a class="sp-text-purple hover:sp-cursor-pointer" @click="userDialog = true">
+                    {{ posterInfoData.name }}**
                 </a>
             </p>
         </div>
@@ -35,14 +35,12 @@
             </v-btn>
         </div>
     </div>
-    <!-- <HomeUserModal :dialog="userDialog" :data="userData" @close="userDialog = false"></HomeUserModal> -->
+    <HomeUserModal :dialog="userDialog" :data="posterInfoData" @close="userDialog = false"></HomeUserModal>
 </template>
 
 <script setup>
 const { posterInfoData } = defineProps(["posterInfoData"]);
-const openUserModel = () => {
-    alert('api?')
-}
+const userDialog = ref(false)
 </script>
 
 <style lang="postcss" scoped>

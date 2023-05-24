@@ -30,6 +30,7 @@ export const siteConfig = {
     account: { title: "會員帳號", to: "/account" },
     tasks: { title: "任務管理", to: "/account/tasks" },
     points: { title: "點數管理", to: "/account/points" },
+    findTasksList: { title: "任務列表", to: "/find-tasks/list" },
   },
 
   //任務狀態
