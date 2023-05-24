@@ -1,6 +1,6 @@
 <template>
   <div>
-    <VCard class="sp-mb-4">
+    <VCard class="sp-my-4">
       <VCardText>
         <v-tabs v-model="groupTab" color="secondary">
           <v-tab value="all">全部 [{{ postList.all.length }}]</v-tab>
@@ -42,6 +42,7 @@
           color="primary"
           outlined
           class="sp--translate-y-2 sp-px-4 sp-py-2 sp-text-center sp-border-2 sp-border-black sp-border-solid sp-float-right"
+          @click="toDetailPage(item.taskId)"
         >
           {{ item.status == "草稿" ? "編輯草稿" : "查看詳情" }}
         </v-btn>
@@ -103,5 +104,8 @@
   onMounted(() => {
     FuncGetTasksHelperManagement();
   });
+  const toDetailPage = function (taskId) {
+    navigateTo(`/account/tasks/${taskId}`);
+  };
 </script>
 <style></style>

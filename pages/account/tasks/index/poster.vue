@@ -1,6 +1,6 @@
 <template>
   <div>
-    <VCard class="sp-mb-4">
+    <VCard class="sp-my-4">
       <VCardText>
         <v-tabs v-model="groupTab" color="secondary">
           <v-tab value="all">全部 [{{ postList.all.length }}]</v-tab>

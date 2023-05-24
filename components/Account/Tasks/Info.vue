@@ -64,11 +64,12 @@
           <div class="sp-text-body sp-flex sp-flex-warp">
             <span class="sp-mr-4">任務照片</span>
             <span>
-              <img
+              <LightBox
                 v-for="(item, index) in 5"
                 class="sp-mr-2 sp-inline-block"
                 :key="index"
-                src="https://fakeimg.pl/60/"
+                image="https://fakeimg.pl/60/"
+                bigImage="https://fakeimg.pl/300/"
               />
             </span>
           </div>
