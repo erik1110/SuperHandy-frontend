@@ -37,7 +37,7 @@
                 <span class="sp-pr-2 sp-mr-1 sp-border-r sp-border-slate-400">刊登時間{{ fromNow(taskData.publishedAt) }}</span>
                 {{ taskData.viewerCount }}人詢問
             </p>
-            <v-btn color="v-purple" class="px-4" @click="$emit('aApply')" :loading="loading">
+            <v-btn color="v-purple" class="px-4" @click="$emit('aApply')" :loading="loading" :disabled="isApplyTaskSuccess">
                 <v-icon class="mr-1">mdi-cursor-pointer</v-icon>我要接案
             </v-btn>
         </div>
@@ -46,7 +46,7 @@
 
 <script setup>
 import { FireIcon } from "@heroicons/vue/24/solid";
-
+const isApplyTaskSuccess = useState('isApplyTaskSuccess')
 const { taskData, loading } = defineProps(["taskData", 'loading']);
 const { fromNow } = useMoment();
 </script>

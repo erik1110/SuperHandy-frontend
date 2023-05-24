@@ -9,8 +9,9 @@
           {{ taskData.title }}
         </h1>
       </v-container>
-      <v-alert v-else :color="isSuccess ? 'deep-purple-accent-4' : 'error'" variant="tonal" class="text-center" closable>
-        <v-icon v-if="isSuccess">mdi-check-circle</v-icon>
+      <v-alert v-else :color="isApplyTaskSuccess ? 'deep-purple-accent-4' : 'error'" variant="tonal" class="text-center"
+        closable>
+        <v-icon v-if="isApplyTaskSuccess">mdi-check-circle</v-icon>
         <v-icon v-else>mdi-alert-circle</v-icon>
         {{ message }}
       </v-alert>
@@ -20,7 +21,8 @@
         <FindTaskDetailPosterInfo :posterInfoData="posterInfoData"></FindTaskDetailPosterInfo>
       </div>
       <div class="sp-flex-auto">
-        <FindTaskDetailCard :taskData="taskData" :loading="loading" @aApply="apply">
+        <FindTaskDetailCard :taskData="taskData" :loading="loading" :isApplyTaskSuccess="isApplyTaskSuccess"
+          @aApply="apply">
         </FindTaskDetailCard>
       </div>
     </v-container>
@@ -35,7 +37,7 @@ const { logInfo, logError } = useLog();
 const taskData = ref({});
 const posterInfoData = ref({});
 const message = ref('');
-const isSuccess = ref(false);
+const isApplyTaskSuccess = useState('isApplyTaskSuccess', () => false);
 const loading = ref(false);
 const _work = '任務詳情'
 let taskId = ''
@@ -58,7 +60,7 @@ const apply = async () => {
       message.value = response.message
       return;
     }
-    isSuccess.value = true
+    isApplyTaskSuccess.value = true
     message.value = `接案申請已成功送出，${response.message}`
   } catch (error) {
     logError(_work, { error })
@@ -85,7 +87,7 @@ const init = async () => {
     }
     taskData.value = response.data;
     posterInfoData.value = response.data.posterInfo;
-
+    isApplyTaskSuccess.value = false
   } catch (error) {
     logError(_work, { error })
     message.value = "取得任務內容失敗"
