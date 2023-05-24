@@ -39,7 +39,7 @@
     }">
         <SwiperSlide v-for="(item, idx) in imgUrls" :key="idx">
             <div class="sp-me-2 sp-rounded-lg sp-overflow-hidden sp-w-[100px] sp-h-[100px]">
-                <v-img cover :src="item"></v-img>
+                <v-img cover :src="item" @click="openBigImage" class="hover:sp-cursor-pointer"></v-img>
             </div>
         </SwiperSlide>
         <div class="text-center my-2 sm:sp-hidden">
@@ -55,6 +55,10 @@ const imgUrls = [
     'https://source.unsplash.com/featured/500x500',
     'https://source.unsplash.com/featured/600x600'
 ]
+
+const openBigImage = () => {
+    alert('顯示大圖')
+}
 
 /*如果只有一个slide就销毁swiper*/
 // if (mySwiper.slides.length <= 3) {
