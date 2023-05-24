@@ -1,6 +1,6 @@
 // stores/counter.js
 import { defineStore } from "pinia";
-import { getListViewTasks } from "@/services/apis/findTasks";
+import { getListViewTasks,getMapViewTasks } from "@/services/apis/findTasks";
 
 export const storeFindTasks = defineStore("findTasks", () => {
   const keyword = ref("");
@@ -32,20 +32,23 @@ export const storeFindTasks = defineStore("findTasks", () => {
       selectedCates: [],
       isUrgent: false,
     });
-    fetchListViewTasks();
+    // fetchListViewTasks();
 
   };
   watch(page, () => {
     fetchListViewTasks();
   });
 
-  const fetchListViewTasks = async (filters) => {
+  const fetchListViewTasks = async () => {
     let payload = {
       keyword: keyword.value,
       page: page.value,
       limit: 3,
     };
-    payload = {...payload,...filters}
+    payload = {...payload,...filterData}
+    Object.keys(payload).forEach(el=>{
+      if(!payload[el]) delete payload[el]
+    })
     delete payload.selectedCates
     let { data } = await getListViewTasks(payload);
     console.log({ data });
@@ -55,6 +58,10 @@ export const storeFindTasks = defineStore("findTasks", () => {
       totalPages: data.total_pages
     }
   };
+  const fetchMapViewTasks = async ()=>{
+    let { data } = await getMapViewTasks()
+    console.log({data});
+  }
   return {
     keyword,
     page,
@@ -63,5 +70,6 @@ export const storeFindTasks = defineStore("findTasks", () => {
     filterData,
     resetFilter,
     fetchListViewTasks,
+    fetchMapViewTasks
   };
 });

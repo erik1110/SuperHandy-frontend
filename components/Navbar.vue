@@ -7,7 +7,7 @@
     </template>
 
     <template v-slot:append>
-      <div class="sp-w-[220px] sp-py-2">
+      <div class="sp-w-[220px] sp-py-2 sp-mr-1">
         <v-text-field
           v-model="_storeFindTasks.keyword"
           label="請輸入關鍵字"
@@ -16,8 +16,8 @@
           hide-details
           single-line
           clearable
-          @keyup.enter="_storeFindTasks.fetchListViewTasks"
-          @click:append-inner="_storeFindTasks.fetchListViewTasks"
+          @keyup.enter="searchSubmit"
+          @click:append-inner="searchSubmit"
         ></v-text-field>
       </div>
 
@@ -68,6 +68,14 @@
 <script setup>
 import { storeFindTasks } from "@/stores/storeFindTasks";
 const _storeFindTasks = storeFindTasks();
+const route = useRoute();
+// Search
+const searchSubmit = () => {
+  if (!route.path.includes("find-tasks")) {
+    navigateTo("/find-tasks/list");
+  }
+  _storeFindTasks.fetchListViewTasks();
+};
 // Account Menu Data
 const items = [
   { title: "我的帳號", to: "/account" },

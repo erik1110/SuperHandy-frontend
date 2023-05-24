@@ -20,7 +20,7 @@
     :navigation="{ prevEl: '.slidePrev-btn', nextEl: '.slideNext-btn' }"
     :autoplay="{
       delay: 3000,
-      disableOnInteraction: true,
+      disableOnInteraction: false,
     }"
     :creative-effect="{
       prev: {
@@ -54,60 +54,25 @@
 
 <script setup>
 import { getTasksHighlight } from "@/services/apis/findTasks";
-const highlightTasks = ref([
+const highlightTasks = ref();
+let mockTasks = [
   {
     taskId: "646c8aa6f48df43c2b5a2e2f",
-    title: "幫忙打王國之淚的Boss0",
+    title: "Google五星評論",
     imgUrls: "https://example.com/switch.jpg",
     category: "人力派遣",
   },
   {
     taskId: "646c8aa6f48df43c2b5a2e23",
-    title: "幫忙打王國之淚的Boss1",
+    title: "數位影像處理",
     imgUrls: "https://example.com/switch.jpg",
     category: "人力派遣",
   },
-  {
-    taskId: "646c8aa6f48df43c2b5ade23",
-    title: "幫忙打王國之淚的Boss2",
-    imgUrls: "https://example.com/switch.jpg",
-    category: "人力派遣",
-  },
-  {
-    taskId: "646c8aa6f48df43c2ssa2e23",
-    title: "幫忙打王國之淚的Boss3",
-    imgUrls: "https://example.com/switch.jpg",
-    category: "人力派遣",
-  },
-  {
-    taskId: "646c8aa6f48df43c2esa2e23",
-    title: "幫忙打王國之淚的Boss4",
-    imgUrls: "https://example.com/switch.jpg",
-    category: "人力派遣",
-  },
-  {
-    taskId: "646c8aa6f48df43c2esa2e23",
-    title: "幫忙打王國之淚的Boss5",
-    imgUrls: "https://example.com/switch.jpg",
-    category: "人力派遣",
-  },
-  {
-    taskId: "646c8aa6f48df43c2esaddd23",
-    title: "幫忙打王國之淚的Boss4",
-    imgUrls: "https://example.com/switch.jpg",
-    category: "人力派遣",
-  },
-  {
-    taskId: "646c8aa6f48df43c2esadd2e23",
-    title: "幫忙打王國之淚的Boss5",
-    imgUrls: "https://example.com/switch.jpg",
-    category: "人力派遣",
-  },
-]);
+];
 const fetchTasksHighlight = async () => {
   let { data } = await getTasksHighlight();
   console.log(data);
-  highlightTasks.value = data.tasks;
+  highlightTasks.value = [...data.tasks, ...mockTasks];
 };
 onMounted(() => {
   fetchTasksHighlight();

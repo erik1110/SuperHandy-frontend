@@ -5,7 +5,10 @@
       <p class="sp-font-bold">任務條件</p>
     </div>
     <!-- 排序 -->
-    <div class="wrap sp-border-b sp-border-slate-200">
+    <div
+      v-if="route.path.includes('list')"
+      class="wrap sp-border-b sp-border-slate-200"
+    >
       <p
         class="sp-min-w-[36px] sp-text-body-sm sp-text-gray-placeholder sp-font-bold"
       >
@@ -134,10 +137,7 @@
     </div>
     <!-- actions -->
     <div class="wrap">
-      <v-btn
-        @click="_storeFindTasks.resetFilter"
-        class="ml-auto mr-2"
-        variant="plain"
+      <v-btn @click="reset" class="ml-auto mr-2" variant="plain"
         >全部重設</v-btn
       >
       <v-btn @click="submitFilters" color="v-purple" rounded="lg">套用</v-btn>
@@ -157,6 +157,7 @@ const _storeFindTasks = storeFindTasks();
 const cityItems = computed(() => cityData);
 const distItems = ref([]);
 const servicesItems = ref([]);
+const route = useRoute();
 
 watch(
   () => _storeFindTasks.filterData.city,
@@ -189,7 +190,12 @@ const deleteService = (item) => {
 
 const submitFilters = () => {
   _storeFindTasks.page = 1;
-  _storeFindTasks.fetchListViewTasks(_storeFindTasks.filterData);
+  _storeFindTasks.fetchListViewTasks();
+};
+//reset
+const reset = () => {
+  _storeFindTasks.resetFilter();
+  _storeFindTasks.fetchListViewTasks();
 };
 </script>
 

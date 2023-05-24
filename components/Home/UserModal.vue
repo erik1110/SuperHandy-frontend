@@ -1,29 +1,36 @@
 <template>
-  <v-dialog v-model="_dialog" max-width="380" :close-on-back="true
-    " class="relative">
-    <v-btn @click="$emit('close')" class="closeBtn d-none d-sm-block" icon="mdi-close" color="v-gray-text"></v-btn>
-    <UserCard v-bind="data" />
+  <v-dialog
+    v-model="_dialog"
+    max-width="380"
+    :close-on-back="true"
+    class="relative"
+  >
+    <v-btn
+      @click="$emit('close')"
+      class="closeBtn d-none d-sm-block"
+      icon="mdi-close"
+      color="v-gray-text"
+    ></v-btn>
+    <UserCard v-bind="data" role="幫手" />
   </v-dialog>
 </template>
 
 <script setup>
-
 const props = defineProps({
   dialog: Boolean,
-  data: Object
-})
-const emit = defineEmits(['close'])
+  data: Object,
+});
+const emit = defineEmits(["close"]);
 const _dialog = computed({
   get() {
-    return props.dialog
+    return props.dialog;
   },
   set(newVal) {
     if (!newVal) {
-      emit('close')
+      emit("close");
     }
-  }
-})
-
+  },
+});
 </script>
 
 <style lang="scss" scoped>
