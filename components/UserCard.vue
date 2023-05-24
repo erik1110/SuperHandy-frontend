@@ -14,7 +14,7 @@
           ></v-img>
         </div>
         <div class="sp-text-h5 sp-text-slate-800 sp-my-2 sp-ml-1">
-          {{ props.name }}**
+          {{ props.lastName }}**
         </div>
         <div class="sp-flex sp-justify-around sp-w-full">
           <div>
@@ -44,7 +44,7 @@
             <v-rating
               v-model="cate.star"
               class="mb-1 mr-2 sm:sp-flex-initial sp-flex-auto"
-              density
+              density="compact"
               size="small"
               color="v-purple"
               half-increments
@@ -59,23 +59,24 @@
 </template>
 
 <script setup>
-  const role = ref("幫手");
-  const props = defineProps({
-    avatar: String,
-    completedTasks: Number,
-    completionRate: Number,
-    name: String,
-    rating: Object,
-  });
+// const role = ref("幫手");
+const props = defineProps({
+  avatar: String,
+  completedTasks: Number,
+  completionRate: Number,
+  lastName: String,
+  rating: Object,
+  role: String,
+});
 </script>
 
 <style lang="postcss" scoped>
-  @import url("@/assets/css/tailwind.css");
-  .card {
-    @apply sp-p-4 sp-bg-white sp-max-w-[400px] sp-min-w-[320px] sp-rounded-2xl sp-border;
-  }
+@import url("@/assets/css/tailwind.css");
+.card {
+  @apply sp-p-4 sp-bg-white sp-max-w-[400px] sp-min-w-[320px] sp-rounded-2xl sp-border;
+}
 
-  .num {
-    @apply sp-text-h4 sp-text-primary;
-  }
+.num {
+  @apply sp-text-h4 sp-text-primary;
+}
 </style>

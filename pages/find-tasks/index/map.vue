@@ -34,6 +34,7 @@
         @update:bounds="boundsUpdated"
       >
         <LControl position="topleft">
+          <v-tooltip activator="parent" location="bottom">我的位置</v-tooltip>
           <div @click="getPosition" class="nowLocation hover:sp-bg-slate-100">
             <v-icon color="v-purple">mdi-crosshairs-gps</v-icon>
           </div>
@@ -81,7 +82,7 @@
               >
               {{ t.inquiriesCount }} 人詢問
             </p>
-            <v-btn color="v-purple">
+            <v-btn color="v-purple" class="px-3">
               <v-icon class="mr-1">mdi-cursor-pointer</v-icon>
               查看詳情</v-btn
             >
@@ -110,15 +111,23 @@ import { MapPinIcon, FireIcon } from "@heroicons/vue/24/solid";
 import pinImg from "@/assets/images/pin.png";
 import pinUrgentImg from "@/assets/images/pin_urgent.png";
 import tasksMock from "@/static/tasks_mock.json";
+import { storeFindTasks } from "~/stores/storeFindTasks";
+
 const tasks = ref(tasksMock);
 const loading = ref(false);
+
 /*
   Get Data
 */
+
+const _storeFindTasks = storeFindTasks();
 const getData = () => {
   console.log("get data");
   showReFetch.value = { b: false, z: false };
 };
+onMounted(() => {
+  _storeFindTasks.fetchMapViewTasks();
+});
 /*
   Map
 */
@@ -180,7 +189,7 @@ const zoomUpdated = (zoom) => {
   @apply sp-text-body-sm sp-font-medium sp-text-slate-500 sp-w-16 sp-inline-block sp-mr-1;
 }
 .nowLocation {
-  @apply sp-bg-white sp-rounded-full sp-w-9 sp-h-9 sp-flex-center sp-border-2 sp-border-[#0004] sp-transition-all;
+  @apply sp-cursor-pointer sp-bg-white sp-rounded-full sp-w-9 sp-h-9 sp-flex-center sp-border-2 sp-border-[#0004] sp-transition-all;
 }
 .reFetchBtn {
   @apply sp-absolute sp-top-4 sp-left-[50%] -sp-translate-x-[50%] sp-text-body-sm sp-bg-white;

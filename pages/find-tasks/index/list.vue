@@ -14,7 +14,7 @@
     </div>
     <div
       v-else
-      class="sp-text-center sp-card-wrapper sp-bg-gray-bg sp-p-4 sp-bg-white sp-text-gray-placeholder"
+      class="sp-text-center sp-card-wrapper sp-p-4 sp-bg-white sp-text-gray-placeholder"
     >
       <p>沒有符合條件的任務，請重新搜尋</p>
     </div>
@@ -26,6 +26,11 @@ import { storeToRefs } from "pinia";
 import { storeFindTasks } from "~/stores/storeFindTasks";
 const _storeFindTasks = storeFindTasks();
 const { listViewTasks, taskMeta, page } = storeToRefs(_storeFindTasks);
+
+watch(page, () => {
+  console.log("page changed");
+  window.scrollTo({ top: 300, behavior: "smooth" });
+});
 
 onMounted(async () => {
   // _storeFindTasks.filterData.page = 1;

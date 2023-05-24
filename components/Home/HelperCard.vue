@@ -11,7 +11,9 @@
         class="sp-w-full"
       ></v-img>
     </div>
-    <div class="sp-text-h5 sp-text-slate-800 sp-my-2 sp-ml-1">{{ name }}**</div>
+    <div class="sp-text-h5 sp-text-slate-800 sp-my-2 sp-ml-1">
+      {{ lastName }}**
+    </div>
     <div class="sp-w-full sp-flex sp-items-center">
       <v-rating
         v-model="rating.overall"
@@ -27,13 +29,14 @@
 </template>
 
 <script setup>
-const { avatar, name, completedTasks, completionRate, rating } = defineProps({
-  name: String,
-  avatar: String,
-  completedTasks: Number,
-  completionRate: Number,
-  rating: Object,
-});
+const { avatar, lastName, completedTasks, completionRate, rating } =
+  defineProps({
+    lastName: String,
+    avatar: String,
+    completedTasks: Number,
+    completionRate: Number,
+    rating: Object,
+  });
 </script>
 
 <style lang="scss" scoped></style>

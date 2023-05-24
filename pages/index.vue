@@ -242,10 +242,11 @@ onUnmounted(async () => {
 */
 const sec2Img = ref(null);
 const showIntroCard = ref(null);
+const observer1 = ref(null);
 const observerSec2 = () => {
   const animateEl = document.querySelectorAll(".introCard"); // 取得 .animate 元素
   // 創建一個新的 IntersectionObserver 監聽器
-  const observer = new IntersectionObserver((entries, observer) => {
+  observer1.value = new IntersectionObserver((entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         // section2 left
@@ -260,13 +261,18 @@ const observerSec2 = () => {
             `animate__delay-${idx}s`
           );
         }); // 元素進入可視區域，添加 .animated 類別
-        observer.unobserve(entry.target); // 停止監聽該元素
+        observer1.value.unobserve(entry.target); // 停止監聽該元素
       }
     });
   });
   // 監聽 .animate 元素是否進入可視區域
-  observer.observe(showIntroCard.value);
+  observer1.value.observe(showIntroCard.value);
 };
+onBeforeUnmount(() => {
+  if (observer1.value) {
+    observer1.value.disconnect();
+  }
+});
 /*
   sec3-動畫+counter
 */

@@ -14,21 +14,21 @@
       {{ taskData.address }}
     </div>
     <div
-      class="sp-bg-gray-border sp-rounded-lg sp-flex sp-justify-around sp-py-4 sp-px-2 sp-mb-4"
+      class="sp-bg-gray-border sp-rounded-lg sp-flex sp-py-4 sp-px-2 sp-mb-4"
     >
-      <div>
+      <div class="item">
         <p class="tile">服務類型</p>
         <p>#{{ taskData.category }}</p>
       </div>
-      <div>
+      <div class="item">
         <p class="tile">案主</p>
         <p>{{ taskData.posterName }}</p>
       </div>
-      <!-- <div>
+      <!-- <div class="item">
         <p class="tile">聯絡電話</p>
         <p>09-26XXX-XXX</p>
       </div> -->
-      <div>
+      <div class="item">
         <p class="tile">案件預算</p>
         <p class="sp-text-purple sp-font-semibold sp-text-body-sm">
           {{ taskData.salary }} 超人幣
@@ -88,6 +88,9 @@ const { fromNow } = useMoment();
 @import url("@/assets/css/tailwind.css");
 .fireIcon {
   @apply sp-bg-warning sp-rounded-md sp-w-10 sp-h-10;
+}
+.item {
+  @apply sp-basis-40 sp-px-4;
 }
 .tile {
   @apply sp-text-body-sm sp-font-medium sp-text-slate-500 sp-w-16 sp-inline-block sp-mr-1;
