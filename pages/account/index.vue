@@ -1,10 +1,10 @@
 <template>
-    <v-overlay v-model="loading" class="align-center justify-center">
-        <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
-    </v-overlay>
+    <!-- 遮罩 -->
+    <PostTaskOverlay/>
     <div class="sp-space-y-6">
         <div class="sp-card-wrapper sp-bg-white sp-p-6">
             <div class="sm:sp-flex sm:sp-items-center sm:sp-space-x-4 sp-mb-6">
+                <!-- 頭像 -->
                 <AccountAvatar></AccountAvatar>
                 <div class="sp-mt-2 sm:sp-mt-0">
                     <p class="sp-font-bold">{{ userData.lastName }}{{ userData.firstName }}</p>
@@ -12,11 +12,13 @@
                 </div>
             </div>
             <div class="sp-mb-4">
+                <!-- 六個數字 -->
                 <AccountPerformance :performanceData="performanceData"></AccountPerformance>
             </div>
         </div>
         <div class="sp-card-wrapper sp-bg-white sp-p-6">
             <SecTitle :text="'個人資料'"></SecTitle>
+            <!-- 會員資料表單 -->
             <v-form @submit.prevent='submit' ref='accountForm' validate-on="input">
                 <div class='mt-4 md:sp-w-1/2'>
                     <label class='label' for='nickname'>暱稱</label>
@@ -58,12 +60,12 @@
                 </div>
                 <div class='mt-4'>
                     <label class='label' for='nickname'>案主介紹</label>
-                    <v-textarea v-model="userData.posterIntro" :rules="accountFormRules.intro.rule" :disabled="isDisabled"
+                    <v-textarea v-model="userData.posterIntro" :rules="accountFormRules.intro.rule"
                         :counter="accountFormRules.intro.counter" :hint="accountFormRules.intro.hint" />
                 </div>
                 <div class='mt-4'>
                     <label class='label' for='nickname'>幫手介紹</label>
-                    <v-textarea v-model="userData.helperIntro" :rules="accountFormRules.intro.rule" :disabled="isDisabled"
+                    <v-textarea v-model="userData.helperIntro" :rules="accountFormRules.intro.rule"
                         :counter="accountFormRules.intro.counter" :hint="accountFormRules.intro.hint" />
                 </div>
                 <div class='mt-4'>
@@ -73,7 +75,7 @@
                         </v-chip>
                     </label>
                     <v-select v-model="userData.helperSkills" :rules="accountFormRules.helperSkills.rule"
-                        :disabled="isDisabled" :items="taskCategories" color="blue-grey-lighten-2" item-title="name"
+                         :items="taskCategories" color="blue-grey-lighten-2" item-title="name"
                         item-value="name" multiple chips clearable>
                         <template v-slot:chip="{ props, item }">
                             <v-chip v-bind="props" :text="item.name"></v-chip>
@@ -82,89 +84,101 @@
                 </div>
                 <div class="mt-8">
                     <v-btn type='submit' color="v-purple" class='sp-px-4 sp-w-full md:sp-mb-0 md:sp-w-auto'
-                        :disabled="loading" :loading="loading">更新檔案</v-btn>
+                        :disabled="isOpenFullOverlay" :loading="btnSubmitLoading">更新檔案</v-btn>
                 </div>
             </v-form>
         </div>
     </div>
+    <!-- 訊息彈出視窗 -->
+    <AccountModel :message="message" :is-error="isError" @click="accountMessageModal = false"></AccountModel>
 </template>
 <script setup>
+import { storeGlobal } from "~/stores/storeGlobal";
 import { getCategories } from "@/services/apis/general";
 import { getAccountInfo, patchAccountInfo, getProfileStatus } from "@/services/apis/account";
-const { checkRespStatus } = useSpUtility()
 const { logInfo, logError } = useLog()
+const { excuteAsyncFunc,errorHanlder } = useSpUtility()
 const { formRules, validateFormResult } = useFormUtil()
 let accountFormRules = formRules()
 const _work = '我的帳號'
-
-const excuteAsyncFunc = async (excuteFunc, params, successFunc) => {
-
-    if (!excuteFunc || typeof excuteFunc !== 'function') {
-        return;
-    }
-
-    let _message = ''
-    loading.value = true
-    try {
-
-        let response = null
-        if (params) {
-            response = await excuteFunc(params)
-        } else {
-            response = await excuteFunc()
-        }
-
-        //logInfo(_work, 'excuteAsyncFunc', response);
-
-        if (response && !checkRespStatus(response)) {
-            _message = response.message
-        } else {
-            if (successFunc && typeof successFunc === 'function') {
-                successFunc(response)
-            }
-        }
-        logInfo(_work, 'excuteAsyncFunc', 'success');
-    } catch (error) {
-        _message = '執行失敗'
-        logError(_work, 'asyncFunc', { error });
-    } finally {
-        loading.value = false
-    }
-}
-
-const loading = ref(false);
-const isDisabled = ref(false);
+const isOpenFullOverlay = useState('fullOverlay',() => ref(false));
+// const _storeGlobal = storeGlobal();
+const btnSubmitLoading = ref(false);
 const accountForm = ref(null)
 const taskCategories = ref([])
 const userData = ref({})
 const performanceData = ref({})
 
+
+// 訊息視窗
+const accountMessageModal = useState('accountMessageModal',() => ref(false));
+const message = ref('')
+const isError = ref(false)
+const openModal = function(text) {
+    accountMessageModal.value = true
+    message.value = text
+    isError.value = true
+}
+
 const init = () => {
-    excuteAsyncFunc(getProfileStatus, null, (response) => performanceData.value = response.data)
-    excuteAsyncFunc(getCategories, null, (response) => taskCategories.value = response.data)
-    excuteAsyncFunc(getAccountInfo, null, (response) => userData.value = response.data)
+    //console.time();
+    isOpenFullOverlay.value = true
+    const promises = [
+        excuteAsyncFunc(_work, getProfileStatus, null, (response) => performanceData.value = response.data),
+        excuteAsyncFunc(_work, getCategories, null, (response) => taskCategories.value = response.data),
+        excuteAsyncFunc(_work, getAccountInfo, null, (response) => userData.value = response.data)
+    ];
+    Promise.allSettled(promises).then(results => {
+        logInfo(_work, 'results', results)
+        const _message = errorHanlder(results)
+        logInfo(_work, 'results.message', message)
+        if(_message && _message.length  > 0) {
+            //alert(_message)
+            openModal(_message)
+
+            // 用_storeGlobal會顯示三次, 原因待查
+            // _storeGlobal.confirmHandler({
+            //     open: true,
+            //     title: "",
+            //     content: message,
+            //     closeHandle: null,
+            // });
+        };
+        isOpenFullOverlay.value = false
+        //console.timeEnd();
+    });
 }
 init();
 
 // - 更新會員資料 -
 const submit = async () => {
 
-    //1. 表單檢查
+    isOpenFullOverlay.value = true
+    btnSubmitLoading.value = true;
+
+    //表單檢查
     const result = await validateFormResult(accountForm)
     //console.log(result, 'result')
     if (!result) {
+        isOpenFullOverlay.value = false
+        btnSubmitLoading.value = false;
+        // _storeGlobal.confirmHandler({
+        //     open: true,
+        //     content: '表單驗證還沒完成'
+        // });
         return false;
     }
 
-    //2. 開啟loading
-    loading.value = true
-
-    //3. 後端更新
+    //後端更新
     const data = { ...userData }
     excuteAsyncFunc(patchAccountInfo, data, (response) => {
-        alert(response.message)
+        // _storeGlobal.confirmHandler({
+        //     open: true,
+        //     content: response.message
+        // });
         userData.value = response.data
-        loading.value = false
+        isOpenFullOverlay.value = false
+        btnSubmitLoading.value = false
     })
 };
 
