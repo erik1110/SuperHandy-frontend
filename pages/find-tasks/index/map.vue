@@ -43,7 +43,7 @@
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         ></LTileLayer>
         <LMarker
-          v-for="(t, idx) in tasks"
+          v-for="(t, idx) in mapViewTasks"
           :key="idx"
           :lat-lng="[t.location.latitude, t.location.longitude]"
         >
@@ -65,24 +65,25 @@
               {{ t.location.city }}{{ t.location.dist }}
             </div>
 
-            <p class="my-3">
+            <p class="mt-4 mb-3">
               <span class="tile">服務類型</span># {{ t.category }}
             </p>
-            <p class="my-3"><span class="tile">案主</span>{{ t.poster }} **</p>
-            <p class="my-3"><span class="tile">聯絡電話</span>09-26XXX-XXX</p>
-            <p class="my-3">
+            <p class="my-3"><span class="tile">案主</span>{{ t.posterName }}</p>
+            <!-- <p class="my-3"><span class="tile">聯絡電話</span>09-26XXX-XXX</p> -->
+            <p class="mt-3 mb-4">
               <span class="tile">案件預算</span>
               <span class="sp-text-purple sp-font-semibold sp-text-body-sm"
                 >{{ t.salary }} 超人幣</span
               >
             </p>
+
             <p class="sp-text-caption sp-text-slate-500">
               <span class="sp-pr-2 sp-mr-1 sp-border-r sp-border-slate-400"
-                >刊登時間 10 分鐘前</span
+                >刊登時間 {{ fromNow(t.publishedAt) }}</span
               >
-              {{ t.inquiriesCount }} 人詢問
+              {{ t.viewerCount }} 人詢問
             </p>
-            <v-btn color="v-purple" class="px-3">
+            <v-btn block color="v-purple" class="px-3 mt-3">
               <v-icon class="mr-1">mdi-cursor-pointer</v-icon>
               查看詳情</v-btn
             >
@@ -110,32 +111,25 @@ import {
 import { MapPinIcon, FireIcon } from "@heroicons/vue/24/solid";
 import pinImg from "@/assets/images/pin.png";
 import pinUrgentImg from "@/assets/images/pin_urgent.png";
-import tasksMock from "@/static/tasks_mock.json";
 import { storeFindTasks } from "~/stores/storeFindTasks";
+import { storeToRefs } from "pinia";
 
-const tasks = ref(tasksMock);
-const loading = ref(false);
-
-/*
-  Get Data
-*/
-
+// const loading = ref(false);
+const { fromNow } = useMoment();
 const _storeFindTasks = storeFindTasks();
-const getData = () => {
-  console.log("get data");
-  showReFetch.value = { b: false, z: false };
-};
-onMounted(() => {
-  _storeFindTasks.fetchMapViewTasks();
-});
+const { mapViewTasks, mapCenterBackup, mapCenter, loading } =
+  storeToRefs(_storeFindTasks);
+
 /*
   Map
 */
 const map = ref(null);
-const zoomLevel = ref(16);
-const mapCenter = ref([25.034436016196786, 121.56407163196346]);
-const mapCenterBackup = ref([25.034436016196786, 121.56407163196346]);
+const zoomLevel = ref(13);
+// const radius = ref(6);
+// const mapCenter = ref([25.034436016196786, 121.56407163196346]);
+// const mapCenterBackup = ref([25.034436016196786, 121.56407163196346]);
 const showReFetch = ref({ b: false, z: false });
+
 const getPosition = async () => {
   if (navigator.geolocation) {
     loading.value = true;
@@ -143,6 +137,7 @@ const getPosition = async () => {
       var latitude = position.coords.latitude;
       var longitude = position.coords.longitude;
       // console.log("Latitude: " + latitude + ", Longitude: " + longitude);
+      zoomLevel.value = 16;
       mapCenter.value = [latitude, longitude];
     });
     setTimeout(() => {
@@ -173,10 +168,46 @@ const boundsUpdated = (bounds) => {
 };
 const zoomUpdated = (zoom) => {
   console.log({ zoom });
-  if (zoom < 15) {
+  if (zoom < 13 || zoom > 15) {
     showReFetch.value.z = true;
   }
+  calculateRadius(zoom);
 };
+// zoom 換算成半徑
+function calculateRadius(zoom) {
+  // 根據縮放級別和地圖投影系統，計算半徑範圍（以米為單位）
+  const metersPerPixel =
+    (40075016.686 *
+      Math.abs(
+        Math.cos((map.value.leafletObject.getCenter().lat * Math.PI) / 180)
+      )) /
+    Math.pow(2, zoom + 8);
+  const r = Math.round(metersPerPixel);
+  // radius.value = r;
+  _storeFindTasks.mapFetchData.radius = r;
+  // return radius;
+}
+/*
+  Get Data
+*/
+
+const getData = async () => {
+  // loading.value = true;
+  console.log("get data");
+  showReFetch.value = { b: false, z: false };
+  // await _storeFindTasks.fetchMapViewTasks({
+  //   longitude: mapCenterBackup.value[1],
+  //   latitude: mapCenterBackup.value[0],
+  //   radius: radius.value,
+  // });
+  // _storeFindTasks.mapFetchData.latitude = mapCenterBackup.value[0];
+  // _storeFindTasks.mapFetchData.longitude = mapCenterBackup.value[1];
+  await _storeFindTasks.fetchMapViewTasks();
+  // loading.value = false;
+};
+onMounted(() => {
+  getData();
+});
 </script>
 
 <style lang="postcss" scoped>

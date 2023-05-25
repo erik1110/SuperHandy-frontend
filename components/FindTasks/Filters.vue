@@ -108,8 +108,9 @@
         </v-autocomplete>
         <v-chip
           color="secondary"
-          class="my-1"
+          class="my-1 mr-1"
           closable
+          size="small"
           @click:close="deleteService(c)"
           style="color: #60c4c4 !important"
           v-for="c in _storeFindTasks.filterData.selectedCates"
@@ -189,8 +190,13 @@ const deleteService = (item) => {
 };
 
 const submitFilters = () => {
-  _storeFindTasks.page = 1;
-  _storeFindTasks.fetchListViewTasks();
+  if (route.path.includes("list")) {
+    _storeFindTasks.page = 1;
+    _storeFindTasks.fetchListViewTasks();
+  } else {
+    console.log(1);
+    _storeFindTasks.fetchMapViewTasks();
+  }
 };
 //reset
 const reset = () => {
