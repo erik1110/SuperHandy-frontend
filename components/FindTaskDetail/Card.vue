@@ -30,7 +30,7 @@
         </div>
         <div class="sp-mb-6">
             <p class="title sp-mb-2">任務照片</p>
-            <FindTaskDetailSwiperImages></FindTaskDetailSwiperImages>
+            <SwiperImages></SwiperImages>
         </div>
         <div class="lg:sp-flex lg:sp-items-center text-center">
             <p class="sp-ml-auto sp-mr-3 sp-text-caption sp-text-slate-500 sp-mb-3 lg:sp-mb-0">

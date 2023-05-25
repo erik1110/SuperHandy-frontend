@@ -9,23 +9,23 @@
         <div class="d-flex justify-center">
             <Swiper class="mySwiper" :modules="[SwiperFreeMode, SwiperPagination]" :freeMode="true" :slidesPerView="1"
                 :spaceBetween="15" :breakpoints="{
-                    '300': {
-                        slidesPerView: 2,
-                        spaceBetween: 15,
-                    },
-                    '500': {
-                        slidesPerView: 3,
-                        spaceBetween: 20,
-                    },
-                    '600': {
-                        slidesPerView: 4,
-                        spaceBetween: 20,
-                    },
-                    '800': {
-                        slidesPerView: 5,
-                        spaceBetween: 20,
-                    },
-                }">
+                        '300': {
+                            slidesPerView: 2,
+                            spaceBetween: 15,
+                        },
+                        '500': {
+                            slidesPerView: 3,
+                            spaceBetween: 20,
+                        },
+                        '600': {
+                            slidesPerView: 4,
+                            spaceBetween: 20,
+                        },
+                        '800': {
+                            slidesPerView: 5,
+                            spaceBetween: 20,
+                        },
+                    }">
                 <SwiperSlide v-for='(item, index) in 5' :key='index'>
                     <div>
                         <v-img src="https://vuetifyjs.b-cdn.net/docs/images/graphics/img-placeholder.png" height="100"
@@ -43,9 +43,8 @@
 </template>
 
 <script setup>
-const { basicBox } = useAlert()
-function upload() {
-    basicBox('還沒寫喔')
+function upload () {
+    alert('還沒寫喔')
 }
 </script>
 <style scoped>
