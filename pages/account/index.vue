@@ -81,7 +81,7 @@
                     </v-select>
                 </div>
                 <div class="mt-8">
-                    <v-btn type='submit' color="v-purple" class='sp-mb-4 sp-w-full md:sp-mb-0 md:sp-w-auto'
+                    <v-btn type='submit' color="v-purple" class='sp-px-4 sp-w-full md:sp-mb-0 md:sp-w-auto'
                         :disabled="loading" :loading="loading">更新檔案</v-btn>
                 </div>
             </v-form>
@@ -140,9 +140,9 @@ const userData = ref({})
 const performanceData = ref({})
 
 const init = () => {
+    excuteAsyncFunc(getProfileStatus, null, (response) => performanceData.value = response.data)
     excuteAsyncFunc(getCategories, null, (response) => taskCategories.value = response.data)
     excuteAsyncFunc(getAccountInfo, null, (response) => userData.value = response.data)
-    excuteAsyncFunc(getProfileStatus, null, (response) => performanceData.value = response.data)
 }
 init();
 
@@ -163,17 +163,10 @@ const submit = async () => {
     const data = { ...userData }
     excuteAsyncFunc(patchAccountInfo, data, (response) => {
         alert(response.message)
+        userData.value = response.data
+        loading.value = false
     })
 };
-
-
-// - 取消編輯-
-function cancel() {
-    isDisabled.value = true
-    //重刷頁面
-    profileForm.value.reset()
-    getAccount()
-}
 
 
 // - 幫手專長驗證規則 -
@@ -192,7 +185,9 @@ watch(() => userData.value.helperSkills, (newVal) => {
 })
 
 </script>
-<style>
+<style lang="postcss" scoped>
+@import url("@/assets/css/tailwind.css");
+
 .label {
     @apply sp-pb-2 sp-block sp-font-bold
 }
