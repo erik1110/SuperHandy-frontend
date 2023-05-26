@@ -32,23 +32,26 @@
             <p class="title sp-mb-2">任務照片</p>
             <SwiperImages></SwiperImages>
         </div>
-        <div class="lg:sp-flex lg:sp-items-center text-center">
-            <p class="sp-ml-auto sp-mr-3 sp-text-caption sp-text-slate-500 sp-mb-3 lg:sp-mb-0">
-                <span class="sp-pr-2 sp-mr-1 sp-border-r sp-border-slate-400">刊登時間{{ fromNow(taskData.publishedAt) }}</span>
-                {{ taskData.viewerCount }}人詢問
-            </p>
-            <v-btn color="v-purple" class="px-4" @click="$emit('aApply')" :loading="loading" :disabled="isApplyTaskSuccess">
-                <v-icon class="mr-1">mdi-cursor-pointer</v-icon>我要接案
-            </v-btn>
+        <div class="sp-mt-8 sp-space-y-4 sm:sp-flex sm:sp-space-x-4 sm:sp-space-y-0 sm:sp-justify-between">
+            <NuxtLink :to="siteConfig.linkPaths.findTasksList.to">
+                <v-btn class="px-4 sp-w-full" color="v-gray-placeholder">回到任務列表</v-btn>
+            </NuxtLink>
+            <div>
+                <v-btn color="v-purple" class="px-4 sp-w-full" @click="$emit('aApply')" :loading="btnSubmitLoading"
+                    :disabled="btnSubmitDisabled">
+                    <v-icon class="mr-1">mdi-cursor-pointer</v-icon>我要接案
+                </v-btn>
+            </div>
+
         </div>
     </div>
 </template>
 
 <script setup>
+import { siteConfig } from "@/services/siteConfig";
 import { FireIcon } from "@heroicons/vue/24/solid";
-const isApplyTaskSuccess = useState('isApplyTaskSuccess')
-const { taskData, loading } = defineProps(["taskData", 'loading']);
-const { fromNow } = useMoment();
+// const isApplyTaskSuccess = useState('isApplyTaskSuccess')
+const { taskData, btnSubmitLoading, btnSubmitDisabled } = defineProps(["taskData", 'btnSubmitLoading', 'btnSubmitDisabled']);
 </script>
 
 <style lang="postcss" scoped>
