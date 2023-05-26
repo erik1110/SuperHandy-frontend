@@ -1,6 +1,6 @@
 <template>
     <!-- 遮罩 -->
-    <PostTaskOverlay/>
+    <PostTaskOverlay />
     <div class="sp-space-y-6">
         <div class="sp-card-wrapper sp-bg-white sp-p-6">
             <div class="sm:sp-flex sm:sp-items-center sm:sp-space-x-4 sp-mb-6">
@@ -75,8 +75,8 @@
                         </v-chip>
                     </label>
                     <v-select v-model="userData.helperSkills" :rules="accountFormRules.helperSkills.rule"
-                         :items="taskCategories" color="blue-grey-lighten-2" item-title="name"
-                        item-value="name" multiple chips clearable>
+                        :items="taskCategories" color="blue-grey-lighten-2" item-title="name" item-value="name" multiple
+                        chips clearable>
                         <template v-slot:chip="{ props, item }">
                             <v-chip v-bind="props" :text="item.name"></v-chip>
                         </template>
@@ -91,7 +91,8 @@
     </div>
 </template>
 <script setup>
-import { storeGlobal } from "~/stores/storeGlobal";
+import { storeGlobal } from "@/stores/storeGlobal";
+import { storeFullOverlay } from "@/stores/storeFullOverlay";
 import { getCategories } from "@/services/apis/general";
 import { getAccountInfo, patchAccountInfo, getProfileStatus } from "@/services/apis/account";
 const { logInfo, logError } = useLog()
@@ -99,8 +100,8 @@ const { excuteAsyncFunc, promiseErrorHanlder, checkRespStatus } = useSpUtility()
 const { formRules, validateFormResult } = useFormUtil()
 let accountFormRules = formRules()
 const _storeGlobal = storeGlobal();
+const _storeFullOverlay = storeFullOverlay();
 const _work = '我的帳號'
-const isOpenFullOverlay = useState('fullOverlay',() => ref(false));
 const btnSubmitLoading = ref(false);
 const btnSubmitDisabled = ref(true);
 const accountForm = ref(null)
@@ -108,7 +109,7 @@ const taskCategories = ref([])
 const userData = ref({})
 const performanceData = ref({})
 const openModal = (text) => {
-    if(!process.client) return;
+    if (!process.client) return;
     _storeGlobal.confirmHandler({
         open: true,
         content: text
@@ -118,24 +119,24 @@ const openModal = (text) => {
 // - 初始化會員資料 -
 const init = () => {
     //console.time()
-    isOpenFullOverlay.value = true
+    _storeFullOverlay.open()
     const promises = [
         excuteAsyncFunc(_work, getProfileStatus, null, (response) => performanceData.value = response.data),
         excuteAsyncFunc(_work, getCategories, null, (response) => taskCategories.value = response.data),
         excuteAsyncFunc(_work, getAccountInfo, null, (response) => userData.value = response.data)
     ];
     Promise.allSettled(promises).then(results => {
-        if(!process.client) return;
+        if (!process.client) return;
         logInfo(_work, 'init.results', results)
         const _message = promiseErrorHanlder(results)
         //logInfo(_work, 'results.message', _message)
-        if(_message && _message.length  > 0) {
+        if (_message && _message.length > 0) {
             openModal(_message)
             btnSubmitDisabled.value = true
-        }else{
+        } else {
             btnSubmitDisabled.value = false
         }
-        isOpenFullOverlay.value = false
+        _storeFullOverlay.close()
         //console.timeEnd()
     });
 }
@@ -144,11 +145,11 @@ init();
 // - 更新會員資料 -
 const submit = async () => {
 
-    isOpenFullOverlay.value = true
+    _storeFullOverlay.open()
     btnSubmitLoading.value = true;
     btnSubmitDisabled.value = true
 
-    try{
+    try {
         //表單檢查
         const result = await validateFormResult(accountForm)
         //console.log(result, 'result')
@@ -169,11 +170,11 @@ const submit = async () => {
             userData.value = response.data
         }
 
-    } catch(error){
+    } catch (error) {
         logError(_work, 'submit', { error })
         openModal('會員資料更新失敗')
     } finally {
-        isOpenFullOverlay.value = false
+        _storeFullOverlay.close()
         btnSubmitLoading.value = false
         btnSubmitDisabled.value = false
     }
