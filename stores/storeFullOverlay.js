@@ -2,12 +2,13 @@ import { defineStore } from "pinia";
 
 export const storeFullOverlay = defineStore("fullOverlay", () => {
 
-  const isOpen = ref(false)
+  const _isOpen = ref(false)
+  const isOpen = computed(() => _isOpen.value)
   const open = () => {
-    isOpen.value = true
+    _isOpen.value = true
   }
   const close = () => {
-    isOpen.value = false
+    _isOpen.value = false
   }
 
   return {
