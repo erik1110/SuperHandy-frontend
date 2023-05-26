@@ -56,13 +56,14 @@ export const useSpUtility = () => {
           }
           //logInfo(work, 'excuteAsyncFunc', 'success');
       } catch (error) {
-          //logError(work, 'excuteAsyncFunc', { error });
+          logError(work, 'excuteAsyncFunc', { error });
           _message = _message.length > 0 ? _message : `${work}執行失敗`
           //console.log('_message',_message)
           throw _message
+          // Uncaught (in promise) ???
       }
     }
-    const errorHanlder = (results) => {
+    const promiseErrorHanlder = (results) => {
       const errors = results.filter((item) => item.status == 'rejected')
       if(errors.length > 0){
           let message = []
@@ -73,7 +74,7 @@ export const useSpUtility = () => {
           })
 
           if(message.length > 0){
-              return message.join('')
+              return message.join()
           }
       }
       return ''
@@ -88,6 +89,6 @@ export const useSpUtility = () => {
         checkIsLogin,
         getTaskId,
         excuteAsyncFunc,
-        errorHanlder
+        promiseErrorHanlder
     }
 }

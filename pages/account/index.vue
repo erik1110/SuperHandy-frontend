@@ -84,44 +84,40 @@
                 </div>
                 <div class="mt-8">
                     <v-btn type='submit' color="v-purple" class='sp-px-4 sp-w-full md:sp-mb-0 md:sp-w-auto'
-                        :disabled="isOpenFullOverlay" :loading="btnSubmitLoading">更新檔案</v-btn>
+                        :disabled="btnSubmitDisabled" :loading="btnSubmitLoading">更新檔案</v-btn>
                 </div>
             </v-form>
         </div>
     </div>
-    <!-- 訊息彈出視窗 -->
-    <AccountModel :message="message" :is-error="isError" @click="accountMessageModal = false"></AccountModel>
 </template>
 <script setup>
 import { storeGlobal } from "~/stores/storeGlobal";
 import { getCategories } from "@/services/apis/general";
 import { getAccountInfo, patchAccountInfo, getProfileStatus } from "@/services/apis/account";
 const { logInfo, logError } = useLog()
-const { excuteAsyncFunc,errorHanlder } = useSpUtility()
+const { excuteAsyncFunc, promiseErrorHanlder, checkRespStatus } = useSpUtility()
 const { formRules, validateFormResult } = useFormUtil()
 let accountFormRules = formRules()
+const _storeGlobal = storeGlobal();
 const _work = '我的帳號'
 const isOpenFullOverlay = useState('fullOverlay',() => ref(false));
-// const _storeGlobal = storeGlobal();
 const btnSubmitLoading = ref(false);
+const btnSubmitDisabled = ref(true);
 const accountForm = ref(null)
 const taskCategories = ref([])
 const userData = ref({})
 const performanceData = ref({})
-
-
-// 訊息視窗
-const accountMessageModal = useState('accountMessageModal',() => ref(false));
-const message = ref('')
-const isError = ref(false)
-const openModal = function(text) {
-    accountMessageModal.value = true
-    message.value = text
-    isError.value = true
+const openModal = (text) => {
+    if(!process.client) return;
+    _storeGlobal.confirmHandler({
+        open: true,
+        content: text
+    });
 }
 
+// - 初始化會員資料 -
 const init = () => {
-    //console.time();
+    //console.time()
     isOpenFullOverlay.value = true
     const promises = [
         excuteAsyncFunc(_work, getProfileStatus, null, (response) => performanceData.value = response.data),
@@ -129,23 +125,18 @@ const init = () => {
         excuteAsyncFunc(_work, getAccountInfo, null, (response) => userData.value = response.data)
     ];
     Promise.allSettled(promises).then(results => {
-        logInfo(_work, 'results', results)
-        const _message = errorHanlder(results)
-        logInfo(_work, 'results.message', message)
+        if(!process.client) return;
+        logInfo(_work, 'init.results', results)
+        const _message = promiseErrorHanlder(results)
+        //logInfo(_work, 'results.message', _message)
         if(_message && _message.length  > 0) {
-            //alert(_message)
             openModal(_message)
-
-            // 用_storeGlobal會顯示三次, 原因待查
-            // _storeGlobal.confirmHandler({
-            //     open: true,
-            //     title: "",
-            //     content: message,
-            //     closeHandle: null,
-            // });
-        };
+            btnSubmitDisabled.value = true
+        }else{
+            btnSubmitDisabled.value = false
+        }
         isOpenFullOverlay.value = false
-        //console.timeEnd();
+        //console.timeEnd()
     });
 }
 init();
@@ -155,31 +146,38 @@ const submit = async () => {
 
     isOpenFullOverlay.value = true
     btnSubmitLoading.value = true;
+    btnSubmitDisabled.value = true
 
-    //表單檢查
-    const result = await validateFormResult(accountForm)
-    //console.log(result, 'result')
-    if (!result) {
-        isOpenFullOverlay.value = false
-        btnSubmitLoading.value = false;
-        // _storeGlobal.confirmHandler({
-        //     open: true,
-        //     content: '表單驗證還沒完成'
-        // });
-        return false;
-    }
+    try{
+        //表單檢查
+        const result = await validateFormResult(accountForm)
+        //console.log(result, 'result')
+        if (!result) {
+            openModal('表單驗證還沒完成')
+            return;
+        }
 
-    //後端更新
-    const data = { ...userData }
-    excuteAsyncFunc(patchAccountInfo, data, (response) => {
-        // _storeGlobal.confirmHandler({
-        //     open: true,
-        //     content: response.message
-        // });
-        userData.value = response.data
+        //後端更新
+        const data = { ...userData.value }
+        //console.log(data, 'data')
+
+        const response = await patchAccountInfo(data)
+        if (response && !checkRespStatus(response)) {
+            openModal(response.message)
+        } else {
+            openModal('會員資料更新成功')
+            userData.value = response.data
+        }
+
+    } catch(error){
+        logError(_work, 'submit', { error })
+        openModal('會員資料更新失敗')
+    } finally {
         isOpenFullOverlay.value = false
         btnSubmitLoading.value = false
-    })
+        btnSubmitDisabled.value = false
+    }
+
 };
 
 
