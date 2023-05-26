@@ -1,5 +1,5 @@
 <template>
-    <div class="sp-bg-white sp-rounded-2xl lg:sp-mr-6 lg:sp-w-[250px]">
+    <div class="sp-bg-white sp-rounded-2xl lg:sp-mr-6 lg:sp-w-[250px] pa-1">
         <div class="wrap sp-items-center sp-border-b sp-border-slate-300">
             <p class="sp-font-bold">案主資訊</p>
         </div>
@@ -7,9 +7,9 @@
             <p class="sp-w-[56px] title">
                 姓名
             </p>
-            <p v-if="posterInfoData.name">
-                <a class="sp-text-purple hover:sp-cursor-pointer" @click="userDialog = true">
-                    {{ posterInfoData.name }}**
+            <p v-if="posterInfoData.lastName">
+                <a class="sp-text-purple hover:sp-cursor-pointer" @click="posterDialog = true">
+                    {{ posterInfoData.lastName }}**
                 </a>
             </p>
         </div>
@@ -29,25 +29,26 @@
                 {{ posterInfoData.email }}
             </p>
         </div>
-        <div class="wrap justify-center pb-4">
+        <!-- <div class="wrap justify-center pb-4">
             <v-btn type='button' color="v-orange" class="px-4" rounded=" xl">
                 <v-icon class="mt-1">mdi-message-reply-text-outline</v-icon>案主聊天室
             </v-btn>
-        </div>
+        </div> -->
     </div>
-    <HomeUserModal :dialog="userDialog" :data="posterInfoData" @close="userDialog = false"></HomeUserModal>
+    <FindTaskDetailPosterModal :dialog="posterDialog" :data="posterInfoData" @close="posterDialog = false">
+    </FindTaskDetailPosterModal>
 </template>
 
 <script setup>
 const { posterInfoData } = defineProps(["posterInfoData"]);
-const userDialog = ref(false)
+const posterDialog = ref(false)
 </script>
 
 <style lang="postcss" scoped>
 @import url("@/assets/css/tailwind.css");
 
 .wrap {
-    @apply sp-flex sp-px-6 sp-py-3;
+    @apply sp-flex sp-px-6 sp-py-2;
 }
 
 .title {

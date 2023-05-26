@@ -1,10 +1,10 @@
 <template>
-    <v-overlay v-model="loading" class="align-center justify-center">
-        <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
-    </v-overlay>
+    <!-- 遮罩 -->
+    <PostTaskOverlay/>
     <div class="sp-space-y-6">
         <div class="sp-card-wrapper sp-bg-white sp-p-6">
             <div class="sm:sp-flex sm:sp-items-center sm:sp-space-x-4 sp-mb-6">
+                <!-- 頭像 -->
                 <AccountAvatar></AccountAvatar>
                 <div class="sp-mt-2 sm:sp-mt-0">
                     <p class="sp-font-bold">{{ userData.lastName }}{{ userData.firstName }}</p>
@@ -12,11 +12,13 @@
                 </div>
             </div>
             <div class="sp-mb-4">
+                <!-- 六個數字 -->
                 <AccountPerformance :performanceData="performanceData"></AccountPerformance>
             </div>
         </div>
         <div class="sp-card-wrapper sp-bg-white sp-p-6">
             <SecTitle :text="'個人資料'"></SecTitle>
+            <!-- 會員資料表單 -->
             <v-form @submit.prevent='submit' ref='accountForm' validate-on="input">
                 <div class='mt-4 md:sp-w-1/2'>
                     <label class='label' for='nickname'>暱稱</label>
@@ -58,12 +60,12 @@
                 </div>
                 <div class='mt-4'>
                     <label class='label' for='nickname'>案主介紹</label>
-                    <v-textarea v-model="userData.posterIntro" :rules="accountFormRules.intro.rule" :disabled="isDisabled"
+                    <v-textarea v-model="userData.posterIntro" :rules="accountFormRules.intro.rule"
                         :counter="accountFormRules.intro.counter" :hint="accountFormRules.intro.hint" />
                 </div>
                 <div class='mt-4'>
                     <label class='label' for='nickname'>幫手介紹</label>
-                    <v-textarea v-model="userData.helperIntro" :rules="accountFormRules.intro.rule" :disabled="isDisabled"
+                    <v-textarea v-model="userData.helperIntro" :rules="accountFormRules.intro.rule"
                         :counter="accountFormRules.intro.counter" :hint="accountFormRules.intro.hint" />
                 </div>
                 <div class='mt-4'>
@@ -73,7 +75,7 @@
                         </v-chip>
                     </label>
                     <v-select v-model="userData.helperSkills" :rules="accountFormRules.helperSkills.rule"
-                        :disabled="isDisabled" :items="taskCategories" color="blue-grey-lighten-2" item-title="name"
+                         :items="taskCategories" color="blue-grey-lighten-2" item-title="name"
                         item-value="name" multiple chips clearable>
                         <template v-slot:chip="{ props, item }">
                             <v-chip v-bind="props" :text="item.name"></v-chip>
@@ -81,99 +83,102 @@
                     </v-select>
                 </div>
                 <div class="mt-8">
-                    <v-btn type='submit' color="v-purple" class='sp-mb-4 sp-w-full md:sp-mb-0 md:sp-w-auto'
-                        :disabled="loading" :loading="loading">更新檔案</v-btn>
+                    <v-btn type='submit' color="v-purple" class='sp-px-4 sp-w-full md:sp-mb-0 md:sp-w-auto'
+                        :disabled="btnSubmitDisabled" :loading="btnSubmitLoading">更新檔案</v-btn>
                 </div>
             </v-form>
         </div>
     </div>
 </template>
 <script setup>
+import { storeGlobal } from "~/stores/storeGlobal";
 import { getCategories } from "@/services/apis/general";
 import { getAccountInfo, patchAccountInfo, getProfileStatus } from "@/services/apis/account";
-const { checkRespStatus } = useSpUtility()
 const { logInfo, logError } = useLog()
+const { excuteAsyncFunc, promiseErrorHanlder, checkRespStatus } = useSpUtility()
 const { formRules, validateFormResult } = useFormUtil()
 let accountFormRules = formRules()
+const _storeGlobal = storeGlobal();
 const _work = '我的帳號'
-
-const excuteAsyncFunc = async (excuteFunc, params, successFunc) => {
-
-    if (!excuteFunc || typeof excuteFunc !== 'function') {
-        return;
-    }
-
-    let _message = ''
-    loading.value = true
-    try {
-
-        let response = null
-        if (params) {
-            response = await excuteFunc(params)
-        } else {
-            response = await excuteFunc()
-        }
-
-        //logInfo(_work, 'excuteAsyncFunc', response);
-
-        if (response && !checkRespStatus(response)) {
-            _message = response.message
-        } else {
-            if (successFunc && typeof successFunc === 'function') {
-                successFunc(response)
-            }
-        }
-        logInfo(_work, 'excuteAsyncFunc', 'success');
-    } catch (error) {
-        _message = '執行失敗'
-        logError(_work, 'asyncFunc', { error });
-    } finally {
-        loading.value = false
-    }
-}
-
-const loading = ref(false);
-const isDisabled = ref(false);
+const isOpenFullOverlay = useState('fullOverlay',() => ref(false));
+const btnSubmitLoading = ref(false);
+const btnSubmitDisabled = ref(true);
 const accountForm = ref(null)
 const taskCategories = ref([])
 const userData = ref({})
 const performanceData = ref({})
+const openModal = (text) => {
+    if(!process.client) return;
+    _storeGlobal.confirmHandler({
+        open: true,
+        content: text
+    });
+}
 
+// - 初始化會員資料 -
 const init = () => {
-    excuteAsyncFunc(getCategories, null, (response) => taskCategories.value = response.data)
-    excuteAsyncFunc(getAccountInfo, null, (response) => userData.value = response.data)
-    excuteAsyncFunc(getProfileStatus, null, (response) => performanceData.value = response.data)
+    //console.time()
+    isOpenFullOverlay.value = true
+    const promises = [
+        excuteAsyncFunc(_work, getProfileStatus, null, (response) => performanceData.value = response.data),
+        excuteAsyncFunc(_work, getCategories, null, (response) => taskCategories.value = response.data),
+        excuteAsyncFunc(_work, getAccountInfo, null, (response) => userData.value = response.data)
+    ];
+    Promise.allSettled(promises).then(results => {
+        if(!process.client) return;
+        logInfo(_work, 'init.results', results)
+        const _message = promiseErrorHanlder(results)
+        //logInfo(_work, 'results.message', _message)
+        if(_message && _message.length  > 0) {
+            openModal(_message)
+            btnSubmitDisabled.value = true
+        }else{
+            btnSubmitDisabled.value = false
+        }
+        isOpenFullOverlay.value = false
+        //console.timeEnd()
+    });
 }
 init();
 
 // - 更新會員資料 -
 const submit = async () => {
 
-    //1. 表單檢查
-    const result = await validateFormResult(accountForm)
-    //console.log(result, 'result')
-    if (!result) {
-        return false;
+    isOpenFullOverlay.value = true
+    btnSubmitLoading.value = true;
+    btnSubmitDisabled.value = true
+
+    try{
+        //表單檢查
+        const result = await validateFormResult(accountForm)
+        //console.log(result, 'result')
+        if (!result) {
+            openModal('表單驗證還沒完成')
+            return;
+        }
+
+        //後端更新
+        const data = { ...userData.value }
+        //console.log(data, 'data')
+
+        const response = await patchAccountInfo(data)
+        if (response && !checkRespStatus(response)) {
+            openModal(response.message)
+        } else {
+            openModal('會員資料更新成功')
+            userData.value = response.data
+        }
+
+    } catch(error){
+        logError(_work, 'submit', { error })
+        openModal('會員資料更新失敗')
+    } finally {
+        isOpenFullOverlay.value = false
+        btnSubmitLoading.value = false
+        btnSubmitDisabled.value = false
     }
 
-    //2. 開啟loading
-    loading.value = true
-
-    //3. 後端更新
-    const data = { ...userData }
-    excuteAsyncFunc(patchAccountInfo, data, (response) => {
-        alert(response.message)
-    })
 };
-
-
-// - 取消編輯-
-function cancel() {
-    isDisabled.value = true
-    //重刷頁面
-    profileForm.value.reset()
-    getAccount()
-}
 
 
 // - 幫手專長驗證規則 -
@@ -192,7 +197,9 @@ watch(() => userData.value.helperSkills, (newVal) => {
 })
 
 </script>
-<style>
+<style lang="postcss" scoped>
+@import url("@/assets/css/tailwind.css");
+
 .label {
     @apply sp-pb-2 sp-block sp-font-bold
 }

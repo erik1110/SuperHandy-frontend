@@ -1,5 +1,6 @@
 <template>
     <div class="sp-space-y-4">
+        <!-- 關於案主 start -->
         <div class="sp-bg-gray-bg sp-p-4 sp-rounded-lg">
             <div class="text-center lg:sp-flex lg:sp-space-x-20 lg:sp-items-center">
                 <div class="sp-font-bold sp-mb-2 lg:sp-mb-0">
@@ -8,28 +9,29 @@
                     <span class="mdi mdi-menu-down lg:sp-hidden"></span>
                 </div>
                 <div class="sp-flex sp-justify-between sp-space-x-2 lg:sp-space-x-10">
-                    <p class="number-wrap sp-text-purple">
+                    <div class="number-wrap sp-text-purple">
                         <NuxtLink :to="siteConfig.linkPaths.points.to">
                             <span class="number">{{ performanceData.superCoin }}</span>
                         </NuxtLink>
                         <span class="sp-inline-block">超人幣</span>
-                    </p>
-                    <p class="number-wrap sp-text-gray-placeholder">
+                    </div>
+                    <div class="number-wrap sp-text-gray-placeholder">
                         <span class="number sp-inline-block">{{ performanceData.numOfPostTasks }}</span>
                         <span class="sp-inline-block">發案數</span>
-                    </p>
-                    <p class="number-wrap sp-text-gray-placeholder ">
+                    </div>
+                    <div class="number-wrap sp-text-gray-placeholder ">
                         <div class="sp-inline-block">
                             <NuxtLink :to="siteConfig.linkPaths.comments.to">
                                 <span class="number sp-text-gray-placeholder">{{  performanceData.ratingPoster }}</span>
                             </NuxtLink>
                         </div>
-
                         <span class="sp-inline-block">星評價</span>
-                    </p>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- 關於案主 end -->
+        <!-- 關於幫手 start -->
         <div class="sp-bg-gray-bg sp-p-4 sp-rounded-lg">
             <div class="text-center lg:sp-flex lg:sp-space-x-20 lg:sp-items-center">
                 <div class="sp-font-bold sp-mb-2 lg:sp-mb-0">
@@ -38,17 +40,17 @@
                     <span class="mdi mdi-menu-down lg:sp-hidden"></span>
                 </div>
                 <div class="sp-flex sp-justify-between sp-space-x-2 lg:sp-space-x-10">
-                    <p class="number-wrap sp-text-purple">
+                    <div class="number-wrap sp-text-purple">
                         <NuxtLink :to="siteConfig.linkPaths.points.to">
                             <span class="number">{{ performanceData.helperCoin }}</span>
                         </NuxtLink>
                         <span class="sp-inline-block">幫手幣</span>
-                    </p>
-                    <p class="number-wrap sp-text-gray-placeholder">
+                    </div>
+                    <div class="number-wrap sp-text-gray-placeholder">
                         <span class="number sp-inline-block">{{ performanceData.numOfCompletedTasks }}</span>
                         <span class="sp-inline-block">發案數</span>
-                    </p>
-                    <p class="number-wrap sp-text-gray-placeholder ">
+                    </div>
+                    <div class="number-wrap sp-text-gray-placeholder ">
                         <div class="sp-inline-block">
                             <NuxtLink :to="siteConfig.linkPaths.comments.to">
                                 <span class="number sp-text-gray-placeholder">{{  performanceData.ratingHelper }}</span>
@@ -56,10 +58,11 @@
                         </div>
 
                         <span class="sp-inline-block">星評價</span>
-                    </p>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- 關於幫手 end -->
     </div>
 </template>
 <script setup>

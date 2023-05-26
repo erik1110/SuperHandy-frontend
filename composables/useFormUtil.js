@@ -60,11 +60,11 @@ export const useFormUtil = () => {
         counter: _counter[1],
         hint: _replace(_hint, _counter[1]),
         rule: [
-          //ruleRequired,
+          ruleRequired,
           (v) => !v || v.length <= _counter[1] || _replace(_error, _counter[1]),
         ],
       },
-      address: {
+      address: { //非必填
         counter: _counter[2],
         hint: _replace(_hint, _counter[2]),
         rule: [
