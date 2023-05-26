@@ -162,7 +162,7 @@ const route = useRoute();
 
 watch(
   () => _storeFindTasks.filterData.city,
-  (val) => {
+  async (val) => {
     _storeFindTasks.filterData.dist = null;
     distItems.value = distData.reduce((acc, cur) => {
       if (cur.city == val) {
@@ -170,6 +170,7 @@ watch(
       }
       return acc;
     }, []);
+    _storeFindTasks.filterData.dist = distItems.value[0];
   }
 );
 const fetchServices = async () => {
@@ -201,7 +202,7 @@ const submitFilters = () => {
 //reset
 const reset = () => {
   _storeFindTasks.resetFilter();
-  _storeFindTasks.fetchListViewTasks();
+  submitFilters();
 };
 </script>
 

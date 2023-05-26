@@ -52,7 +52,10 @@ export const storeFindTasks = defineStore("findTasks", () => {
       delete mapFetchData.latitude 
       delete mapFetchData.longitude 
     }
-    let payload = {...mapFetchData,...filterData}
+    let payload = {
+      keyword: keyword.value,
+    };
+    payload = {...payload,...mapFetchData,...filterData}
     cleanNull(payload)
     console.log({payload});
 
@@ -101,6 +104,7 @@ export const storeFindTasks = defineStore("findTasks", () => {
 
 
   return {
+    loading,
     keyword,
     page,
     mapCenter,

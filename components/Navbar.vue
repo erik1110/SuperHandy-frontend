@@ -70,11 +70,15 @@ import { storeFindTasks } from "@/stores/storeFindTasks";
 const _storeFindTasks = storeFindTasks();
 const route = useRoute();
 // Search
-const searchSubmit = () => {
+const searchSubmit = async () => {
   if (!route.path.includes("find-tasks")) {
-    navigateTo("/find-tasks/list");
+    await navigateTo("/find-tasks/list");
   }
-  _storeFindTasks.fetchListViewTasks();
+  if (route.path.includes("list")) {
+    await _storeFindTasks.fetchListViewTasks();
+  } else if (route.path.includes("map")) {
+    await _storeFindTasks.fetchMapViewTasks();
+  }
 };
 // Account Menu Data
 const items = [

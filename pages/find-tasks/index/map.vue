@@ -14,7 +14,7 @@
         >搜尋此區域</v-btn
       >
       <v-overlay
-        v-model="loading"
+        v-model="_storeFindTasks.loading"
         contained
         class="align-center justify-center"
       >
@@ -30,6 +30,8 @@
         id="map"
         :zoom="zoomLevel"
         :center="mapCenter"
+        :min-zoom="14"
+        :max-zoom="17"
         @update:zoom="zoomUpdated"
         @update:bounds="boundsUpdated"
       >
@@ -83,10 +85,12 @@
               >
               {{ t.viewerCount }} 人詢問
             </p>
-            <v-btn block color="v-purple" class="px-3 mt-3">
-              <v-icon class="mr-1">mdi-cursor-pointer</v-icon>
-              查看詳情</v-btn
-            >
+            <NuxtLink :to="`/find-task/${t.taskId}`">
+              <v-btn block color="v-purple" class="px-3 mt-3">
+                <v-icon class="mr-1">mdi-cursor-pointer</v-icon>
+                查看詳情</v-btn
+              >
+            </NuxtLink>
           </LPopup>
         </LMarker>
         <LTileLayer
@@ -117,48 +121,43 @@ import { storeToRefs } from "pinia";
 // const loading = ref(false);
 const { fromNow } = useMoment();
 const _storeFindTasks = storeFindTasks();
-const { mapViewTasks, mapCenterBackup, mapCenter, loading } =
+const { mapViewTasks, mapCenterBackup, mapCenter } =
   storeToRefs(_storeFindTasks);
 
 /*
   Map
 */
 const map = ref(null);
-const zoomLevel = ref(13);
-// const radius = ref(6);
-// const mapCenter = ref([25.034436016196786, 121.56407163196346]);
-// const mapCenterBackup = ref([25.034436016196786, 121.56407163196346]);
+const zoomLevel = ref(14);
 const showReFetch = ref({ b: false, z: false });
 
 const getPosition = async () => {
   if (navigator.geolocation) {
-    loading.value = true;
-    navigator.geolocation.getCurrentPosition(function (position) {
+    _storeFindTasks.loading = true;
+    navigator.geolocation.getCurrentPosition(function async(position) {
       var latitude = position.coords.latitude;
       var longitude = position.coords.longitude;
-      // console.log("Latitude: " + latitude + ", Longitude: " + longitude);
-      zoomLevel.value = 16;
-      mapCenter.value = [latitude, longitude];
+      _storeFindTasks.mapCenter = [latitude, longitude];
     });
     setTimeout(() => {
-      loading.value = false;
+      _storeFindTasks.loading = false;
     }, 3000);
   } else {
     console.log("Geolocation is not supported by this browser.");
-    mapCenter.value = [25.034436016196786, 121.56407163196346];
+    _storeFindTasks.mapCenter = [25.034436016196786, 121.56407163196346];
   }
 };
 // 中心點更新
 const centerUpdated = () => {
   let c = map.value.leafletObject.getCenter();
   console.log({ c });
-  mapCenterBackup.value = [c.lat, c.lng];
+  _storeFindTasks.mapCenterBackup = [c.lat, c.lng];
 };
 // 超出地圖顯示範圍，顯示重新搜尋按鈕
 const boundsUpdated = (bounds) => {
   let isContainCenter = map.value.leafletObject
     .getBounds()
-    .contains(mapCenterBackup.value);
+    .contains(_storeFindTasks.mapCenterBackup);
   if (!isContainCenter) {
     showReFetch.value.b = true;
     centerUpdated();
@@ -168,9 +167,9 @@ const boundsUpdated = (bounds) => {
 };
 const zoomUpdated = (zoom) => {
   console.log({ zoom });
-  if (zoom < 13 || zoom > 15) {
-    showReFetch.value.z = true;
-  }
+  // if (zoom < 13 || zoom > 15) {
+  showReFetch.value.z = true;
+  // }
   calculateRadius(zoom);
 };
 // zoom 換算成半徑
@@ -183,27 +182,17 @@ function calculateRadius(zoom) {
       )) /
     Math.pow(2, zoom + 8);
   const r = Math.round(metersPerPixel);
-  // radius.value = r;
-  _storeFindTasks.mapFetchData.radius = r;
-  // return radius;
+  console.log({ r });
+  _storeFindTasks.mapFetchData.radius = r / 2;
 }
 /*
   Get Data
 */
 
 const getData = async () => {
-  // loading.value = true;
   console.log("get data");
   showReFetch.value = { b: false, z: false };
-  // await _storeFindTasks.fetchMapViewTasks({
-  //   longitude: mapCenterBackup.value[1],
-  //   latitude: mapCenterBackup.value[0],
-  //   radius: radius.value,
-  // });
-  // _storeFindTasks.mapFetchData.latitude = mapCenterBackup.value[0];
-  // _storeFindTasks.mapFetchData.longitude = mapCenterBackup.value[1];
   await _storeFindTasks.fetchMapViewTasks();
-  // loading.value = false;
 };
 onMounted(() => {
   getData();
