@@ -43,3 +43,23 @@ export const postPostTaskEdit = (taskId, data) =>
 // 取得已發布的任務
 export const getTasksById = (taskId, data) =>
   req("GET", `/tasks/management/${taskId}`, data, { auth: true });
+
+
+export const executeFetchData = async (status, data, taskId) => {
+  switch (status) {
+    case taskStatus.addDraft:
+      return await postDraft(data);
+
+    case taskStatus.updateDraft:
+      return await putDraftById(taskId, data);
+
+    case taskStatus.published:
+      return await postPublish(data);
+
+    case taskStatus.publishFromDraft:
+      return await postPublishFromDraft(taskId, data);
+
+    default:
+      break;
+  }
+}
