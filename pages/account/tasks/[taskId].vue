@@ -2,9 +2,11 @@
   <div>
     <VContainer fluid>
       <VRow>
-        <VCol>
+        <VCol v-if="detail">
           <AccountTasksProgress></AccountTasksProgress>
           <AccountTasksInfo class="sp-my-4"></AccountTasksInfo>
+          <AccountTasksMatch class="sp-my-4"></AccountTasksMatch>
+          <AccountTasksAccept class="sp-my-4"></AccountTasksAccept>
         </VCol>
       </VRow>
     </VContainer>
