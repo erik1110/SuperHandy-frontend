@@ -36,7 +36,7 @@ export const postPostTaskUnpublish = (taskId) =>
 export const postPostTaskRepublish = (taskId) =>
   req("POST", `/post-task/republish/${taskId}`, {}, { auth: true });
 
-//編輯下嫁任務
+//編輯下架任務
 export const postPostTaskEdit = (taskId, data) =>
   req("POST", `/post-task/edit/${taskId}`, data, { auth: true });
 

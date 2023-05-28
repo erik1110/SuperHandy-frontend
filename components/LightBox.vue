@@ -1,5 +1,6 @@
 <template>
   <img
+    class="sp-cursor-pointer"
     :class="lightBoxControll.class"
     :src="lightBoxControll.image"
     @click="open = true"
@@ -15,7 +16,7 @@
 <script setup>
   const lightBoxControll = defineProps({
     image: String,
-    bigImage: Number,
+    bigImage: String,
     class: String,
   });
   const open = ref(false);

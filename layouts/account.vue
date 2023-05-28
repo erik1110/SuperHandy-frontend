@@ -55,22 +55,26 @@
 <script setup>
   const route = useRoute();
   const activeRouter = ref("account");
+  const FuncCheckTabs = function (val) {
+    if (val == "/account") {
+      activeRouter.value = "account";
+    } else if (val.startsWith("/account/tasks")) {
+      activeRouter.value = "task";
+    } else if (val.startsWith("/account/comments")) {
+      activeRouter.value = "comment";
+    } else if (val.startsWith("/account/messages")) {
+      activeRouter.value = "message";
+    } else if (val.startsWith("/account/points")) {
+      activeRouter.value = "point";
+    }
+  };
   watch(
     () => route.path,
     (val) => {
-      if (val == "/account") {
-        activeRouter.value = "account";
-      } else if (val.startsWith("/account/tasks")) {
-        activeRouter.value = "task";
-      } else if (val.startsWith("/account/comments")) {
-        activeRouter.value = "comment";
-      } else if (val.startsWith("/account/messages")) {
-        activeRouter.value = "message";
-      } else if (val.startsWith("/account/points")) {
-        activeRouter.value = "point";
-      }
+      FuncCheckTabs(val);
     }
   );
+  FuncCheckTabs(route.path);
 </script>
 
 <style scoped lang="scss">
