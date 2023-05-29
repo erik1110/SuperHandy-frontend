@@ -16,7 +16,7 @@
           hide-details
           single-line
           clearable
-          @keyup.enter="_storeFindTasks.fetchListViewTasks"
+          @keyup.enter="search"
         ></v-text-field>
       </v-container>
     </div>
@@ -44,6 +44,15 @@ const _storeFindTasks = storeFindTasks();
 onBeforeMount(() => {
   _storeFindTasks.resetFilter();
 });
+
+const route = useRoute();
+const search = () => {
+  if (route.fullPath.includes("list")) {
+    _storeFindTasks.fetchListViewTasks();
+  } else {
+    _storeFindTasks.fetchMapViewTasks();
+  }
+};
 </script>
 <style lang="postcss" scoped>
 .searchBar:deep(input) {

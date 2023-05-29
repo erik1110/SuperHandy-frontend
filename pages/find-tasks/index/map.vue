@@ -14,7 +14,7 @@
         >搜尋此區域</v-btn
       >
       <v-overlay
-        v-model="loading"
+        v-model="_storeFindTasks.loading"
         contained
         class="align-center justify-center"
       >
@@ -28,8 +28,12 @@
       <LMap
         ref="map"
         id="map"
+        v-model="zoomLevel"
+        v-model:zoom="zoomLevel"
         :zoom="zoomLevel"
         :center="mapCenter"
+        :min-zoom="12"
+        :max-zoom="17"
         @update:zoom="zoomUpdated"
         @update:bounds="boundsUpdated"
       >
@@ -39,11 +43,12 @@
             <v-icon color="v-purple">mdi-crosshairs-gps</v-icon>
           </div>
         </LControl>
+
         <LTileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         ></LTileLayer>
         <LMarker
-          v-for="(t, idx) in tasks"
+          v-for="(t, idx) in mapViewTasks"
           :key="idx"
           :lat-lng="[t.location.latitude, t.location.longitude]"
         >
@@ -65,27 +70,30 @@
               {{ t.location.city }}{{ t.location.dist }}
             </div>
 
-            <p class="my-3">
+            <p class="mt-4 mb-3">
               <span class="tile">服務類型</span># {{ t.category }}
             </p>
-            <p class="my-3"><span class="tile">案主</span>{{ t.poster }} **</p>
-            <p class="my-3"><span class="tile">聯絡電話</span>09-26XXX-XXX</p>
-            <p class="my-3">
+            <p class="my-3"><span class="tile">案主</span>{{ t.posterName }}</p>
+            <!-- <p class="my-3"><span class="tile">聯絡電話</span>09-26XXX-XXX</p> -->
+            <p class="mt-3 mb-4">
               <span class="tile">案件預算</span>
               <span class="sp-text-purple sp-font-semibold sp-text-body-sm"
                 >{{ t.salary }} 超人幣</span
               >
             </p>
+
             <p class="sp-text-caption sp-text-slate-500">
               <span class="sp-pr-2 sp-mr-1 sp-border-r sp-border-slate-400"
-                >刊登時間 10 分鐘前</span
+                >刊登時間 {{ fromNow(t.publishedAt) }}</span
               >
-              {{ t.inquiriesCount }} 人詢問
+              {{ t.viewerCount }} 人詢問
             </p>
-            <v-btn color="v-purple" class="px-3">
-              <v-icon class="mr-1">mdi-cursor-pointer</v-icon>
-              查看詳情</v-btn
-            >
+            <NuxtLink :to="`/find-task/${t.taskId}`">
+              <v-btn block color="v-purple" class="px-3 mt-3">
+                <v-icon class="mr-1">mdi-cursor-pointer</v-icon>
+                查看詳情</v-btn
+              >
+            </NuxtLink>
           </LPopup>
         </LMarker>
         <LTileLayer
@@ -106,64 +114,54 @@ import {
   LIcon,
   LPopup,
   LControl,
+  LControlZoom,
 } from "@vue-leaflet/vue-leaflet";
 import { MapPinIcon, FireIcon } from "@heroicons/vue/24/solid";
 import pinImg from "@/assets/images/pin.png";
 import pinUrgentImg from "@/assets/images/pin_urgent.png";
-import tasksMock from "@/static/tasks_mock.json";
 import { storeFindTasks } from "~/stores/storeFindTasks";
+import { storeToRefs } from "pinia";
 
-const tasks = ref(tasksMock);
-const loading = ref(false);
-
-/*
-  Get Data
-*/
-
+// const loading = ref(false);
+const { fromNow } = useMoment();
 const _storeFindTasks = storeFindTasks();
-const getData = () => {
-  console.log("get data");
-  showReFetch.value = { b: false, z: false };
-};
-onMounted(() => {
-  _storeFindTasks.fetchMapViewTasks();
-});
+const { mapViewTasks, mapCenterBackup, mapCenter, zoomLevel } =
+  storeToRefs(_storeFindTasks);
+
 /*
   Map
 */
 const map = ref(null);
-const zoomLevel = ref(16);
-const mapCenter = ref([25.034436016196786, 121.56407163196346]);
-const mapCenterBackup = ref([25.034436016196786, 121.56407163196346]);
+// const zoomLevel = ref(14);
 const showReFetch = ref({ b: false, z: false });
+
 const getPosition = async () => {
   if (navigator.geolocation) {
-    loading.value = true;
-    navigator.geolocation.getCurrentPosition(function (position) {
+    _storeFindTasks.loading = true;
+    navigator.geolocation.getCurrentPosition(function async(position) {
       var latitude = position.coords.latitude;
       var longitude = position.coords.longitude;
-      // console.log("Latitude: " + latitude + ", Longitude: " + longitude);
-      mapCenter.value = [latitude, longitude];
+      _storeFindTasks.mapCenter = [latitude, longitude];
     });
     setTimeout(() => {
-      loading.value = false;
+      _storeFindTasks.loading = false;
     }, 3000);
   } else {
     console.log("Geolocation is not supported by this browser.");
-    mapCenter.value = [25.034436016196786, 121.56407163196346];
+    _storeFindTasks.mapCenter = [25.034436016196786, 121.56407163196346];
   }
 };
 // 中心點更新
 const centerUpdated = () => {
   let c = map.value.leafletObject.getCenter();
   console.log({ c });
-  mapCenterBackup.value = [c.lat, c.lng];
+  _storeFindTasks.mapCenterBackup = [c.lat, c.lng];
 };
 // 超出地圖顯示範圍，顯示重新搜尋按鈕
 const boundsUpdated = (bounds) => {
   let isContainCenter = map.value.leafletObject
     .getBounds()
-    .contains(mapCenterBackup.value);
+    .contains(_storeFindTasks.mapCenterBackup);
   if (!isContainCenter) {
     showReFetch.value.b = true;
     centerUpdated();
@@ -171,12 +169,43 @@ const boundsUpdated = (bounds) => {
     showReFetch.value.b = false;
   }
 };
+const zoomBackup = ref(0);
 const zoomUpdated = (zoom) => {
   console.log({ zoom });
-  if (zoom < 15) {
+  if (zoomBackup.value != zoom) {
+    zoomBackup.value = zoom;
     showReFetch.value.z = true;
   }
+  // // if (zoom < 13 || zoom > 15) {
+  // showReFetch.value.z = true;
+  // // }
+  calculateRadius(zoom);
 };
+// zoom 換算成半徑
+function calculateRadius(zoom) {
+  // 根據縮放級別和地圖投影系統，計算半徑範圍（以米為單位）
+  const metersPerPixel =
+    (40075016.686 *
+      Math.abs(
+        Math.cos((map.value.leafletObject.getCenter().lat * Math.PI) / 180)
+      )) /
+    Math.pow(2, zoom + 8);
+  const r = Math.round(metersPerPixel);
+  _storeFindTasks.radius = r;
+  console.log({ r });
+}
+/*
+  Get Data
+*/
+
+const getData = async () => {
+  console.log("get data");
+  showReFetch.value = { b: false, z: false };
+  await _storeFindTasks.fetchMapViewTasks();
+};
+onMounted(() => {
+  getData();
+});
 </script>
 
 <style lang="postcss" scoped>

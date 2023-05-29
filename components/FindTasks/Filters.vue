@@ -1,5 +1,5 @@
 <template>
-  <div class="filter sm:sp-mr-6 sp-min-w-[250px] sm:sp-max-w-[300px]">
+  <div class="filter sm:sp-mr-6 sp-min-w-[280px] sm:sp-max-w-[300px]">
     <div class="wrap sp-items-center sp-border-b sp-border-slate-300">
       <FunnelIcon class="sp-icon-sm sp-text-purple sp-mr-1" />
       <p class="sp-font-bold">任務條件</p>
@@ -108,8 +108,9 @@
         </v-autocomplete>
         <v-chip
           color="secondary"
-          class="my-1"
+          class="my-1 mr-1"
           closable
+          size="small"
           @click:close="deleteService(c)"
           style="color: #60c4c4 !important"
           v-for="c in _storeFindTasks.filterData.selectedCates"
@@ -161,7 +162,7 @@ const route = useRoute();
 
 watch(
   () => _storeFindTasks.filterData.city,
-  (val) => {
+  async (val) => {
     _storeFindTasks.filterData.dist = null;
     distItems.value = distData.reduce((acc, cur) => {
       if (cur.city == val) {
@@ -169,6 +170,7 @@ watch(
       }
       return acc;
     }, []);
+    _storeFindTasks.filterData.dist = distItems.value[0];
   }
 );
 const fetchServices = async () => {
@@ -189,13 +191,18 @@ const deleteService = (item) => {
 };
 
 const submitFilters = () => {
-  _storeFindTasks.page = 1;
-  _storeFindTasks.fetchListViewTasks();
+  if (route.path.includes("list")) {
+    _storeFindTasks.page = 1;
+    _storeFindTasks.fetchListViewTasks();
+  } else {
+    console.log(1);
+    _storeFindTasks.fetchMapViewTasks("filter");
+  }
 };
 //reset
 const reset = () => {
   _storeFindTasks.resetFilter();
-  _storeFindTasks.fetchListViewTasks();
+  submitFilters();
 };
 </script>
 
