@@ -11,7 +11,7 @@
                     <tbody>
                         <tr class="sp-border-b sp-h-12">
                             <td class="sp-text-v-gray-dark sp-font-bold">目前持有超人幣</td>
-                            <td class="sp-text-end">{{ _option.superCoin }}點</td>
+                            <td class="sp-text-end">{{ userCoin.superCoin }}點</td>
                         </tr>
                         <tr class="sp-border-b sp-h-12">
                             <td class="sp-text-v-gray-dark sp-font-bold">可折抵幫手幣</td>
@@ -32,11 +32,11 @@
                                     <tbody>
                                         <tr class="sp-h-10">
                                             <td class="sp-text-v-gray-dark">曝光方案</td>
-                                            <td class="sp-text-end">{{ _option.exposurePlanPoint }}點</td>
+                                            <td class="sp-text-end">{{ feeModalOption.exposurePlanPoint }}點</td>
                                         </tr>
                                         <tr class="sp-h-10">
                                             <td class="sp-text-v-gray-dark">預扣薪水</td>
-                                            <td class="sp-text-end">{{ _option.salary }}點</td>
+                                            <td class="sp-text-end">{{ feeModalOption.salary }}點</td>
                                         </tr>
                                         <tr class="sp-h-10">
                                             <td class="sp-text-v-gray-dark">折抵幫手幣</td>
@@ -66,18 +66,18 @@
                                     @update:modelValue="publishBtnDisable = !$event"></v-checkbox-btn>
                             </td>
                             <td class="sp-text-end">
-                                <div v-if="_option.isDraft">
+                                <div v-if="feeModalOption.isFromDraft">
                                     <v-form
                                         @submit.prevent="$emit('aSubmit', $event, { superCoin: total, helperCoin: helperCoinConfirm })">
                                         <v-btn color="v-purple" id="publishFromDraft" type="submit" :loading="loading"
-                                            :disabled="publishBtnDisable">確認刊登</v-btn>
+                                            :disabled="loading">確認刊登</v-btn>
                                     </v-form>
                                 </div>
                                 <div v-else>
                                     <v-form
                                         @submit.prevent="$emit('aSubmit', $event, { superCoin: total, helperCoin: helperCoinConfirm })">
                                         <v-btn color="v-purple" id="published" type="submit" :loading="loading"
-                                            :disabled="publishBtnDisable">確認刊登</v-btn>
+                                            :disabled="loading">確認刊登</v-btn>
                                     </v-form>
                                 </div>
 
@@ -100,16 +100,21 @@
 </template>
 <script setup>
 import { siteConfig } from '@/services/siteConfig'
-const { isNumber } = useFormUtil()
-const postTaskFeeModal = useState("postTaskFeeModal");
-const props = defineProps(['option', 'loading']);
-const _option = ref(props.option)
-//console.log(_option.value, '_option')
+import { storeToRefs } from "pinia";
+import { storePostTask } from "~/stores/storePostTask";
+const _storePostTask = storePostTask();
+const { userCoin, feeModalOption, postTaskFeeModal } = storeToRefs(_storePostTask);
+const { loading } = defineProps(['loading']);
+const { isNumber } = useSpUtility()
+// const postTaskFeeModal = useState("postTaskFeeModal");
+// const props = defineProps(['option', 'loading']);
+// const _option = ref(props.option)
+// //console.log(_option.value, '_option')
 
 // 計算可折抵的幫手幣金額
 const helperCoinEstimate = computed(() => {
-    const helperCoin = _option.value.helperCoin
-    const planPoint = _option.value.exposurePlanPoint
+    const helperCoin = userCoin.value.helperCoin
+    const planPoint = feeModalOption.value.exposurePlanPoint
     if (helperCoin && planPoint) {
         return helperCoin >= planPoint ? planPoint : helperCoin
     }
@@ -130,7 +135,7 @@ function calculateHelperCoin (event) {
 // 計算本次花費總金額
 const total = computed(() => {
     //  本次花費的超人幣總金額 = 曝光費用+任務薪水-折抵幫手幣
-    const value = Number(_option.value.exposurePlanPoint) + Number(_option.value.salary) - helperCoinConfirm.value
+    const value = Number(feeModalOption.value.exposurePlanPoint) + Number(userCoin.value.helperCoin) - helperCoinConfirm.value
     return isNumber(value) ? value : 0
 })
 
@@ -140,10 +145,10 @@ const publishBtnDisable = ref(true);
 
 
 // Reset
-watch(
-    () => postTaskFeeModal.value,
-    (val) => {
-        //console.log(_option.value, 'modal close')
-    }
-);
+// watch(
+//     () => postTaskFeeModal.value,
+//     (val) => {
+//         //console.log(_option.value, 'modal close')
+//     }
+// );
 </script>
