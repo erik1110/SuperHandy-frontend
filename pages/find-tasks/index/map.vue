@@ -143,6 +143,7 @@ const getPosition = async () => {
       var longitude = position.coords.longitude;
       _storeFindTasks.mapCenter = [latitude, longitude];
     });
+    await getData();
     setTimeout(() => {
       _storeFindTasks.loading = false;
     }, 3000);
