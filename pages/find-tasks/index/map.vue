@@ -142,10 +142,11 @@ const getPosition = async () => {
       var latitude = position.coords.latitude;
       var longitude = position.coords.longitude;
       _storeFindTasks.mapCenter = [latitude, longitude];
+      centerUpdated();
     });
-    await getData();
     setTimeout(() => {
       _storeFindTasks.loading = false;
+      getData();
     }, 3000);
   } else {
     console.log("Geolocation is not supported by this browser.");
