@@ -28,9 +28,11 @@
       <LMap
         ref="map"
         id="map"
+        v-model="zoomLevel"
+        v-model:zoom="zoomLevel"
         :zoom="zoomLevel"
         :center="mapCenter"
-        :min-zoom="14"
+        :min-zoom="12"
         :max-zoom="17"
         @update:zoom="zoomUpdated"
         @update:bounds="boundsUpdated"
@@ -41,6 +43,7 @@
             <v-icon color="v-purple">mdi-crosshairs-gps</v-icon>
           </div>
         </LControl>
+
         <LTileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         ></LTileLayer>
@@ -111,6 +114,7 @@ import {
   LIcon,
   LPopup,
   LControl,
+  LControlZoom,
 } from "@vue-leaflet/vue-leaflet";
 import { MapPinIcon, FireIcon } from "@heroicons/vue/24/solid";
 import pinImg from "@/assets/images/pin.png";
@@ -121,14 +125,14 @@ import { storeToRefs } from "pinia";
 // const loading = ref(false);
 const { fromNow } = useMoment();
 const _storeFindTasks = storeFindTasks();
-const { mapViewTasks, mapCenterBackup, mapCenter } =
+const { mapViewTasks, mapCenterBackup, mapCenter, zoomLevel } =
   storeToRefs(_storeFindTasks);
 
 /*
   Map
 */
 const map = ref(null);
-const zoomLevel = ref(14);
+// const zoomLevel = ref(14);
 const showReFetch = ref({ b: false, z: false });
 
 const getPosition = async () => {
@@ -165,11 +169,16 @@ const boundsUpdated = (bounds) => {
     showReFetch.value.b = false;
   }
 };
+const zoomBackup = ref(0);
 const zoomUpdated = (zoom) => {
   console.log({ zoom });
-  // if (zoom < 13 || zoom > 15) {
-  showReFetch.value.z = true;
-  // }
+  if (zoomBackup.value != zoom) {
+    zoomBackup.value = zoom;
+    showReFetch.value.z = true;
+  }
+  // // if (zoom < 13 || zoom > 15) {
+  // showReFetch.value.z = true;
+  // // }
   calculateRadius(zoom);
 };
 // zoom 換算成半徑
@@ -182,8 +191,8 @@ function calculateRadius(zoom) {
       )) /
     Math.pow(2, zoom + 8);
   const r = Math.round(metersPerPixel);
+  _storeFindTasks.radius = r;
   console.log({ r });
-  _storeFindTasks.mapFetchData.radius = r / 2;
 }
 /*
   Get Data

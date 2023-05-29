@@ -34,28 +34,30 @@ export const storeFindTasks = defineStore("findTasks", () => {
 
   // map
   const loading = ref(false)
-  const mapViewTasks = ref([]);
+const zoomLevel = ref(13);
+const mapViewTasks = ref([]);
   const mapCenter = ref([25.034436016196786, 121.56407163196346]);
   const mapCenterBackup =ref([25.034436016196786, 121.56407163196346])
-  const mapFetchData =reactive({
-    longitude: 121.56407163196346,
-    latitude: 25.034436016196786,
-    radius: 6,
-  });
-  const fetchMapViewTasks = async ()=>{
+  const radius = ref(6)
+  // const mapFetchData =reactive({
+  //   longitude: 121.56407163196346,
+  //   latitude: 25.034436016196786,
+  //   radius: 6,
+  // });
+  const fetchMapViewTasks = async (from)=>{
     loading.value = true
+    await nextTick()
     console.log({filterData});
-    if(!filterData.dist && !filterData.city){
-      mapFetchData.latitude = mapCenterBackup.value[0]
-      mapFetchData.longitude = mapCenterBackup.value[1]
-    }else{
-      delete mapFetchData.latitude 
-      delete mapFetchData.longitude 
+    if(from=='filter'){
+      zoomLevel.value = 13
     }
     let payload = {
       keyword: keyword.value,
+      radius: radius.value,
+      longitude: mapCenterBackup.value[1],
+      latitude: mapCenterBackup.value[0]
     };
-    payload = {...payload,...mapFetchData,...filterData}
+    payload = {...payload,...filterData}
     cleanNull(payload)
     console.log({payload});
 
@@ -105,11 +107,12 @@ export const storeFindTasks = defineStore("findTasks", () => {
 
   return {
     loading,
+    zoomLevel,
     keyword,
     page,
     mapCenter,
     mapCenterBackup,
-    mapFetchData,
+    radius,
     listViewTasks,
     mapViewTasks,
     taskMeta,

@@ -1,5 +1,5 @@
 <template>
-  <div class="filter sm:sp-mr-6 sp-min-w-[250px] sm:sp-max-w-[300px]">
+  <div class="filter sm:sp-mr-6 sp-min-w-[280px] sm:sp-max-w-[300px]">
     <div class="wrap sp-items-center sp-border-b sp-border-slate-300">
       <FunnelIcon class="sp-icon-sm sp-text-purple sp-mr-1" />
       <p class="sp-font-bold">任務條件</p>
@@ -196,7 +196,7 @@ const submitFilters = () => {
     _storeFindTasks.fetchListViewTasks();
   } else {
     console.log(1);
-    _storeFindTasks.fetchMapViewTasks();
+    _storeFindTasks.fetchMapViewTasks("filter");
   }
 };
 //reset
