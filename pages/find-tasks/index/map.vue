@@ -146,8 +146,10 @@ const getPosition = async () => {
     });
     setTimeout(() => {
       _storeFindTasks.loading = false;
-      getData();
     }, 3000);
+    setTimeout(() => {
+      getData();
+    }, 1000);
   } else {
     console.log("Geolocation is not supported by this browser.");
     _storeFindTasks.mapCenter = [25.034436016196786, 121.56407163196346];
