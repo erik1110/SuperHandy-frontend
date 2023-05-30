@@ -43,6 +43,7 @@
           outlined
           class="sp--translate-y-2 sp-px-4 sp-py-2 sp-text-center sp-border-2 sp-border-black sp-border-solid sp-float-right"
           @click="toDetailPage(item.taskId)"
+          :disabled="item.status == '未媒合'"
         >
           {{ item.status == "草稿" ? "編輯草稿" : "查看詳情" }}
         </v-btn>
@@ -76,26 +77,31 @@
       postList.value = listModel;
       resArray.forEach(function (item) {
         postList.value.all.push(item);
-        switch (item.status) {
-          case "媒合中": {
-            postList.value.published.push(item);
-            break;
-          }
-          case "進行中": {
-            postList.value.inProgressed.push(item);
-            break;
-          }
-          case "已完成": {
-            postList.value.confirmed.push(item);
-            break;
-          }
-          case "已下架": {
-            postList.value.unpublished.push(item);
-            break;
-          }
-          default: {
-            postList.value.other.push(item);
-            break;
+        if (item.helperStatus == "媒合失敗") {
+          item.status = "未媒合";
+          postList.value.other.push(item);
+        } else {
+          switch (item.status) {
+            case "媒合中": {
+              postList.value.published.push(item);
+              break;
+            }
+            case "進行中": {
+              postList.value.inProgressed.push(item);
+              break;
+            }
+            case "已完成": {
+              postList.value.confirmed.push(item);
+              break;
+            }
+            case "已下架": {
+              postList.value.unpublished.push(item);
+              break;
+            }
+            default: {
+              postList.value.other.push(item);
+              break;
+            }
           }
         }
       });

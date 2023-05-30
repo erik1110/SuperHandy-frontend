@@ -8,16 +8,12 @@
           color="v-purple"
           bg-color="primary-lighten"
         >
-          <v-tab value="poster"
-            ><NuxtLink class="point" to="/account/tasks/poster"
-              >案主任務</NuxtLink
-            ></v-tab
-          >
-          <v-tab value="helper"
-            ><NuxtLink class="point" to="/account/tasks/helper"
-              >幫手任務</NuxtLink
-            ></v-tab
-          >
+          <v-tab value="poster" @click="FuncPageRouter('/account/tasks/poster')"
+            >案主任務
+          </v-tab>
+          <v-tab value="helper" @click="FuncPageRouter('/account/tasks/helper')"
+            >幫手任務
+          </v-tab>
         </V-tabs>
       </VCardText></VCard
     >
@@ -31,6 +27,9 @@
   if (route.path == "/account/tasks") {
     navigateTo("/account/tasks/poster");
   }
+  const FuncPageRouter = function (route) {
+    navigateTo(route);
+  };
 </script>
 
 <style lang="scss" scoped></style>
