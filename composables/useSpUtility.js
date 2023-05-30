@@ -121,7 +121,7 @@ export const useSpUtility = () => {
         checkIsLogin,
         getTaskId,
         excuteAsyncFunc,
-        // promiseErrorHanlder,
+        promiseErrorHanlder,
         promiseAllSettledHanlder
     }
 }
