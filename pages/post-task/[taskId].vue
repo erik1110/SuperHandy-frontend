@@ -367,6 +367,8 @@ const postFormData = async (status, data) => {
 }
 const submit = async (event, taskTrans) => {
 
+  console.log( await postTaskForm.value.validate(),'postTaskForm')
+
   let _message = ''
   let _dialogType = siteConfig.dialogType.info
   let _isShowGoTaskBtn = false

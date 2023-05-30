@@ -8,20 +8,20 @@ export const postTaskConfig = {
     // 表單規則
     rules: {
         draft: {
-            title: [ruleRequired],
+            title: _formRules.taskTitle.rule,
             category: [],
             description: _formRules.taskDescription.rule,
             salary: _formRules.taskSalary.rule,
             exposurePlan: [],
-            contactInfoName: [],
+            contactInfoName: _formRules.name.rule,
             contactInfoPhone: [rulePhone],
             contactInfoEmail: [ruleEmail],
             locationCity: [],
             locationDist: [],
-            locationAddress: []
+            locationAddress: [ruleAddress]
         },
         publish: {
-            title: [ruleRequired],
+            title: _formRules.taskTitle.rule,
             category: [ruleRequired],
             description: [ruleRequired, _formRules.taskDescription.rule[0]],
             salary: _formRules.taskSalary.rule,
@@ -31,19 +31,59 @@ export const postTaskConfig = {
             contactInfoEmail: [ruleRequired, ruleEmail],
             locationCity: [ruleRequired],
             locationDist: [ruleRequired],
-            locationAddress: [ruleAddress]
+            locationAddress: [ruleRequired, ruleAddress]
+        }
+    },
+
+
+    //任務來源狀態
+    currentTaskStatus:{
+        create:'create',//新增任務
+        draft:'draft',//草稿編輯
+        unpublished:'unpublished'//下架編輯
+    },
+
+    //欄位是否開啟
+    fieldReadOnly:{
+        //全部都可以編輯
+        init:{
+            title:false,
+            category: false,
+            description: false,
+            salary: false,
+            exposurePlan: false,
+            contactInfoName: false,
+            contactInfoPhone: false,
+            contactInfoEmail: false,
+            locationCity: false,
+            locationDist: false,
+            locationAddress: false,
+        },
+        //只有任務說明,任務圖片,聯絡人
+        unpublishedEdit:{
+            title: true,
+            category: true,
+            description: false,
+            salary: true,
+            exposurePlan: true,
+            contactInfoName: false,
+            contactInfoPhone: false,
+            contactInfoEmail: false,
+            locationCity: true,
+            locationDist: true,
+            locationAddress: true,
         }
     },
 
 
     //Submit.Button
     taskSubmitter: {
-        draftAdd: "draftAdd", //新增草稿
+        draftAdd: "draftAdd", //儲存為草稿
         draftUpdate: "draftUpdate", //更新草稿
         draftDelete: "draftDelete", //刪除草稿
         publishFromDraft: "publishFromDraft", //從草稿刊登任務(因為分成兩支API)
         published: "published", //直接刊登任務(因為分成兩支API)
-        republish: "republish", //重新刊登任務
+        unpublished: "unpublished", //下架任務編輯儲存
     },
 
 

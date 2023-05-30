@@ -1,8 +1,29 @@
 import { defineStore } from "pinia";
-import { siteConfig } from '@/services/siteConfig';
+import { postTaskConfig } from '@/services/postTaskConfig';
 
 export const storePostTask = defineStore("storePostTask", () => {
 
+    //紀錄任務來源狀態
+    const currentTaskStatus = ref('')
+    const currentTaskStatusIsDraft = computed(()=>{
+        return currentTaskStatus && currentTaskStatus.value.toLowerCase() === postTaskConfig.currentTaskStatus.draft
+    })
+    const currentTaskStatusIsUnpublish =  computed(()=>{
+        return currentTaskStatus && currentTaskStatus.value.toLowerCase() === postTaskConfig.currentTaskStatus.unpublished
+    })
+
+    //formData
+    const formData = ref({
+        salary: 10,
+    })
+    const locationData = ref({})
+    const contactInfoData = ref({})
+
+
+    //紀錄曝光方案清單，任務清單，任務說明樣本
+    const exposurePlans = ref([])
+    const taskCategories = ref([])
+    const descriptionTemplateList = ref([])
 
     //紀錄超人幣和幫手幣
     const userCoin = ref({
@@ -11,26 +32,36 @@ export const storePostTask = defineStore("storePostTask", () => {
     })
 
 
+    //紀錄曝光方案點數
+    const exposurePlanPoint = ref(0)
+
+
     //按鈕的loading和disabled
-    const btnDisabled = ref(false);
+    const btnDisabled = ref(true);
     const btnLoading = ref({
-        draftAdd: false,//儲存為草稿
-        draftUpdate: false,//更新草稿
-        draftDelete: false,//刪除草稿
-        published: false//立即刊登
+        draftAdd: false, //儲存為草稿
+        draftUpdate: false, //更新草稿
+        draftDelete: false, //刪除草稿
+        publishFromDraft: false, //從草稿刊登任務(因為分成兩支API)
+        published: false, //直接刊登任務(因為分成兩支API)
+        unpublished: false, //下架任務編輯儲存
     })
 
     function openBtnLoading (option) {
         btnLoading.value.draftAdd = option.draftAdd ?? false;
         btnLoading.value.draftUpdate = option.draftUpdate ?? false;
         btnLoading.value.draftDelete = option.draftDelete ?? false;
+        btnLoading.value.publishFromDraft = option.publishFromDraft ?? false;
         btnLoading.value.published = option.published ?? false;
+        btnLoading.value.unpublished = option.unpublished ?? false;
     }
     function closeBtnLoading () {
         btnLoading.value.draftAdd = false
         btnLoading.value.draftUpdate = false
         btnLoading.value.draftDelete = false
+        btnLoading.value.publishFromDraft = false
         btnLoading.value.published = false
+        btnLoading.value.unpublished = false
     }
 
 
@@ -65,7 +96,6 @@ export const storePostTask = defineStore("storePostTask", () => {
         isFromDraft: false
     })
     function openSFeeModal (option) {
-        feeModalOption.value.exposurePlanPoint = option.exposurePlanPoint ?? 0;
         feeModalOption.value.salary = option.salary ?? 0;
         feeModalOption.value.isFromDraft = option.isFromDraft ?? false;
         postTaskFeeModal.value = true
@@ -73,8 +103,20 @@ export const storePostTask = defineStore("storePostTask", () => {
 
 
     return {
-        userCoin,
+        currentTaskStatus,
+        currentTaskStatusIsDraft,
+        currentTaskStatusIsUnpublish,
 
+        exposurePlans,
+        taskCategories,
+        descriptionTemplateList,
+
+        formData,
+        locationData,
+        contactInfoData,
+
+        userCoin,
+        exposurePlanPoint,
         btnDisabled,
 
         btnLoading,

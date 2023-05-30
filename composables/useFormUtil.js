@@ -15,8 +15,9 @@ export const useFormUtil = () => {
   const ruleConfirmPassword = (v, password) =>
     v === password || "確認密碼必須和密碼相同";
   const ruleAddress = (v) =>
+    !v || (v.length > 2 && v.indexOf("號") != -1) || "地址填寫不完整";
     //(!!v && v.length > 2 && v.indexOf("號") != -1) || "地址填寫不完整";
-    (!!v && v.length > 0) || "地址填寫不完整";
+    //(!!v && v.length > 0) || "地址填寫不完整";
   const validateFormResult = async function (form) {
     let result = false;
     if (!form.value) return result;

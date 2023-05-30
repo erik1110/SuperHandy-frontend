@@ -32,7 +32,7 @@
                                     <tbody>
                                         <tr class="sp-h-10">
                                             <td class="sp-text-v-gray-dark">曝光方案</td>
-                                            <td class="sp-text-end">{{ feeModalOption.exposurePlanPoint }}點</td>
+                                            <td class="sp-text-end">{{ exposurePlanPoint }}點</td>
                                         </tr>
                                         <tr class="sp-h-10">
                                             <td class="sp-text-v-gray-dark">預扣薪水</td>
@@ -63,21 +63,21 @@
                         <tr v-else class="sp-border-b sp-h-20">
                             <td>
                                 <v-checkbox-btn label="我已詳閱點數付款須知"
-                                    @update:modelValue="publishBtnDisable = !$event"></v-checkbox-btn>
+                                    @update:modelValue="btnDisabled = !$event"></v-checkbox-btn>
                             </td>
                             <td class="sp-text-end">
                                 <div v-if="feeModalOption.isFromDraft">
                                     <v-form
                                         @submit.prevent="$emit('aSubmit', $event, { superCoin: total, helperCoin: helperCoinConfirm })">
                                         <v-btn color="v-purple" id="publishFromDraft" type="submit" :loading="loading"
-                                            :disabled="loading">確認刊登</v-btn>
+                                            :disabled="btnDisabled">確認刊登</v-btn>
                                     </v-form>
                                 </div>
                                 <div v-else>
                                     <v-form
                                         @submit.prevent="$emit('aSubmit', $event, { superCoin: total, helperCoin: helperCoinConfirm })">
                                         <v-btn color="v-purple" id="published" type="submit" :loading="loading"
-                                            :disabled="loading">確認刊登</v-btn>
+                                            :disabled="btnDisabled">確認刊登</v-btn>
                                     </v-form>
                                 </div>
 
@@ -103,18 +103,16 @@ import { siteConfig } from '@/services/siteConfig'
 import { storeToRefs } from "pinia";
 import { storePostTask } from "~/stores/storePostTask";
 const _storePostTask = storePostTask();
-const { userCoin, feeModalOption, postTaskFeeModal } = storeToRefs(_storePostTask);
+const { userCoin, feeModalOption, postTaskFeeModal, exposurePlanPoint } = storeToRefs(_storePostTask);
 const { loading } = defineProps(['loading']);
 const { isNumber } = useSpUtility()
-// const postTaskFeeModal = useState("postTaskFeeModal");
-// const props = defineProps(['option', 'loading']);
-// const _option = ref(props.option)
-// //console.log(_option.value, '_option')
+const btnDisabled = ref(true)
+
 
 // 計算可折抵的幫手幣金額
 const helperCoinEstimate = computed(() => {
     const helperCoin = userCoin.value.helperCoin
-    const planPoint = feeModalOption.value.exposurePlanPoint
+    const planPoint = exposurePlanPoint.value
     if (helperCoin && planPoint) {
         return helperCoin >= planPoint ? planPoint : helperCoin
     }
@@ -123,7 +121,7 @@ const helperCoinEstimate = computed(() => {
 
 // 確認要折抵的幫手幣金額
 const helperCoinConfirm = ref(0)
-function calculateHelperCoin (event) {
+function calculateHelperCoin(event) {
     //console.log(event, 'calculateHelperCoin')
     if (event) {
         helperCoinConfirm.value = helperCoinEstimate.value
@@ -135,20 +133,18 @@ function calculateHelperCoin (event) {
 // 計算本次花費總金額
 const total = computed(() => {
     //  本次花費的超人幣總金額 = 曝光費用+任務薪水-折抵幫手幣
-    const value = Number(feeModalOption.value.exposurePlanPoint) + Number(userCoin.value.helperCoin) - helperCoinConfirm.value
+    const value = Number(exposurePlanPoint.value) + Number(feeModalOption.value.salary) - helperCoinConfirm.value
     return isNumber(value) ? value : 0
 })
 
 
-// 是否勾選 "我已詳閱點數付款通知"
-const publishBtnDisable = ref(true);
-
-
 // Reset
-// watch(
-//     () => postTaskFeeModal.value,
-//     (val) => {
-//         //console.log(_option.value, 'modal close')
-//     }
-// );
+watch(
+    () => postTaskFeeModal.value,
+    (nV, oV) => {
+        if (!nV) {
+            btnDisabled.value = true
+        }
+    }
+);
 </script>

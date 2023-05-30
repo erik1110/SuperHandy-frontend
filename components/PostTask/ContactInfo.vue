@@ -2,23 +2,27 @@
     <div>
         <div class='mt-4 md:sp-w-1/2'>
             <label class='label' for="contactInfoName">姓名</label>
-            <v-text-field v-model="data.name" :rules='currentRules.contactInfoName' :counter='hintMsgs.name.counter'
+            <v-text-field v-model="contactInfoData.name" :rules='currentRules.contactInfoName' :counter='hintMsgs.name.counter'
                 :hint='hintMsgs.name.hint' id="contactInfoName" @keypress.enter.prevent />
         </div>
         <div class='mt-4 md:sp-w-1/2'>
             <label class='label' for="contactInfoPhone">電話</label>
-            <v-text-field v-model="data.phone" :rules='currentRules.contactInfoPhone' id="contactInfoPhone"
+            <v-text-field v-model="contactInfoData.phone" :rules='currentRules.contactInfoPhone' id="contactInfoPhone"
                 @keypress.enter.prevent />
         </div>
         <div class='mt-4 md:sp-w-1/2'>
             <label class='label' for="contactInfoEmail">Email</label>
-            <v-text-field v-model="data.email" :rules='currentRules.contactInfoEmail' id="contactInfoEmail"
+            <v-text-field v-model="contactInfoData.email" :rules='currentRules.contactInfoEmail' id="contactInfoEmail"
                 @keypress.enter.prevent />
         </div>
     </div>
 </template>
 <script setup>
-const data = inject('contactInfo')
+import { storeToRefs } from 'pinia'
+import { storePostTask } from "@/stores/storePostTask";
+const _storePostTask = storePostTask();
+const { contactInfoData } = storeToRefs(_storePostTask);
+// const data = inject('contactInfo')
 const hintMsgs = inject('hintMsgs')
 const currentRules = inject('currentRules')
 </script>

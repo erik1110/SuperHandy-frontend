@@ -1,6 +1,6 @@
 <template>
     <v-form @submit.prevent="submit" ref="postTaskForm" validate-on="blur">
-        <PostTaskBasic />
+        <PostTaskBasic></PostTaskBasic>
 
         <div class='mt-4'>
             <label class='label'>任務說明照片(非必填)</label>
@@ -17,13 +17,17 @@
         </div>
 
         <div class='my-8'>
-            <div :class="!checkTaskId(taskId) ? 'md:sp-flex md:sp-justify-between' : 'md:sp-flex md:sp-justify-end'">
-                <div v-if="!checkTaskId(taskId)">
+            <div v-if="currentTaskStatusIsUnpublish">
+                <v-btn type='submit' id='unpublished' color="v-gray-placeholder" class='button md:sp-w-auto'
+                    :disabled="btnDisabled" :loading="btnLoading.unpublished">儲存任務</v-btn>
+            </div>
+            <div v-else :class="!currentTaskStatusIsDraft ? 'md:sp-flex md:sp-justify-between' : 'md:sp-flex md:sp-justify-end'">
+                <div v-if="!currentTaskStatusIsDraft">
                     <v-btn color="v-orange" type='button' class='button' :disabled="btnDisabled"
                         @click="resetForm">全部清除</v-btn>
                 </div>
                 <div class="md:sp-flex md:sp-justify-end md:sp-space-x-2">
-                    <div v-if="checkTaskId(taskId)" class="md:sp-space-x-2">
+                    <div v-if="currentTaskStatusIsDraft" class="md:sp-space-x-2">
                         <v-btn type='button' id='draftDelete' color="v-gray-placeholder" class='button md:sp-w-auto'
                             :disabled="btnDisabled" :loading="btnLoading.draftDelete" @click="openConfirmModal">刪除草稿</v-btn>
 
@@ -40,7 +44,7 @@
             </div>
         </div>
         <div>
-            <v-btn color="primary" class="button md:sp-w-auto" @click="fakeData">填入假資料</v-btn>
+            <v-btn v-if="!currentTaskStatusIsDraft && !currentTaskStatusIsUnpublish" color="primary" class="button md:sp-w-auto" @click="fakeData">填入假資料</v-btn>
         </div>
     </v-form>
 
@@ -53,51 +57,43 @@ import { storeToRefs } from 'pinia'
 import { storeFullOverlay } from "@/stores/storeFullOverlay";
 import { storePostTask } from "@/stores/storePostTask";
 
-
 import { postTaskConfig } from '@/services/postTaskConfig';
-
+import { getDraftById, getTasksById, deleteDraftById, executeFetchData } from '@/services/apis/postTask'
+import { getCategories, getExposurePlan } from '@/services/apis/general';
 import { getAccountPoints } from '@/services/apis/point';
-import { executeFetchData } from '@/services/apis/postTask'
 
-const { excuteAsyncFunc, checkTaskId, checkRespStatus } = useSpUtility()
+const { excuteAsyncFunc, promiseAllSettledHanlder, checkTaskId, checkRespStatus } = useSpUtility()
 const { validateFormResult } = useFormUtil();
 const _storeFullOverlay = storeFullOverlay();
 const _storePostTask = storePostTask();
 const { logInfo, logError } = useLog()
+
 const { openModal, closeModal, openBtnLoading, closeBtnLoading, openSFeeModal } = storePostTask();
-const { userCoin, btnDisabled, btnLoading, postTaskModal, postTaskFeeModal } = storeToRefs(_storePostTask);
+const { exposurePlans, taskCategories, descriptionTemplateList } = storeToRefs(_storePostTask);
+const { currentTaskStatus, currentTaskStatusIsDraft, currentTaskStatusIsUnpublish  } = storeToRefs(_storePostTask);
+const { userCoin, formData, contactInfoData, locationData } = storeToRefs(_storePostTask);
+const { btnDisabled, btnLoading, postTaskModal, postTaskFeeModal } = storeToRefs(_storePostTask);
+
 const currentRules = ref(postTaskConfig.rules.draft)
-const formData = ref({
-    salary: 10,
-    contactInfo: {},
-    location: {}
-})
 const postTaskForm = ref(null)
 const _work = '刊登任務'
 let taskId = ''
 
-
-
-provide('basic', formData.value)
-provide('contactInfo', formData.value.contactInfo)
-provide('location', formData.value.location)
 provide('hintMsgs', postTaskConfig.hintMsgs)
 provide('currentRules', currentRules)
 
 
-
 // - loading -
-function openLoading (option) {
+function openLoading(option) {
     _storeFullOverlay.open()
     btnDisabled.value = true
     openBtnLoading(option)
 }
-function closeLoading () {
+function closeLoading() {
     _storeFullOverlay.close()
     btnDisabled.value = false
     closeBtnLoading()
 }
-
 
 
 
@@ -111,13 +107,10 @@ const openFeeModal = async () => {
     //驗證失敗
     if (!result) return;
     //驗證成功
-    const exPlan = exposurePlans.value.find(item => item.title === formData.value.exposurePlan)
     openSFeeModal({
-        exposurePlanPoint: exPlan.price,
         salary: formData.value.salary,
         isFromDraft: checkTaskId(taskId)
     })
-    logInfo(_work, 'openFeeDialog', feeModalOption)
 }
 
 
@@ -129,6 +122,7 @@ const setCurrentRules = (submitter) => {
             break;
         case postTaskConfig.taskSubmitter.published:
         case postTaskConfig.taskSubmitter.publishFromDraft:
+        case postTaskConfig.taskSubmitter.unpublished:
             currentRules.value = postTaskConfig.rules.publish
             break;
         default:
@@ -161,11 +155,13 @@ const submit = async (event, taskTrans) => {
     //1. 開啟loading & disable btns
     const _submitter = event.submitter.id
     openLoading({
-        draftAdd: _submitter === postTaskConfig.taskSubmitter.addDraft,
-        draftUpdate: _submitter === postTaskConfig.taskSubmitter.updateDraft,
+        draftAdd: _submitter === postTaskConfig.taskSubmitter.draftAdd,
+        draftUpdate: _submitter === postTaskConfig.taskSubmitter.draftUpdate,
+        publishFromDraft: _submitter === postTaskConfig.taskSubmitter.publishFromDraft,
         published: _submitter === postTaskConfig.taskSubmitter.published,
+        unpublished: _submitter === postTaskConfig.taskSubmitter.unpublished,
     })
-    logInfo(_work, 'submit', event, taskTrans)
+    logInfo(_work, 'submit', _submitter, taskTrans)
 
     //2.1設定現在要使用的表單驗證規則
     setCurrentRules(_submitter)
@@ -180,24 +176,27 @@ const submit = async (event, taskTrans) => {
     //3. 更新資料
     //4. 關閉loading & reset form
     try {
-        const data = {
-            ...fromData
-        }
+        const data = {...formData.value}
+        data.imgUrls = ["https://storage.googleapis.com"]
+        data.contactInfo = {...contactInfoData.value}
+        data.location = {...locationData.value}
+
         if (taskTrans) {
             data.taskTrans = {
                 superCoin: taskTrans.superCoin,
                 helperCoin: taskTrans.helperCoin
             }
         }
+        logInfo(_work, 'formData', data)
 
-        // const response = await executeFetchData(_submitter, data, taskId)
-        // logInfo(_work, 'submit.response', response);
-        // if (response && checkRespStatus(response)) {
-        //     _isShowGoTaskBtn = true
-        // } else {
-        //     _dialogType = postTaskConfig.dialogType.error
-        // }
-        // _message = response.message
+        const response = await executeFetchData(_submitter, data, taskId)
+        logInfo(_work, 'submit.response', response);
+        if (response && checkRespStatus(response)) {
+            _isShowGoTaskBtn = true
+        } else {
+            _dialogType = postTaskConfig.dialogType.error
+        }
+        _message = response.message
 
     } catch (error) {
 
@@ -207,9 +206,8 @@ const submit = async (event, taskTrans) => {
 
     } finally {
 
-        resetForm()
         closeLoading()
-        //excuteAsyncFunc(_work, getAccountPoints, null, (response) => userCoin.value = response.data)
+        excuteAsyncFunc(_work, getAccountPoints, null, (response) => userCoin.value = response.data)
         if (_message) {
             openModal({
                 type: _dialogType,
@@ -217,7 +215,9 @@ const submit = async (event, taskTrans) => {
                 isShowGoTaskBtn: _isShowGoTaskBtn
             })
         }
-
+        // if (_isShowGoTaskBtn) {
+        //     resetForm()
+        // }
     }
 }
 
@@ -229,7 +229,7 @@ const submit = async (event, taskTrans) => {
 const resetForm = () => {
     postTaskForm.value?.reset() //防止postTaskForm null
     formData.value.salary = 10
-    // postTaskFeeModal.value = false
+    postTaskFeeModal.value = false
     postTaskModal.value = false
 }
 
@@ -242,30 +242,28 @@ const openConfirmModal = () => {
         message: '確認要刪除這筆任務草稿?',
         isShowConfirmBtn: true
     })
-
 }
 const deleteDraft = async () => {
-    openLoading({
-        overlay: true,
-        draftDelete: true
-    })
-    // console.log('deleteDraft')
-    excuteAsyncFunc(_work, deleteDraftById, taskId, (response) => {
-        resetForm()
-        closeLoading()
-        openModal({
-            message: response.message,
-            isShowGoTaskBtn: true
-        })
-    })
-    // excuteAsyncFunc(deleteDraftById, taskId, (response) => {
-    //     resetForm()
-    //     closeLoading()
-    //     openModal({
-    //         message: response.message,
-    //         isShowGoTaskBtn: true
-    //     })
-    // })
+    openLoading({ draftDelete: true })
+    promiseAllSettledHanlder(
+        [excuteAsyncFunc(_work, deleteDraftById, taskId, (response)=>{
+            openModal({
+                message:response.message
+            })
+            resetForm()
+        })]
+        //成功
+        ,null
+        //失敗
+        ,(error) => {
+            openModal({
+                type: postTaskConfig.dialogType.error,
+                message:error
+            })
+        }
+        //finally
+        ,()=> closeLoading()
+    )
 }
 
 
@@ -273,14 +271,73 @@ const deleteDraft = async () => {
 
 // Init
 const Init = () => {
-    // - 取得草稿資料 -
+    _storeFullOverlay.open()
+    btnDisabled.value = true
+
     const route = useRoute();
+    const status = route.query.status?.toLowerCase()
     taskId = route.params.taskId
-    //logInfo(taskId, 'taskId')
-    logInfo(_work, checkTaskId(taskId), 'check.taskId')
-    if (checkTaskId(taskId)) {
-        excuteAsyncFunc(_work, getDraftById, taskId, (response) => formDtata.value = response.data)
+
+    let promiseArr = [
+        excuteAsyncFunc(_work, getExposurePlan, null, (response) => exposurePlans.value = response.data),
+        excuteAsyncFunc(_work, getCategories, null, (response) => {
+            taskCategories.value = response.data
+            descriptionTemplateList.value = response.data.map(item => item.template)
+        }),
+        excuteAsyncFunc(_work, getAccountPoints, null, (response) => {
+            userCoin.value = response.data
+            //增加任務薪水檢查規則
+            const index = currentRules.value.salary.findIndex((item) => item == 'checkUserCoin')
+            if (index >= 0) {
+                currentRules.value.salary[index] = (v) => v <= userCoin.value.superCoin || `不可超過目前帳戶儲值餘額 ${userCoin.value.superCoin} 點超人幣`
+            }
+            // console.log(userCoin.value)
+        })
+    ]
+
+    if(checkTaskId(taskId) && status && status === postTaskConfig.currentTaskStatus.unpublished){
+        //任務來源:已下架任務
+        currentTaskStatus.value = postTaskConfig.currentTaskStatus.unpublished
+        promiseArr.push(excuteAsyncFunc(_work, getTasksById, taskId, (response) => {
+            formData.value = response.data
+            contactInfoData.value = response.data.contactInfo
+            locationData.value = response.data.location
+        }))
+
+    }else if(checkTaskId(taskId)){
+        //任務來源:草稿
+        currentTaskStatus.value = postTaskConfig.currentTaskStatus.draft
+        promiseArr.push(excuteAsyncFunc(_work, getDraftById, taskId, (response) => {
+            formData.value = response.data
+            contactInfoData.value = response.data.contactInfo
+            locationData.value = response.data.location
+        }))
+
+    }else{
+        //任務來源:新增任務
+        currentTaskStatus.value = postTaskConfig.currentTaskStatus.create
     }
+    logInfo(_work, currentTaskStatus.value, 'check.currentTaskStatus')
+
+
+    promiseAllSettledHanlder(
+        promiseArr
+        //成功
+        ,() => btnDisabled.value = false
+        //失敗
+        ,(error) => {
+            openModal({
+                type: postTaskConfig.dialogType.error,
+                message:error
+            })
+            btnDisabled.value = true
+        }
+        //finally
+        ,()=> {
+            _storeFullOverlay.close()
+            logInfo(_work, 'init success')
+        }
+    )
 }
 Init();
 
@@ -288,18 +345,18 @@ Init();
 
 
 // - 假資料 -
-function fakeData () {
+function fakeData() {
     formData.value.title = '測試任務'
     formData.value.category = '到府驅蟲'
     formData.value.description = 'test'
     formData.value.salary = 100
     formData.value.exposurePlan = '一般曝光'
-    formData.value.contactInfo.name = 'test'
-    formData.value.contactInfo.phone = '0910123456'
-    formData.value.contactInfo.email = 'test@gmail.com'
-    formData.value.location.city = '台北市'
-    formData.value.location.dist = '信義區'
-    formData.value.location.address = '信義路一段12號'
+    contactInfoData.value.name = 'test'
+    contactInfoData.value.phone = '0910123456'
+    contactInfoData.value.email = 'test@gmail.com'
+    locationData.value.city = '台北市'
+    locationData.value.dist = '信義區'
+    locationData.value.address = '信義路一段12號'
 }
 </script>
 <style lang="postcss" scoped>
