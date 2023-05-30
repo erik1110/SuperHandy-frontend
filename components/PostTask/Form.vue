@@ -220,9 +220,6 @@ const submit = async (event, taskTrans) => {
                 isShowGoTaskBtn: _isShowGoTaskBtn
             })
         }
-        // if (_isShowGoTaskBtn) {
-        //     resetForm()
-        // }
     }
 }
 
@@ -250,15 +247,20 @@ const openConfirmModal = () => {
 }
 const deleteDraft = async () => {
     openLoading({ draftDelete: true })
+    let _message = ''
     promiseAllSettledHanlder(
-        [excuteAsyncFunc(_work, deleteDraftById, taskId, (response) => {
-            openModal({
-                message: response.message
+        [
+            excuteAsyncFunc(_work, deleteDraftById, taskId, (response)=>{
+                _message = response.message
             })
-            resetForm()
-        })]
+        ]
         //成功
-        , null
+        , ()=>{
+            resetForm()
+            openModal({
+                message: _message
+            })
+        }
         //失敗
         , (error) => {
             openModal({
@@ -354,7 +356,7 @@ const Init = () => {
         //finally
         , () => {
             _storeFullOverlay.close()
-            logInfo(_work, 'init success')
+            logInfo(_work, 'init done')
         }
     )
 }
