@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { postTaskConfig } from '@/services/postTaskConfig';
+import { siteConfig } from '@/services/siteConfig';
 
 export const storePostTask = defineStore("storePostTask", () => {
 
@@ -82,9 +83,10 @@ export const storePostTask = defineStore("storePostTask", () => {
     }
     function closeModal () {
         postTaskModal.value = false
-        // if (!modalOption.value.isShowConfirmBtn) {
-        //     navigateTo(siteConfig.linkPaths.postTask.to)
-        // }
+        if (!modalOption.value.isShowConfirmBtn) {
+            //navigateTo(siteConfig.linkPaths.postTask.to)
+            navigateTo('/post-task/unpublished/-1')
+        }
     }
 
 

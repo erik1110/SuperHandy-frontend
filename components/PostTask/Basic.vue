@@ -2,31 +2,32 @@
     <div>
         <div class='mt-4'>
             <label class='label' for='title'>任務標題</label>
-            <v-text-field v-model='formData.title' :rules='currentRules.title' :counter='hintMsgs.taskTitle.counter'
-                :hint='hintMsgs.taskTitle.hint' placeholder="請輸入任務標題" id="title" @keypress.enter.prevent />
+            <v-text-field v-model='formData.title' :rules='currentRules.title' :disabled="currentEnabled.title"
+                :counter='hintMsgs.taskTitle.counter' :hint='hintMsgs.taskTitle.hint' placeholder="請輸入任務標題" id="title"
+                @keypress.enter.prevent />
         </div>
         <div class='mt-4'>
             <label class='label' for='category'>服務類別</label>
-            <v-select v-model='formData.category' :rules='currentRules.category' :items='taskCategories' item-title='name'
-                item-value='name' placeholder="請選擇服務類別" id="category" clearable>
+            <v-select v-model='formData.category' :rules='currentRules.category' :disabled="currentEnabled.title"
+                :items='taskCategories' item-title='name' item-value='name' placeholder="請選擇服務類別" id="category" clearable>
             </v-select>
         </div>
         <div class='mt-4'>
             <label class='label' for='description'>任務說明</label>
             <v-textarea v-model='formData.description' :rules='currentRules.description'
-                :counter='hintMsgs.taskDescription.counter' :hint='hintMsgs.taskDescription.hint' placeholder="請輸入任務說明"
-                id="description" />
+                :disabled="currentEnabled.description" :counter='hintMsgs.taskDescription.counter'
+                :hint='hintMsgs.taskDescription.hint' placeholder="請輸入任務說明" id="description" />
         </div>
         <div class='mt-4 md:sp-w-1/2 lg:sp-w-1/3'>
             <label class='label' for='salary'>任務薪水</label>
-            <v-text-field v-model='formData.salary' :rules='currentRules.salary' type='number' prefix=$ suffix=超人幣 id="salary"
-                @keypress.enter.prevent />
+            <v-text-field v-model='formData.salary' :rules='currentRules.salary' :disabled="currentEnabled.salary"
+                type='number' prefix=$ suffix=超人幣 id="salary" @keypress.enter.prevent />
         </div>
         <div class='mt-4'>
             <label class='label'>曝光方案</label>
             <div class='d-md-flex'>
                 <v-radio-group v-model='formData.exposurePlan' v-for='(item, index) in exposurePlans' :key='index'
-                    :rules='currentRules.exposurePlan'>
+                    :rules='currentRules.exposurePlan' :disabled="currentEnabled.exposurePlan">
                     <v-radio :label='`${item.title} ${item.price}點`' :value='item.title'></v-radio>
                 </v-radio-group>
             </div>
@@ -40,10 +41,12 @@ import { storeToRefs } from "pinia";
 import { storePostTask } from "@/stores/storePostTask";
 
 const currentRules = inject('currentRules')
+const currentEnabled = inject('currentFieldEnabled')
 const hintMsgs = inject('hintMsgs')
 
+
 const _storePostTask = storePostTask();
-const { formData , exposurePlanPoint } = storeToRefs(_storePostTask);
+const { formData, exposurePlanPoint } = storeToRefs(_storePostTask);
 const { exposurePlans, taskCategories, descriptionTemplateList } = storeToRefs(_storePostTask);
 
 // let descriptionTemplateList = []
@@ -117,7 +120,7 @@ watch(() => formData.value.category, (nV, oV) => {
 
 // - 紀錄曝光方案點數 -
 watch(() => formData.value.exposurePlan, (nV, oV) => {
-    if(nV){
+    if (nV) {
         const exPlan = exposurePlans.value.find(item => item.title === nV)
         exposurePlanPoint.value = exPlan.price
     }

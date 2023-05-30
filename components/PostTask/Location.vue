@@ -3,15 +3,15 @@
         <label class='label'>地址</label>
         <div class="sp-space-y-4 lg:sp-flex lg:sp-space-x-2 lg:sp-space-y-0">
             <div class=" lg:sp-w-1/2 lg:sp-flex lg:sp-space-x-2">
-                <v-select v-model="locationData.city" :rules='currentRules.locationCity' :items='countyList' item-title='city'
+                <v-select v-model="locationData.city" :rules='currentRules.locationCity' :disabled="currentEnabled.locationCity" :items='countyList' item-title='city'
                     item-value='city' label="縣市" clearable>
                 </v-select>
-                <v-select v-model='locationData.dist' :rules='currentRules.locationDist' :items='townList' item-title='dist'
+                <v-select v-model='locationData.dist' :rules='currentRules.locationDist' :disabled="currentEnabled.locationDist" :items='townList' item-title='dist'
                     item-value='dist' :hint='hintLocationDist' :readonly='readonlyLocationDist' label="區域" clearable
                     persistent-hint>
                 </v-select>
             </div>
-            <v-text-field v-model='locationData.address' :rules='currentRules.locationAddress' :counter='hintMsgs.address.counter'
+            <v-text-field v-model='locationData.address' :rules='currentRules.locationAddress' :disabled="currentEnabled.locationAddress" :counter='hintMsgs.address.counter'
                 :hint='hintMsgs.address.hint' @keypress.enter.prevent />
         </div>
     </div>
@@ -25,6 +25,7 @@ const _storePostTask = storePostTask();
 const { locationData } = storeToRefs(_storePostTask);
 // const data = inject('location')
 const currentRules = inject('currentRules')
+const currentEnabled = inject('currentFieldEnabled')
 const hintMsgs = inject('hintMsgs')
 
 

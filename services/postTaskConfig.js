@@ -44,7 +44,7 @@ export const postTaskConfig = {
     },
 
     //欄位是否開啟
-    fieldReadOnly:{
+    fieldEnabled:{
         //全部都可以編輯
         init:{
             title:false,

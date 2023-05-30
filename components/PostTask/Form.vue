@@ -21,7 +21,8 @@
                 <v-btn type='submit' id='unpublished' color="v-gray-placeholder" class='button md:sp-w-auto'
                     :disabled="btnDisabled" :loading="btnLoading.unpublished">儲存任務</v-btn>
             </div>
-            <div v-else :class="!currentTaskStatusIsDraft ? 'md:sp-flex md:sp-justify-between' : 'md:sp-flex md:sp-justify-end'">
+            <div v-else
+                :class="!currentTaskStatusIsDraft ? 'md:sp-flex md:sp-justify-between' : 'md:sp-flex md:sp-justify-end'">
                 <div v-if="!currentTaskStatusIsDraft">
                     <v-btn color="v-orange" type='button' class='button' :disabled="btnDisabled"
                         @click="resetForm">全部清除</v-btn>
@@ -44,7 +45,8 @@
             </div>
         </div>
         <div>
-            <v-btn v-if="!currentTaskStatusIsDraft && !currentTaskStatusIsUnpublish" color="primary" class="button md:sp-w-auto" @click="fakeData">填入假資料</v-btn>
+            <v-btn v-if="!currentTaskStatusIsDraft && !currentTaskStatusIsUnpublish" color="primary"
+                class="button md:sp-w-auto" @click="fakeData">填入假資料</v-btn>
         </div>
     </v-form>
 
@@ -70,26 +72,28 @@ const { logInfo, logError } = useLog()
 
 const { openModal, closeModal, openBtnLoading, closeBtnLoading, openSFeeModal } = storePostTask();
 const { exposurePlans, taskCategories, descriptionTemplateList } = storeToRefs(_storePostTask);
-const { currentTaskStatus, currentTaskStatusIsDraft, currentTaskStatusIsUnpublish  } = storeToRefs(_storePostTask);
+const { currentTaskStatus, currentTaskStatusIsDraft, currentTaskStatusIsUnpublish } = storeToRefs(_storePostTask);
 const { userCoin, formData, contactInfoData, locationData } = storeToRefs(_storePostTask);
 const { btnDisabled, btnLoading, postTaskModal, postTaskFeeModal } = storeToRefs(_storePostTask);
 
 const currentRules = ref(postTaskConfig.rules.draft)
+const currentFieldEnabled = ref(postTaskConfig.fieldEnabled.unpublishedEdit)
 const postTaskForm = ref(null)
 const _work = '刊登任務'
 let taskId = ''
 
 provide('hintMsgs', postTaskConfig.hintMsgs)
 provide('currentRules', currentRules)
+provide('currentFieldEnabled', currentFieldEnabled)
 
 
 // - loading -
-function openLoading(option) {
+function openLoading (option) {
     _storeFullOverlay.open()
     btnDisabled.value = true
     openBtnLoading(option)
 }
-function closeLoading() {
+function closeLoading () {
     _storeFullOverlay.close()
     btnDisabled.value = false
     closeBtnLoading()
@@ -176,10 +180,10 @@ const submit = async (event, taskTrans) => {
     //3. 更新資料
     //4. 關閉loading & reset form
     try {
-        const data = {...formData.value}
-        data.imgUrls = ["https://storage.googleapis.com"]
-        data.contactInfo = {...contactInfoData.value}
-        data.location = {...locationData.value}
+        const data = { ...formData.value }
+        data.imagesUrl = ["https://example.com/image1.jpg", "https://example.com/mage2.jpg"]
+        data.contactInfo = { ...contactInfoData.value }
+        data.location = { ...locationData.value }
 
         if (taskTrans) {
             data.taskTrans = {
@@ -205,7 +209,8 @@ const submit = async (event, taskTrans) => {
         logError(_work, 'submit', { error });
 
     } finally {
-
+        //暫時先導頁回-1
+        resetForm()
         closeLoading()
         excuteAsyncFunc(_work, getAccountPoints, null, (response) => userCoin.value = response.data)
         if (_message) {
@@ -246,23 +251,23 @@ const openConfirmModal = () => {
 const deleteDraft = async () => {
     openLoading({ draftDelete: true })
     promiseAllSettledHanlder(
-        [excuteAsyncFunc(_work, deleteDraftById, taskId, (response)=>{
+        [excuteAsyncFunc(_work, deleteDraftById, taskId, (response) => {
             openModal({
-                message:response.message
+                message: response.message
             })
             resetForm()
         })]
         //成功
-        ,null
+        , null
         //失敗
-        ,(error) => {
+        , (error) => {
             openModal({
                 type: postTaskConfig.dialogType.error,
-                message:error
+                message: error
             })
         }
         //finally
-        ,()=> closeLoading()
+        , () => closeLoading()
     )
 }
 
@@ -295,25 +300,38 @@ const Init = () => {
         })
     ]
 
-    if(checkTaskId(taskId) && status && status === postTaskConfig.currentTaskStatus.unpublished){
+    if (checkTaskId(taskId) && status && status === postTaskConfig.currentTaskStatus.unpublished) {
         //任務來源:已下架任務
         currentTaskStatus.value = postTaskConfig.currentTaskStatus.unpublished
         promiseArr.push(excuteAsyncFunc(_work, getTasksById, taskId, (response) => {
-            formData.value = response.data
+            formData.value.title = response.data.title
+            formData.value.category = response.data.category
+            formData.value.description = response.data.description
+            formData.value.salary = response.data.salary
+            formData.value.exposurePlan = '一般曝光'
             contactInfoData.value = response.data.contactInfo
-            locationData.value = response.data.location
+            locationData.value = {
+                city: '台北市',
+                dist: '信義區',
+                address: '信義路一段12號'
+            }
         }))
 
-    }else if(checkTaskId(taskId)){
+    } else if (checkTaskId(taskId)) {
         //任務來源:草稿
         currentTaskStatus.value = postTaskConfig.currentTaskStatus.draft
         promiseArr.push(excuteAsyncFunc(_work, getDraftById, taskId, (response) => {
-            formData.value = response.data
+            formData.value.title = response.data.title
+            formData.value.category = response.data.category
+            formData.value.description = response.data.description
+            formData.value.salary = response.data.salary
+            formData.value.exposurePlan = response.data.exposurePlan
+            //formData.value.imgUrls = data.imgUrls
             contactInfoData.value = response.data.contactInfo
             locationData.value = response.data.location
         }))
 
-    }else{
+    } else {
         //任務來源:新增任務
         currentTaskStatus.value = postTaskConfig.currentTaskStatus.create
     }
@@ -323,17 +341,17 @@ const Init = () => {
     promiseAllSettledHanlder(
         promiseArr
         //成功
-        ,() => btnDisabled.value = false
+        , () => btnDisabled.value = false
         //失敗
-        ,(error) => {
+        , (error) => {
             openModal({
                 type: postTaskConfig.dialogType.error,
-                message:error
+                message: error
             })
             btnDisabled.value = true
         }
         //finally
-        ,()=> {
+        , () => {
             _storeFullOverlay.close()
             logInfo(_work, 'init success')
         }
@@ -345,7 +363,7 @@ Init();
 
 
 // - 假資料 -
-function fakeData() {
+function fakeData () {
     formData.value.title = '測試任務'
     formData.value.category = '到府驅蟲'
     formData.value.description = 'test'
