@@ -1,4 +1,5 @@
 const { req } = useHttp();
+import { postTaskConfig } from "../postTaskConfig";
 
 // 檢查地址
 export const getLocation = (data) =>
@@ -36,10 +37,33 @@ export const postPostTaskUnpublish = (taskId) =>
 export const postPostTaskRepublish = (taskId) =>
   req("POST", `/post-task/republish/${taskId}`, {}, { auth: true });
 
-//編輯下架任務
+//編輯(儲存)下架任務
 export const postPostTaskEdit = (taskId, data) =>
   req("POST", `/post-task/edit/${taskId}`, data, { auth: true });
 
 // 取得已發布的任務
 export const getTasksById = (taskId, data) =>
   req("GET", `/tasks/management/${taskId}`, data, { auth: true });
+
+
+export const executeFetchData = async (submitter, data, taskId) => {
+  switch (submitter) {
+    case postTaskConfig.taskSubmitter.draftAdd:
+      return await postDraft(data);
+
+    case postTaskConfig.taskSubmitter.draftUpdate:
+      return await putDraftById(taskId, data);
+
+    case postTaskConfig.taskSubmitter.published:
+      return await postPublish(data);
+
+    case postTaskConfig.taskSubmitter.publishFromDraft:
+      return await postPublishFromDraft(taskId, data);
+
+    case postTaskConfig.taskSubmitter.unpublished:
+        return await postPostTaskEdit(taskId, data);
+
+    default:
+      break;
+  }
+}

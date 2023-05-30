@@ -1,5 +1,6 @@
 const { logInfo, logError } = useLog()
 
+
 export const useSpUtility = () => {
     const isNumber = n => (typeof (n) === 'number' || n instanceof Number );
     const checkIsLogin = () => useCookie("spToken").value?.length > 0 ?? false
@@ -79,6 +80,37 @@ export const useSpUtility = () => {
       }
       return ''
     }
+    const promiseAllSettledHanlder = (promiseArr, successFunc, errorFunc, finalFunc) => {
+        Promise.allSettled(promiseArr).then((results) => {
+          if (!process.client) return;
+          const errors = results.filter((item) => item.status == 'rejected')
+
+          //成功
+          if(errors.length == 0){
+            if(successFunc && typeof successFunc === 'function'){
+              successFunc()
+            }
+            return;
+          }
+
+          //失敗
+          let errorMsgs = []
+          errors.map(item => {
+              if(!errorMsgs.includes(item.reason)){
+                errorMsgs.push(item.reason)
+              }
+          })
+
+          if(errorMsgs.length > 0 && errorFunc && typeof errorFunc === 'function'){
+            errorFunc(errorMsgs.join())
+          }
+
+        }).finally(() =>{
+          if(finalFunc && typeof finalFunc === 'function'){
+            finalFunc()
+          }
+      });
+    }
 
 
 
@@ -89,6 +121,7 @@ export const useSpUtility = () => {
         checkIsLogin,
         getTaskId,
         excuteAsyncFunc,
-        promiseErrorHanlder
+        promiseErrorHanlder,
+        promiseAllSettledHanlder
     }
 }
