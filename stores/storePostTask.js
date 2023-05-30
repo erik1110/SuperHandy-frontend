@@ -84,8 +84,7 @@ export const storePostTask = defineStore("storePostTask", () => {
     function closeModal () {
         postTaskModal.value = false
         if (!modalOption.value.isShowConfirmBtn) {
-            //navigateTo(siteConfig.linkPaths.postTask.to)
-            navigateTo('/post-task/unpublished/-1')
+            navigateTo(siteConfig.linkPaths.postTask.to)
         }
     }
 
