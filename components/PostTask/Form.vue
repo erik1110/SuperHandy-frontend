@@ -1,6 +1,6 @@
 <template>
     <v-form @submit.prevent="submit" ref="postTaskForm" validate-on="blur">
-        <PostTaskBasic></PostTaskBasic>
+        <PostTaskBasic />
 
         <div class='mt-4'>
             <label class='label'>任務說明照片(非必填)</label>
@@ -77,7 +77,7 @@ const { userCoin, formData, contactInfoData, locationData } = storeToRefs(_store
 const { btnDisabled, btnLoading, postTaskModal, postTaskFeeModal } = storeToRefs(_storePostTask);
 
 const currentRules = ref(postTaskConfig.rules.draft)
-const currentFieldEnabled = ref(postTaskConfig.fieldEnabled.unpublishedEdit)
+const currentFieldEnabled = ref(postTaskConfig.fieldEnabled.init)
 const postTaskForm = ref(null)
 const _work = '刊登任務'
 let taskId = ''
@@ -303,6 +303,7 @@ const Init = () => {
     if (checkTaskId(taskId) && status && status === postTaskConfig.currentTaskStatus.unpublished) {
         //任務來源:已下架任務
         currentTaskStatus.value = postTaskConfig.currentTaskStatus.unpublished
+        currentFieldEnabled.value = postTaskConfig.fieldEnabled.unpublishedEdit
         promiseArr.push(excuteAsyncFunc(_work, getTasksById, taskId, (response) => {
             formData.value.title = response.data.title
             formData.value.category = response.data.category
