@@ -101,9 +101,9 @@ export const storePostTask = defineStore("storePostTask", () => {
     }
     function closeModal () {
         postTaskModal.value = false
-        if (!modalOption.value.isShowConfirmBtn) {
-            navigateTo(siteConfig.linkPaths.postTask.to)
-        }
+        // if (!modalOption.value.isShowConfirmBtn) {
+        //     navigateTo(siteConfig.linkPaths.postTask.to)
+        // }
     }
     function execConfirmCallback(){
         _useLog.logInfo('execConfirmCallback', modalOption.value.confirmCallback.name)
