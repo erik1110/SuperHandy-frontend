@@ -197,6 +197,7 @@ const submit = async (event, taskTrans) => {
         logInfo(_work, 'submit.response', response);
         if (response && checkRespStatus(response)) {
             _isShowGoTaskBtn = true
+            resetForm()
         } else {
             _dialogType = postTaskConfig.dialogType.error
         }
@@ -210,7 +211,6 @@ const submit = async (event, taskTrans) => {
 
     } finally {
         //暫時先導頁回-1
-        resetForm()
         closeLoading()
         excuteAsyncFunc(_work, getAccountPoints, null, (response) => userCoin.value = response.data)
         if (_message) {
