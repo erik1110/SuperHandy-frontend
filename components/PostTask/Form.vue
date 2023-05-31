@@ -30,7 +30,7 @@
                 <div class="md:sp-flex md:sp-justify-end md:sp-space-x-2">
                     <div v-if="currentTaskStatusIsDraft" class="md:sp-space-x-2">
                         <v-btn type='button' id='draftDelete' color="v-gray-placeholder" class='button md:sp-w-auto'
-                            :disabled="btnDisabled" :loading="btnLoading.draftDelete" @click="openConfirmModal">刪除草稿</v-btn>
+                            :disabled="btnDisabled" :loading="btnLoading.draftDelete" @click="confirmDeleteDraft">刪除草稿</v-btn>
 
                         <v-btn type='submit' id='draftUpdate' color="v-gray-placeholder" class='button md:sp-w-auto'
                             :disabled="btnDisabled" :loading="btnLoading.draftUpdate">更新草稿</v-btn>
@@ -52,7 +52,7 @@
 
     <PostTaskFeeModal :loading="btnLoading.published" @aClose="postTaskFeeModal = false" @aSubmit="submit">
     </PostTaskFeeModal>
-    <PostTaskModal @close="closeModal" @aDeleteDraft="deleteDraft"></PostTaskModal>
+    <PostTaskModal @close="closeModal" @aConfirm="execConfirmCallback"></PostTaskModal>
 </template>
 <script setup>
 import { storeToRefs } from 'pinia'
@@ -64,16 +64,16 @@ import { getDraftById, getTasksById, deleteDraftById, executeFetchData } from '@
 import { getCategories, getExposurePlan } from '@/services/apis/general';
 import { getAccountPoints } from '@/services/apis/point';
 
-const { excuteAsyncFunc, promiseAllSettledHanlder, checkTaskId, checkRespStatus } = useSpUtility()
+const { excuteAsyncFunc, promiseAllSettledHanlder, checkTaskId, checkRespStatus, checkIsFunc } = useSpUtility()
 const { validateFormResult } = useFormUtil();
 const _storeFullOverlay = storeFullOverlay();
 const _storePostTask = storePostTask();
 const { logInfo, logError } = useLog()
 
-const { openModal, closeModal, openBtnLoading, closeBtnLoading, openSFeeModal } = storePostTask();
+const { openConfirmModal, openModal, closeModal, execConfirmCallback,openBtnLoading, closeBtnLoading, openSFeeModal } = storePostTask();
 const { exposurePlans, taskCategories, descriptionTemplateList } = storeToRefs(_storePostTask);
 const { currentTaskStatus, currentTaskStatusIsDraft, currentTaskStatusIsUnpublish } = storeToRefs(_storePostTask);
-const { userCoin, formData, contactInfoData, locationData } = storeToRefs(_storePostTask);
+const { userCoin, formData, imgUrls, contactInfoData, locationData } = storeToRefs(_storePostTask);
 const { btnDisabled, btnLoading, postTaskModal, postTaskFeeModal } = storeToRefs(_storePostTask);
 
 const currentRules = ref(postTaskConfig.rules.draft)
@@ -88,12 +88,12 @@ provide('currentFieldEnabled', currentFieldEnabled)
 
 
 // - loading -
-function openLoading (option) {
+function openLoading(option) {
     _storeFullOverlay.open()
     btnDisabled.value = true
     openBtnLoading(option)
 }
-function closeLoading () {
+function closeLoading() {
     _storeFullOverlay.close()
     btnDisabled.value = false
     closeBtnLoading()
@@ -181,7 +181,7 @@ const submit = async (event, taskTrans) => {
     //4. 關閉loading & reset form
     try {
         const data = { ...formData.value }
-        data.imagesUrl = ["https://example.com/image1.jpg", "https://example.com/mage2.jpg"]
+        data.imgUrls = [...imgUrls.value]
         data.contactInfo = { ...contactInfoData.value }
         data.location = { ...locationData.value }
 
@@ -233,29 +233,28 @@ const resetForm = () => {
     formData.value.salary = 10
     postTaskFeeModal.value = false
     postTaskModal.value = false
+    imgUrls.value = []
 }
 
 
 
 
 // - 刪除草稿 -
-const openConfirmModal = () => {
-    openModal({
-        message: '確認要刪除這筆任務草稿?',
-        isShowConfirmBtn: true
-    })
+const confirmDeleteDraft = () => {
+    openConfirmModal('確認要刪除這筆任務草稿?',deleteDraft)
 }
-const deleteDraft = async () => {
+async function deleteDraft(){
+    postTaskModal.value = false
     openLoading({ draftDelete: true })
     let _message = ''
     promiseAllSettledHanlder(
         [
-            excuteAsyncFunc(_work, deleteDraftById, taskId, (response)=>{
+            excuteAsyncFunc(_work, deleteDraftById, taskId, (response) => {
                 _message = response.message
             })
         ]
         //成功
-        , ()=>{
+        , () => {
             resetForm()
             openModal({
                 message: _message
@@ -269,12 +268,14 @@ const deleteDraft = async () => {
             })
         }
         //finally
-        , () => closeLoading()
+        , () => {
+            closeLoading()
+        }
     )
 }
+// const deleteDraft = async () => {
 
-
-
+// }
 
 // Init
 const Init = () => {
@@ -329,7 +330,7 @@ const Init = () => {
             formData.value.description = response.data.description
             formData.value.salary = response.data.salary
             formData.value.exposurePlan = response.data.exposurePlan
-            //formData.value.imgUrls = data.imgUrls
+            //imgUrls.value = response.data.imgUrls
             contactInfoData.value = response.data.contactInfo
             locationData.value = response.data.location
         }))
@@ -366,7 +367,7 @@ Init();
 
 
 // - 假資料 -
-function fakeData () {
+function fakeData() {
     formData.value.title = '測試任務'
     formData.value.category = '到府驅蟲'
     formData.value.description = 'test'

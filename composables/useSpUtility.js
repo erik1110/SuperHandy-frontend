@@ -5,6 +5,8 @@ export const useSpUtility = () => {
     const isNumber = n => (typeof (n) === 'number' || n instanceof Number );
     const checkIsLogin = () => useCookie("spToken").value?.length > 0 ?? false
     const checkTaskId = taskId => taskId && taskId.length == 24 ? true : false
+    const checkUploadImage = (fileSize,maxSize) => fileSize > maxSize ? false : true
+    const checkIsFunc = (func) => (func && typeof func === 'function') ? true : false
     const checkRespStatus = res => {
         const _status = {
           false: "false",
@@ -114,11 +116,15 @@ export const useSpUtility = () => {
 
 
 
+
+
     return {
         isNumber,
         checkRespStatus,
         checkTaskId,
         checkIsLogin,
+        checkUploadImage,
+        checkIsFunc,
         getTaskId,
         excuteAsyncFunc,
         promiseErrorHanlder,
