@@ -18,7 +18,7 @@
                             <td>
                                 <div class="d-flex align-center justify-end">
                                     <span>{{ helperCoinEstimate }}點</span>
-                                    <v-checkbox-btn @update:modelValue="calculateHelperCoin"></v-checkbox-btn>
+                                    <v-checkbox-btn v-model="chkHelperCoinEstimate" @update:modelValue="calculateHelperCoin"></v-checkbox-btn>
                                 </div>
                             </td>
                         </tr>
@@ -99,14 +99,15 @@
     </v-dialog>
 </template>
 <script setup>
-import { siteConfig } from '@/services/siteConfig'
 import { storeToRefs } from "pinia";
+import { siteConfig } from '@/services/siteConfig'
 import { storePostTask } from "~/stores/storePostTask";
 const _storePostTask = storePostTask();
 const { userCoin, feeModalOption, postTaskFeeModal, exposurePlanPoint } = storeToRefs(_storePostTask);
 const { loading } = defineProps(['loading']);
 const { isNumber } = useSpUtility()
 const btnDisabled = ref(true)
+const chkHelperCoinEstimate = ref(false)
 
 
 // 計算可折抵的幫手幣金額
@@ -122,8 +123,7 @@ const helperCoinEstimate = computed(() => {
 // 確認要折抵的幫手幣金額
 const helperCoinConfirm = ref(0)
 function calculateHelperCoin(event) {
-    //console.log(event, 'calculateHelperCoin')
-    if (event) {
+    if (chkHelperCoinEstimate) {
         helperCoinConfirm.value = helperCoinEstimate.value
     } else {
         helperCoinConfirm.value = 0
@@ -144,6 +144,8 @@ watch(
     (nV, oV) => {
         if (!nV) {
             btnDisabled.value = true
+            chkHelperCoinEstimate.value = false
+            helperCoinConfirm.value = 0
         }
     }
 );

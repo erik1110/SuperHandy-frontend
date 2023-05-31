@@ -13,7 +13,7 @@
       </div>
 
       <div class="text-center sp-mt-8" :class="modalOption.isShowConfirmBtn ? '' : 'd-none'">
-        <v-btn color="primary me-4" @click="$emit('aDeleteDraft')">確認</v-btn>
+        <v-btn color="primary me-4" @click="$emit('aConfirm')">確認</v-btn>
         <v-btn color="v-gray-placeholder" @click="postTaskModal = false">取消</v-btn>
       </div>
 
@@ -26,4 +26,11 @@ import { storeToRefs } from "pinia";
 import { storePostTask } from "@/stores/storePostTask";
 const _storePostTask = storePostTask();
 const { modalOption, postTaskModal } = storeToRefs(_storePostTask);
+
+
+// watch(() => postTaskModal.value,(nV,oV)=>{
+//   if(!nV){
+
+//   }
+// })
 </script>

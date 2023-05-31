@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { postTaskConfig } from '@/services/postTaskConfig';
 import { siteConfig } from '@/services/siteConfig';
+const _useSpUtility = useSpUtility()
+const _useLog = useLog()
 
 export const storePostTask = defineStore("storePostTask", () => {
 
@@ -17,6 +19,7 @@ export const storePostTask = defineStore("storePostTask", () => {
     const formData = ref({
         salary: 10,
     })
+    const imgUrls = ref([])
     const locationData = ref({})
     const contactInfoData = ref({})
 
@@ -72,13 +75,28 @@ export const storePostTask = defineStore("storePostTask", () => {
         type: '',
         message: '',
         isShowGoTaskBtn: false,
-        isShowConfirmBtn: false
+        isShowConfirmBtn: false,
+        confirmCallback: null
     })
+    const openConfirmModal = (text,callback) => {
+        if(_useSpUtility.checkIsFunc(callback)){
+            openModal({isShowConfirmBtn:true, message:text, confirmCallback:callback})
+        }else{
+            openModal({isShowConfirmBtn:true, message:text})
+        }
+    }
+    const openInfoModal = (text) => {
+        openModal({type:postTaskConfig.dialogType.info, message:text})
+    }
+    const openErrorModal = (text) => {
+        openModal({type:postTaskConfig.dialogType.error, message:text})
+    }
     function openModal (option) {
         modalOption.value.type = option.type ?? '';
         modalOption.value.message = option.message ?? '';
         modalOption.value.isShowGoTaskBtn = option.isShowGoTaskBtn ?? false;
         modalOption.value.isShowConfirmBtn = option.isShowConfirmBtn ?? false;
+        modalOption.value.confirmCallback = option.confirmCallback ?? null
         postTaskModal.value = true
     }
     function closeModal () {
@@ -87,6 +105,13 @@ export const storePostTask = defineStore("storePostTask", () => {
             navigateTo(siteConfig.linkPaths.postTask.to)
         }
     }
+    function execConfirmCallback(){
+        _useLog.logInfo('execConfirmCallback', modalOption.value.confirmCallback.name)
+        if(_useSpUtility.checkIsFunc(modalOption.value.confirmCallback)){
+            modalOption.value.confirmCallback()
+        }
+    }
+
 
 
     //顯示刊登費用計算視窗
@@ -113,6 +138,7 @@ export const storePostTask = defineStore("storePostTask", () => {
         descriptionTemplateList,
 
         formData,
+        imgUrls,
         locationData,
         contactInfoData,
 
@@ -126,8 +152,12 @@ export const storePostTask = defineStore("storePostTask", () => {
 
         postTaskModal,
         modalOption,
+        openConfirmModal,
+        openInfoModal,
+        openErrorModal,
         openModal,
         closeModal,
+        execConfirmCallback,
 
         postTaskFeeModal,
         feeModalOption,

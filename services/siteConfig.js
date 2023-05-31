@@ -34,19 +34,12 @@ export const siteConfig = {
     comments: { title: "評價查看", to: "/account/comments" },
   },
 
-  //任務狀態
-  taskStatus: {
-    addDraft: "addDraft", //新增草稿
-    updateDraft: "updateDraft", //更新草稿
-    deleteDraft: "deleteDraft", //刪除草稿
-    publishFromDraft: "publishFromDraft", //從草稿刊登任務
-    published: "published", //直接刊登任務
-    republish: "republish", //重新刊登任務
-  },
+  Image:{
+    upload:{
+      maxSize:2097152,// 2MB
+      maxSizeCn:'2MB',
+    }
 
-
-  dialogType: {
-    info: 'primary',
-    error: 'error'
   }
+
 };

@@ -48,7 +48,7 @@
                     </div>
                     <div class="number-wrap sp-text-gray-placeholder">
                         <span class="number sp-inline-block">{{ performanceData.numOfCompletedTasks }}</span>
-                        <span class="sp-inline-block">發案數</span>
+                        <span class="sp-inline-block">接案數</span>
                     </div>
                     <div class="number-wrap sp-text-gray-placeholder ">
                         <div class="sp-inline-block">
