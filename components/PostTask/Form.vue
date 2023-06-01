@@ -312,13 +312,10 @@ const Init = () => {
             formData.value.category = response.data.category
             formData.value.description = response.data.description
             formData.value.salary = response.data.salary
-            formData.value.exposurePlan = '一般曝光'
+            formData.value.exposurePlan = response.data.exposurePlan
+            imgUrls.value = response.data.imgUrls
             contactInfoData.value = response.data.contactInfo
-            locationData.value = {
-                city: '台北市',
-                dist: '信義區',
-                address: '信義路一段12號'
-            }
+            locationData.value = response.data.location
         }))
 
     } else if (checkTaskId(taskId)) {
@@ -330,7 +327,7 @@ const Init = () => {
             formData.value.description = response.data.description
             formData.value.salary = response.data.salary
             formData.value.exposurePlan = response.data.exposurePlan
-            //imgUrls.value = response.data.imgUrls
+            imgUrls.value = response.data.imgUrls
             contactInfoData.value = response.data.contactInfo
             locationData.value = response.data.location
         }))
