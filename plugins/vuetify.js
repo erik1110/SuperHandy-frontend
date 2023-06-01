@@ -20,6 +20,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       "v-gray-bg": "#F3F3F3",
       "v-gray-bg-secondary": "#F3F3F3",
       "on-v-gray-bg-secondary": "#E68244",
+      "v-pink": "#fc4157",
       error: "#B00020",
       info: "#B7EEEE",
       success: "#DFDFFF",
