@@ -3,7 +3,34 @@ const _formRules = formRules()
 export const postTaskConfig = {
 
     // 表單提示
-    hintMsgs: _formRules,
+    hintMsgs: {
+        counter:{
+            title: _formRules.taskTitle.counter,
+            category: '',
+            description: _formRules.taskDescription.counter,
+            salary: '',
+            exposurePlan: '',
+            contactInfoName: _formRules.name.counter,
+            contactInfoPhone: '',
+            contactInfoEmail: '',
+            locationCity: '',
+            locationDist: '',
+            locationAddress: _formRules.address.counter,
+        },
+        hint:{
+            title: _formRules.taskTitle.hint,
+            category: '',
+            description: _formRules.taskDescription.hint,
+            salary: '最少需要 10 點超人幣',
+            exposurePlan: '',
+            contactInfoName: _formRules.name.hint,
+            contactInfoPhone: '請輸入有效的手機號碼:09開頭共10碼',
+            contactInfoEmail: '請輸入有效的Email格式:abc@email.com',
+            locationCity: '',
+            locationDist: '',
+            locationAddress: _formRules.address.hint,
+        }
+    },
 
     // 表單規則
     rules: {

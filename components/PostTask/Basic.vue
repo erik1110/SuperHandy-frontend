@@ -3,8 +3,8 @@
         <div class='mt-4'>
             <label class='label' for='title'>任務標題</label>
             <v-text-field v-model='formData.title' :rules='currentRules.title' :disabled="currentEnabled.title"
-                :counter='hintMsgs.taskTitle.counter' :hint='hintMsgs.taskTitle.hint' placeholder="請輸入任務標題" id="title"
-                @keypress.enter.prevent />
+                :counter='hintMsgs.counter.title' :hint='hintMsgs.hint.title' placeholder="請輸入任務標題" id="title"
+                @keypress.enter.prevent clearable/>
         </div>
         <div class='mt-4'>
             <label class='label' for='category'>服務類別</label>
@@ -15,12 +15,12 @@
         <div class='mt-4'>
             <label class='label' for='description'>任務說明</label>
             <v-textarea v-model='formData.description' :rules='currentRules.description'
-                :disabled="currentEnabled.description" :counter='hintMsgs.taskDescription.counter'
-                :hint='hintMsgs.taskDescription.hint' placeholder="請輸入任務說明" id="description" />
+                :disabled="currentEnabled.description" :counter='hintMsgs.counter.description'
+                :hint='hintMsgs.hint.description' placeholder="請輸入任務說明" id="description" clearable/>
         </div>
         <div class='mt-4 md:sp-w-1/2 lg:sp-w-1/3'>
             <label class='label' for='salary'>任務薪水</label>
-            <v-text-field v-model='formData.salary' :rules='currentRules.salary' :disabled="currentEnabled.salary"
+            <v-text-field v-model='formData.salary' :rules='currentRules.salary' :disabled="currentEnabled.salary" :hint='hintMsgs.hint.salary'
                 type='number' prefix=$ suffix=超人幣 id="salary" @keypress.enter.prevent />
         </div>
         <div class='mt-4'>

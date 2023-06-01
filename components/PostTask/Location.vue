@@ -11,8 +11,8 @@
                     persistent-hint>
                 </v-select>
             </div>
-            <v-text-field v-model='locationData.address' :rules='currentRules.locationAddress' :disabled="currentEnabled.locationAddress" :counter='hintMsgs.address.counter'
-                :hint='hintMsgs.address.hint' @keypress.enter.prevent />
+            <v-text-field v-model='locationData.address' :rules='currentRules.locationAddress' :disabled="currentEnabled.locationAddress" :counter='hintMsgs.counter.locationAddress'
+                :hint='hintMsgs.hint.locationAddress' @keypress.enter.prevent clearable />
         </div>
     </div>
 </template>
