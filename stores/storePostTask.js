@@ -76,7 +76,8 @@ export const storePostTask = defineStore("storePostTask", () => {
         message: '',
         isShowGoTaskBtn: false,
         isShowConfirmBtn: false,
-        confirmCallback: null
+        confirmCallback: null,
+        closeCallback: null
     })
     const openConfirmModal = (text,callback) => {
         if(_useSpUtility.checkIsFunc(callback)){
@@ -96,19 +97,29 @@ export const storePostTask = defineStore("storePostTask", () => {
         modalOption.value.message = option.message ?? '';
         modalOption.value.isShowGoTaskBtn = option.isShowGoTaskBtn ?? false;
         modalOption.value.isShowConfirmBtn = option.isShowConfirmBtn ?? false;
-        modalOption.value.confirmCallback = option.confirmCallback ?? null
+        modalOption.value.confirmCallback = option.confirmCallback ?? null;
+        modalOption.value.closeCallback = option.closeCallback ?? null;
         postTaskModal.value = true
     }
     function closeModal () {
         postTaskModal.value = false
-        // if (!modalOption.value.isShowConfirmBtn) {
-        //     navigateTo(siteConfig.linkPaths.postTask.to)
-        // }
+        if(_useSpUtility.checkIsFunc(modalOption.value.closeCallback)){
+            _useLog.logInfo('execCloseCallback')
+            modalOption.value.closeCallback()
+        }
     }
     function execConfirmCallback(){
+        postTaskModal.value = false
         _useLog.logInfo('execConfirmCallback', modalOption.value.confirmCallback.name)
         if(_useSpUtility.checkIsFunc(modalOption.value.confirmCallback)){
             modalOption.value.confirmCallback()
+        }
+    }
+    function execCloseCallback(){
+        postTaskModal.value = false
+        _useLog.logInfo('execCloseCallback')
+        if(_useSpUtility.checkIsFunc(modalOption.value.closeCallback)){
+            modalOption.value.closeCallback()
         }
     }
 
@@ -158,6 +169,7 @@ export const storePostTask = defineStore("storePostTask", () => {
         openModal,
         closeModal,
         execConfirmCallback,
+        execCloseCallback,
 
         postTaskFeeModal,
         feeModalOption,
