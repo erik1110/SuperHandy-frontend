@@ -1,16 +1,17 @@
 <template>
   <Transition name="expand">
     <div v-if="showChat" class="sp-card-wrapper chatModal">
-      <div class="roomList"></div>
-      <div class="room">
-        <div class="head">
-          <v-avatar class="mr-2">
-            <v-img
-              src="https://cdn.vuetifyjs.com/images/john.jpg"
-              alt="John"
-            ></v-img>
-          </v-avatar>
-        </div>
+      <div class="head">
+        <v-icon
+          @click="_storeChatBox.showChat = false"
+          class="ml-auto sp-cursor-pointer"
+          color="#fff"
+          >mdi-minus</v-icon
+        >
+      </div>
+      <div class="sp-flex content">
+        <ChatRoomList class="sp-basis-2/5" />
+        <ChatRoom class="sp-basis-3/5" />
       </div>
     </div>
   </Transition>
@@ -26,23 +27,20 @@ const { showChat } = storeToRefs(_storeChatBox);
 <style lang="scss" scoped>
 @import url("@/assets/css/tailwind.css");
 .chatModal {
-  @apply sp-bg-white sp-absolute sp-right-0 sp-bottom-0 sp-z-20 sp-flex sp-w-[500px] sp-h-[300px] sp-overflow-hidden;
-  .roomList {
-    @apply sp-bg-pink-200 sp-flex-auto;
+  @apply sp-bg-white sp-absolute sp-right-0 sp-bottom-0 sp-z-20 sp-w-[600px] sp-h-[500px] sp-overflow-hidden;
+  .head {
+    @apply sp-bg-purple sp-w-full sp-h-[30px] sp-flex sp-px-4 sp-items-center;
   }
-  .room {
-    @apply sp-flex-auto;
-    .head {
-      @apply sp-px-5 sp-py-3 sp-border-b sp-border-slate-200;
-    }
+  .content {
+    height: calc(100% - 30px);
   }
 }
 .expand-enter-active,
 .expand-leave-active {
   transition: width 0.5s ease-in-out, height 0.5s ease-in-out,
     opacity 0.3s ease-in-out;
-  width: 500px;
-  height: 300px;
+  //   width: 500px;
+  //   height: 360px;
   opacity: 1;
 }
 

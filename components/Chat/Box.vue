@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <ChatModal @click="_storeChatBox.showChat = false" />
+    <ChatModal />
     <ChatBoxBtn @click="_storeChatBox.showChat = true" />
   </div>
 </template>

@@ -6,7 +6,7 @@
     >
       <!-- <v-badge class="dot" content="2" color="v-pink"> -->
       <v-badge class="dot" dot color="v-pink">
-        <ChatBubbleOvalLeftIcon
+        <ChatBubbleOvalLeftEllipsisIcon
           class="sp-w-9 sp-h-9 sp-text-white sp-shadow-sm"
         />
       </v-badge>
@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { ChatBubbleOvalLeftIcon } from "@heroicons/vue/24/solid";
+import { ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/vue/24/solid";
 import { storeToRefs } from "pinia";
 import { storeChatBox } from "@/stores/storeChatBox";
 const _storeChatBox = storeChatBox();
@@ -33,6 +33,10 @@ const { showChat } = storeToRefs(_storeChatBox);
   justify-content: center;
   align-items: center;
   z-index: 10;
+  transition: all 0.3s ease-out;
+  &:hover {
+    transform: scale(1.1);
+  }
 
   .dot {
     &:deep(.v-badge__badge) {
