@@ -1,6 +1,13 @@
 <template>
   <div class="room">
     <div class="room_head">
+      <v-btn
+        icon="mdi-arrow-left"
+        @click="roomSmCard = false"
+        variant="plain"
+        size="x-small"
+        class="mr-2 md:sp-hidden"
+      ></v-btn>
       <div>
         <div
           class="sp-text-caption sp-font-bold sp-flex sp-items-center sp-mb-1"
@@ -43,7 +50,7 @@
     <div class="room_input sp-p-4 sp-flex-center">
       <input
         type="text"
-        class="sp-bg-gray-bg sp-rounded-md sp-w-full sp-h-[40px] sp-mr-4 sp-px-2 sp-text-body-sm active:sp-outline-none"
+        class="sp-bg-gray-bg sp-rounded-md sp-w-full sp-h-[40px] sp-mr-4 sp-px-2 sp-text-body-sm active:sp-outline-none focus:sp-outline-none"
       />
       <div class="sp-rounded-full sp-bg-primary-lighten sp-p-2">
         <PaperAirplaneIcon class="sp-icon-xs sp-text-purple -sp-rotate-45" />
@@ -56,14 +63,18 @@
 import { PaperAirplaneIcon } from "@heroicons/vue/24/solid";
 import { storeChatBox } from "~/stores/storeChatBox";
 const _storeChatBox = storeChatBox();
+const roomSmCard = useState("roomSmCard");
 </script>
 
 <style lang="scss" scoped>
 @import url("@/assets/css/tailwind.css");
 .room {
   @apply sp-flex sp-flex-col sp-justify-between sp-border-l sp-border-slate-100;
+  @media (max-width: 768px) {
+    height: calc(100% - 30px);
+  }
   &_head {
-    @apply sp-px-5 sp-py-2 sp-border-b sp-border-slate-100 sp-flex;
+    @apply sp-px-5 sp-py-2 sp-border-b sp-border-slate-100 sp-flex sp-items-center;
   }
   &_task {
     display: -webkit-box;
