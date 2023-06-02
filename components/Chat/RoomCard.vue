@@ -1,10 +1,10 @@
 <template>
   <div
-    @click="_storeChatBox.nowRoom = room"
+    @click="openRoom"
     class="roomCard active:sp-bg-slate-200"
     :class="
       isOpen &&
-      'sp-bg-white sp-shadow-sm sp-border-l-8 sp-border-l-primary-lighten '
+      'sp-bg-white sp-shadow-sm md:sp-border-l-8 sp-border-l-primary-lighten '
     "
   >
     <v-avatar class="mr-2" size="32">
@@ -54,6 +54,12 @@ const isOpen = computed(() => {
   if (_storeChatBox.nowRoom?.id == props.room.id) return true;
   else return false;
 });
+
+const roomSmCard = useState("roomSmCard");
+const openRoom = () => {
+  _storeChatBox.nowRoom = props.room;
+  roomSmCard.value = true;
+};
 </script>
 
 <style lang="scss" scoped>
