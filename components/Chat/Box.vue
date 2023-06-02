@@ -8,7 +8,6 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import { storeChatBox } from "@/stores/storeChatBox";
-import { onClickOutside } from "@vueuse/core";
 const _storeChatBox = storeChatBox();
 const { showChat } = storeToRefs(_storeChatBox);
 </script>
