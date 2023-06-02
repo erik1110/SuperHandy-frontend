@@ -5,6 +5,15 @@
       您將使用 NT$ {{ money }} 儲值 {{ money }} 點進入帳戶，是否儲值
     </p>
     <template #actions>
+      <VBtn
+        v-if="!message"
+        :loading="loading"
+        color="v-purple text-white"
+        class="sp-mb-2"
+        @click="createLinePayPayment()"
+      >
+        LinePay 儲值
+      </VBtn>
       <v-btn
         v-if="!message"
         :loading="loading"
@@ -29,6 +38,7 @@
 
 <script setup>
   import { postAccountPointspurchase } from "@/services/apis/point";
+  import { postLinePayPayment } from "@/services/apis/linepay";
   const props = defineProps({
     money: Number,
   });
@@ -50,6 +60,17 @@
       }, 1500);
     } else {
       message.value = res.message;
+    }
+  };
+  //create linepay payment
+  const createLinePayPayment = async () => {
+    let data = {
+      money: props.money,
+    };
+    let res = await postLinePayPayment(data);
+    if (!res.error) {
+      window.open(res.data.redirectURL);
+      purchaseModal.value = false;
     }
   };
   // Reset

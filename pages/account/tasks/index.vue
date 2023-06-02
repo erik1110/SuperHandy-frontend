@@ -23,7 +23,7 @@
 
 <script setup>
   const route = useRoute();
-  const identityTabs = useState("poster");
+  const identityTabs = ref("poster");
   if (route.path == "/account/tasks") {
     navigateTo("/account/tasks/poster");
   }

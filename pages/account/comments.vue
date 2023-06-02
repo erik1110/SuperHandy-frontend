@@ -1,13 +1,46 @@
 <template>
-  <VCard class="sp-h-[100%]">
-    <VCardText>
-      <VRow>
-        <VCol><h2>評價查看</h2></VCol>
-      </VRow>
-    </VCardText>
-  </VCard>
+  <div>
+    <VCard class="sp-mb-4">
+      <VCardText>
+        <VTabs color="secondary" v-model="commentTabs">
+          <v-tab
+            value="poster"
+            @click="FuncPageRouter('/account/comments/poster')"
+            >案主評價
+          </v-tab>
+          <v-tab
+            value="helper"
+            @click="FuncPageRouter('/account/comments/helper')"
+            >幫手評價
+          </v-tab>
+        </VTabs>
+      </VCardText>
+    </VCard>
+    <NuxtPage />
+  </div>
 </template>
 
-<script setup></script>
+<script setup>
+  import { getCategories } from "@/services/apis/general";
+  const route = useRoute();
+  const commentTabs = ref("poster");
+  const categories = useState("categories");
+  if (route.path == "/account/comments") {
+    navigateTo("/account/comments/poster");
+  }
+  const FuncPageRouter = function (route) {
+    navigateTo(route);
+  };
+  const FuncGetCategories = async function () {
+    let res = await getCategories();
+    if (!res.error) {
+      res.data.unshift({
+        name: "全部",
+      });
+      categories.value = res.data;
+    }
+  };
+  FuncGetCategories();
+</script>
 
 <style lang="scss" scoped></style>

@@ -11,3 +11,11 @@ export const getAccountInfo = () =>
 //修改會員資料
 export const patchAccountInfo = (data) =>
   req("PATCH", "/account/info-form", data, { auth: true });
+
+//獲得會員基礎評價物件
+export const getAccountCommentsStar = (role) =>
+  req("GET", `/account/comments/starCounts?role=${role}`, {}, { auth: true });
+
+//獲得會員評價詳情
+export const getAccountComments = (query) =>
+  req("GET", `/account/comments`, query, { auth: true });
