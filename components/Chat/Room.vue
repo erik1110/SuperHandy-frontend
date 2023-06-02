@@ -70,7 +70,9 @@ const roomSmCard = useState("roomSmCard");
 @import url("@/assets/css/tailwind.css");
 .room {
   @apply sp-flex sp-flex-col sp-justify-between sp-border-l sp-border-slate-100;
-  height: calc(100% - 30px);
+  @media (max-width: 768px) {
+    height: calc(100% - 30px);
+  }
   &_head {
     @apply sp-px-5 sp-py-2 sp-border-b sp-border-slate-100 sp-flex sp-items-center;
   }
