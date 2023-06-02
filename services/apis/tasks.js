@@ -35,3 +35,6 @@ export const postTasksManagementPosterAccpet = (taskId) =>
     {},
     { auth: true }
   );
+//修改我方評論
+export const postTasksManagementComment = (taskId, data) =>
+  req("POST", `/tasks/management/comment/${taskId}`, data, { auth: true });
