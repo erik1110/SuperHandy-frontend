@@ -66,10 +66,10 @@ const roomSmCard = useState("roomSmCard", () => ref(false));
 .chatModal {
   @apply sp-bg-white sp-absolute sp-right-0 sp-bottom-0 sp-z-20  sp-overflow-hidden;
   &_head {
-    @apply sp-bg-purple sp-w-full sp-h-[30px] sp-flex sp-px-4 sp-items-center;
+    @apply sp-bg-purple sp-w-full sp-h-[36px] sp-flex sp-px-4 sp-items-center;
   }
   &_content {
-    height: calc(100% - 30px);
+    height: calc(100% - 36px);
   }
 }
 .expand-enter-active,

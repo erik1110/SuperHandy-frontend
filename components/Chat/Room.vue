@@ -10,7 +10,7 @@
       ></v-btn>
       <div>
         <div
-          class="sp-text-caption sp-font-bold sp-flex sp-items-center sp-mb-1"
+          class="sp-text-body-sm md:sp-text-caption sp-font-bold sp-flex sp-items-center sp-mb-1"
         >
           <v-chip
             class="mr-1"
@@ -21,7 +21,7 @@
                 : 'secondary-darken'
             "
           >
-            <span style="font-size: 10px">
+            <span class="sp-text-body-sm md:sp-text-caption">
               {{ _storeChatBox.nowRoom.role }}
             </span>
           </v-chip>
@@ -34,7 +34,9 @@
             {{ _storeChatBox.nowRoom.title }}
           </span>
         </div>
-        <div class="roomCard_task sp-text-caption sp-text-slate-400 sp-px-1">
+        <div
+          class="roomCard_task sp-text-body-sm md:sp-text-caption sp-text-slate-400 sp-px-1"
+        >
           任務編號：{{ _storeChatBox.nowRoom.no }}
         </div>
       </div>
@@ -71,10 +73,10 @@ const roomSmCard = useState("roomSmCard");
 .room {
   @apply sp-flex sp-flex-col sp-justify-between sp-border-l sp-border-slate-100;
   @media (max-width: 768px) {
-    height: calc(100% - 30px);
+    height: calc(100% - 36px);
   }
   &_head {
-    @apply sp-px-5 sp-py-2 sp-border-b sp-border-slate-100 sp-flex sp-items-center;
+    @apply sp-px-5 sp-py-3 sp-border-b sp-border-slate-100 sp-flex sp-items-center;
   }
   &_task {
     display: -webkit-box;
