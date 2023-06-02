@@ -34,10 +34,6 @@
       color="v-purple"
     ></v-alert>
   </DialogModal>
-  <AccountPointsLinePayModal
-    :id="linePayOrderId"
-    :url="linePayUrl"
-  ></AccountPointsLinePayModal>
 </template>
 
 <script setup>
@@ -49,11 +45,6 @@
   const purchaseModal = useState("purchaseModal");
   const message = ref("");
   const loading = ref(false);
-  const isLinePayModalOpen = useState("linePayModalController", () => {
-    ref(false);
-  });
-  const linePayOrderId = ref("");
-  const linePayUrl = ref("");
   // Submit
   const onSubmit = async () => {
     loading.value = true;
@@ -78,9 +69,7 @@
     };
     let res = await postLinePayPayment(data);
     if (!res.error) {
-      linePayOrderId.value = res.data.orderId;
-      linePayUrl.value = res.data.redirectURL;
-      isLinePayModalOpen.value = true;
+      window.open(res.data.redirectURL);
       purchaseModal.value = false;
     }
   };
