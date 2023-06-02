@@ -11,7 +11,9 @@
       <v-img :src="room.imgUrl" alt="John"></v-img>
     </v-avatar>
     <div class="sp-flex-auto mr-2">
-      <div class="sp-text-caption sp-font-bold sp-flex sp-items-center sp-mb-1">
+      <div
+        class="sp-text-body-sm md:sp-text-caption sp-font-bold sp-flex sp-items-center sp-mb-1"
+      >
         <v-chip
           class="mr-1"
           size="x-small"
@@ -23,14 +25,18 @@
         </v-chip>
         {{ room.name }}
       </div>
-      <div class="roomCard_task sp-text-caption sp-text-slate-600 sp-px-1">
+      <div
+        class="roomCard_task sp-text-body-sm md:sp-text-caption sp-text-slate-600 sp-px-1"
+      >
         {{ room.title }}
       </div>
     </div>
     <div
       class="sp-flex sp-flex-col sp-min-h-[48px] sp-max-h-[54px] sp-justify-between sp-items-center"
     >
-      <div class="sp-text-caption sp-text-slate-400 sp-whitespace-nowrap">
+      <div
+        class="sp-text-body-sm md:sp-text-caption sp-text-slate-400 sp-whitespace-nowrap"
+      >
         8:00 pm
       </div>
       <div>
