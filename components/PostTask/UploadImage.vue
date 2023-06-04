@@ -1,6 +1,4 @@
 <template>
-
-
     <div class="sp-py-3 sp-flex sp-space-x-2 sp-flex-wrap">
         <div v-for="item, idx in imgUrls" :key="idx" class="sp-relative pa-3">
             <v-btn :data-id="idx" variant="plain" icon="mdi-close-circle" :ripple="false" class="btn-del-img" @click="deleteConfirm(idx,$event)"></v-btn>
