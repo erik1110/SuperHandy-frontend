@@ -1,26 +1,26 @@
 <template>
-    <div class="sp-py-3 sp-flex sp-space-x-2">
-        <!-- <v-img aspect-ratio="1" cover class="box sp-relative"
-            src="https://storage.googleapis.com/superhandy.appspot.com/images/bc5b74fd-5564-4903-ad94-c5bcc712b7f6.jpg?GoogleAccessId=firebase-adminsdk-xlymb%40superhandy.iam.gserviceaccount.com&Expires=16756675200&Signature=KgO9RXgE1RpEggm%2FtH7gnWOS9ZnFqBAx553V0BWgAZ%2FXeFOzHXc0AvT2d5yxa%2Fv4q07xdCG9y0Ws65jdU4qIJdxKb29UX82OUe1XLO%2F86UAlWfpj6kRcl1GjuxAR0XqWKjdy862G61zXO7LYoC3rKz9aUYCBluAN5dTCdstRO6CtL0bjtssaKcDgBDMlKo2fQ%2FnxnE%2BbzoScJexEiuG3fjYBq6v5wRYvYwDTBTyK%2BJMWdLJjlyNnWdMIRd5N%2Fj4GZAfjP6Csmc3%2F1of1xhnhO3x8SP%2BBpsAyS8j9%2B06wGxJmswStuyq2pncNsWdY81ed%2F%2BL3j0XT5UiQxRZdWZY%2BzQ%3D%3D">
-            <v-btn variant="plain" icon="mdi-close-circle" class="btn-del-img"></v-btn>
-        </v-img> -->
-        <div v-for="item, idx in imgUrls" :key="idx">
-            <v-img :src="item" aspect-ratio="1" cover class="box" :data-id="idx">
-                <v-btn :data-id="idx" variant="plain" icon="mdi-close-circle" :ripple="false" class="btn-del-img" @click="deleteConfirm(idx,$event)"></v-btn>
-            </v-img>
+
+
+    <div class="sp-py-3 sp-flex sp-space-x-2 sp-flex-wrap">
+        <div v-for="item, idx in imgUrls" :key="idx" class="sp-relative pa-3">
+            <v-btn :data-id="idx" variant="plain" icon="mdi-close-circle" :ripple="false" class="btn-del-img" @click="deleteConfirm(idx,$event)"></v-btn>
+            <v-img :src="item" aspect-ratio="1" cover class="box" :data-id="idx"></v-img>
         </div>
 
         <!-- 上傳照片按鈕 -->
-        <label class="box btn-area sp-cursor-pointer" :class="imgUrls.length >= 5 ? 'd-none':''">
-            <v-progress-circular v-if="circularLoading" indeterminate color="v-purple"></v-progress-circular>
-            <div v-else class="sp-text-center sp-text-sm">
-                <div class="mdi mdi-plus"></div>
-                <div>上傳照片</div>
-            </div>
-            <input class="d-none" type="file" accept=".png, .jpg, .jpeg" @change="upload" />
-        </label>
+        <div class="pa-3">
+            <label class="box btn-area sp-cursor-pointer" :class="imgUrls.length >= 5 ? 'd-none':''">
+                <v-progress-circular v-if="circularLoading" indeterminate color="v-purple"></v-progress-circular>
+                <div v-else class="sp-text-center sp-text-sm">
+                    <div class="mdi mdi-plus"></div>
+                    <div>上傳照片</div>
+                </div>
+                <input class="d-none" type="file" accept=".png, .jpg, .jpeg" @change="upload" />
+            </label>
+        </div>
         <!-- 上傳照片按鈕 -->
     </div>
+
     <ul class="sp-text-sm sp-list-disc sp-pl-5">
         <li class="sp-text-gray-placeholder sp-text-sm">每筆任務最多可上傳5張照片，每張照片大小不超過2MB，只支援JPG、PNG格式。</li>
     </ul>
@@ -52,7 +52,7 @@ const upload = async (event) => {
         logInfo(_work, 'file.size', _file.size)
         if (!checkUploadImage(_file.size, siteConfig.Image.upload.maxSize)) {
             logError(_work, 'file.size', _file.size)
-            openErrorModal(`圖片大小不可超過${siteConfig.Image.upload.maxSizeCn}`)
+            _message = `圖片大小不可超過${siteConfig.Image.upload.maxSizeCn}`
             circularLoading.value = false
             return;
         }
@@ -71,7 +71,7 @@ const upload = async (event) => {
         logError(_work, { error })
         _message = '圖片上傳失敗'
     } finally {
-        _storePostTask.openModal({ type: _dialogType, message: _message })
+        openModal({ type: _dialogType, message: _message })
         circularLoading.value = false
     }
 
@@ -79,7 +79,7 @@ const upload = async (event) => {
 
 
 const deleteConfirm = (idx,event) => {
-    console.log(idx,'idx')
+    // console.log(idx,'idx')
 
     const deleteImage = () => {
         imgUrls.value.splice(idx,1)
@@ -97,13 +97,14 @@ const deleteConfirm = (idx,event) => {
 }
 
 .box {
-    @apply sp-border sp-border-dashed sp-rounded-lg sp-flex sp-justify-center sp-items-center sp-text-purple
+    @apply sp-border sp-border-dashed sp-border-gray-placeholder sp-rounded-lg sp-flex sp-justify-center sp-items-center sp-text-purple
 }
 
 .btn-del-img{
     position: absolute;
     top: -12px;
     right: -12px;
+    z-index: 99;
 }
 </style>
 

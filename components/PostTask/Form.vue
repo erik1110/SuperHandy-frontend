@@ -52,7 +52,7 @@
 
     <PostTaskFeeModal :loading="btnLoading.published" @aClose="postTaskFeeModal = false" @aSubmit="submit">
     </PostTaskFeeModal>
-    <PostTaskModal @close="closeModal" @aConfirm="execConfirmCallback"></PostTaskModal>
+    <PostTaskModal @close="closeModal" @aConfirmCallback="execConfirmCallback" @aCloseCallback="execCloseCallback"></PostTaskModal>
 </template>
 <script setup>
 import { storeToRefs } from 'pinia'
@@ -63,6 +63,7 @@ import { postTaskConfig } from '@/services/postTaskConfig';
 import { getDraftById, getTasksById, deleteDraftById, executeFetchData } from '@/services/apis/postTask'
 import { getCategories, getExposurePlan } from '@/services/apis/general';
 import { getAccountPoints } from '@/services/apis/point';
+import { siteConfig } from '~/services/siteConfig';
 
 const { excuteAsyncFunc, promiseAllSettledHanlder, checkTaskId, checkRespStatus, checkIsFunc } = useSpUtility()
 const { validateFormResult } = useFormUtil();
@@ -70,7 +71,8 @@ const _storeFullOverlay = storeFullOverlay();
 const _storePostTask = storePostTask();
 const { logInfo, logError } = useLog()
 
-const { openConfirmModal, openModal, closeModal, execConfirmCallback,openBtnLoading, closeBtnLoading, openSFeeModal } = storePostTask();
+const { openConfirmModal, openErrorModal, openModal, closeModal, execConfirmCallback, execCloseCallback} = storePostTask();
+const { openBtnLoading, closeBtnLoading, openSFeeModal } = storePostTask();
 const { exposurePlans, taskCategories, descriptionTemplateList } = storeToRefs(_storePostTask);
 const { currentTaskStatus, currentTaskStatusIsDraft, currentTaskStatusIsUnpublish } = storeToRefs(_storePostTask);
 const { userCoin, formData, imgUrls, contactInfoData, locationData } = storeToRefs(_storePostTask);
@@ -195,31 +197,46 @@ const submit = async (event, taskTrans) => {
 
         const response = await executeFetchData(_submitter, data, taskId)
         logInfo(_work, 'submit.response', response);
-        if (response && checkRespStatus(response)) {
-            _isShowGoTaskBtn = true
-            resetForm()
-        } else {
-            _dialogType = postTaskConfig.dialogType.error
+
+        if(response && !checkRespStatus(response)){
+            openErrorModal(response.message)
+            return;
         }
-        _message = response.message
+
+        //因為是彈跳視窗，所以必須處理關閉視窗的原本頁面的處理
+        _isShowGoTaskBtn = true
+        resetForm()
+        switch (_submitter) {
+            case postTaskConfig.taskSubmitter.draftAdd:
+                openModal({isShowGoTaskBtn:true,message:response.message,closeCallback:()=>{
+                    console.log('anna')
+                    navigateTo(`/post-task/${response.data.taskId}`)
+                }})
+                break;
+            case postTaskConfig.taskSubmitter.draftUpdate:
+                excuteAsyncFunc(_work, getDraftById, taskId, setResponseDate)
+                openModal({isShowGoTaskBtn:true,message:response.message})
+                break;
+            case postTaskConfig.taskSubmitter.published:
+            case postTaskConfig.taskSubmitter.publishFromDraft:
+                openModal({isShowGoTaskBtn:true,message:response.message,closeCallback:()=>{
+                    navigateTo(siteConfig.linkPaths.postTask.to)
+                }})
+                break;
+            case postTaskConfig.taskSubmitter.unpublished:
+                excuteAsyncFunc(_work, getTasksById, taskId, setResponseDate)
+                openModal({isShowGoTaskBtn:true,message:response.message})
+                break;
+            default:
+                break;
+        }
 
     } catch (error) {
-
-        _message = '刊登任務失敗'
-        _dialogType = postTaskConfig.dialogType.error
         logError(_work, 'submit', { error });
-
+        openErrorModal('刊登任務失敗')
     } finally {
-        //暫時先導頁回-1
         closeLoading()
         excuteAsyncFunc(_work, getAccountPoints, null, (response) => userCoin.value = response.data)
-        if (_message) {
-            openModal({
-                type: _dialogType,
-                message: _message,
-                isShowGoTaskBtn: _isShowGoTaskBtn
-            })
-        }
     }
 }
 
@@ -229,6 +246,7 @@ const submit = async (event, taskTrans) => {
 
 
 const resetForm = () => {
+    console.log('resetForm',postTaskForm.value)
     postTaskForm.value?.reset() //防止postTaskForm null
     formData.value.salary = 10
     postTaskFeeModal.value = false
@@ -243,7 +261,7 @@ const resetForm = () => {
 const confirmDeleteDraft = () => {
     openConfirmModal('確認要刪除這筆任務草稿?',deleteDraft)
 }
-async function deleteDraft(){
+const deleteDraft = async () => {
     postTaskModal.value = false
     openLoading({ draftDelete: true })
     let _message = ''
@@ -256,6 +274,7 @@ async function deleteDraft(){
         //成功
         , () => {
             resetForm()
+            navigateTo(siteConfig.linkPaths.postTask.to)
             openModal({
                 message: _message
             })
@@ -273,12 +292,21 @@ async function deleteDraft(){
         }
     )
 }
-// const deleteDraft = async () => {
 
-// }
 
 // Init
+const setResponseDate = (response) =>{
+    formData.value.title = response.data.title
+    formData.value.category = response.data.category
+    formData.value.description = response.data.description
+    formData.value.salary = response.data.salary
+    formData.value.exposurePlan = response.data.exposurePlan
+    imgUrls.value = response.data.imgUrls
+    contactInfoData.value = response.data.contactInfo
+    locationData.value = response.data.location
+}
 const Init = () => {
+
     _storeFullOverlay.open()
     btnDisabled.value = true
 
@@ -307,33 +335,12 @@ const Init = () => {
         //任務來源:已下架任務
         currentTaskStatus.value = postTaskConfig.currentTaskStatus.unpublished
         currentFieldEnabled.value = postTaskConfig.fieldEnabled.unpublishedEdit
-        promiseArr.push(excuteAsyncFunc(_work, getTasksById, taskId, (response) => {
-            formData.value.title = response.data.title
-            formData.value.category = response.data.category
-            formData.value.description = response.data.description
-            formData.value.salary = response.data.salary
-            formData.value.exposurePlan = '一般曝光'
-            contactInfoData.value = response.data.contactInfo
-            locationData.value = {
-                city: '台北市',
-                dist: '信義區',
-                address: '信義路一段12號'
-            }
-        }))
+        promiseArr.push(excuteAsyncFunc(_work, getTasksById, taskId, setResponseDate))
 
     } else if (checkTaskId(taskId)) {
         //任務來源:草稿
         currentTaskStatus.value = postTaskConfig.currentTaskStatus.draft
-        promiseArr.push(excuteAsyncFunc(_work, getDraftById, taskId, (response) => {
-            formData.value.title = response.data.title
-            formData.value.category = response.data.category
-            formData.value.description = response.data.description
-            formData.value.salary = response.data.salary
-            formData.value.exposurePlan = response.data.exposurePlan
-            //imgUrls.value = response.data.imgUrls
-            contactInfoData.value = response.data.contactInfo
-            locationData.value = response.data.location
-        }))
+        promiseArr.push(excuteAsyncFunc(_work, getDraftById, taskId, setResponseDate))
 
     } else {
         //任務來源:新增任務
@@ -363,8 +370,10 @@ const Init = () => {
 }
 Init();
 
-
-
+onMounted(()=>{
+    resetForm()
+    Init();
+})
 
 // - 假資料 -
 function fakeData() {

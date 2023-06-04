@@ -13,7 +13,7 @@
       </div>
 
       <div class="text-center sp-mt-8" :class="modalOption.isShowConfirmBtn ? '' : 'd-none'">
-        <v-btn color="primary me-4" @click="$emit('aConfirm')">確認</v-btn>
+        <v-btn color="primary me-4" @click="$emit('aConfirmCallback')">確認</v-btn>
         <v-btn color="v-gray-placeholder" @click="postTaskModal = false">取消</v-btn>
       </div>
 
