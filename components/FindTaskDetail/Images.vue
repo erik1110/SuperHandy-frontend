@@ -43,18 +43,12 @@
             </div>
         </SwiperSlide>
         <div class="text-center my-2 sm:sp-hidden">
-            <SwiperControls :btnSize="'xsmal'"></SwiperControls>
+            <SwiperControls v-if="imgUrls.length > 2"  :btnSize="'xsmal'"></SwiperControls>
         </div>
     </Swiper>
 </template>
 <script setup>
-//const { imgUrls } = defineProps(["imgUrls"]);
-const imgUrls = [
-    'https://source.unsplash.com/featured/300x300',
-    'https://source.unsplash.com/featured/400x400',
-    'https://source.unsplash.com/featured/500x500',
-    'https://source.unsplash.com/featured/600x600'
-]
+const { imgUrls } = defineProps(["imgUrls"]);
 
 const openBigImage = () => {
     alert('顯示大圖')
