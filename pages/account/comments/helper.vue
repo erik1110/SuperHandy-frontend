@@ -184,7 +184,7 @@
               class="sp-px-4 sp-py-1 sp-border-r-2 sp-border-gray-400 sp-border-solid sp-overflow-hidden"
             >
               <v-rating
-                v-model="item.editStar"
+                v-model="item.posterReview.star"
                 class="sm:sp-flex-initial sp-flex-auto"
                 readonly
                 density="compact"
@@ -195,7 +195,7 @@
             <div class="sp-px-4 sp-py-2 sp-inline-flex sp-flex-1">
               <input
                 class="sp-h-[20px] sp-outline-none sp-flex-1"
-                v-model="item.editComment"
+                v-model="item.posterReview.comment"
                 disabled
               />
             </div>

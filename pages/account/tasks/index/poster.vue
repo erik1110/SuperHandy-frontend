@@ -108,7 +108,7 @@
             break;
           }
           default: {
-            postList.value.other.puth(item);
+            postList.value.other.push(item);
             break;
           }
         }
