@@ -82,9 +82,29 @@
             class="sp-text-body sp-text-right"
             v-if="!detail.progressBar.inProgressAt && detail.role == '案主'"
           >
-            <VBtn color="secondary" class="sp-mr-2">編輯任務</VBtn>
-            <VBtn color="v-gray-bg" class="sp-mr-2">下架任務</VBtn>
-            <VBtn color="v-gray-bg-secondary" class="sp-mr-2">刪除任務</VBtn>
+            <VBtn color="secondary" class="sp-mr-2" @click="FuncEditTask()"
+              >編輯任務</VBtn
+            >
+            <VBtn
+              color="v-gray-bg"
+              class="sp-mr-2"
+              v-if="detail.status != '已下架'"
+              @click="FuncUnpublishTask()"
+              >下架任務</VBtn
+            >
+            <VBtn
+              color="v-gray-bg"
+              class="sp-mr-2"
+              v-if="detail.status == '已下架'"
+              @click="FuncPublishTask()"
+              >上架任務</VBtn
+            >
+            <VBtn
+              color="v-gray-bg-secondary"
+              class="sp-mr-2"
+              @click="FuncDeleteTask()"
+              >刪除任務</VBtn
+            >
           </div>
         </div>
       </VCardText>
@@ -92,5 +112,53 @@
   </div>
 </template>
 <script setup>
+  import { postTaskUnpublish, postTaskPublish } from "@/services/apis/postTask";
+  import {
+    getTasksManagementDetail,
+    deleteTasksManagement,
+  } from "@/services/apis/tasks";
   const detail = useState("taskDetail");
+  const isSnackbarOpen = useState("isSnackbarOpen");
+  const snackbarMessage = useState("snackbarMessage");
+  const tasksReload = async function () {
+    let res = await getTasksManagementDetail(detail.value.taskId);
+    if (!res.error) {
+      detail.value = res.data;
+    }
+  };
+  const FuncUnpublishTask = async function () {
+    let res = await postTaskUnpublish(detail.value.taskId);
+    if (!res.error) {
+      isSnackbarOpen.value = true;
+      snackbarMessage.value = "下架成功!";
+      tasksReload();
+    }
+  };
+  const FuncPublishTask = async function () {
+    let res = await postTaskPublish(detail.value.taskId);
+    if (!res.error) {
+      isSnackbarOpen.value = true;
+      snackbarMessage.value = "上架成功!";
+      tasksReload();
+    }
+  };
+  const FuncEditTask = function () {
+    if (detail.value.status != "已下架") {
+      isSnackbarOpen.value = true;
+      snackbarMessage.value = "需要下架才能編輯!";
+      tasksReload();
+    } else {
+      navigateTo(`/post-task/${detail.value.taskId}?status=unpublished`);
+    }
+  };
+  const FuncDeleteTask = async function () {
+    let res = await deleteTasksManagement(detail.value.taskId);
+    if (!res.error) {
+      isSnackbarOpen.value = true;
+      snackbarMessage.value = "刪除成功!";
+      setTimeout(function () {
+        navigateTo("/account/tasks/poster");
+      }, 1000);
+    }
+  };
 </script>

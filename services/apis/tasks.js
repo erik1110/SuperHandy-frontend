@@ -8,6 +8,10 @@ export const getTasksPosterManagement = () =>
 export const getTasksHelperManagement = () =>
   req("GET", "/tasks/management/helper", {}, { auth: true });
 
+//刪除案件
+export const deleteTasksManagement = (taskId) =>
+  req("DELETE", `/tasks/management/${taskId}`, {}, { auth: true });
+
 //取得任務詳情
 export const getTasksManagementDetail = (taskId) =>
   req("GET", `tasks/management/${taskId}`, {}, { auth: true });
