@@ -21,9 +21,16 @@
       <div class="sp-mb-2">
         很抱歉，發生未知錯誤，請紀錄以下兩組序號並且寄信給我們，讓我們為您服務
       </div>
-      <div class="sp-mb-2">交易序號：{{ transactionId }}</div>
-      <div class="sp-mb-2">訂單序號：{{ orderId }}</div>
+      <div class="sp-mb-2 sp-w-[300px] sp-text-left sp-mx-auto">
+        交易序號：{{ transactionId }}
+      </div>
+      <div class="sp-mb-2 sp-w-[300px] sp-text-left sp-mx-auto">
+        訂單序號：{{ orderId }}
+      </div>
       <div class="sp-mb-2">超人幫手：supersuperhandy@gmail.com</div>
+      <VBtn color="primary" class="sp-mt-2" @click="gotoAccountPointPage()"
+        >返回點數頁</VBtn
+      >
     </template>
   </div>
 </template>
