@@ -26,7 +26,11 @@ export const postTasksManagementHelperAccept = (taskId, data) =>
   req("POST", `tasks/management/upload-acceptance/${taskId}`, data, {
     auth: true,
   });
-
+//案主退回驗收內容
+export const postTasksManagementPosterRefuse = (taskId, data) =>
+  req("POST", `tasks/management/refuse-acceptance/${taskId}`, data, {
+    auth: true,
+  });
 //案主確認驗收內容
 export const postTasksManagementPosterAccpet = (taskId) =>
   req(
