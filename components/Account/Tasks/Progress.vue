@@ -10,8 +10,10 @@
             </div>
             <div class="stpper-item-content">
               <div class="stpper-item-content-title sp-text-h4">任務發布</div>
-              <div class="stpper-item-content-end_time sp-text-caption">
-                {{ progressObject.publishedAt.time }}
+              <div class="stpper-item-content-end_time">
+                <div class="stpper-item-content-end_time-text sp-text-caption">
+                  {{ progressObject.publishedAt.time }}
+                </div>
               </div>
             </div>
           </div>
@@ -126,33 +128,37 @@
       time: "",
     },
   });
+  const FuncProgressControll = function (val) {
+    if (val) {
+      let i = 0;
+      progressObject.value = progressObjectModel;
+      while (i != -1) {
+        if (val.progressBar[progressName[i]]) {
+          progressObject.value[progressName[i]] = {
+            class: "actived",
+            time: new Date(val.progressBar[progressName[i]]).toLocaleString(),
+          };
+          if (i != 4) {
+            progressObject.value[progressName[i + 1]] = {
+              class: "active",
+              time: "",
+            };
+          }
+          i = i + 1;
+          if (i == 5) {
+            i = -1;
+          }
+        } else {
+          i = -1;
+        }
+      }
+    }
+  };
+  FuncProgressControll(detail.value);
   watch(
     () => detail.value,
     (val) => {
-      if (val) {
-        let i = 0;
-        progressObject.value = progressObjectModel;
-        while (i != -1) {
-          if (val.progressBar[progressName[i]]) {
-            progressObject.value[progressName[i]] = {
-              class: "actived",
-              time: new Date(val.progressBar[progressName[i]]).toLocaleString(),
-            };
-            if (i != 4) {
-              progressObject.value[progressName[i + 1]] = {
-                class: "active",
-                time: "",
-              };
-            }
-            i = i + 1;
-            if (i == 5) {
-              i = -1;
-            }
-          } else {
-            i = -1;
-          }
-        }
-      }
+      FuncProgressControll(val);
     }
   );
 </script>
@@ -183,8 +189,17 @@
         }
       }
       &-content {
-        &-time {
+        &-end_time {
           display: none;
+          position: relative;
+          height: 20px;
+          &-text {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 140px;
+            transform: scale(0.75) translateX(-25px);
+          }
         }
       }
     }
@@ -204,7 +219,7 @@
         display: none;
       }
     }
-    .stpper-item-content-time {
+    .stpper-item-content-end_time {
       display: block;
     }
   }
@@ -219,7 +234,7 @@
         color: white;
       }
     }
-    .stpper-item-content-time {
+    .stpper-item-content-end_time {
       display: none;
     }
   }

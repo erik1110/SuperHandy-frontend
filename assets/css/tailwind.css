@@ -57,9 +57,8 @@
   }
   /* 設計稿 div.secTitle */
   .sp-sec-title {
-    @apply sp-border-l-8 sp-border-secondary sp-pl-4 sp-font-bold sp-text-lg sp-text-primary
+    @apply sp-border-l-8 sp-border-secondary sp-pl-4 sp-font-bold sp-text-lg sp-text-primary;
   }
-
 }
 
 :root {

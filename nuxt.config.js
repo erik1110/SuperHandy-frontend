@@ -16,7 +16,7 @@ export default defineNuxtConfig({
   css: [
     "vuetify/lib/styles/main.sass",
     "@mdi/font/css/materialdesignicons.min.css",
-    'leaflet/dist/leaflet.css',
+    "leaflet/dist/leaflet.css",
   ],
   build: {
     transpile: ["vuetify"],
@@ -33,20 +33,20 @@ export default defineNuxtConfig({
     "nuxt-swiper",
     "@lewebsimple/nuxt3-svg",
     "@nuxt/image-edge",
-  //   [
-  //     "@nuxtjs/google-fonts",
-  //     {
-  //       families: {
-  //         Sigmar: true,
-  //         "Noto Sans TC": {
-  //           wght: [100, 300, 400, 500, 700, 900],
-  //         },
-  //         download: true,
-  //       },
-  //     },
-  //   ],
+    //   [
+    //     "@nuxtjs/google-fonts",
+    //     {
+    //       families: {
+    //         Sigmar: true,
+    //         "Noto Sans TC": {
+    //           wght: [100, 300, 400, 500, 700, 900],
+    //         },
+    //         download: true,
+    //       },
+    //     },
+    //   ],
   ],
   experimental: {
-      writeEarlyHints: false,
+    writeEarlyHints: false,
   },
 });

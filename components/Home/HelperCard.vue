@@ -2,7 +2,7 @@
   <div
     class="sp-card-wrapper sp-p-3 sp-my-4 sp-bg-white sp-transition-all sp-cursor-pointer sp-w-full sm:sp-w-[150px] hover:sp-shadow-lg hover:-sp-translate-y-1"
   >
-    <div class="sp-w-full sp-rounded-lg sp-overflow-hidden">
+    <div class="sp-w-full sp-min-h-[150px] sp-rounded-lg sp-overflow-hidden">
       <!-- Formal -->
       <!-- <v-img :src="avatar" class="sp-w-full"></v-img> -->
       <!-- -----Test------ -->
@@ -29,14 +29,14 @@
 </template>
 
 <script setup>
-const { avatar, lastName, completedTasks, completionRate, rating } =
-  defineProps({
-    lastName: String,
-    avatar: String,
-    completedTasks: Number,
-    completionRate: Number,
-    rating: Object,
-  });
+  const { avatar, lastName, completedTasks, completionRate, rating } =
+    defineProps({
+      lastName: String,
+      avatar: String,
+      completedTasks: Number,
+      completionRate: Number,
+      rating: Object,
+    });
 </script>
 
 <style lang="scss" scoped></style>
