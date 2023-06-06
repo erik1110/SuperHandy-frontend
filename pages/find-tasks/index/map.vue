@@ -28,6 +28,7 @@
       <LMap
         ref="map"
         id="map"
+        class="sp-z-0"
         v-model="zoomLevel"
         v-model:zoom="zoomLevel"
         :zoom="zoomLevel"

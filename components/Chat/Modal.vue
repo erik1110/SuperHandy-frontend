@@ -19,11 +19,11 @@
           >
         </div>
         <Transition name="fade">
-          <ChatRoomList v-if="!roomSmCard" />
+          <ChatRoomList v-if="!roomMobileView" />
         </Transition>
 
         <Transition name="slideLeft">
-          <ChatRoom v-if="roomSmCard" />
+          <ChatRoom v-if="roomMobileView" />
         </Transition>
       </v-card>
     </v-dialog>
@@ -56,7 +56,15 @@ import { storeChatBox } from "@/stores/storeChatBox";
 const _storeChatBox = storeChatBox();
 const { showChat } = storeToRefs(_storeChatBox);
 const dialog = true;
-const roomSmCard = useState("roomSmCard", () => ref(false));
+const roomMobileView = useState("roomMobileView", () => ref(false));
+
+// 聊天室關閉時 Reset nowRoom
+watch(showChat, (val) => {
+  if (!val) {
+    _storeChatBox.nowRoom = {};
+    roomMobileView.value = false;
+  }
+});
 </script>
 
 <style lang="scss" scoped>

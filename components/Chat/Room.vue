@@ -1,10 +1,10 @@
 <template>
   <!-- Modal Right - Individual Room -->
-  <div class="room">
+  <div v-if="Object.keys(_storeChatBox.nowRoom).length != 0" class="room">
     <div class="room_head">
       <v-btn
         icon="mdi-arrow-left"
-        @click="roomSmCard = false"
+        @click="roomMobileView = false"
         variant="plain"
         size="x-small"
         class="mr-2 md:sp-hidden"
@@ -60,13 +60,19 @@
       </div>
     </div>
   </div>
+  <div v-else class="emptyRoom sp-flex-center">
+    <ChatBubbleLeftRightIcon class="sp-icon-lg sp-text-slate-300" />
+  </div>
 </template>
 
 <script setup>
-import { PaperAirplaneIcon } from "@heroicons/vue/24/solid";
+import {
+  PaperAirplaneIcon,
+  ChatBubbleLeftRightIcon,
+} from "@heroicons/vue/24/solid";
 import { storeChatBox } from "~/stores/storeChatBox";
 const _storeChatBox = storeChatBox();
-const roomSmCard = useState("roomSmCard");
+const roomMobileView = useState("roomMobileView");
 </script>
 
 <style lang="scss" scoped>
@@ -101,5 +107,8 @@ const roomSmCard = useState("roomSmCard");
       border-radius: 20px 20px 1px 20px;
     }
   }
+}
+.emptyRoom {
+  @apply sp-bg-slate-50;
 }
 </style>

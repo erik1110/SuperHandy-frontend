@@ -62,10 +62,13 @@ const isOpen = computed(() => {
   else return false;
 });
 
-const roomSmCard = useState("roomSmCard");
+const roomMobileView = useState("roomMobileView");
 const openRoom = () => {
+  console.log("openRoom");
   _storeChatBox.nowRoom = props.room;
-  roomSmCard.value = true;
+  roomMobileView.value = true;
+  // for test :647f385eea40b69f3e54a443
+  _storeChatBox.fetchRoomHistory("647f385eea40b69f3e54a443");
 };
 </script>
 

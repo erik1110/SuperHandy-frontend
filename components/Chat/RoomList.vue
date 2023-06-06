@@ -6,8 +6,10 @@
 </template>
 
 <script setup>
+import { storeToRefs } from "pinia";
 import { storeChatBox } from "~/stores/storeChatBox";
 const _storeChatBox = storeChatBox();
+const { roomList } = storeToRefs(_storeChatBox);
 const rooms = ref([
   {
     id: 1,
@@ -83,7 +85,8 @@ const rooms = ref([
   },
 ]);
 onMounted(() => {
-  _storeChatBox.nowRoom = rooms.value[0];
+  // _storeChatBox.nowRoom = rooms.value[0];
+  // _storeChatBox.nowRoom = roomList.value[0];
 });
 </script>
 
