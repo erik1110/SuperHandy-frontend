@@ -5,7 +5,8 @@
         <div class="sp-card-wrapper sp-bg-white sp-p-6">
             <div class="sm:sp-flex sm:sp-items-center sm:sp-space-x-4 sp-mb-6">
                 <!-- 頭像 -->
-                <AccountAvatar></AccountAvatar>
+                <AccountAvatar :avatarPath="avatarPath" :circularLoading="circularLoading" @aUploadAvatar="uploadAvatar">
+                </AccountAvatar>
                 <div class="sp-mt-2 sm:sp-mt-0">
                     <p class="sp-font-bold">{{ userData.lastName }}{{ userData.firstName }}</p>
                     <p class="sp-text-gray-placeholder" v-show="userData.email">帳號 {{ userData.email }}</p>
@@ -41,22 +42,8 @@
                     </label>
                     <v-text-field v-model="userData.email" disabled required />
                 </div>
-                <div class='mt-4 md:sp-w-1/2'>
-                    <label class='label'>地址</label>
-                    <!-- <div class=" lg:sp-flex lg:sp-space-x-2">
-                        <div class=" lg:sp-w-1/2 lg:sp-flex lg:sp-space-x-2">
-                            <v-select v-model='locationCity' rules='[required]' :items='countyList' item-title='city'
-                                item-value='city' @click:clear="clearDist" label="縣市" clearable>
-                            </v-select>
-                            <v-select v-model='locationDist' :rules='rules.locationDist' :items='townList' item-title='dist'
-                                item-value='dist' :hint='hintLocationDist' :readonly='readonlyLocationDist' label="區域"
-                                clearable>
-                            </v-select>
-                        </div>
-                        <v-text-field :rules='accountFormRules.address' v-model='address'
-                            :counter='postTaskFormRules.address.counter' :hint='postTaskFormRules.address.hint'
-                            @keypress.enter.prevent />
-                    </div> -->
+                <div class='mt-4'>
+                    <AccountLocation />
                 </div>
                 <div class='mt-4'>
                     <label class='label' for='nickname'>案主介紹</label>
@@ -91,15 +78,17 @@
     </div>
 </template>
 <script setup>
+import { storeToRefs } from 'pinia'
+import { siteConfig } from "@/services/siteConfig";
 import { storeGlobal } from "@/stores/storeGlobal";
+import { storeLocation } from "@/stores/storeLocation";
 import { storeFullOverlay } from "@/stores/storeFullOverlay";
-import { getCategories } from "@/services/apis/general";
+import { getCategories, postUploadImage } from "@/services/apis/general";
 import { getAccountInfo, patchAccountInfo, getProfileStatus } from "@/services/apis/account";
 const { logInfo, logError } = useLog()
-const { excuteAsyncFunc, promiseErrorHanlder, checkRespStatus } = useSpUtility()
-const { formRules, validateFormResult } = useFormUtil()
+const { excuteAsyncFunc, promiseAllSettledHanlder, checkRespStatus, checkUploadImage } = useSpUtility()
+const { formRules, validateFormResult, ruleAddress, ruleRequired } = useFormUtil()
 let accountFormRules = formRules()
-const _storeGlobal = storeGlobal();
 const _storeFullOverlay = storeFullOverlay();
 const _work = '我的帳號'
 const btnSubmitLoading = ref(false);
@@ -108,6 +97,18 @@ const accountForm = ref(null)
 const taskCategories = ref([])
 const userData = ref({})
 const performanceData = ref({})
+
+
+// - 地址 -
+const _storeLocation = storeLocation();
+const { locationData } = storeToRefs(_storeLocation);
+provide('hintMsgs', { counter: { locationCity: '', locationDist: '', locationAddress: accountFormRules.address.counter }, hint: { locationCity: '', locationDist: '', locationAddress: accountFormRules.address.hint } })
+provide('currentRules', { locationCity: [ruleRequired], locationDist: [ruleRequired], locationAddress: [ruleRequired, ruleAddress] })
+provide('currentFieldDisabled', { locationCity: false, locationDist: false, locationAddress: false })
+
+
+// - 訊息視窗 -
+const _storeGlobal = storeGlobal();
 const openModal = (text) => {
     if (!process.client) return;
     _storeGlobal.confirmHandler({
@@ -118,31 +119,37 @@ const openModal = (text) => {
 
 // - 初始化會員資料 -
 const init = () => {
-    //console.time()
     _storeFullOverlay.open()
-    const promises = [
+    const promiseArr = [
         excuteAsyncFunc(_work, getProfileStatus, null, (response) => performanceData.value = response.data),
         excuteAsyncFunc(_work, getCategories, null, (response) => taskCategories.value = response.data),
-        excuteAsyncFunc(_work, getAccountInfo, null, (response) => userData.value = response.data)
+        excuteAsyncFunc(_work, getAccountInfo, null, (response) => {
+            userData.value = response.data;
+            avatarPath.value = response.data.avatarPath;
+            locationData.value = response.data.location;
+        })
     ];
-    Promise.allSettled(promises).then(results => {
-        if (!process.client) return;
-        logInfo(_work, 'init.results', results)
-        const _message = promiseErrorHanlder(results)
-        //logInfo(_work, 'results.message', _message)
-        if (_message && _message.length > 0) {
-            openModal(_message)
+    promiseAllSettledHanlder(
+        promiseArr
+        //成功
+        , () => btnSubmitDisabled.value = false
+        //失敗
+        , (error) => {
+            openModal(error)
             btnSubmitDisabled.value = true
-        } else {
-            btnSubmitDisabled.value = false
         }
-        _storeFullOverlay.close()
-        //console.timeEnd()
-    });
+        //finally
+        , () => {
+            _storeFullOverlay.close()
+            logInfo(_work, 'init done')
+        }
+    )
 }
 init();
 
 // - 更新會員資料 -
+const circularLoading = ref(false)
+const avatarPath = ref('')
 const submit = async () => {
 
     _storeFullOverlay.open()
@@ -160,7 +167,9 @@ const submit = async () => {
 
         //後端更新
         const data = { ...userData.value }
-        //console.log(data, 'data')
+        data.location = { ...locationData.value }
+        data.avatarPath = avatarPath.value
+        console.log(data, 'account.update.data')
 
         const response = await patchAccountInfo(data)
         if (response && !checkRespStatus(response)) {
@@ -180,6 +189,42 @@ const submit = async () => {
     }
 
 };
+
+
+// - 更新頭像 -
+const uploadAvatar = async (event) => {
+
+    const _file = event.target.files[0]
+    circularLoading.value = true
+    try {
+        //檢查圖片大小不可超過2MB
+        logInfo(_work, 'file.size', _file.size)
+        if (!checkUploadImage(_file.size, siteConfig.Image.upload.maxSize)) {
+            logError(_work, 'file.size', _file.size)
+            openModal(`圖片大小不可超過${siteConfig.Image.upload.maxSizeCn}`)
+            circularLoading.value = false
+            return;
+        }
+
+        let formData = new FormData();
+        formData.append("file", _file)
+        const response = await postUploadImage(formData)
+        if (response && checkRespStatus(response)) {
+            logInfo(_work, 'upload success')
+            openModal(response.message)
+            avatarPath.value = response.data.imgUrl
+        }
+        //防止不能上傳同一張圖片
+        event.target.value = ''
+
+    } catch (error) {
+        logError(_work, { error })
+        openModal(`更新頭像失敗`)
+    } finally {
+        circularLoading.value = false
+    }
+
+}
 
 
 // - 幫手專長驗證規則 -
