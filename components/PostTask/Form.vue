@@ -4,7 +4,7 @@
 
         <div class='mt-4'>
             <label class='label'>任務說明照片(非必填)</label>
-            <UploadImage></UploadImage>
+            <PostTaskUploadImage/>
         </div>
 
         <v-divider class="border-opacity-100 my-8"></v-divider>

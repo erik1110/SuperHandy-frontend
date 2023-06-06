@@ -53,7 +53,9 @@ import { siteConfig } from '@/services/siteConfig'
 const { checkRespStatus, checkTaskId, checkIsLogin, getTaskId } = useSpUtility()
 const { logInfo, logError } = useLog();
 const { fromNow } = useMoment();
-const taskData = ref({});
+const taskData = ref({
+  imgUrls:[]
+});
 const posterInfoData = ref({});
 const alertMessage = ref('');
 const _storeFullOverlay = storeFullOverlay()

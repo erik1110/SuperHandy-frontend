@@ -1,15 +1,15 @@
 <template>
-
-
-    <div class="sp-py-3 sp-flex sp-space-x-2 sp-flex-wrap">
+    <div class="sp-py-3 sp-flex sm:sp-space-x-2 sp-flex-wrap">
         <div v-for="item, idx in imgUrls" :key="idx" class="sp-relative pa-3">
-            <v-btn :data-id="idx" variant="plain" icon="mdi-close-circle" :ripple="false" class="btn-del-img" @click="deleteConfirm(idx,$event)"></v-btn>
-            <v-img :src="item" aspect-ratio="1" cover class="box" :data-id="idx"></v-img>
+            <v-btn :data-id="idx" variant="plain" icon="mdi-close-circle" :ripple="false" class="btn-del-img"
+                @click="deleteConfirm(idx, $event)"></v-btn>
+            <v-img :src="item" aspect-ratio="1" cover class="box sp-cursor-pointer" :data-id="idx"
+                @click="openBigImg(item)"></v-img>
         </div>
 
         <!-- 上傳照片按鈕 -->
         <div class="pa-3">
-            <label class="box btn-area sp-cursor-pointer" :class="imgUrls.length >= 5 ? 'd-none':''">
+            <label class="box btn-area sp-cursor-pointer" :class="imgUrls.length >= 5 ? 'd-none' : ''">
                 <v-progress-circular v-if="circularLoading" indeterminate color="v-purple"></v-progress-circular>
                 <div v-else class="sp-text-center sp-text-sm">
                     <div class="mdi mdi-plus"></div>
@@ -19,12 +19,19 @@
             </label>
         </div>
         <!-- 上傳照片按鈕 -->
+
+        <!-- 顯示大圖 -->
+        <v-overlay v-model="bigImgOverlay" @click="bigImgOverlay = false">
+            <div class="sp-flex sp-w-[100vw] sp-h-[100vh] sp-items-center sp-justify-center">
+                <v-img aspect-ratio="1" class="bigbox" :src="bigImgSrc" />
+            </div>
+        </v-overlay>
+        <!-- 顯示大圖 -->
     </div>
 
     <ul class="sp-text-sm sp-list-disc sp-pl-5">
         <li class="sp-text-gray-placeholder sp-text-sm">每筆任務最多可上傳5張照片，每張照片大小不超過2MB，只支援JPG、PNG格式。</li>
     </ul>
-
 </template>
 
 <script setup>
@@ -34,15 +41,18 @@ import { postTaskConfig } from "@/services/postTaskConfig";
 import { storePostTask } from "@/stores/storePostTask";
 import { postUploadImage } from '@/services/apis/general'
 const _storePostTask = storePostTask();
-const { openConfirmModal, openInfoModal, openErrorModal, openModal, closeModal} = storePostTask();
+const { openConfirmModal, openInfoModal, openErrorModal, openModal, closeModal } = storePostTask();
 const { imgUrls } = storeToRefs(_storePostTask)
 const { checkRespStatus, checkUploadImage } = useSpUtility()
 const { logInfo, logError } = useLog()
 const _work = '圖片上傳'
 const circularLoading = ref(false)
+const bigImgOverlay = ref(false)
+const bigImgSrc = ref('')
+
 
 const upload = async (event) => {
-    console.log('anna')
+
     let _message = ''
     let _dialogType = postTaskConfig.dialogType.error
     const _file = event.target.files[0]
@@ -66,6 +76,8 @@ const upload = async (event) => {
             imgUrls.value.push(response.data.imgUrl)
         }
         _message = response.message
+        //防止不能上傳同一張圖片
+        event.target.value = ''
 
     } catch (error) {
         logError(_work, { error })
@@ -78,15 +90,28 @@ const upload = async (event) => {
 }
 
 
-const deleteConfirm = (idx,event) => {
+const openBigImg = (url) => {
+    bigImgSrc.value = url
+    bigImgOverlay.value = true
+}
+
+const deleteConfirm = (idx, event) => {
     // console.log(idx,'idx')
 
     const deleteImage = () => {
-        imgUrls.value.splice(idx,1)
+        imgUrls.value.splice(idx, 1)
         closeModal()
     }
-    openConfirmModal('是否要刪除這張照片?',deleteImage)
+    openConfirmModal('是否要刪除這張照片?', deleteImage)
 }
+
+
+watch(bigImgOverlay, (nV, oV) => {
+    if (!nV) {
+        bigImgSrc.value = ''
+    }
+})
+
 </script>
 <style lang="postcss" scoped>
 @import url("@/assets/css/tailwind.css");
@@ -96,11 +121,16 @@ const deleteConfirm = (idx,event) => {
     height: 100px;
 }
 
+.bigbox {
+    width: 50vw;
+    height: 50vh;
+}
+
 .box {
     @apply sp-border sp-border-dashed sp-border-gray-placeholder sp-rounded-lg sp-flex sp-justify-center sp-items-center sp-text-purple
 }
 
-.btn-del-img{
+.btn-del-img {
     position: absolute;
     top: -12px;
     right: -12px;
