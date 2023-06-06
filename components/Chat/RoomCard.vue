@@ -1,4 +1,5 @@
 <template>
+  <!-- Modal Left - room card component -->
   <div
     @click="openRoom"
     class="roomCard active:sp-bg-slate-200"

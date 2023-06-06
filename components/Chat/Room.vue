@@ -1,4 +1,5 @@
 <template>
+  <!-- Modal Right - Individual Room -->
   <div class="room">
     <div class="room_head">
       <v-btn

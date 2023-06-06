@@ -1,4 +1,5 @@
 <template>
+  <!-- Mobile mode -->
   <v-row v-if="showChat" class="md:sp-hidden" justify="center">
     <v-dialog
       class="md:sp-hidden"
@@ -18,19 +19,16 @@
           >
         </div>
         <Transition name="fade">
-          <v-list v-if="!roomSmCard" lines="two" subheader>
-            <ChatRoomList />
-          </v-list>
+          <ChatRoomList v-if="!roomSmCard" />
         </Transition>
 
         <Transition name="slideLeft">
-          <!-- <v-list v-if="roomSmCard" lines="two" subheader> -->
           <ChatRoom v-if="roomSmCard" />
-          <!-- </v-list> -->
         </Transition>
       </v-card>
     </v-dialog>
   </v-row>
+  <!-- Web mode -->
   <Transition name="expand">
     <div
       v-if="showChat"
@@ -66,7 +64,7 @@ const roomSmCard = useState("roomSmCard", () => ref(false));
 .chatModal {
   @apply sp-bg-white sp-absolute sp-right-0 sp-bottom-0 sp-z-20  sp-overflow-hidden;
   &_head {
-    @apply sp-bg-purple sp-w-full sp-h-[36px] sp-flex sp-px-4 sp-items-center;
+    @apply sp-bg-purple sp-w-full sp-h-[36px] sp-min-h-[36px] sp-flex sp-px-4 sp-items-center;
   }
   &_content {
     height: calc(100% - 36px);

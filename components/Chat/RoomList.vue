@@ -1,4 +1,5 @@
 <template>
+  <!-- Modal Left - All Rooms -->
   <div class="roomList">
     <ChatRoomCard v-for="r in rooms" :key="r.id" :room="r" />
   </div>
