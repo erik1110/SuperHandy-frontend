@@ -1,75 +1,53 @@
 <template>
-    <Swiper class="swiper" :spaceBetween="5" :slidesPerView="1" :modules="[SwiperNavigation]" :breakpoints="{
-        '110': {
-            slidesPerView: 1,
-            spaceBetween: 5
-        },
-        '220': {
-            slidesPerView: 1.25,
-            spaceBetween: 5
-        },
-        '275': {
-            slidesPerView: 1.75,
-            spaceBetween: 5
-        },
-        '330': {
-            slidesPerView: 2.25,
-            spaceBetween: 5
-        },
-        '385': {
-            slidesPerView: 2.75,
-            spaceBetween: 5
-        },
-        '440': {
-            slidesPerView: 3.25,
-            spaceBetween: 5
-        },
-        '495': {
-            slidesPerView: 3.75,
-            spaceBetween: 5
-        },
-        '550': {
-            slidesPerView: 4.25,
-            spaceBetween: 5
-        },
-        '640': {
-            slidesPerView: 5,
-            spaceBetween: 5
-        },
-    }">
-        <SwiperSlide v-for="(item, idx) in imgUrls" :key="idx">
-            <div class="sp-me-2 sp-rounded-lg sp-overflow-hidden sp-w-[100px] sp-h-[100px]">
-                <v-img cover :src="item" @click="openBigImage" class="hover:sp-cursor-pointer"></v-img>
-            </div>
-        </SwiperSlide>
-        <div class="text-center my-2 sm:sp-hidden">
-            <SwiperControls v-if="imgUrls.length > 2"  :btnSize="'xsmal'"></SwiperControls>
+    <div class="sp-py-3 sp-flex sm:sp-space-x-2 sp-flex-wrap">
+        <div v-for="item, idx in imgUrls" :key="idx" class="sp-relative pa-3">
+            <v-img :src="item" aspect-ratio="1" cover class="box sp-cursor-pointer" :data-id="idx"
+                @click="openBigImg(item)"></v-img>
         </div>
-    </Swiper>
+
+        <!-- 顯示大圖 -->
+        <v-overlay v-model="bigImgOverlay" @click="bigImgOverlay = false">
+            <div class="sp-flex sp-w-[100vw] sp-h-[100vh] sp-items-center sp-justify-center">
+                <v-img aspect-ratio="1" class="bigbox" :src="bigImgSrc" />
+            </div>
+        </v-overlay>
+        <!-- 顯示大圖 -->
+    </div>
 </template>
+
 <script setup>
 const { imgUrls } = defineProps(["imgUrls"]);
+const circularLoading = ref(false)
+const bigImgOverlay = ref(false)
+const bigImgSrc = ref('')
 
-const openBigImage = () => {
-    alert('顯示大圖')
+const openBigImg = (url) => {
+    bigImgSrc.value = url
+    bigImgOverlay.value = true
 }
 
-/*如果只有一个slide就销毁swiper*/
-// if (mySwiper.slides.length <= 3) {
-//     mySwiper.destroy();
-// }
-
-/*如果只有一个slide就不顯示SwiperControls*/
-
-/*點擊圖片顯示大圖*/
+watch(bigImgOverlay, (nV, oV) => {
+    if (!nV) {
+        bigImgSrc.value = ''
+    }
+})
 
 </script>
-<style scoped>
-.swiper {
-    margin-left: 0;
-    /* 640px = tailwindcss.sm */
-    max-width: 640px;
-    width: 100%;
-    height: auto;
+<style lang="postcss" scoped>
+@import url("@/assets/css/tailwind.css");
+
+.box {
+    width: 100px;
+    height: 100px;
+}
+
+.bigbox {
+    width: 50vw;
+    height: 50vh;
+}
+
+.box {
+    @apply sp-border sp-border-dashed sp-border-gray-placeholder sp-rounded-lg sp-flex sp-justify-center sp-items-center sp-text-purple
 }
 </style>
+
