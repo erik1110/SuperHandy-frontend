@@ -3,7 +3,7 @@
     <div class="sp-flex">
       <div class="left sp-text-center sp-mr-4">
         <div
-          class="sp-w-full sp-min-w-[150px] sp-rounded-lg sp-overflow-hidden"
+          class="sp-w-full sp-min-w-[150px] sp-min-h-[150px] sp-rounded-lg sp-overflow-hidden"
         >
           <!-- Formal -->
           <!-- <v-img :src="props.avatar" class="sp-w-full"></v-img> -->

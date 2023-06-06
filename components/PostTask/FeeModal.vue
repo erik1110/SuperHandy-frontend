@@ -123,7 +123,7 @@ const helperCoinEstimate = computed(() => {
 // 確認要折抵的幫手幣金額
 const helperCoinConfirm = ref(0)
 function calculateHelperCoin(event) {
-    if (chkHelperCoinEstimate) {
+    if (chkHelperCoinEstimate.value) {
         helperCoinConfirm.value = helperCoinEstimate.value
     } else {
         helperCoinConfirm.value = 0

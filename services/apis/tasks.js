@@ -8,6 +8,10 @@ export const getTasksPosterManagement = () =>
 export const getTasksHelperManagement = () =>
   req("GET", "/tasks/management/helper", {}, { auth: true });
 
+//刪除案件
+export const deleteTasksManagement = (taskId) =>
+  req("DELETE", `/tasks/management/${taskId}`, {}, { auth: true });
+
 //取得任務詳情
 export const getTasksManagementDetail = (taskId) =>
   req("GET", `tasks/management/${taskId}`, {}, { auth: true });
@@ -26,7 +30,11 @@ export const postTasksManagementHelperAccept = (taskId, data) =>
   req("POST", `tasks/management/upload-acceptance/${taskId}`, data, {
     auth: true,
   });
-
+//案主退回驗收內容
+export const postTasksManagementPosterRefuse = (taskId, data) =>
+  req("POST", `tasks/management/refuse-acceptance/${taskId}`, data, {
+    auth: true,
+  });
 //案主確認驗收內容
 export const postTasksManagementPosterAccpet = (taskId) =>
   req(
@@ -35,3 +43,6 @@ export const postTasksManagementPosterAccpet = (taskId) =>
     {},
     { auth: true }
   );
+//修改我方評論
+export const postTasksManagementComment = (taskId, data) =>
+  req("POST", `/tasks/management/comment/${taskId}`, data, { auth: true });

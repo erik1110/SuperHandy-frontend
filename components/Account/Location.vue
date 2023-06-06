@@ -1,31 +1,32 @@
 <template>
-    <div>
-        <label class='label'>地址</label>
-        <div class="sp-space-y-4 lg:sp-flex lg:sp-space-x-2 lg:sp-space-y-0">
-            <div class=" lg:sp-w-1/2 lg:sp-flex lg:sp-space-x-2">
-                <v-select v-model="locationData.city" :rules='currentRules.locationCity' :disabled="currentEnabled.locationCity" :items='countyList' item-title='city'
-                    item-value='city' label="縣市" clearable>
-                </v-select>
-                <v-select v-model='locationData.dist' :rules='currentRules.locationDist' :disabled="currentEnabled.locationDist" :items='townList' item-title='dist'
-                    item-value='dist' :hint='hintLocationDist' :readonly='readonlyLocationDist' label="區域" clearable
-                    persistent-hint>
-                </v-select>
-            </div>
-            <v-text-field v-model='locationData.address' :rules='currentRules.locationAddress' :disabled="currentEnabled.locationAddress" :counter='hintMsgs.counter.locationAddress'
-                :hint='hintMsgs.hint.locationAddress' @keypress.enter.prevent clearable />
-        </div>
+  <div>
+    <label class='label'>地址</label>
+    <div class="sp-space-y-4 lg:sp-flex lg:sp-space-x-2 lg:sp-space-y-0">
+      <div class=" lg:sp-w-1/2 lg:sp-flex lg:sp-space-x-2">
+        <v-select v-model="locationData.city" :rules='currentRules.locationCity' :disabled="currentDisabled.locationCity"
+          :items='countyList' item-title='city' item-value='city' label="縣市" clearable>
+        </v-select>
+        <v-select v-model='locationData.dist' :rules='currentRules.locationDist' :disabled="currentDisabled.locationDist"
+          :items='townList' item-title='dist' item-value='dist' :hint='hintLocationDist' :readonly='readonlyLocationDist'
+          label="區域" clearable persistent-hint>
+        </v-select>
+      </div>
+      <v-text-field v-model='locationData.address' :rules='currentRules.locationAddress'
+        :disabled="currentDisabled.locationAddress" :counter='hintMsgs.counter.locationAddress'
+        :hint='hintMsgs.hint.locationAddress' @keypress.enter.prevent clearable />
     </div>
+  </div>
 </template>
 <script setup>
 import { storeToRefs } from 'pinia'
 import tw_county from '@/static/tw_county.json'
 import tw_town from '@/static/tw_town.json'
-import { storePostTask } from "@/stores/storePostTask";
-const _storePostTask = storePostTask();
-const { locationData } = storeToRefs(_storePostTask);
-// const data = inject('location')
+import { storeLocation } from "@/stores/storeLocation";
+const _storeLocation = storeLocation();
+const { locationData } = storeToRefs(_storeLocation);
+
 const currentRules = inject('currentRules')
-const currentEnabled = inject('currentFieldEnabled')
+const currentDisabled = inject('currentFieldDisabled')
 const hintMsgs = inject('hintMsgs')
 
 
@@ -56,7 +57,7 @@ watch(() => locationData.value.city, (nV, oV) => {
     clearDist()
   }
 })
-function clearDist () {
+function clearDist() {
   locationData.value.dist = ''
 }
 
@@ -84,6 +85,6 @@ function clearDist () {
 @import url("@/assets/css/tailwind.css");
 
 .label {
-    @apply sp-text-gray-placeholder sp-font-bold sp-mb-2 sp-inline-block
+  @apply sp-text-gray-placeholder sp-font-bold sp-mb-2 sp-inline-block
 }
 </style>

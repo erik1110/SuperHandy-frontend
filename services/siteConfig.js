@@ -36,7 +36,7 @@ export const siteConfig = {
 
   Image:{
     upload:{
-      maxSize:2097152,// 2MB
+      maxSize:(2*1024*1024),// 2MB
       maxSizeCn:'2MB',
     }
 

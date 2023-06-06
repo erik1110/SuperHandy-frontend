@@ -30,7 +30,10 @@
         </div>
         <div class="sp-mb-6">
             <p class="title sp-mb-2">任務照片</p>
-            <SwiperImages></SwiperImages>
+            <div v-if="!taskData.imgUrls" class="sp-text-body-sm sp-whitespace-pre-line sp-text-gray-placeholder">
+                無提供照片
+            </div>
+            <FindTaskDetailImages v-else :imgUrls="taskData.imgUrls"></FindTaskDetailImages>
         </div>
         <div class="sp-mt-8 sp-space-y-4 sm:sp-flex sm:sp-space-x-4 sm:sp-space-y-0 sm:sp-justify-between">
             <NuxtLink :to="siteConfig.linkPaths.findTasksList.to">
