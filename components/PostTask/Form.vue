@@ -16,7 +16,7 @@
 
         <div class='mt-4'>
             <!-- 任務地點 -->
-            <PostTaskLocation />
+            <AccountLocation />
         </div>
 
         <div class='my-8'>
@@ -60,7 +60,7 @@
             </div>
         </div>
         <div>
-            <v-btn v-if="!currentTaskStatusIsDraft && !currentTaskStatusIsUnpublish" color="primary"
+            <v-btn v-if="!currentTaskStatusIsDraft && !currentTaskStatusIsUnpublish && dev" color="primary"
                 class="button md:sp-w-auto" @click="fakeData">填入假資料</v-btn>
         </div>
     </v-form>
@@ -75,6 +75,7 @@
 import { storeToRefs } from 'pinia'
 import { storeFullOverlay } from "@/stores/storeFullOverlay";
 import { storePostTask } from "@/stores/storePostTask";
+import { storeLocation } from "@/stores/storeLocation";
 
 import { postTaskConfig } from '@/services/postTaskConfig';
 import { getDraftById, getTasksById, deleteDraftById, executeFetchData } from '@/services/apis/postTask'
@@ -86,14 +87,16 @@ const { excuteAsyncFunc, promiseAllSettledHanlder, checkTaskId, checkRespStatus 
 const { validateFormResult } = useFormUtil();
 const _storeFullOverlay = storeFullOverlay();
 const _storePostTask = storePostTask();
+const _storeLocation = storeLocation();
 const { logInfo, logError } = useLog()
 
 const { openConfirmModal, openErrorModal, openModal, closeModal, execConfirmCallback, execCloseCallback } = storePostTask();
 const { openBtnLoading, closeBtnLoading, openSFeeModal } = storePostTask();
 const { exposurePlans, taskCategories, descriptionTemplateList } = storeToRefs(_storePostTask);
 const { currentTaskStatus, currentTaskStatusIsDraft, currentTaskStatusIsUnpublish } = storeToRefs(_storePostTask);
-const { userCoin, formData, imgUrls, contactInfoData, locationData } = storeToRefs(_storePostTask);
+const { userCoin, formData, imgUrls, contactInfoData } = storeToRefs(_storePostTask);
 const { btnDisabled, btnLoading, postTaskModal, postTaskFeeModal } = storeToRefs(_storePostTask);
+const { locationData } = storeToRefs(_storeLocation);
 
 const currentRules = ref(postTaskConfig.rules.draft)
 const currentFieldDisabled = ref(postTaskConfig.fieldDisadled.init)
@@ -104,6 +107,8 @@ let taskId = ''
 provide('hintMsgs', postTaskConfig.hintMsgs)
 provide('currentRules', currentRules) //會重新set
 provide('currentFieldDisabled', currentFieldDisabled) //會重新set
+
+const dev = process.dev
 
 
 // - loading -
