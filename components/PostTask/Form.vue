@@ -27,7 +27,7 @@
                         <v-btn color="v-orange" class='button'>回到任務詳情</v-btn>
                     </NuxtLink>
                     <v-btn type='submit' id='unpublished' color="v-gray-placeholder" class='button md:sp-w-auto'
-                            :disabled="btnDisabled" :loading="btnLoading.unpublished">儲存任務</v-btn>
+                        :disabled="btnDisabled" :loading="btnLoading.unpublished">儲存任務</v-btn>
                 </div>
             </div>
             <!-- 草稿任務按鈕區 -->
@@ -300,9 +300,12 @@ const deleteDraft = async () => {
         //成功
         , () => {
             resetForm()
-            navigateTo(siteConfig.linkPaths.postTask.to)
             openModal({
-                message: _message
+                isShowGoTaskBtn: true,
+                message: _message,
+                closeCallback: () => {
+                    navigateTo(siteConfig.linkPaths.postTask.to)
+                }
             })
         }
         //失敗
@@ -424,4 +427,5 @@ function fakeData() {
 
 .button {
     @apply sp-px-4 sp-mb-4 sp-w-full md:sp-mb-0
-}</style>
+}
+</style>
