@@ -20,7 +20,7 @@ export const storePostTask = defineStore("storePostTask", () => {
         salary: 10,
     })
     const imgUrls = ref([])
-    const locationData = ref({})
+    // const locationData = ref({})
     const contactInfoData = ref({})
 
 
@@ -134,7 +134,7 @@ export const storePostTask = defineStore("storePostTask", () => {
     })
     function openSFeeModal (option) {
         feeModalOption.value.salary = option.salary ?? 0;
-        feeModalOption.value.isFromDraft = option.isFromDraft ?? false;
+        //feeModalOption.value.isFromDraft = option.isFromDraft ?? false;
         postTaskFeeModal.value = true
     }
 
@@ -150,7 +150,7 @@ export const storePostTask = defineStore("storePostTask", () => {
 
         formData,
         imgUrls,
-        locationData,
+        // locationData,
         contactInfoData,
 
         userCoin,

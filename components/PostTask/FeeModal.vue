@@ -18,7 +18,8 @@
                             <td>
                                 <div class="d-flex align-center justify-end">
                                     <span>{{ helperCoinEstimate }}點</span>
-                                    <v-checkbox-btn v-model="chkHelperCoinEstimate" @update:modelValue="calculateHelperCoin"></v-checkbox-btn>
+                                    <v-checkbox-btn v-model="chkHelperCoinEstimate"
+                                        @update:modelValue="calculateHelperCoin"></v-checkbox-btn>
                                 </div>
                             </td>
                         </tr>
@@ -66,7 +67,7 @@
                                     @update:modelValue="btnDisabled = !$event"></v-checkbox-btn>
                             </td>
                             <td class="sp-text-end">
-                                <div v-if="feeModalOption.isFromDraft">
+                                <div v-if="currentTaskStatusIsDraft">
                                     <v-form
                                         @submit.prevent="$emit('aSubmit', $event, { superCoin: total, helperCoin: helperCoinConfirm })">
                                         <v-btn color="v-purple" id="publishFromDraft" type="submit" :loading="loading"
@@ -103,7 +104,7 @@ import { storeToRefs } from "pinia";
 import { siteConfig } from '@/services/siteConfig'
 import { storePostTask } from "~/stores/storePostTask";
 const _storePostTask = storePostTask();
-const { userCoin, feeModalOption, postTaskFeeModal, exposurePlanPoint } = storeToRefs(_storePostTask);
+const { userCoin, feeModalOption, postTaskFeeModal, exposurePlanPoint, currentTaskStatusIsDraft } = storeToRefs(_storePostTask);
 const { loading } = defineProps(['loading']);
 const { isNumber } = useSpUtility()
 const btnDisabled = ref(true)

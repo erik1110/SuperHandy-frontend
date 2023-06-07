@@ -71,7 +71,7 @@ export const postTaskConfig = {
     },
 
     //欄位是否開啟
-    fieldEnabled:{
+    fieldDisadled:{
         //全部都可以編輯
         init:{
             title:false,
@@ -86,7 +86,7 @@ export const postTaskConfig = {
             locationDist: false,
             locationAddress: false,
         },
-        //只有任務說明,任務圖片,聯絡人
+        //只有任務說明,任務圖片,聯絡人可以編輯
         unpublishedEdit:{
             title: true,
             category: true,

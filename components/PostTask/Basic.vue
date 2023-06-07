@@ -2,32 +2,32 @@
     <div>
         <div class='mt-4'>
             <label class='label' for='title'>任務標題</label>
-            <v-text-field v-model='formData.title' :rules='currentRules.title' :disabled="currentEnabled.title"
+            <v-text-field v-model='formData.title' :rules='currentRules.title' :disabled="currentDisabled.title"
                 :counter='hintMsgs.counter.title' :hint='hintMsgs.hint.title' placeholder="請輸入任務標題" id="title"
                 @keypress.enter.prevent clearable/>
         </div>
         <div class='mt-4'>
             <label class='label' for='category'>服務類別</label>
-            <v-select v-model='formData.category' :rules='currentRules.category' :disabled="currentEnabled.title"
+            <v-select v-model='formData.category' :rules='currentRules.category' :disabled="currentDisabled.title"
                 :items='taskCategories' item-title='name' item-value='name' placeholder="請選擇服務類別" id="category" clearable>
             </v-select>
         </div>
         <div class='mt-4'>
             <label class='label' for='description'>任務說明</label>
             <v-textarea v-model='formData.description' :rules='currentRules.description'
-                :disabled="currentEnabled.description" :counter='hintMsgs.counter.description'
+                :disabled="currentDisabled.description" :counter='hintMsgs.counter.description'
                 :hint='hintMsgs.hint.description' placeholder="請輸入任務說明" id="description" clearable/>
         </div>
         <div class='mt-4 md:sp-w-1/2 lg:sp-w-1/3'>
             <label class='label' for='salary'>任務薪水</label>
-            <v-text-field v-model='formData.salary' :rules='currentRules.salary' :disabled="currentEnabled.salary" :hint='hintMsgs.hint.salary'
+            <v-text-field v-model='formData.salary' :rules='currentRules.salary' :disabled="currentDisabled.salary" :hint='hintMsgs.hint.salary'
                 type='number' prefix=$ suffix=超人幣 id="salary" @keypress.enter.prevent />
         </div>
         <div class='mt-4'>
             <label class='label'>曝光方案</label>
             <div class='d-md-flex'>
                 <v-radio-group v-model='formData.exposurePlan' v-for='(item, index) in exposurePlans' :key='index'
-                    :rules='currentRules.exposurePlan' :disabled="currentEnabled.exposurePlan">
+                    :rules='currentRules.exposurePlan' :disabled="currentDisabled.exposurePlan">
                     <v-radio :label='`${item.title} ${item.price}點`' :value='item.title'></v-radio>
                 </v-radio-group>
             </div>
@@ -36,13 +36,12 @@
 </template>
 <script setup>
 
-// const data = inject('basic')
 import { storeToRefs } from "pinia";
 import { storePostTask } from "@/stores/storePostTask";
 
-const currentRules = inject('currentRules')
-const currentEnabled = inject('currentFieldEnabled')
 const hintMsgs = inject('hintMsgs')
+const currentRules = inject('currentRules')
+const currentDisabled = inject('currentFieldDisabled')
 
 
 const _storePostTask = storePostTask();
