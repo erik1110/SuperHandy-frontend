@@ -60,7 +60,7 @@ export const executeFetchData = async (submitter, data, taskId) => {
       return await postPublishFromDraft(taskId, data);
 
     case postTaskConfig.taskSubmitter.unpublished:
-      return await postPostTaskEdit(taskId, data);
+      return await postTaskEdit(taskId, data);
 
     default:
       break;
