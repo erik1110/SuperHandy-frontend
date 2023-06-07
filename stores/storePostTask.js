@@ -20,7 +20,7 @@ export const storePostTask = defineStore("storePostTask", () => {
         salary: 10,
     })
     const imgUrls = ref([])
-    const locationData = ref({})
+    // const locationData = ref({})
     const contactInfoData = ref({})
 
 
@@ -150,7 +150,7 @@ export const storePostTask = defineStore("storePostTask", () => {
 
         formData,
         imgUrls,
-        locationData,
+        // locationData,
         contactInfoData,
 
         userCoin,
