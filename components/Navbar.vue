@@ -8,17 +8,9 @@
 
     <template v-slot:append>
       <div class="sp-w-[220px] sp-py-2 sp-mr-1">
-        <v-text-field
-          v-model="_storeFindTasks.keyword"
-          label="請輸入關鍵字"
-          append-inner-icon="mdi-magnify"
-          density="compact"
-          hide-details
-          single-line
-          clearable
-          @keyup.enter="searchSubmit"
-          @click:append-inner="searchSubmit"
-        ></v-text-field>
+        <v-text-field v-model="_storeFindTasks.keyword" label="請輸入關鍵字" append-inner-icon="mdi-magnify" density="compact"
+          hide-details single-line clearable @keyup.enter="searchSubmit"
+          @click:append-inner="searchSubmit"></v-text-field>
       </div>
 
       <NuxtLink to="/find-tasks/list">
@@ -27,28 +19,15 @@
       <NuxtLink to="/post-task/-1">
         <v-btn>刊登任務</v-btn>
       </NuxtLink>
-      <v-btn v-if="_storeAuth.loginToken" icon size="small"
-        ><v-icon>mdi-bell</v-icon>
-        <!-- <v-menu activator="parent">
-          <v-list>
-            <NuxtLink v-for="(item, index) in items" :key="index" :value="index" :to="item.to">
-              <v-list-item>
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
-              </v-list-item>
-            </NuxtLink>
-          </v-list>
-        </v-menu> -->
+      <v-btn v-if="_storeAuth.loginToken" icon size="small"><v-icon>mdi-bell</v-icon>
+        <v-menu :close-on-content-click="false" activator="parent">
+          <Notifications />
+        </v-menu>
       </v-btn>
-      <v-btn v-if="_storeAuth.loginToken" icon
-        ><v-icon>mdi-account-circle</v-icon>
+      <v-btn v-if="_storeAuth.loginToken" icon><v-icon>mdi-account-circle</v-icon>
         <v-menu activator="parent">
           <v-list>
-            <NuxtLink
-              v-for="(item, index) in items"
-              :key="index"
-              :value="index"
-              :to="item.to"
-            >
+            <NuxtLink v-for="(item, index) in items" :key="index" :value="index" :to="item.to">
               <v-list-item>
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item>
