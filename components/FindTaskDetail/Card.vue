@@ -30,7 +30,7 @@
         </div>
         <div class="sp-mb-6">
             <p class="title sp-mb-2">任務照片</p>
-            <div v-if="!taskData.imgUrls" class="sp-text-body-sm sp-whitespace-pre-line sp-text-gray-placeholder">
+            <div v-if="taskData.imgUrls.length === 0" class="sp-text-body-sm sp-whitespace-pre-line sp-text-gray-placeholder">
                 無提供照片
             </div>
             <FindTaskDetailImages v-else :imgUrls="taskData.imgUrls"></FindTaskDetailImages>
@@ -45,7 +45,6 @@
                     <v-icon class="mr-1">mdi-cursor-pointer</v-icon>我要接案
                 </v-btn>
             </div>
-
         </div>
     </div>
 </template>
