@@ -134,7 +134,7 @@ export const storePostTask = defineStore("storePostTask", () => {
     })
     function openSFeeModal (option) {
         feeModalOption.value.salary = option.salary ?? 0;
-        feeModalOption.value.isFromDraft = option.isFromDraft ?? false;
+        //feeModalOption.value.isFromDraft = option.isFromDraft ?? false;
         postTaskFeeModal.value = true
     }
 
