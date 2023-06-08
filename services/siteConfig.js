@@ -32,6 +32,7 @@ export const siteConfig = {
     tasks: { title: "任務管理", to: "/account/tasks" },
     points: { title: "點數管理", to: "/account/points" },
     comments: { title: "評價查看", to: "/account/comments" },
+    exposurePlan: { title: "曝光方案", to: "/exposure-plan" },
   },
 
   Image:{

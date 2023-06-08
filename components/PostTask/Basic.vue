@@ -4,7 +4,7 @@
             <label class='label' for='title'>任務標題</label>
             <v-text-field v-model='formData.title' :rules='currentRules.title' :disabled="currentDisabled.title"
                 :counter='hintMsgs.counter.title' :hint='hintMsgs.hint.title' placeholder="請輸入任務標題" id="title"
-                @keypress.enter.prevent clearable/>
+                @keypress.enter.prevent clearable />
         </div>
         <div class='mt-4'>
             <label class='label' for='category'>服務類別</label>
@@ -16,12 +16,12 @@
             <label class='label' for='description'>任務說明</label>
             <v-textarea v-model='formData.description' :rules='currentRules.description'
                 :disabled="currentDisabled.description" :counter='hintMsgs.counter.description'
-                :hint='hintMsgs.hint.description' placeholder="請輸入任務說明" id="description" clearable/>
+                :hint='hintMsgs.hint.description' placeholder="請輸入任務說明" id="description" clearable />
         </div>
         <div class='mt-4 md:sp-w-1/2 lg:sp-w-1/3'>
             <label class='label' for='salary'>任務薪水</label>
-            <v-text-field v-model='formData.salary' :rules='currentRules.salary' :disabled="currentDisabled.salary" :hint='hintMsgs.hint.salary'
-                type='number' prefix=$ suffix=超人幣 id="salary" @keypress.enter.prevent />
+            <v-text-field v-model='formData.salary' :rules='currentRules.salary' :disabled="currentDisabled.salary"
+                :hint='hintMsgs.hint.salary' type='number' prefix=$ suffix=超人幣 id="salary" @keypress.enter.prevent />
         </div>
         <div class='mt-4'>
             <label class='label'>曝光方案</label>
@@ -31,6 +31,14 @@
                     <v-radio :label='`${item.title} ${item.price}點`' :value='item.title'></v-radio>
                 </v-radio-group>
             </div>
+            <div class="sp-text-end">
+                <NuxtLink :to="siteConfig.linkPaths.exposurePlan.to" target="_blank">
+                    <v-chip class="ma-2 px-10 sp-cursor-pointer" color="secondary-darken" size="small">
+                        <v-icon start icon="mdi-magnify"></v-icon>
+                        查看曝光方案
+                    </v-chip>
+                </NuxtLink>
+            </div>
         </div>
     </div>
 </template>
@@ -38,6 +46,7 @@
 
 import { storeToRefs } from "pinia";
 import { storePostTask } from "@/stores/storePostTask";
+import { siteConfig } from "~/services/siteConfig";
 
 const hintMsgs = inject('hintMsgs')
 const currentRules = inject('currentRules')
