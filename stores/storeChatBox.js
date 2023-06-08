@@ -7,13 +7,27 @@ import { getChatList, getChatRoomHistory } from "@/services/apis/chat";
 export const storeChatBox = defineStore("chatBox", () => {
   const showChat = ref(false);
   const nowRoom = reactive({});
+  const nowRoomChatList = ref([]);
 
   // 聊天室列表
   const roomList = ref([]);
   const fetchChatList = async () => {
     let res = await getChatList();
     console.log({ res });
-    roomList.value = res.data;
+    let data = res.data
+    roomList.value = data.reduce((acc,cur)=>{
+      let newObj = {
+        ...cur[cur.partnerRole],
+        taskId: cur.taskId,
+        time: cur.time,
+        title: cur.title,
+        unreadCount: cur.unreadCount,
+        role: cur.partnerRole
+      }
+      acc.push(newObj)
+      return acc
+    },[])
+    console.log('roomlist',roomList.value);
   };
   onMounted(() => {
     console.log("fetchChatList on mounted");
@@ -23,6 +37,81 @@ export const storeChatBox = defineStore("chatBox", () => {
   const fetchRoomHistory = async (taskId) => {
     let res = await getChatRoomHistory({ taskId });
     console.log({ res });
+    // nowRoomChatList.value = res.data
+    nowRoomChatList.value =  [
+      {
+          "_id": "64813eb00b9e2d99b4bf968c",
+          "taskId": "64813eb00b9e2d99b4bf960a",
+          "role": "helper",
+          "message": "一塊小蛋糕",
+          "read": false,
+          "createdAt": "2023-06-08T02:36:32.249Z"
+      },
+      {
+          "_id": "64813eb00b9e2d99b4bf968b",
+          "taskId": "64813eb00b9e2d99b4bf960a",
+          "role": "poster",
+          "message": "你好，我的專題是做一個類似找打工的網站，請問你會寫網站嗎？",
+          "read": false,
+          "createdAt": "2023-06-08T02:36:32.249Z"
+      },
+      {
+          "_id": "64813eb00b9e2d99b4bf968a",
+          "taskId": "64813eb00b9e2d99b4bf960a",
+          "role": "helper",
+          "message": "你好，我可以幫你做畢業專題，請問你的專題是什麼呢？",
+          "read": false,
+          "createdAt": "2023-06-08T02:36:32.249Z"
+      },
+      {
+        "_id": "64813eb00b9e2d99b4bf9682",
+        "taskId": "64813eb00b9e2d99b4bf960a",
+        "role": "helper",
+        "message": "一塊小蛋糕",
+        "read": false,
+        "createdAt": "2023-06-08T02:36:32.249Z"
+    },
+    {
+        "_id": "64813eb00b9e2d99b4bf968d",
+        "taskId": "64813eb00b9e2d99b4bf960a",
+        "role": "poster",
+        "message": "你好，我的專題是做一個類似找打工的網站，請問你會寫網站嗎？",
+        "read": false,
+        "createdAt": "2023-06-08T02:36:32.249Z"
+    },
+    {
+        "_id": "64813eb00b9e2d99b4bf9623",
+        "taskId": "64813eb00b9e2d99b4bf960a",
+        "role": "helper",
+        "message": "你好，我可以幫你做畢業專題，請問你的專題是什麼呢？",
+        "read": false,
+        "createdAt": "2023-06-08T02:36:32.249Z"
+    },
+    {
+      "_id": "64813eb00b9e2d99b4bf9611",
+      "taskId": "64813eb00b9e2d99b4bf960a",
+      "role": "helper",
+      "message": "一塊小蛋糕",
+      "read": false,
+      "createdAt": "2023-06-08T02:36:32.249Z"
+  },
+  {
+      "_id": "64813eb00b9e2d99b4bf9612",
+      "taskId": "64813eb00b9e2d99b4bf960a",
+      "role": "poster",
+      "message": "你好，我的專題是做一個類似找打工的網站，請問你會寫網站嗎？",
+      "read": false,
+      "createdAt": "2023-06-08T02:36:32.249Z"
+  },
+  {
+      "_id": "64813eb00b9e2d99b4bf9613",
+      "taskId": "64813eb00b9e2d99b4bf960a",
+      "role": "helper",
+      "message": "你好，我可以幫你做畢業專題，請問你的專題是什麼呢？",
+      "read": false,
+      "createdAt": "2023-06-08T02:36:32.249Z"
+  }
+    ]
   };
   // WebSocket 設定
   const io = useIO();
@@ -76,6 +165,7 @@ export const storeChatBox = defineStore("chatBox", () => {
   return {
     showChat,
     nowRoom,
+    nowRoomChatList,
     roomList,
     fetchRoomHistory,
     messages,

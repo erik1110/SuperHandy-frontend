@@ -9,7 +9,7 @@
     "
   >
     <v-avatar class="mr-2" size="32">
-      <v-img :src="room.imgUrl" alt="John"></v-img>
+      <v-img :src="room.avatarPath" alt="John"></v-img>
     </v-avatar>
     <div class="sp-flex-auto mr-2">
       <div
@@ -18,13 +18,13 @@
         <v-chip
           class="mr-1"
           size="x-small"
-          :color="room.role == '幫手' ? 'v-purple' : 'secondary-darken'"
+          :color="room.role == 'helper' ? 'v-purple' : 'secondary-darken'"
         >
           <span style="font-size: 10px">
-            {{ room.role }}
+            {{ roleToDisplayRole(room.role) }}
           </span>
         </v-chip>
-        {{ room.name }}
+        {{ room.nickname || `${room.lastName}${room.firstName}` }}
       </div>
       <div
         class="roomCard_task sp-text-body-sm md:sp-text-caption sp-text-slate-600 sp-px-1"
@@ -38,12 +38,12 @@
       <div
         class="sp-text-body-sm md:sp-text-caption sp-text-slate-400 sp-whitespace-nowrap"
       >
-        8:00 pm
+        {{ lasMsgTime }}
       </div>
-      <div>
+      <div v-if="room.unreadCount != 0">
         <v-badge color="v-purple" inline>
           <template #badge>
-            <span class="sp-text-caption"> 7 </span>
+            <span class="sp-text-caption"> {{ room.unreadCount }} </span>
           </template>
         </v-badge>
       </div>
@@ -53,22 +53,41 @@
 
 <script setup>
 import { storeChatBox } from "~/stores/storeChatBox";
+import { useMoment } from "~/composables/useMoment";
+import { useHelper } from "~/composables/useHelper";
+
 const _storeChatBox = storeChatBox();
+const { timeFormat, timeDuration } = useMoment();
+const { roleToDisplayRole } = useHelper();
 const props = defineProps({
   room: Object,
 });
-const isOpen = computed(() => {
-  if (_storeChatBox.nowRoom?.id == props.room.id) return true;
-  else return false;
-});
 
 const roomMobileView = useState("roomMobileView");
-const openRoom = () => {
+const displayRole = computed(() => {
+  if (props.room.role == "helper") return "幫手";
+  else if (props.room.role == "poster") return "案主";
+});
+const lasMsgTime = computed(() => {
+  if (!props.room.time) return;
+  let duration = timeDuration(props.room.time);
+  if (duration.asHours() < 24) {
+    return timeFormat(props.room.time, "A hh:mm");
+  } else {
+    return timeFormat(props.room.time, "MM/DD");
+  }
+});
+// 判斷聊天室房間是否開啟
+const isOpen = computed(() => {
+  if (_storeChatBox.nowRoom?.taskId == props.room.taskId) return true;
+  else return false;
+});
+// 開啟聊天室房間
+const openRoom = async () => {
   console.log("openRoom");
+  await _storeChatBox.fetchRoomHistory(props.room.taskId);
   _storeChatBox.nowRoom = props.room;
   roomMobileView.value = true;
-  // for test :647f385eea40b69f3e54a443
-  _storeChatBox.fetchRoomHistory("647f385eea40b69f3e54a443");
 };
 </script>
 

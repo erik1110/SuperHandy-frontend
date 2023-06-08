@@ -6,13 +6,13 @@
     >
       <div class="sp-rounded-lg sp-overflow-hidden">
         <!-- Formal -->
-        <v-img :src="imgUrls" cover :max-height="150"></v-img>
+        <v-img :src="imgUrls" cover :height="150"></v-img>
         <!-- -----Test------ -->
-        <v-img
+        <!-- <v-img
           src="https://source.unsplash.com/random/240x180/?lifeStyle"
           cover
           :max-height="150"
-        ></v-img>
+        ></v-img> -->
       </div>
       <div
         class="sp-text-body sp-font-medium sp-text-slate-800 sp-my-2 sp-ml-1"
