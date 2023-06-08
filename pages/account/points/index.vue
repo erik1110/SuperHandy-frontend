@@ -1,115 +1,97 @@
 <template>
-  <div class="sp-max-w-[1000px]">
-    <VContainer fluid v-if="!isLoading">
-      <VRow>
-        <VCol cols="12" class="sp-flex">
-          <VCard class="sp-flex-1">
-            <v-card-text
-              class="sp-border-2 sp-border-black sp-border-solid sp-rounded-2 sp-text-center"
-            >
-              <div class="sp-text-h3 sp-mb-2">超人幣</div>
-              <div class="bg-svg superCoin sp-mx-auto sp-mb-2"></div>
-              <div class="">{{ point.superCoin }}</div>
-            </v-card-text>
-          </VCard>
-          <VCard class="sp-flex-1">
-            <v-card-text
-              class="sp-border-2 sp-border-black sp-border-solid sp-rounded-2 sp-text-center"
-            >
-              <div class="sp-text-h3 sp-mb-2">幫手幣</div>
-              <div class="bg-svg helperCoin sp-mx-auto sp-mb-2"></div>
-              <div class="">{{ point.helperCoin }}</div>
-            </v-card-text>
-          </VCard>
-        </VCol>
-        <VCol cols="12"> * 幫手幣僅用於案主曝光方案折抵使用 </VCol>
-        <VCol cols="12" class="sp-text-center sp-text-title"> 儲值點數 </VCol>
-        <VCol cols="12" class="sp-flex">
-          <VCard class="sp-flex-1">
-            <v-card-text
-              class="sp-border-2 sp-border-black sp-border-solid sp-rounded-2 sp-text-center"
-            >
-              <div class="sp-text-h3 sp-pb-[18px]">100 超人幣</div>
-              <div class="sp-my-4">NT$ 100</div>
-              <v-btn color="primary" outline @click="openPurchaseModal(100)"
-                >儲值去</v-btn
-              >
-            </v-card-text>
-          </VCard>
-          <VCard class="sp-flex-1">
-            <v-card-text
-              class="sp-border-2 sp-border-black sp-border-solid sp-rounded-2 sp-text-center"
-            >
-              <div class="sp-text-h3">500 超人幣</div>
-              <div class="sp-text-caption">贈送 50 幫手幣</div>
-              <div class="sp-my-4">NT$ 500</div>
-              <v-btn color="primary" outline @click="openPurchaseModal(500)"
-                >儲值去</v-btn
-              >
-            </v-card-text>
-          </VCard>
-          <VCard class="sp-flex-1">
-            <v-card-text
-              class="sp-border-2 sp-border-black sp-border-solid sp-rounded-2 sp-text-center"
-            >
-              <div class="sp-text-h3">1000 超人幣</div>
-              <div class="sp-text-caption">贈送 200 幫手幣</div>
-              <div class="sp-my-4">NT$ 1000</div>
-              <v-btn color="primary" outline @click="openPurchaseModal(1000)"
-                >儲值去</v-btn
-              >
-            </v-card-text>
-          </VCard>
-        </VCol>
-      </VRow>
-    </VContainer>
-    <AccountPointsPurchaseModal
-      :money="purchaseMoney"
-      @close="purchaseModal = false"
-    ></AccountPointsPurchaseModal>
+  <PostTaskOverlay />
+  <div class="sp-card-wrapper sp-bg-white sp-p-6">
+    <SecTitle :text="'目前帳戶點數'"></SecTitle>
+    <v-container fluid class="px-0" v-if="!isLoading">
+      <v-row class="">
+        <v-col cols="12" md="6">
+          <AccountPointsCard :data="pointHoster"></AccountPointsCard>
+        </v-col>
+        <v-col cols="12" md="6">
+          <AccountPointsCard :data="pointHelper"></AccountPointsCard>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
+  <div class="sp-card-wrapper sp-bg-white sp-p-6">
+    <SecTitle :text="'儲值超人幣'"></SecTitle>
+    <v-container fluid class="px-0" v-if="!isLoading">
+      <v-row class="">
+        <v-col cols="12" lg="4">
+          <AccountPointsPurchaseCard :data="purchaseData.basic" @openPurchaseModal="openPurchaseModal">
+          </AccountPointsPurchaseCard>
+        </v-col>
+        <v-col cols="12" lg="4">
+          <AccountPointsPurchaseCard :data="purchaseData.medium" @openPurchaseModal="openPurchaseModal">
+          </AccountPointsPurchaseCard>
+        </v-col>
+        <v-col cols="12" lg="4">
+          <AccountPointsPurchaseCard :data="purchaseData.advanced" @openPurchaseModal="openPurchaseModal">
+          </AccountPointsPurchaseCard>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
+  <AccountPointsPurchaseModal :money="purchaseMoney" @close="purchaseModal = false"></AccountPointsPurchaseModal>
 </template>
 <script setup>
-  import { getAccountPoints } from "@/services/apis/point";
-  const isLoading = ref(true);
-  const point = ref({});
-  const purchaseMoney = ref(0);
-  const purchaseModal = useState("purchaseModal", () => ref(false));
-  const FuncGetAccountPoints = async function () {
-    let res = await getAccountPoints();
-    if (!res.error) {
-      point.value = res.data;
-    } else {
-    }
-    isLoading.value = false;
-  };
-  onMounted(() => {
-    FuncGetAccountPoints();
-  });
-  const openPurchaseModal = function (money) {
-    purchaseMoney.value = money;
-    purchaseModal.value = true;
-  };
-  watch(
-    () => purchaseModal.value,
-    (val) => {
-      if (val == false) {
-        FuncGetAccountPoints();
-      }
-    }
-  );
-</script>
-<style scoped lang="scss">
-  .bg-svg {
-    width: 48px;
-    height: 48px;
-    &.superCoin {
-      background: url("@/assets/images/svg/superCoin.svg") center center /
-        contain no-repeat;
-    }
-    &.helperCoin {
-      background: url("@/assets/images/svg/helperCoin.svg") center center /
-        contain no-repeat;
+import { getAccountPoints } from "@/services/apis/point";
+const isLoading = ref(true);
+// const point = ref({});
+const pointHoster = ref({
+  title: '超人幣',
+  image: 'superCoin',
+  coin: 0,
+})
+const pointHelper = ref({
+  title: '幫手幣',
+  image: 'helperCoin',
+  coin: 0,
+  comments: '幫手幣僅限於折抵曝光方案時使用'
+})
+const purchaseData = ref({
+  basic: {
+    superCoin: 100,
+    price: 100,
+  },
+  medium: {
+    superCoin: 500,
+    price: 500,
+    bonus: 50
+  },
+  advanced: {
+    superCoin: 1000,
+    price: 1000,
+    bonus: 200
+  }
+})
+
+
+const purchaseMoney = ref(0);
+const purchaseModal = useState("purchaseModal", () => ref(false));
+const FuncGetAccountPoints = async function () {
+  let res = await getAccountPoints();
+  if (!res.error) {
+    // point.value = res.data;
+    pointHoster.value.coin = res.data.superCoin;
+    pointHelper.value.coin = res.data.helperCoin;
+  }
+  isLoading.value = false;
+};
+onMounted(() => {
+  FuncGetAccountPoints();
+});
+const openPurchaseModal = function (money) {
+  purchaseMoney.value = money;
+  purchaseModal.value = true;
+};
+watch(
+  () => purchaseModal.value,
+  (val) => {
+    if (val == false) {
+      FuncGetAccountPoints();
     }
   }
-</style>
+);
+</script>
+<style scoped lang="scss"></style>
