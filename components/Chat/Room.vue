@@ -11,7 +11,7 @@
       ></v-btn>
       <div>
         <div
-          class="sp-text-body-sm md:sp-text-caption sp-font-bold sp-flex sp-items-center sp-mb-1"
+          class="sp-text-body-sm md:sp-text-caption sp-font-bold md:sp-font-bold sp-flex sp-items-center sp-mb-1"
         >
           <v-chip
             class="mr-1"
@@ -54,11 +54,18 @@
     </div>
     <div class="room_input sp-p-4 sp-flex-center">
       <input
+        v-model="msgText"
         type="text"
         class="sp-bg-gray-bg sp-rounded-md sp-w-full sp-h-[40px] sp-mr-4 sp-px-2 sp-text-body-sm active:sp-outline-none focus:sp-outline-none"
+        @keypress.enter="sendMsg"
       />
-      <div class="sp-rounded-full sp-bg-primary-lighten sp-p-2">
-        <PaperAirplaneIcon class="sp-icon-xs sp-text-purple -sp-rotate-45" />
+      <div
+        class="sp-rounded-full sp-cursor-pointer sp-bg-primary-lighten sp-p-2"
+      >
+        <PaperAirplaneIcon
+          @click="sendMsg"
+          class="sp-icon-xs sp-text-purple -sp-rotate-45"
+        />
       </div>
     </div>
   </div>
@@ -83,12 +90,27 @@ const { nowRoomChatList } = storeToRefs(_storeChatBox);
 const roomMobileView = useState("roomMobileView");
 
 const roomContent = ref(null);
+const msgText = ref(null);
+
 // 滾動到最新訊息
 watch([() => _storeChatBox.nowRoom, roomContent], ([room, content]) => {
   if (!!(room.taskId && content)) {
-    content.scrollTop = content.scrollHeight;
+    // console.log(content.clientHeight);
+    // console.log(content.scrollHeight);
+    if (content.clientHeight < content.scrollHeight) {
+      content.scrollTop = content.scrollHeight;
+    }
   }
 });
+const scollToBottom = (content) => {};
+
+// 傳送訊息
+const sendMsg = () => {
+  if (msgText.value) {
+    _storeChatBox.sendWsMsg(_storeChatBox.nowRoom.taskId, msgText.value);
+  }
+  msgText.value = "";
+};
 </script>
 
 <style lang="scss" scoped>

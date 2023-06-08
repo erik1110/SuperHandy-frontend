@@ -32,7 +32,7 @@
   <Transition name="expand">
     <div
       v-if="showChat"
-      class="sp-hidden md:sp-block sp-card-wrapper chatModal sp-w-[100vw] sp-h-[100vh] md:sp-w-[600px] md:sp-h-[500px]"
+      class="sp-hidden md:sp-block sp-card-wrapper chatModal sp-w-[100vw] sp-h-[100vh] md:sp-w-[700px] md:sp-h-[500px]"
     >
       <div class="chatModal_head">
         <v-icon
