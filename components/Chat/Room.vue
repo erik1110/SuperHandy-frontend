@@ -102,6 +102,7 @@ watch([() => _storeChatBox.nowRoom, roomContent], ([room, content]) => {
     }
   }
 });
+// Todo: 新增訊息時要滑到最下面
 const scollToBottom = (content) => {};
 
 // 傳送訊息
