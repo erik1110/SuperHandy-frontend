@@ -29,4 +29,9 @@ const direction = ref('');
 watch(smAndUp, (val) => {
   direction.value = val ? 'horizontal' : 'vertical';
 }, { immediate: true });
+
+onMounted(() => {
+  const route = useRoute()
+  pointTabs.value = route.name
+})
 </script>
