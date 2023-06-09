@@ -94,8 +94,6 @@ const props = defineProps({
 });
 const tasksChooseHelper = async function () {
   let res = await postTasksManagementHelper(props.taskId, props.helperId);
-  // _storeChatBox.reConnectWebSocket();
-
   if (!res.error) {
     tasksReload();
   }
