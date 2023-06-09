@@ -10,6 +10,7 @@
     </label>
 </template>
 <script setup>
+// - 會員頭像預設圖片連結 -
 const { VITE_SP_IMAGE } = import.meta.env;
 const { avatarPath, circularLoading } = defineProps(['avatarPath', 'circularLoading'])
 </script>
