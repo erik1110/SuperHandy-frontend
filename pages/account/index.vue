@@ -14,7 +14,7 @@
             </div>
             <div class="sp-mb-4">
                 <!-- 六個數字 -->
-                <AccountPerformance :performanceData="performanceData"></AccountPerformance>
+                <AccountPerformance :hosterData="performanceHosterData" :helperData="performanceHelperData"></AccountPerformance>
             </div>
         </div>
         <div class="sp-card-wrapper sp-bg-white sp-p-6">
@@ -43,6 +43,7 @@
                     <v-text-field v-model="userData.email" disabled required />
                 </div>
                 <div class='mt-4'>
+                    <label class='label'>地址</label>
                     <AccountLocation />
                 </div>
                 <div class='mt-4'>
@@ -85,9 +86,11 @@ import { storeLocation } from "@/stores/storeLocation";
 import { storeFullOverlay } from "@/stores/storeFullOverlay";
 import { getCategories, postUploadImage } from "@/services/apis/general";
 import { getAccountInfo, patchAccountInfo, getProfileStatus } from "@/services/apis/account";
+
 const { logInfo, logError } = useLog()
 const { excuteAsyncFunc, promiseAllSettledHanlder, checkRespStatus, checkUploadImage } = useSpUtility()
 const { formRules, validateFormResult, ruleAddress, ruleRequired } = useFormUtil()
+
 let accountFormRules = formRules()
 const _storeFullOverlay = storeFullOverlay();
 const _work = '我的帳號'
@@ -96,7 +99,8 @@ const btnSubmitDisabled = ref(true);
 const accountForm = ref(null)
 const taskCategories = ref([])
 const userData = ref({})
-const performanceData = ref({})
+const performanceHosterData = ref({})
+const performanceHelperData = ref({})
 
 
 // - 地址 -
@@ -121,7 +125,22 @@ const openModal = (text) => {
 const init = () => {
     _storeFullOverlay.open()
     const promiseArr = [
-        excuteAsyncFunc(_work, getProfileStatus, null, (response) => performanceData.value = response.data),
+        excuteAsyncFunc(_work, getProfileStatus, null, (response) => {
+
+            performanceHosterData.value.cnRole = '關於案主';
+            performanceHosterData.value.cnCoin = '超人幣';
+            performanceHosterData.value.cnNumTasks = '發案數';
+            performanceHosterData.value.coin = response.data.superCoin;
+            performanceHosterData.value.numTasks = response.data.numOfPostTasks;
+            performanceHosterData.value.rating = response.data.ratingPoster;
+
+            performanceHelperData.value.cnRole = '關於幫手';
+            performanceHelperData.value.cnCoin = '幫手幣';
+            performanceHelperData.value.cnNumTasks = '接案數';
+            performanceHelperData.value.coin = response.data.helperCoin;
+            performanceHelperData.value.numTasks = response.data.numOfCompletedTasks;
+            performanceHelperData.value.rating = response.data.ratingHelper;
+        }),
         excuteAsyncFunc(_work, getCategories, null, (response) => taskCategories.value = response.data),
         excuteAsyncFunc(_work, getAccountInfo, null, (response) => {
             userData.value = response.data;
@@ -208,18 +227,27 @@ const uploadAvatar = async (event) => {
 
         let formData = new FormData();
         formData.append("file", _file)
-        const response = await postUploadImage(formData)
-        if (response && checkRespStatus(response)) {
-            logInfo(_work, 'upload success')
-            openModal(response.message)
-            avatarPath.value = response.data.imgUrl
+        const res1 = await postUploadImage(formData)
+        if (res1 && checkRespStatus(res1)) {
+            logInfo(_work, 'upload avatar success')
+            const _avatarPath = res1.data.imgUrl
+            //更新會員資料
+            const res2 = await patchAccountInfo({ avatarPath: _avatarPath })
+            if (res2 && !checkRespStatus(res2)) {
+                openModal(res2.message)
+            } else {
+                logInfo(_work, 'update info-form success')
+                avatarPath.value = _avatarPath
+                openModal('會員照片更新成功')
+            }
+
         }
         //防止不能上傳同一張圖片
         event.target.value = ''
 
     } catch (error) {
         logError(_work, { error })
-        openModal(`更新頭像失敗`)
+        openModal(`會員照片更新失敗`)
     } finally {
         circularLoading.value = false
     }

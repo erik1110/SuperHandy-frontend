@@ -20,13 +20,17 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 import { storePostTask } from "@/stores/storePostTask";
-const _storePostTask = storePostTask();
-const { contactInfoData } = storeToRefs(_storePostTask);
 
+
+// - 從父元件接收資料 -
 const hintMsgs = inject('hintMsgs')
 const currentRules = inject('currentRules')
 const currentDisabled = inject('currentFieldDisabled')
 
+
+// - 從pinia取得資料 -
+const _storePostTask = storePostTask();
+const { contactInfoData } = storeToRefs(_storePostTask);
 </script>
 <style lang="postcss" scoped>
 @import url("@/assets/css/tailwind.css");

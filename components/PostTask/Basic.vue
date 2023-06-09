@@ -43,68 +43,22 @@
     </div>
 </template>
 <script setup>
-
 import { storeToRefs } from "pinia";
 import { storePostTask } from "@/stores/storePostTask";
 import { siteConfig } from "~/services/siteConfig";
 
+// - 從父元件接收資料 -
 const hintMsgs = inject('hintMsgs')
 const currentRules = inject('currentRules')
 const currentDisabled = inject('currentFieldDisabled')
 
-
+// - 從pinia取得資料 -
 const _storePostTask = storePostTask();
 const { formData, exposurePlanPoint } = storeToRefs(_storePostTask);
 const { exposurePlans, taskCategories, descriptionTemplateList } = storeToRefs(_storePostTask);
 
-// let descriptionTemplateList = []
-// const exposurePlans = ref([])
-// const taskCategories = ref([])
-// const _work = '刊登任務'
 
-
-// const init = () => {
-//     //console.time()
-//     _storeFullOverlay.open()
-//     btnDisabled.value = true
-//     const promises = [
-//         excuteAsyncFunc(_work, getExposurePlan, null, (response) => exposurePlans.value = response.data),
-//         excuteAsyncFunc(_work, getCategories, null, (response) => {
-//             taskCategories.value = response.data
-//             descriptionTemplateList = response.data.map(item => item.template)
-//         }),
-//         excuteAsyncFunc(_work, getAccountPoints, null, (response) => {
-//             userCoin.value = response.data
-//             //增加任務薪水檢查規則
-//             const index = currentRules.value.salary.findIndex((item) => item == 'checkUserCoin')
-//             if (index >= 0) {
-//                 currentRules.value.salary[index] = (v) => v <= userCoin.value.superCoin || `不可超過目前帳戶儲值餘額 ${userCoin.value.superCoin} 點超人幣`
-//             }
-//             // console.log(userCoin.value)
-//         })
-//     ];
-//     Promise.allSettled(promises).then(results => {
-//         if (!process.client) return;
-//         logInfo(_work, 'init.results', results)
-//         const _message = promiseErrorHanlder(results)
-//         //logInfo(_work, 'results.message', _message)
-//         if (_message && _message.length > 0) {
-//             openModal({
-//                 message: _message
-//             })
-//         } else {
-//             btnDisabled.value = false
-//         }
-//         //console.timeEnd()
-//     }).finally(() => {
-//         _storeFullOverlay.close()
-//     });
-// }
-// init();
-
-
-
-// - 選擇服務類別帶出任務說明 -
+// - 選擇服務類別時帶出任務說明 -
 watch(() => formData.value.category, (nV, oV) => {
     // 動作是清空就離開
     if (!nV) return;
