@@ -250,7 +250,12 @@ const submit = async (event, taskTrans) => {
                 break;
             case postTaskConfig.taskSubmitter.unpublished:
                 excuteAsyncFunc(_work, getTasksById, taskId, setResponseDate)
-                openModal({ isShowGoTaskBtn: true, message: response.message })
+                // 2023-06-07 改成導向任務詳情頁面
+                //openModal({ isShowGoTaskBtn: true, message: response.message })
+                const message= `${response.message}，是否前往任務詳情頁執行任務上架 ?`
+                openConfirmModal(message, ()=>{
+                    navigateTo(`${siteConfig.linkPaths.tasks.to}/${taskId}`)
+                })
                 break;
             default:
                 break;
@@ -267,10 +272,7 @@ const submit = async (event, taskTrans) => {
 }
 
 
-
-
-
-
+// - 表單重設 -
 const resetForm = () => {
     postTaskForm.value?.reset() //防止postTaskForm null
     formData.value.salary = 10
@@ -279,8 +281,6 @@ const resetForm = () => {
     imgUrls.value = []
     logInfo(_work, 'reset form done')
 }
-
-
 
 
 // - 刪除草稿 -
