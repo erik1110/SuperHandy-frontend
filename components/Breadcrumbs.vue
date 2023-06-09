@@ -36,10 +36,10 @@ const breadcrumbItems = computed(() => {
     }
   });
 
-  //不規則處理
+  // - 不規則處理 -
   let last = result.pop();
 
-  //會員
+  //1.會員
   if (last.title === "會員") {
     result.push(last);
     result.push({
@@ -50,7 +50,7 @@ const breadcrumbItems = computed(() => {
     last = result.pop();
   }
 
-  //任務詳情
+  //2.任務詳情
   if (last.title === "任務詳情") {
     result.push({
       title: "找任務",
@@ -63,8 +63,6 @@ const breadcrumbItems = computed(() => {
 
   last.disabled = true;
   result.push(last);
-
-  // console.log(result, 'result')
   return result;
 });
 </script>
