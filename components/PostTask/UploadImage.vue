@@ -1,11 +1,13 @@
 <template>
     <div class="sp-py-3 sp-flex sm:sp-space-x-2 sp-flex-wrap">
+        <!-- 照片列表 -->
         <div v-for="item, idx in imgUrls" :key="idx" class="sp-relative pa-3">
             <v-btn :data-id="idx" variant="plain" icon="mdi-close-circle" :ripple="false" class="btn-del-img"
                 @click="deleteConfirm(idx, $event)"></v-btn>
             <v-img :src="item" aspect-ratio="1" cover class="box sp-cursor-pointer" :data-id="idx"
                 @click="openBigImg(item)"></v-img>
         </div>
+        <!-- 照片列表 -->
 
         <!-- 上傳照片按鈕 -->
         <div class="pa-3">
@@ -40,17 +42,20 @@ import { siteConfig } from "@/services/siteConfig";
 import { postTaskConfig } from "@/services/postTaskConfig";
 import { storePostTask } from "@/stores/storePostTask";
 import { postUploadImage } from '@/services/apis/general'
-const _storePostTask = storePostTask();
-const { openConfirmModal, openInfoModal, openErrorModal, openModal, closeModal } = storePostTask();
-const { imgUrls } = storeToRefs(_storePostTask)
+
 const { checkRespStatus, checkUploadImage } = useSpUtility()
 const { logInfo, logError } = useLog()
+
+const _storePostTask = storePostTask();
+const { openConfirmModal, openModal, closeModal } = storePostTask();
+const { imgUrls } = storeToRefs(_storePostTask)
+
 const _work = '圖片上傳'
 const circularLoading = ref(false)
 const bigImgOverlay = ref(false)
 const bigImgSrc = ref('')
 
-
+// - 上傳一張圖片 -
 const upload = async (event) => {
 
     let _message = ''
@@ -89,15 +94,16 @@ const upload = async (event) => {
 
 }
 
-
+// - 打開一張大圖 -
 const openBigImg = (url) => {
     bigImgSrc.value = url
     bigImgOverlay.value = true
 }
 
+// - 刪除一張圖片 -
 const deleteConfirm = (idx, event) => {
-    // console.log(idx,'idx')
 
+    // - 刪除一張圖片 -
     const deleteImage = () => {
         imgUrls.value.splice(idx, 1)
         closeModal()
@@ -105,7 +111,7 @@ const deleteConfirm = (idx, event) => {
     openConfirmModal('是否要刪除這張照片?', deleteImage)
 }
 
-
+// - 重置 -
 watch(bigImgOverlay, (nV, oV) => {
     if (!nV) {
         bigImgSrc.value = ''

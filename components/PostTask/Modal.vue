@@ -21,16 +21,9 @@
   </DialogModal>
 </template>
 <script setup>
-import { siteConfig } from "@/services/siteConfig";
 import { storeToRefs } from "pinia";
+import { siteConfig } from "@/services/siteConfig";
 import { storePostTask } from "@/stores/storePostTask";
 const _storePostTask = storePostTask();
 const { modalOption, postTaskModal } = storeToRefs(_storePostTask);
-
-
-// watch(() => postTaskModal.value,(nV,oV)=>{
-//   if(!nV){
-
-//   }
-// })
 </script>

@@ -64,9 +64,11 @@
                 class="button md:sp-w-auto" @click="fakeData">填入假資料</v-btn>
         </div>
     </v-form>
+
     <!-- 刊登任務費用視窗 -->
     <PostTaskFeeModal :loading="btnLoading.published" @aClose="postTaskFeeModal = false" @aSubmit="submit">
     </PostTaskFeeModal>
+
     <!-- 提示訊息視窗(區分成功與錯誤訊息) -->
     <PostTaskModal @close="closeModal" @aConfirmCallback="execConfirmCallback" @aCloseCallback="execCloseCallback">
     </PostTaskModal>
@@ -90,12 +92,19 @@ const _storePostTask = storePostTask();
 const _storeLocation = storeLocation();
 const { logInfo, logError } = useLog()
 
+// - Modal相關方法 -
 const { openConfirmModal, openErrorModal, openModal, closeModal, execConfirmCallback, execCloseCallback } = storePostTask();
+// - loading相關方法 -
 const { openBtnLoading, closeBtnLoading, openSFeeModal } = storePostTask();
+// - 下拉選單資料 -
 const { exposurePlans, taskCategories, descriptionTemplateList } = storeToRefs(_storePostTask);
+// - 任務來源狀態 -
 const { currentTaskStatus, currentTaskStatusIsDraft, currentTaskStatusIsUnpublish } = storeToRefs(_storePostTask);
+// - 任務共用物件 -
 const { userCoin, formData, imgUrls, contactInfoData } = storeToRefs(_storePostTask);
 const { btnDisabled, btnLoading, postTaskModal, postTaskFeeModal } = storeToRefs(_storePostTask);
+
+// - 地址共用物件 -
 const { locationData } = storeToRefs(_storeLocation);
 
 const currentRules = ref(postTaskConfig.rules.draft)
@@ -104,6 +113,7 @@ const postTaskForm = ref(null)
 const _work = '刊登任務'
 let taskId = ''
 
+// - 提供給子元件的資料 -
 provide('hintMsgs', postTaskConfig.hintMsgs)
 provide('currentRules', currentRules) //會重新set
 provide('currentFieldDisabled', currentFieldDisabled) //會重新set
@@ -125,7 +135,7 @@ function closeLoading() {
 
 
 
-// - 刊登費用計算視窗 -
+// - 打開刊登費用計算視窗 -
 const openFeeModal = async () => {
 
     //設定現在要使用的表單驗證規則(暫時一律用刊登規則)
@@ -174,6 +184,7 @@ const validatePostTaskForm = async () => {
     })
     return false;
 }
+
 // - 表單送出 -
 const submit = async (event, taskTrans) => {
 
@@ -271,7 +282,6 @@ const submit = async (event, taskTrans) => {
     }
 }
 
-
 // - 表單重設 -
 const resetForm = () => {
     postTaskForm.value?.reset() //防止postTaskForm null
@@ -281,7 +291,6 @@ const resetForm = () => {
     imgUrls.value = []
     logInfo(_work, 'reset form done')
 }
-
 
 // - 刪除草稿 -
 const confirmDeleteDraft = () => {

@@ -81,7 +81,6 @@
                                             :disabled="btnDisabled">確認刊登</v-btn>
                                     </v-form>
                                 </div>
-
                             </td>
                         </tr>
                     </tbody>
@@ -103,15 +102,17 @@
 import { storeToRefs } from "pinia";
 import { siteConfig } from '@/services/siteConfig'
 import { storePostTask } from "~/stores/storePostTask";
-const _storePostTask = storePostTask();
-const { userCoin, feeModalOption, postTaskFeeModal, exposurePlanPoint, currentTaskStatusIsDraft } = storeToRefs(_storePostTask);
+
 const { loading } = defineProps(['loading']);
+const _storePostTask = storePostTask();
+const { userCoin, currentTaskStatusIsDraft, exposurePlanPoint} = storeToRefs(_storePostTask);
+const { feeModalOption, postTaskFeeModal} = storeToRefs(_storePostTask);
 const { isNumber } = useSpUtility()
 const btnDisabled = ref(true)
 const chkHelperCoinEstimate = ref(false)
 
 
-// 計算可折抵的幫手幣金額
+// - 計算可折抵的幫手幣金額 -
 const helperCoinEstimate = computed(() => {
     const helperCoin = userCoin.value.helperCoin
     const planPoint = exposurePlanPoint.value
@@ -121,7 +122,7 @@ const helperCoinEstimate = computed(() => {
     return 0
 })
 
-// 確認要折抵的幫手幣金額
+// - 確認要折抵的幫手幣金額 -
 const helperCoinConfirm = ref(0)
 function calculateHelperCoin(event) {
     if (chkHelperCoinEstimate.value) {
@@ -131,7 +132,7 @@ function calculateHelperCoin(event) {
     }
 }
 
-// 計算本次花費總金額
+// - 計算本次花費總金額 -
 const total = computed(() => {
     //  本次花費的超人幣總金額 = 曝光費用+任務薪水-折抵幫手幣
     const value = Number(exposurePlanPoint.value) + Number(feeModalOption.value.salary) - helperCoinConfirm.value
@@ -139,7 +140,7 @@ const total = computed(() => {
 })
 
 
-// Reset
+// - 重置 -
 watch(
     () => postTaskFeeModal.value,
     (nV, oV) => {
