@@ -1,6 +1,6 @@
 <template>
   <!-- Modal Right - Individual Room -->
-  <div v-if="Object.keys(_storeChatBox.nowRoom).length != 0" class="room">
+  <div v-if="Object.keys(nowRoom).length != 0" class="room">
     <div class="room_head">
       <v-btn
         icon="mdi-arrow-left"
@@ -16,32 +16,25 @@
           <v-chip
             class="mr-1"
             size="x-small"
-            :color="
-              _storeChatBox.nowRoom.role == 'helper'
-                ? 'v-purple'
-                : 'secondary-darken'
-            "
+            :color="nowRoom.role == 'helper' ? 'v-purple' : 'secondary-darken'"
           >
             <span class="sp-text-body-sm md:sp-text-caption">
-              {{ roleToDisplayRole(_storeChatBox.nowRoom.role) }}
+              {{ roleToDisplayRole(nowRoom.role) }}
             </span>
           </v-chip>
           <span
             class="sp-whitespace-nowrap sp-border-r sp-border-slate-400 sp-pr-2 sp-mr-2"
           >
-            {{
-              _storeChatBox.nowRoom.nickname ||
-              `${_storeChatBox.nowRoom.lastName}${_storeChatBox.nowRoom.firstName}`
-            }}
+            {{ nowRoom.nickname || `${nowRoom.lastName}${nowRoom.firstName}` }}
           </span>
           <span class="room_task">
-            {{ _storeChatBox.nowRoom.title }}
+            {{ nowRoom.title }}
           </span>
         </div>
         <div
           class="roomCard_task sp-text-body-sm md:sp-text-caption sp-text-slate-400 sp-px-1"
         >
-          任務編號：{{ _storeChatBox.nowRoom.taskId }}
+          任務編號：{{ nowRoom.taskId }}
         </div>
       </div>
     </div>
@@ -86,29 +79,23 @@ import { storeToRefs } from "pinia";
 const { roleToDisplayRole } = useHelper();
 
 const _storeChatBox = storeChatBox();
-const { nowRoomChatList } = storeToRefs(_storeChatBox);
+const { nowRoomChatList, nowRoom } = storeToRefs(_storeChatBox);
 const roomMobileView = useState("roomMobileView");
 
 const roomContent = ref(null);
 const msgText = ref(null);
 
 // 滾動到最新訊息
-watch([() => _storeChatBox.nowRoom, roomContent], ([room, content]) => {
+watch([nowRoom, roomContent], ([room, content]) => {
   if (!!(room.taskId && content)) {
-    // console.log(content.clientHeight);
-    // console.log(content.scrollHeight);
-    if (content.clientHeight < content.scrollHeight) {
-      content.scrollTop = content.scrollHeight;
-    }
+    _storeChatBox.scrollToBottom(content);
   }
 });
-// Todo: 新增訊息時要滑到最下面
-const scollToBottom = (content) => {};
 
 // 傳送訊息
 const sendMsg = () => {
   if (msgText.value) {
-    _storeChatBox.sendWsMsg(_storeChatBox.nowRoom.taskId, msgText.value);
+    _storeChatBox.sendWsMsg(nowRoom.value.taskId, msgText.value);
   }
   msgText.value = "";
 };

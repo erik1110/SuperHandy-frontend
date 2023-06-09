@@ -9,7 +9,7 @@
     "
   >
     <v-avatar class="mr-4" size="32">
-      <v-img :src="room.avatarPath" alt="John"></v-img>
+      <v-img :src="room.avatarPath" cover></v-img>
     </v-avatar>
     <div class="sp-flex-initial mr-2">
       <div
@@ -34,7 +34,7 @@
       <div
         class="roomCard_task sp-text-body-sm md:sp-text-caption sp-text-slate-600"
       >
-        {{ room.title }}
+        {{ room.lastMessage }}
       </div>
     </div>
     <div
@@ -74,12 +74,12 @@ const displayRole = computed(() => {
   else if (props.room.role == "poster") return "案主";
 });
 const lasMsgTime = computed(() => {
-  if (!props.room.time) return;
-  let duration = timeDuration(props.room.time);
+  if (!props.room.updatedAt) return;
+  let duration = timeDuration(props.room.updatedAt);
   if (duration.asHours() < 24) {
-    return timeFormat(props.room.time, "A hh:mm");
+    return timeFormat(props.room.updatedAt, "A hh:mm");
   } else {
-    return timeFormat(props.room.time, "MM/DD");
+    return timeFormat(props.room.updatedAt, "MM/DD");
   }
 });
 // 判斷聊天室房間是否開啟
@@ -98,7 +98,12 @@ const openRoom = async () => {
   // 開啟後，所有訊息設為已讀
   let lastMsg =
     _storeChatBox.nowRoomChatList[_storeChatBox.nowRoomChatList.length - 1];
+  if (!lastMsg) return;
   _storeChatBox.setRoomRead(lastMsg.taskId, lastMsg._id);
+  let presentRoom = _storeChatBox.roomList.find(
+    (room) => room.taskId == lastMsg.taskId
+  );
+  presentRoom.unreadCount = 0;
 };
 </script>
 

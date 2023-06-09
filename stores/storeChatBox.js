@@ -6,10 +6,12 @@ import { getChatList, getChatRoomHistory } from "@/services/apis/chat";
 
 export const storeChatBox = defineStore("chatBox", () => {
   const showChat = ref(false);
-  const nowRoom = reactive({});
+  const nowRoom = ref({});
   const nowRoomChatList = ref([]);
-
-  // 聊天室列表
+  /*
+    Fetch Data
+  */
+  // 取得聊天室列表
   const roomList = ref([]);
   const fetchChatList = async () => {
     let res = await getChatList();
@@ -20,26 +22,24 @@ export const storeChatBox = defineStore("chatBox", () => {
       let newObj = {
         ...cur[cur.partnerRole],
         taskId: cur.taskId,
-        time: cur.time,
+        updatedAt: cur.updatedAt,
         title: cur.title,
         unreadCount: cur.unreadCount,
-        role: cur.partnerRole
+        role: cur.partnerRole,
+        lastMessage: cur.lastMessage
       }
       acc.push(newObj)
       return acc
     },[])
     console.log('roomlist',roomList.value);
   };
+  
   watch(showChat,(val)=>{
     if(val){
       fetchChatList()
     }
   })
-  // onMounted(() => {
-  //   console.log("fetchChatList on mounted");
-  //   fetchChatList();
-  // });
-  // 個別聊天室對話
+  // 取得個別聊天室對話
   const fetchRoomHistory = async (taskId) => {
     let res = await getChatRoomHistory({ taskId });
     console.log({ res });
@@ -120,7 +120,10 @@ export const storeChatBox = defineStore("chatBox", () => {
     // }
     //   ]
   };
-  // WebSocket 設定
+
+  /* 
+    WebSocket 設定
+  */
   const io = useIO();
   const URL = import.meta.env.VITE_BACKEND_ROOT_DEV;
   let socket = reactive({});
@@ -134,19 +137,17 @@ export const storeChatBox = defineStore("chatBox", () => {
     });
     console.log("socket in store", { socket });
   };
+
   /* 
-  監聽事件 
+    監聽事件 
   */
   const setUpEventHandlers = () => {
     //監聽message事件(接收websocket訊息)
     socket.on("message", (msg) => {
       console.log("收到甚麼message訊息:", msg);
       // 更新 ChatList
-      let randomNum = Math.round(Math.random())*1000
-      nowRoomChatList.value.push({
-        _id:randomNum,
-        ...msg
-      })
+      // if(nowRoom.taskId)
+        updateMsg(msg)
     });
     //監聽read事件(接收websocket訊息)
     socket.on("read",(data)=>{
@@ -162,8 +163,9 @@ export const storeChatBox = defineStore("chatBox", () => {
       console.log("socket err:", { err });
     });
   };
+
   /* 
-  WebSocket Emit 
+    WebSocket Emit 
   */
   // 傳送訊息
   const sendWsMsg = (taskId,message)=>{
@@ -173,7 +175,6 @@ export const storeChatBox = defineStore("chatBox", () => {
   const setRoomRead = (taskId,chatId)=>{
     socket.emit('read', { taskId, chatId })
   }
-
   // WebSocket重新連線
   const reConnectWebSocket = () => {
     console.log("reConnectWebSocket");
@@ -183,6 +184,42 @@ export const storeChatBox = defineStore("chatBox", () => {
     //建立新的連線
     socketConnect();
     setUpEventHandlers();
+  };
+
+  /* 
+    聊天室操作
+  */
+  // 更新聊天室訊息
+  const updateMsg = (msg)=>{
+    // 更新左側聊天室列表
+    let newMsgRoom = roomList.value.find(r=>r.taskId==msg.taskId)
+    newMsgRoom.lastMessage = msg.message
+    newMsgRoom.updatedAt = msg.createdAt
+    // TODO: 釐清unreadCount邏輯
+    // newMsgRoom.unreadCount = msg.unreadCount
+    console.log({newMsgRoom});
+    // 如果正在聊天室內，更新房間訊息
+    if(nowRoom.value.taskId == msg.taskId){
+      let randomNum = Math.round(Math.random())*1000
+      nowRoomChatList.value.push({
+        _id:randomNum,
+        ...msg
+      })
+      let roomContent = document.querySelector('.room_content')
+      if(roomContent){
+        scrollToBottom(roomContent)
+      }
+      // TODO: ws 已讀傳送
+    }else{
+      newMsgRoom.unreadCount ++
+    }
+    
+  }
+  // 滾動到最新訊息
+  const scrollToBottom = (content) => {
+    setTimeout(()=>{
+      content.scrollTop = content.scrollHeight;
+    },100)
   };
 
   onMounted(async () => {
@@ -197,6 +234,7 @@ export const storeChatBox = defineStore("chatBox", () => {
     roomList,
     fetchChatList,
     fetchRoomHistory,
+    scrollToBottom,
     sendWsMsg,
     setRoomRead,
     messages,
