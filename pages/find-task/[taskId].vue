@@ -25,24 +25,30 @@
         {{ alertMessage }}
       </v-alert>
     </div>
-    <!-- 任務內容 -->
+    <!-- 任務內容 start -->
     <v-container>
       <v-row justify="center">
         <v-col cols="12" xl="10">
           <div class="lg:sp-flex">
             <div class="sp-mb-3">
+
+              <!-- 左邊案主資訊 -->
               <FindTaskDetailPosterInfo :posterInfoData="posterInfoData"></FindTaskDetailPosterInfo>
+
             </div>
             <div class="sp-flex-auto">
+
+              <!-- 右邊任務資訊 -->
               <FindTaskDetailCard :taskData="taskData" :btnSubmitLoading="btnSubmitLoading"
                 :btnSubmitDisabled="btnSubmitDisabled" @aApply="apply">
               </FindTaskDetailCard>
+
             </div>
           </div>
         </v-col>
       </v-row>
     </v-container>
-    <!-- 任務內容 -->
+    <!-- 任務內容 end -->
   </div>
 </template>
 
@@ -50,6 +56,7 @@
 import { storeFullOverlay } from '@/stores/storeFullOverlay'
 import { getTasksDetail, postApplyTask } from '@/services/apis/findTasks'
 import { siteConfig } from '@/services/siteConfig'
+
 const { checkRespStatus, checkTaskId, checkIsLogin, getTaskId } = useSpUtility()
 const { logInfo, logError } = useLog();
 const { fromNow } = useMoment();
@@ -64,6 +71,8 @@ const btnSubmitLoading = ref(false);
 const btnSubmitDisabled = ref(false);
 const _work = '任務詳情'
 let taskId = ''
+
+
 
 // - 我要接案 -
 const apply = async () => {
@@ -102,7 +111,7 @@ const apply = async () => {
 }
 
 
-// - 取得任務詳情 -
+// - 取得初始化資料 -
 const init = async () => {
   try {
     taskId = getTaskId()
