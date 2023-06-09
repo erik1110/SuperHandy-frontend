@@ -5,15 +5,19 @@
       <h1 class="mb-4 sp-text-2xl sp-font-bold">曝光方案</h1>
       <v-row>
         <v-col cols="12" sm="6" md="3">
+          <!-- 一般曝光 -->
           <ExposurePlanCard :data="planA"></ExposurePlanCard>
         </v-col>
         <v-col cols="12" sm="6" md="3">
+           <!-- 限時曝光 -->
           <ExposurePlanCard :data="planB"></ExposurePlanCard>
         </v-col>
         <v-col cols="12" sm="6" md="3">
+           <!-- 黃金曝光 -->
           <ExposurePlanCard :data="planC"></ExposurePlanCard>
         </v-col>
         <v-col cols="12" sm="6" md="3">
+           <!-- 限時黃金曝光 -->
           <ExposurePlanCard :data="planD"></ExposurePlanCard>
         </v-col>
       </v-row>
@@ -24,7 +28,7 @@
 <script setup>
 import { storeFullOverlay } from "@/stores/storeFullOverlay";
 import { getExposurePlan } from '@/services/apis/general';
-const { excuteAsyncFunc, promiseAllSettledHanlder, checkTaskId, checkRespStatus } = useSpUtility()
+const { excuteAsyncFunc, promiseAllSettledHanlder} = useSpUtility()
 const { logInfo, logError } = useLog()
 const _storeFullOverlay = storeFullOverlay();
 const _work = '曝光方案'
@@ -49,7 +53,7 @@ const init = () => {
     , null
     //失敗
     , (error) => {
-      logInfo(_work, { error })
+      logError(_work, { error })
     }
     //finally
     , () => {
