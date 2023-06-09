@@ -208,18 +208,27 @@ const uploadAvatar = async (event) => {
 
         let formData = new FormData();
         formData.append("file", _file)
-        const response = await postUploadImage(formData)
-        if (response && checkRespStatus(response)) {
-            logInfo(_work, 'upload success')
-            openModal(response.message)
-            avatarPath.value = response.data.imgUrl
+        const res1 = await postUploadImage(formData)
+        if (res1 && checkRespStatus(res1)) {
+            logInfo(_work, 'upload avatar success')
+            const _avatarPath = res1.data.imgUrl
+            //更新會員資料
+            const res2 = await patchAccountInfo({ avatarPath: _avatarPath })
+            if (res2 && !checkRespStatus(res2)) {
+                openModal(res2.message)
+            } else {
+                logInfo(_work, 'update info-form success')
+                avatarPath.value = _avatarPath
+                openModal('會員照片更新成功')
+            }
+
         }
         //防止不能上傳同一張圖片
         event.target.value = ''
 
     } catch (error) {
         logError(_work, { error })
-        openModal(`更新頭像失敗`)
+        openModal(`會員照片更新失敗`)
     } finally {
         circularLoading.value = false
     }
