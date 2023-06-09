@@ -1,14 +1,19 @@
 <template>
-  <PostTaskOverlay />
   <div class="sp-card-wrapper sp-bg-white sp-p-6">
     <SecTitle :text="'目前帳戶點數'"></SecTitle>
     <v-container fluid class="px-0" v-if="!isLoading">
       <v-row class="">
         <v-col cols="12" md="6">
-          <AccountPointsCard :data="pointHoster"></AccountPointsCard>
+
+          <!-- 超人幣 -->
+          <AccountPointsCard :data="pointSuper"></AccountPointsCard>
+
         </v-col>
         <v-col cols="12" md="6">
+
+          <!-- 幫手幣 -->
           <AccountPointsCard :data="pointHelper"></AccountPointsCard>
+
         </v-col>
       </v-row>
     </v-container>
@@ -18,16 +23,25 @@
     <v-container fluid class="px-0" v-if="!isLoading">
       <v-row class="">
         <v-col cols="12" lg="4">
+
+          <!-- 儲值100 -->
           <AccountPointsPurchaseCard :data="purchaseData.basic" @openPurchaseModal="openPurchaseModal">
           </AccountPointsPurchaseCard>
+
         </v-col>
         <v-col cols="12" lg="4">
+
+          <!-- 儲值500 -->
           <AccountPointsPurchaseCard :data="purchaseData.medium" @openPurchaseModal="openPurchaseModal">
           </AccountPointsPurchaseCard>
+
         </v-col>
         <v-col cols="12" lg="4">
+
+          <!-- 儲值1000 -->
           <AccountPointsPurchaseCard :data="purchaseData.advanced" @openPurchaseModal="openPurchaseModal">
           </AccountPointsPurchaseCard>
+
         </v-col>
       </v-row>
     </v-container>
@@ -38,7 +52,7 @@
 import { getAccountPoints } from "@/services/apis/point";
 const isLoading = ref(true);
 // const point = ref({});
-const pointHoster = ref({
+const pointSuper = ref({
   title: '超人幣',
   image: 'superCoin',
   coin: 0,
@@ -73,7 +87,7 @@ const FuncGetAccountPoints = async function () {
   let res = await getAccountPoints();
   if (!res.error) {
     // point.value = res.data;
-    pointHoster.value.coin = res.data.superCoin;
+    pointSuper.value.coin = res.data.superCoin;
     pointHelper.value.coin = res.data.helperCoin;
   }
   isLoading.value = false;
