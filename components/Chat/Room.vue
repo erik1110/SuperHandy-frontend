@@ -63,16 +63,10 @@
     </div>
   </div>
   <div v-else-if="roomLoading" class="emptyRoom sp-flex-center">
-    <v-overlay
-      v-model="roomLoading"
-      contained
-      class="align-center justify-center"
-    >
-      <v-progress-circular
-        color="secondary-darken"
-        indeterminate
-      ></v-progress-circular>
-    </v-overlay>
+    <v-progress-circular
+      color="secondary-darken"
+      indeterminate
+    ></v-progress-circular>
   </div>
   <div v-else class="emptyRoom sp-flex-center">
     <ChatBubbleLeftRightIcon class="sp-icon-lg sp-text-slate-300" />
