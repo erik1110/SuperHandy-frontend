@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label class='label'>地址</label>
+    <!-- <label class='label'>地址</label> -->
     <div class="sp-space-y-4 lg:sp-flex lg:sp-space-x-2 lg:sp-space-y-0">
       <div class=" lg:sp-w-1/2 lg:sp-flex lg:sp-space-x-2">
         <v-select v-model="locationData.city" :rules='currentRules.locationCity' :disabled="currentDisabled.locationCity"
@@ -18,17 +18,20 @@
   </div>
 </template>
 <script setup>
-import { storeToRefs } from 'pinia'
 import tw_county from '@/static/tw_county.json'
 import tw_town from '@/static/tw_town.json'
+import { storeToRefs } from 'pinia'
+
+// - 從pinia取得共用物件 -
 import { storeLocation } from "@/stores/storeLocation";
 const _storeLocation = storeLocation();
 const { locationData } = storeToRefs(_storeLocation);
 
+
+// - 從父元件接收資料 -
 const currentRules = inject('currentRules')
 const currentDisabled = inject('currentFieldDisabled')
 const hintMsgs = inject('hintMsgs')
-
 
 
 // - 縣市處理 -
@@ -51,6 +54,8 @@ const townList = computed(() => {
     }
   }
 })
+
+// - 當縣市清空時，同時清空區域 -
 watch(() => locationData.value.city, (nV, oV) => {
   if (!oV) return
   if (nV !== oV) {

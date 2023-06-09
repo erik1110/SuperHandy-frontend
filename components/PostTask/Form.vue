@@ -16,6 +16,7 @@
 
         <div class='mt-4'>
             <!-- 任務地點 -->
+            <label class='label'>地址</label>
             <AccountLocation />
         </div>
 
