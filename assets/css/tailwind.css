@@ -3,67 +3,113 @@
 @tailwind utilities;
 
 @layer base {
+
   /* 全域字型 */
   body {
     @apply sp-font-sans;
   }
 }
+
 @layer components {
+
   /* 標題 */
   .sp-text-h1 {
     font-size: 3.5rem;
     line-height: 1.2;
     font-weight: 700;
   }
+
   .sp-text-h2 {
     font-size: 2.5rem;
     line-height: 1.2;
     font-weight: 700;
   }
+
   .sp-text-h3 {
     font-size: 2rem;
     line-height: 1.2;
     font-weight: 700;
   }
+
   .sp-text-h4 {
     font-size: 1.5rem;
     line-height: 1.2;
     font-weight: 700;
   }
+
   .sp-text-h5 {
     font-size: 1.125rem;
     line-height: 1.2;
     font-weight: 700;
   }
+
   .sp-text-title {
     font-size: 1.125rem;
     line-height: 1.5;
     font-weight: 400;
   }
+
   .sp-text-body {
     font-size: 1rem;
     line-height: 1.5;
     font-weight: 400;
   }
+
   .sp-text-body-sm {
     font-size: 0.875rem;
     line-height: 1.5;
     font-weight: 400;
   }
+
   .sp-text-caption {
     font-size: 0.75rem;
     line-height: 1.5;
     font-weight: 400;
   }
+
   /* 設計稿 div.secTitle */
   .sp-sec-title {
     @apply sp-border-l-8 sp-border-secondary sp-pl-4 sp-font-bold sp-text-lg sp-text-primary;
+  }
+
+  /* 自訂標籤 */
+  .sp-tag-dark-lg-amber {
+    @apply sp-px-6 sp-py-3 sp-text-base sp-bg-amber-600 sp-text-white sp-rounded sp-tracking-widest;
+  }
+
+  .sp-tag-light-xs-amber {
+    @apply sp-px-2 sp-py-1 sp-text-sm sp-bg-amber-100 sp-text-amber-600 sp-rounded sp-tracking-normal;
+  }
+
+  .sp-tag-dark-lg-cyan {
+    @apply sp-px-6 sp-py-3 sp-text-base sp-bg-cyan-600 sp-text-white sp-rounded sp-tracking-widest;
+  }
+
+  .sp-tag-light-xs-cyan {
+    @apply sp-px-2 sp-py-1 sp-text-base sp-bg-cyan-100 sp-text-cyan-600 sp-rounded sp-tracking-normal;
+  }
+
+  .sp-tag-dark-lg-blue {
+    @apply sp-px-6 sp-py-3 sp-text-base sp-bg-blue-600 sp-text-white sp-rounded sp-tracking-widest;
+  }
+
+  .sp-tag-light-xs-blue {
+    @apply sp-px-2 sp-py-1 sp-text-base sp-bg-blue-100 sp-text-blue-600 sp-rounded sp-tracking-normal;
+  }
+
+  .sp-tag-dark-lg-slate {
+    @apply sp-px-6 sp-py-3 sp-text-base sp-bg-slate-600 sp-text-white sp-rounded sp-tracking-widest;
+  }
+
+  .sp-tag-light-xs-slate {
+    @apply sp-px-2 sp-py-1 sp-text-base sp-bg-slate-100 sp-text-slate-600 sp-rounded sp-tracking-normal;
   }
 }
 
 :root {
   --animate-delay: 0.2s;
 }
+
 /* Logo */
 .logo,
 .logo::after {
@@ -73,6 +119,7 @@
   top: 0;
   left: 0;
 }
+
 .logo::after {
   content: "";
   position: absolute;
@@ -81,35 +128,44 @@
   background-position: center;
   background-size: 100%;
 }
+
 /* 置中 */
 .sp-flex-center {
   @apply sp-flex sp-justify-center sp-items-center;
 }
+
 /* Icons */
 .sp-icon-xs {
   @apply sp-w-4 sp-h-4;
 }
+
 .sp-icon-sm {
   @apply sp-w-5 sp-h-5;
 }
+
 .sp-icon-md {
   @apply sp-w-10 sp-h-10;
 }
+
 .sp-icon-lg {
   @apply sp-w-12 sp-h-12;
 }
+
 /* Card Wrapper */
 .sp-card-wrapper {
   @apply sp-mx-auto sp-rounded-2xl sp-shadow-md;
 }
+
 /* vuetify select */
 .v-input {
   touch-action: none;
 }
+
 .v-autocomplete .v-field,
 .v-select .v-field {
   border-radius: 8px;
 }
+
 .v-autocomplete .v-field__outline::before,
 .v-autocomplete .v-field__outline::after,
 .v-select .v-field__outline::before,
