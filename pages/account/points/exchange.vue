@@ -6,17 +6,21 @@
         <v-row class="my-5">
           <v-col cols="12" lg="6" class="sp-space-y-5">
 
+            <!-- 銀行代碼 -->
             <VAutocomplete v-model="bankNo" :items="bankList" item-value="code" item-title="name" label="銀行代碼"
               :rules="[ruleRequired]" hint="請輸入您的銀行代碼" clearable></VAutocomplete>
 
+            <!-- 銀行帳號 -->
             <VTextField v-model="bankAcct" label="銀行帳號" hint="請輸入您的銀行帳號共14碼數字" :rules="[ruleRequired, ruleBankAcctLen]"
               hiint="請輸入您的銀行帳號" type='number' counter="14" clearable>
             </VTextField>
 
+            <!-- 超人幣點數 -->
             <VTextField v-model="point" label="超人幣" hint="請輸入您要兌換的超人幣點數" type='number' prefix=$ suffix=超人幣
               :rules="[ruleRequired, rulePointExchange]">
             </VTextField>
 
+            <!-- 兌換規定 -->
             <ul class="sp-text-sm sp-list-disc sp-pl-5 sp-space-y-2">
               <li class="sp-text-red-500 sp-text-xs ">您目前擁有 {{ userPoint.superCoin }} 點超人幣。</li>
               <li class="sp-text-gray-placeholder sp-text-xs">每 100 點超人幣可兌換 100 元新台幣。</li>
