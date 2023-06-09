@@ -6,6 +6,7 @@ import { getChatList, getChatRoomHistory } from "@/services/apis/chat";
 
 export const storeChatBox = defineStore("chatBox", () => {
   const roomLoading = ref(false)
+  const roomListLoading = ref(true)
   const showChat = ref(false);
   const nowRoom = ref({});
   const nowRoomChatList = ref([]);
@@ -15,6 +16,7 @@ export const storeChatBox = defineStore("chatBox", () => {
   // 取得聊天室列表
   const roomList = ref([]);
   const fetchChatList = async () => {
+    roomListLoading.value = true
     let res = await getChatList();
     console.log({ res });
     if(res.status=="false") return
@@ -33,6 +35,7 @@ export const storeChatBox = defineStore("chatBox", () => {
       return acc
     },[])
     console.log('roomlist',roomList.value);
+    roomListLoading.value = false
   };
   
   watch(showChat,(val)=>{
@@ -232,6 +235,7 @@ export const storeChatBox = defineStore("chatBox", () => {
 
   return {
     roomLoading,
+    roomListLoading,
     showChat,
     nowRoom,
     nowRoomChatList,
