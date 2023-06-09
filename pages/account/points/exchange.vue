@@ -4,7 +4,7 @@
     <v-container fluid class="px-0">
       <v-form @submit.prevent="submit" ref="exchangeForm">
         <v-row class="my-5">
-          <v-col cols="12" md="6" class="sp-space-y-5">
+          <v-col cols="12" lg="6" class="sp-space-y-5">
 
             <VAutocomplete v-model="bankNo" :items="bankList" item-value="code" item-title="name" label="銀行代碼"
               :rules="[ruleRequired]" hint="請輸入您的銀行代碼" clearable></VAutocomplete>
@@ -21,12 +21,20 @@
               <li class="sp-text-red-500 sp-text-xs ">您目前擁有 {{ userPoint.superCoin }} 點超人幣。</li>
               <li class="sp-text-gray-placeholder sp-text-xs">每 100 點超人幣可兌換 100 元新台幣。</li>
               <li class="sp-text-gray-placeholder sp-text-xs">單次提領以 100 點為單位，最少需要提領 300 點。</li>
+              <li class="sp-text-gray-placeholder sp-text-xs">取出點數需要 5~7 個工作天，待完成後系統將會發送通知訊息，還請耐心等待，謝謝您。</li>
             </ul>
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12" md="6" class="">
-            <VBtn color="v-purple" type="submit" :disabled="isLoading" :loading="isLoading">兌換</VBtn>
+          <v-col cols="12" lg="6">
+            <v-row class="sp-flex sp-items-center">
+              <v-col cols="6">
+                <v-checkbox v-model="chkRule" label="我已了解以上規定" color="v-purple" hide-details></v-checkbox>
+              </v-col>
+              <v-col cols="6" class="text-end">
+                <VBtn color="v-purple" type="submit" :disabled="submitDisabled" :loading="isLoading">兌換</VBtn>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-form>
@@ -51,7 +59,9 @@ const bankAcct = ref(null);
 const point = ref(300);
 const isRead = ref(false);
 const userPoint = ref({});
-const isLoading = ref(false)
+const isLoading = ref(false);
+const submitDisabled = ref(true)
+const chkRule = ref(false)
 const FuncGetAccountPoints = async function () {
   let res = await getAccountPoints();
   if (!res.error) {
@@ -63,7 +73,8 @@ const submit = async () => {
 
   const validate = await validateFormResult(exchangeForm)
   if (!validate) return;
-  isLoading.value = true
+  isLoading.value = true;
+  submitDisabled.value = true;
 
   let chooseBankName = bankList.value
     .find((item) => item.code == bankNo.value)
@@ -78,6 +89,7 @@ const submit = async () => {
   let res = await postAccountPointsCashback(data);
   if (!res.error) {
     exchangeForm.value.reset();
+
     _storeGlobal.confirmHandler({
       open: true,
       title: "點數兌換成功",
@@ -92,8 +104,12 @@ const submit = async () => {
     });
     console.log(res);
   }
+  chkRule.value = false;
   isLoading.value = false
 };
+watch(chkRule, (val) => {
+  submitDisabled.value = !val
+})
 </script>
 <style scoped lang="scss">
 .v-field__outline__notch {
