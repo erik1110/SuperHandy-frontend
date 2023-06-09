@@ -54,7 +54,7 @@
 import { storeToRefs } from "pinia";
 import { storeChatBox } from "@/stores/storeChatBox";
 const _storeChatBox = storeChatBox();
-const { showChat } = storeToRefs(_storeChatBox);
+const { showChat, roomLoading } = storeToRefs(_storeChatBox);
 const dialog = true;
 const roomMobileView = useState("roomMobileView", () => ref(false));
 
