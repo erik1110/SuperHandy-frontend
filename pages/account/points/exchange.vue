@@ -29,7 +29,7 @@
           <v-col cols="12" lg="6">
             <v-row class="sp-flex sp-items-center">
               <v-col cols="6">
-                <v-checkbox v-model="chkRule" label="我已了解點數取出相關條款" color="v-purple" hide-details></v-checkbox>
+                <v-checkbox v-model="chkRule" label="我已了解以上規定" color="v-purple" hide-details></v-checkbox>
               </v-col>
               <v-col cols="6" class="text-end">
                 <VBtn color="v-purple" type="submit" :disabled="submitDisabled" :loading="isLoading">兌換</VBtn>
