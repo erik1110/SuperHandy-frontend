@@ -7,6 +7,7 @@ export const storeAuth = defineStore("auth", () => {
   // const loginToken = ref("");
   const loginToken = useCookie("spToken");
   const setLoginToken = (val) => (loginToken.value = val);
+  
 
   return {
     isLogin,

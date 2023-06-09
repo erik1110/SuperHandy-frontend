@@ -4,7 +4,6 @@
       <v-btn
         v-if="showReFetch.b || showReFetch.z"
         class="px-2 reFetchBtn"
-        style="z-index: 999"
         rounded="xl"
         size="small"
         color="secondary-darken"
@@ -28,6 +27,7 @@
       <LMap
         ref="map"
         id="map"
+        class="sp-z-0"
         v-model="zoomLevel"
         v-model:zoom="zoomLevel"
         :zoom="zoomLevel"
@@ -225,6 +225,6 @@ onMounted(() => {
   @apply sp-cursor-pointer sp-bg-white sp-rounded-full sp-w-9 sp-h-9 sp-flex-center sp-border-2 sp-border-[#0004] sp-transition-all;
 }
 .reFetchBtn {
-  @apply sp-absolute sp-top-4 sp-left-[50%] -sp-translate-x-[50%] sp-text-body-sm sp-bg-white;
+  @apply sp-absolute sp-top-4 sp-left-[50%] -sp-translate-x-[50%] sp-text-body-sm sp-bg-white sp-z-10;
 }
 </style>

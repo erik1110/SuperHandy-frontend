@@ -88,8 +88,10 @@ import { postLogin } from "@/services/apis/auth";
 import { postResendVerification } from "@/services/apis/auth";
 import { storeAuth } from "@/stores/storeAuth";
 import { storeGlobal } from "@/stores/storeGlobal";
+import { storeChatBox } from "@/stores/storeChatBox";
 const _storeGlobal = storeGlobal();
 const _storeAuth = storeAuth();
+const _storeChatBox = storeChatBox();
 
 const loading = ref(false);
 const resendLoading = ref(false);
@@ -126,6 +128,8 @@ const onSubmit = async () => {
     } else {
       // _storeAuth.setLoginToken(res.data.token)
       _storeAuth.loginToken = res.data.token;
+      _storeChatBox.reConnectWebSocket();
+      // _storeChatBox.fetchChatList();
       navigateTo("/");
     }
   } catch (err) {

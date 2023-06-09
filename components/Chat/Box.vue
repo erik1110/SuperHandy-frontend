@@ -1,4 +1,5 @@
 <template>
+  <!-- Modal + Open Btn -->
   <div class="box">
     <ChatModal />
     <ChatBoxBtn @click="_storeChatBox.showChat = true" />
@@ -9,7 +10,6 @@
 import { storeToRefs } from "pinia";
 import { storeChatBox } from "@/stores/storeChatBox";
 const _storeChatBox = storeChatBox();
-const { showChat } = storeToRefs(_storeChatBox);
 </script>
 
 <style lang="scss" scoped>

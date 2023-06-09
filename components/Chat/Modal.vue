@@ -1,4 +1,5 @@
 <template>
+  <!-- Mobile mode -->
   <v-row v-if="showChat" class="md:sp-hidden" justify="center">
     <v-dialog
       class="md:sp-hidden"
@@ -18,23 +19,20 @@
           >
         </div>
         <Transition name="fade">
-          <v-list v-if="!roomSmCard" lines="two" subheader>
-            <ChatRoomList />
-          </v-list>
+          <ChatRoomList v-if="!roomMobileView" />
         </Transition>
 
         <Transition name="slideLeft">
-          <!-- <v-list v-if="roomSmCard" lines="two" subheader> -->
-          <ChatRoom v-if="roomSmCard" />
-          <!-- </v-list> -->
+          <ChatRoom v-if="roomMobileView" />
         </Transition>
       </v-card>
     </v-dialog>
   </v-row>
+  <!-- Web mode -->
   <Transition name="expand">
     <div
       v-if="showChat"
-      class="sp-hidden md:sp-block sp-card-wrapper chatModal sp-w-[100vw] sp-h-[100vh] md:sp-w-[600px] md:sp-h-[500px]"
+      class="sp-hidden md:sp-block sp-card-wrapper chatModal sp-w-[100vw] sp-h-[100vh] md:sp-w-[700px] md:sp-h-[500px]"
     >
       <div class="chatModal_head">
         <v-icon
@@ -58,7 +56,15 @@ import { storeChatBox } from "@/stores/storeChatBox";
 const _storeChatBox = storeChatBox();
 const { showChat } = storeToRefs(_storeChatBox);
 const dialog = true;
-const roomSmCard = useState("roomSmCard", () => ref(false));
+const roomMobileView = useState("roomMobileView", () => ref(false));
+
+// 聊天室關閉時 Reset nowRoom
+watch(showChat, (val) => {
+  if (!val) {
+    _storeChatBox.nowRoom = {};
+    roomMobileView.value = false;
+  }
+});
 </script>
 
 <style lang="scss" scoped>
@@ -66,7 +72,7 @@ const roomSmCard = useState("roomSmCard", () => ref(false));
 .chatModal {
   @apply sp-bg-white sp-absolute sp-right-0 sp-bottom-0 sp-z-20  sp-overflow-hidden;
   &_head {
-    @apply sp-bg-purple sp-w-full sp-h-[36px] sp-flex sp-px-4 sp-items-center;
+    @apply sp-bg-purple sp-w-full sp-h-[36px] sp-min-h-[36px] sp-flex sp-px-4 sp-items-center;
   }
   &_content {
     height: calc(100% - 36px);

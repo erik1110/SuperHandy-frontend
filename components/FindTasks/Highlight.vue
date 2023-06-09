@@ -55,24 +55,24 @@
 <script setup>
 import { getTasksHighlight } from "@/services/apis/findTasks";
 const highlightTasks = ref();
-let mockTasks = [
-  {
-    taskId: "646c8aa6f48df43c2b5a2e2f",
-    title: "Google五星評論",
-    imgUrls: "https://example.com/switch.jpg",
-    category: "人力派遣",
-  },
-  {
-    taskId: "646c8aa6f48df43c2b5a2e23",
-    title: "數位影像處理",
-    imgUrls: "https://example.com/switch.jpg",
-    category: "人力派遣",
-  },
-];
+// let mockTasks = [
+//   {
+//     taskId: "646c8aa6f48df43c2b5a2e2f",
+//     title: "Google五星評論",
+//     imgUrls: "https://example.com/switch.jpg",
+//     category: "人力派遣",
+//   },
+//   {
+//     taskId: "646c8aa6f48df43c2b5a2e23",
+//     title: "數位影像處理",
+//     imgUrls: "https://example.com/switch.jpg",
+//     category: "人力派遣",
+//   },
+// ];
 const fetchTasksHighlight = async () => {
   let { data } = await getTasksHighlight();
   console.log(data);
-  highlightTasks.value = [...data.tasks, ...mockTasks];
+  highlightTasks.value = [...data.tasks];
 };
 onMounted(() => {
   fetchTasksHighlight();

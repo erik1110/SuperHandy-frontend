@@ -169,6 +169,11 @@ import {
   getCompletedReviews,
 } from "@/services/apis/home";
 import homeData from "@/static/home.json";
+import { storeToRefs } from "pinia";
+import { storeChatBox } from "@/stores/storeChatBox";
+
+const _storeChatBox = storeChatBox();
+const { showChat } = storeToRefs(_storeChatBox);
 const { intro, countData, steps } = homeData;
 
 onMounted(async () => {
@@ -222,6 +227,7 @@ const initData = async () => {
 let windowMousewheel = () => {
   let wrapper = document.querySelector("html");
   let content = document.querySelector(".wrapper");
+  if (showChat.value) return;
   if (
     content.scrollTop + content.clientHeight < content.scrollHeight &&
     event.deltaY > 0

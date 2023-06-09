@@ -11,6 +11,11 @@ export default defineNuxtConfig({
           href: "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css",
         },
       ],
+      // script:[
+      //   {
+      //     src: "https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"
+      //   }
+      // ]
     },
   },
   css: [
@@ -33,19 +38,13 @@ export default defineNuxtConfig({
     "nuxt-swiper",
     "@lewebsimple/nuxt3-svg",
     "@nuxt/image-edge",
-    //   [
-    //     "@nuxtjs/google-fonts",
-    //     {
-    //       families: {
-    //         Sigmar: true,
-    //         "Noto Sans TC": {
-    //           wght: [100, 300, 400, 500, 700, 900],
-    //         },
-    //         download: true,
-    //       },
-    //     },
-    //   ],
+    'nuxt3-socket.io',
   ],
+  socket: {
+    // JSON serializable options only.
+    // options object to pass when instantiating socket server.
+    serverOptions: {}
+  },
   experimental: {
     writeEarlyHints: false,
   },
