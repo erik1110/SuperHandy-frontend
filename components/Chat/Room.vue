@@ -1,6 +1,6 @@
 <template>
   <!-- Modal Right - Individual Room -->
-  <div v-if="Object.keys(nowRoom).length != 0" class="room">
+  <div v-if="Object.keys(nowRoom).length != 0 && !roomLoading" class="room">
     <div class="room_head">
       <v-btn
         icon="mdi-arrow-left"
@@ -62,6 +62,18 @@
       </div>
     </div>
   </div>
+  <div v-else-if="roomLoading" class="emptyRoom sp-flex-center">
+    <v-overlay
+      v-model="roomLoading"
+      contained
+      class="align-center justify-center"
+    >
+      <v-progress-circular
+        color="secondary-darken"
+        indeterminate
+      ></v-progress-circular>
+    </v-overlay>
+  </div>
   <div v-else class="emptyRoom sp-flex-center">
     <ChatBubbleLeftRightIcon class="sp-icon-lg sp-text-slate-300" />
   </div>
@@ -79,7 +91,7 @@ import { storeToRefs } from "pinia";
 const { roleToDisplayRole } = useHelper();
 
 const _storeChatBox = storeChatBox();
-const { nowRoomChatList, nowRoom } = storeToRefs(_storeChatBox);
+const { roomLoading, nowRoomChatList, nowRoom } = storeToRefs(_storeChatBox);
 const roomMobileView = useState("roomMobileView");
 
 const roomContent = ref(null);
@@ -105,9 +117,7 @@ const sendMsg = () => {
 @import url("@/assets/css/tailwind.css");
 .room {
   @apply sp-flex sp-flex-col sp-justify-between sp-border-l sp-border-slate-100;
-  @media (max-width: 768px) {
-    height: calc(100% - 36px);
-  }
+
   &_head {
     @apply sp-px-5 sp-py-3 sp-border-b sp-border-slate-100 sp-flex sp-items-center;
   }
@@ -125,5 +135,11 @@ const sendMsg = () => {
 }
 .emptyRoom {
   @apply sp-bg-slate-50;
+}
+.room,
+.emptyRoom {
+  @media (max-width: 768px) {
+    height: calc(100% - 36px);
+  }
 }
 </style>

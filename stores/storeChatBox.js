@@ -5,6 +5,7 @@ import { storeAuth } from "@/stores/storeAuth";
 import { getChatList, getChatRoomHistory } from "@/services/apis/chat";
 
 export const storeChatBox = defineStore("chatBox", () => {
+  const roomLoading = ref(false)
   const showChat = ref(false);
   const nowRoom = ref({});
   const nowRoomChatList = ref([]);
@@ -41,9 +42,11 @@ export const storeChatBox = defineStore("chatBox", () => {
   })
   // 取得個別聊天室對話
   const fetchRoomHistory = async (taskId) => {
+    roomLoading.value = true
     let res = await getChatRoomHistory({ taskId });
     console.log({ res });
     nowRoomChatList.value = res.data 
+    roomLoading.value = false
     // === for test ===
     //   nowRoomChatList.value =  [
     //     {
@@ -228,6 +231,7 @@ export const storeChatBox = defineStore("chatBox", () => {
   });
 
   return {
+    roomLoading,
     showChat,
     nowRoom,
     nowRoomChatList,
