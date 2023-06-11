@@ -8,10 +8,14 @@
           color="v-purple"
           bg-color="primary-lighten"
         >
-          <v-tab value="poster" @click="FuncPageRouter('/account/tasks/poster')"
+          <v-tab
+            value="account-tasks-index-poster"
+            @click="FuncPageRouter('/account/tasks/poster')"
             >案主任務
           </v-tab>
-          <v-tab value="helper" @click="FuncPageRouter('/account/tasks/helper')"
+          <v-tab
+            value="account-tasks-index-helper"
+            @click="FuncPageRouter('/account/tasks/helper')"
             >幫手任務
           </v-tab>
         </V-tabs>
@@ -23,10 +27,16 @@
 
 <script setup>
   const route = useRoute();
-  const identityTabs = ref("poster");
+  const identityTabs = ref("");
   if (route.path == "/account/tasks") {
     navigateTo("/account/tasks/poster");
+    identityTabs.value = "account-tasks-index-poster";
   }
+  onMounted(() => {
+    if (route.path != "/account/tasks") {
+      identityTabs.value = route.name;
+    }
+  });
   const FuncPageRouter = function (route) {
     navigateTo(route);
   };
