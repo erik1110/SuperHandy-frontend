@@ -153,7 +153,11 @@
         content: "驗證信已重新寄出，請至信箱收取信件",
       });
     } else {
-      errMsg.value = res.message;
+      // _storeAuth.setLoginToken(res.data.token)
+      _storeAuth.loginToken = res.data.token;
+      _storeChatBox.reConnectWebSocket();
+      _storeChatBox.fetchChatList();
+      navigateTo("/");
     }
     resendLoading.value = false;
   };
