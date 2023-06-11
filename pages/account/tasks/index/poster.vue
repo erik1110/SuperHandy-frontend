@@ -1,6 +1,6 @@
 <template>
   <div>
-    <VCard class="sp-my-4">
+    <div class="sp-my-4 sp-card-wrapper sp-bg-white">
       <VCardText class="sp-overflow-x-auto">
         <v-tabs show-arrows v-model="groupTab" color="purple">
           <v-tab value="all">全部 [{{ postList.all.length }}]</v-tab>
@@ -20,20 +20,31 @@
           <v-tab value="other">未成立 [{{ postList.other.length }}]</v-tab>
         </v-tabs>
       </VCardText>
-    </VCard>
+    </div>
 
-    <v-card class="sp-mb-4" v-for="(item, index) in postList[groupTab]">
+    <div
+      class="sp-mb-4 sp-card-wrapper sp-bg-white"
+      v-for="(item, index) in postList[groupTab]"
+      :key="index"
+    >
       <v-card-text class="sp-relative">
         <h4
-          class="sp-text-h4 sp-flex sp-flex-row-reverse sm:sp-flex-row sp-items-center sp-justify-end sm:sp-justify-between sp-mb-2"
+          class="sp-text-h5 sp-text-slate-800 sp-flex sp-flex-row-reverse sm:sp-flex-row sp-items-center sp-justify-end sm:sp-justify-between sp-mb-2"
         >
           <span>{{ item.title }}</span>
-          <div
+          <!-- <div
             class="sp-text-body sp-flex-shrink-0 sp-mr-4 sm:sp-w-[94.5px] sm:sp-mr-0 sp-px-2 sp-py-1 sp-text-center"
             :class="colorControl(item.status)"
           >
             {{ item.status }}
-          </div>
+          </div> -->
+          <v-chip
+            class="mr-1"
+            size="x-small"
+            :color="colorControl(item.status)"
+          >
+            {{ item.status }}
+          </v-chip>
         </h4>
         <div class="d-flex sp-mb-[40px] sm:sp-mb-0 sp-flex-wrap">
           <div class="sp-mr-4 sp-shrink-0 sp-mb-2 sm:sp-mb-0">
@@ -72,7 +83,7 @@
               class="sm:sp--translate-y-2 sp-px-[1rem] sm:sp-px-0 sp-absolute sp-bottom-[15px] sp-left-0 sm:sp-relative sp-w-full sm:sp-w-auto sm:sp-float-right"
             >
               <v-btn
-                color="primary"
+                color="v-purple"
                 outlined
                 class="sp-px-4 sp-py-2 sp-w-full sp-text-center sp-border-2 sp-border-black sp-border-solid"
                 @click="
@@ -87,85 +98,86 @@
           </div>
         </div>
       </v-card-text>
-    </v-card>
+    </div>
   </div>
 </template>
 <script setup>
-  import { getTasksPosterManagement } from "@/services/apis/tasks";
-  const groupTab = useState("all");
-  const postList = ref({
-    all: [],
-    draft: [],
-    published: [],
-    inProgressed: [],
-    confirmed: [],
-    unpublished: [],
-    other: [],
-  });
-  const listModel = {
-    all: [],
-    draft: [],
-    published: [],
-    inProgressed: [],
-    confirmed: [],
-    unpublished: [],
-    other: [],
-  };
-  let FuncGetTasksPosterManagement = async () => {
-    let res = await getTasksPosterManagement();
-    if (!res.error) {
-      let resArray = res.data;
-      postList.value = listModel;
-      resArray.forEach(function (item) {
-        postList.value.all.push(item);
-        switch (item.status) {
-          case "草稿": {
-            postList.value.draft.push(item);
-            break;
-          }
-          case "媒合中": {
-            postList.value.published.push(item);
-            break;
-          }
-          case "進行中": {
-            postList.value.inProgressed.push(item);
-            break;
-          }
-          case "已完成": {
-            postList.value.confirmed.push(item);
-            break;
-          }
-          case "已下架": {
-            postList.value.unpublished.push(item);
-            break;
-          }
-          default: {
-            postList.value.other.push(item);
-            break;
-          }
+import { getTasksPosterManagement } from "@/services/apis/tasks";
+const groupTab = useState("all");
+const postList = ref({
+  all: [],
+  draft: [],
+  published: [],
+  inProgressed: [],
+  confirmed: [],
+  unpublished: [],
+  other: [],
+});
+const listModel = {
+  all: [],
+  draft: [],
+  published: [],
+  inProgressed: [],
+  confirmed: [],
+  unpublished: [],
+  other: [],
+};
+let FuncGetTasksPosterManagement = async () => {
+  let res = await getTasksPosterManagement();
+  if (!res.error) {
+    let resArray = res.data;
+    postList.value = listModel;
+    resArray.forEach(function (item) {
+      postList.value.all.push(item);
+      switch (item.status) {
+        case "草稿": {
+          postList.value.draft.push(item);
+          break;
         }
-      });
-    }
-  };
-  let colorControl = (status) => {
-    if (status == "草稿" || status == "已下架") {
-      return "sp-tag-dark-lg-amber";
-    } else if (status == "媒合中" || status == "進行中") {
-      return "sp-tag-dark-lg-blue";
-    } else if (status == "已完成" || status == "未成立") {
-      return "sp-tag-dark-lg-slate";
-    } else {
-      return "sp-tag-dark-lg-slate";
-    }
-  };
-  onMounted(() => {
-    FuncGetTasksPosterManagement();
-  });
-  const toDraftPage = function (taskId) {
-    navigateTo(`/post-task/${taskId}`);
-  };
-  const toDetailPage = function (taskId) {
-    navigateTo(`/account/tasks/${taskId}`);
-  };
+        case "媒合中": {
+          postList.value.published.push(item);
+          break;
+        }
+        case "進行中": {
+          postList.value.inProgressed.push(item);
+          break;
+        }
+        case "已完成": {
+          postList.value.confirmed.push(item);
+          break;
+        }
+        case "已下架": {
+          postList.value.unpublished.push(item);
+          break;
+        }
+        default: {
+          postList.value.other.push(item);
+          break;
+        }
+      }
+    });
+  }
+};
+let colorControl = (status) => {
+  if (status == "草稿" || status == "已下架") {
+    return "v-orange";
+    // return "sp-tag-dark-lg-amber";
+  } else if (status == "媒合中" || status == "進行中") {
+    return "v-purple";
+  } else if (status == "已完成") {
+    return "secondary-darken";
+  } else {
+    return "v-gray-text";
+  }
+};
+onMounted(() => {
+  FuncGetTasksPosterManagement();
+});
+const toDraftPage = function (taskId) {
+  navigateTo(`/post-task/${taskId}`);
+};
+const toDetailPage = function (taskId) {
+  navigateTo(`/account/tasks/${taskId}`);
+};
 </script>
 <style></style>
