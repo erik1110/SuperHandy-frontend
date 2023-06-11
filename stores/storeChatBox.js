@@ -5,6 +5,8 @@ import { storeAuth } from "@/stores/storeAuth";
 import { getChatList, getChatRoomHistory } from "@/services/apis/chat";
 
 export const storeChatBox = defineStore("chatBox", () => {
+  const _storeAuth = storeAuth();
+
   const roomLoading = ref(false)
   const roomListLoading = ref(true)
   const showChat = ref(false);
@@ -36,16 +38,19 @@ export const storeChatBox = defineStore("chatBox", () => {
       return acc
     },[])
     console.log('roomlist',roomList.value);
+    updateBadge()
     roomListLoading.value = false
+    
   };
-  
+  onMounted(()=>{
+    if(_storeAuth.loginToken){
+      fetchChatList()
+    }
+  })
   watch(showChat,(val)=>{
     if(val){
       fetchChatList()
     }
-  })
-  watch(roomList,(val)=>{
-    console.log('roomlist',{val});
   })
   // 取得個別聊天室對話
   const fetchRoomHistory = async (taskId) => {
@@ -140,7 +145,6 @@ export const storeChatBox = defineStore("chatBox", () => {
   const messages = reactive({});
   // WebSocket 連線
   const socketConnect = () => {
-    const _storeAuth = storeAuth();
     socket = io(URL, {
       transports: ["websocket"],
       auth: { Authorization: _storeAuth.loginToken ? `Bearer ${_storeAuth.loginToken}`: `` },
@@ -161,6 +165,7 @@ export const storeChatBox = defineStore("chatBox", () => {
     //監聽read事件(接收websocket訊息)
     socket.on("read",(data)=>{
       console.log("socket read:", {data});
+      updateBadge()
     })
 
     //監聽connectStatus事件(接收websocket訊息)
@@ -241,7 +246,12 @@ export const storeChatBox = defineStore("chatBox", () => {
       roomList.value.unshift(removed[0])
       console.log(roomList.value);
     }
-    
+  }
+  // 更新Chat btn Badge
+  const updateBadge = ()=>{
+    let hasUnreadCount = roomList.value.find(el=>el.unreadCount != 0
+      )
+    showBadge.value = !!hasUnreadCount
   }
 
   onMounted(async () => {
@@ -255,6 +265,7 @@ export const storeChatBox = defineStore("chatBox", () => {
     showChat,
     nowRoom,
     nowRoomChatList,
+    showBadge,
     roomList,
     fetchChatList,
     fetchRoomHistory,
