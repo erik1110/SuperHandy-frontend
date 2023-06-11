@@ -17,7 +17,7 @@
               </div>
             </div>
           </div>
-          <div class="sp-hidden md:sp-block stpper-line"></div>
+          <div class="sp-block stpper-line"></div>
           <div class="stpper-item" :class="progressObject.inProgressAt.class">
             <div class="stpper-item-icon">
               <CheckIcon class="stpper-item-icon-svg" />
@@ -25,12 +25,14 @@
             </div>
             <div class="stpper-item-content">
               <div class="stpper-item-content-title sp-text-h4">媒合幫手</div>
-              <div class="stpper-item-content-end_time sp-text-caption">
-                {{ progressObject.inProgressAt.time }}
+              <div class="stpper-item-content-end_time">
+                <div class="stpper-item-content-end_time-text sp-text-caption">
+                  {{ progressObject.inProgressAt.time }}
+                </div>
               </div>
             </div>
           </div>
-          <div class="sp-hidden md:sp-block stpper-line"></div>
+          <div class="sp-block stpper-line"></div>
           <div class="stpper-item" :class="progressObject.submittedAt.class">
             <div class="stpper-item-icon">
               <CheckIcon class="stpper-item-icon-svg" />
@@ -38,12 +40,14 @@
             </div>
             <div class="stpper-item-content">
               <div class="stpper-item-content-title sp-text-h4">任務執行</div>
-              <div class="stpper-item-content-end_time sp-text-caption">
-                {{ progressObject.submittedAt.time }}
+              <div class="stpper-item-content-end_time">
+                <div class="stpper-item-content-end_time-text sp-text-caption">
+                  {{ progressObject.submittedAt.time }}
+                </div>
               </div>
             </div>
           </div>
-          <div class="sp-hidden md:sp-block stpper-line"></div>
+          <div class="sp-block stpper-line"></div>
           <div class="stpper-item" :class="progressObject.confirmedAt.class">
             <div class="stpper-item-icon">
               <CheckIcon class="stpper-item-icon-svg" />
@@ -51,12 +55,14 @@
             </div>
             <div class="stpper-item-content">
               <div class="stpper-item-content-title sp-text-h4">任務完成</div>
-              <div class="stpper-item-content-end_time sp-text-caption">
-                {{ progressObject.confirmedAt.time }}
+              <div class="stpper-item-content-end_time">
+                <div class="stpper-item-content-end_time-text sp-text-caption">
+                  {{ progressObject.confirmedAt.time }}
+                </div>
               </div>
             </div>
           </div>
-          <div class="sp-hidden md:sp-block stpper-line"></div>
+          <div class="sp-block stpper-line"></div>
           <div class="stpper-item" :class="progressObject.completedAt.class">
             <div class="stpper-item-icon">
               <CheckIcon class="stpper-item-icon-svg" />
@@ -64,8 +70,10 @@
             </div>
             <div class="stpper-item-content">
               <div class="stpper-item-content-title sp-text-h4">雙方評價</div>
-              <div class="stpper-item-content-end_time sp-text-caption">
-                {{ progressObject.completedAt.time }}
+              <div class="stpper-item-content-end_time">
+                <div class="stpper-item-content-end_time-text sp-text-caption">
+                  {{ progressObject.completedAt.time }}
+                </div>
               </div>
             </div>
           </div>
@@ -198,7 +206,7 @@
             left: 0;
             top: 0;
             width: 140px;
-            transform: scale(0.75) translateX(-25px);
+            transform: scale(0.85) translateX(-15px);
           }
         }
       }
@@ -236,6 +244,38 @@
     }
     .stpper-item-content-end_time {
       display: none;
+    }
+  }
+  @media (max-width: 1024px) {
+    .stpper-item {
+      flex-direction: column;
+      &-icon {
+        margin-right: 0;
+        margin-bottom: 5px;
+      }
+      &-content {
+        &-title {
+          font-size: 1rem;
+        }
+        &-end_time {
+          display: none;
+          height: 0px;
+          opacity: 0;
+        }
+      }
+    }
+  }
+  @media (max-width: 640px) {
+    .stpper-line {
+      visibility: hidden;
+      margin: 0;
+    }
+    .stpper-item {
+      &-content {
+        &-title {
+          font-size: 0.75rem;
+        }
+      }
     }
   }
 </style>

@@ -2,7 +2,7 @@
   <div>
     <VCard class="sp-mb-4">
       <VCardText>
-        <VTabs color="secondary" v-model="commentTabs">
+        <VTabs color="v-purple" v-model="commentTabs">
           <v-tab
             value="poster"
             @click="FuncPageRouter('/account/comments/poster')"

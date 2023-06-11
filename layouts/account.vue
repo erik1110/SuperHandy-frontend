@@ -42,7 +42,7 @@
           </VCardText>
         </VCard>
       </div>
-      <div class="sp-flex-1 sp-mx-4 sp-my-4">
+      <div class="sp-flex-1 sm:sp-mx-4 sp-my-4 sp-overflow-auto">
         <div class="sp-h-[100%]">
           <slot />
         </div>

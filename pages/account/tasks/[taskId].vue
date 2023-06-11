@@ -7,6 +7,7 @@
           <AccountTasksInfo class="sp-my-4"></AccountTasksInfo>
           <AccountTasksMatch class="sp-my-4"></AccountTasksMatch>
           <AccountTasksAccept class="sp-my-4"></AccountTasksAccept>
+          <AccountTasksComment class="sp-my-4"></AccountTasksComment>
         </VCol>
       </VRow>
     </VContainer>

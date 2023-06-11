@@ -18,3 +18,5 @@ export const getVerifyEmail = (token) =>
 //重寄驗證信
 export const postResendVerification = (data) =>
   req("POST", "/resend-verification", data);
+//google 登入
+export const getGoogleAccount = () => req("GET", "/auth/google");

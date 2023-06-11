@@ -9,7 +9,7 @@
     <div
       class="sp-flex sp-w-[100vw] sp-h-[100vh] sp-items-center sp-justify-center"
     >
-      <img :src="lightBoxControll.bigImage" />
+      <img class="bigImage" :src="lightBoxControll.bigImage" />
     </div>
   </v-overlay>
 </template>
@@ -21,3 +21,9 @@
   });
   const open = ref(false);
 </script>
+<style scoped lang="scss">
+  .bigImage {
+    max-width: 80vw;
+    max-height: 80vh;
+  }
+</style>
