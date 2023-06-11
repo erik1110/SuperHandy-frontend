@@ -14,13 +14,13 @@
       {{ taskData.address }}
     </div>
     <div
-      class="sp-bg-gray-border sp-rounded-lg sp-flex sp-py-4 sp-px-2 sp-mb-4"
+      class="sp-bg-gray-border sp-rounded-lg sp-flex sp-flex-wrap md:sp-flex-nowrap sp-py-4 sp-px-2 sp-mb-4"
     >
-      <div class="item">
+      <div class="item sp-w-full md:sp-w-auto">
         <p class="tile">服務類型</p>
         <p>#{{ taskData.category }}</p>
       </div>
-      <div class="item">
+      <div class="item sp-w-full md:sp-w-auto">
         <p class="tile">案主</p>
         <p>{{ taskData.posterName }}</p>
       </div>
@@ -28,7 +28,7 @@
         <p class="tile">聯絡電話</p>
         <p>09-26XXX-XXX</p>
       </div> -->
-      <div class="item">
+      <div class="item sp-w-full md:sp-w-auto">
         <p class="tile">案件預算</p>
         <p class="sp-text-purple sp-font-semibold sp-text-body-sm">
           {{ taskData.salary }} 超人幣
@@ -55,15 +55,20 @@
         </div>
       </div>
     </div>
-    <div class="sp-flex sp-items-center">
-      <p class="sp-ml-auto sp-mr-3 sp-text-caption sp-text-slate-500">
+    <div
+      class="sp-flex sp-items-center sp-justify-center md:sp-justify-start sp-flex-wrap md:sp-flex-nowrap"
+    >
+      <p class="md:sp-ml-auto sp-mr-3 sp-text-caption sp-text-slate-500">
         <span class="sp-pr-2 sp-mr-1 sp-border-r sp-border-slate-400"
           >刊登時間 {{ fromNow(taskData.publishedAt) }}</span
         >
         {{ taskData.helperCount }} 人詢問
       </p>
-      <NuxtLink :to="`/find-task/${taskData.taskId}`">
-        <v-btn color="v-purple" class="px-4">
+      <NuxtLink
+        class="sp-w-full md:sp-w-auto sp-mt-2 md:sp-mt-0"
+        :to="`/find-task/${taskData.taskId}`"
+      >
+        <v-btn color="v-purple" class="px-4 sp-w-full">
           <v-icon class="mr-1">mdi-cursor-pointer</v-icon>
           查看詳情</v-btn
         >
@@ -73,21 +78,21 @@
 </template>
 
 <script setup>
-import { MapPinIcon, FireIcon } from "@heroicons/vue/24/solid";
+  import { MapPinIcon, FireIcon } from "@heroicons/vue/24/solid";
 
-const { taskData } = defineProps(["taskData"]);
-const { fromNow } = useMoment();
+  const { taskData } = defineProps(["taskData"]);
+  const { fromNow } = useMoment();
 </script>
 
 <style lang="postcss" scoped>
-@import url("@/assets/css/tailwind.css");
-.fireIcon {
-  @apply sp-bg-warning sp-rounded-md sp-w-10 sp-h-10;
-}
-.item {
-  @apply sp-basis-40 sp-px-4;
-}
-.tile {
-  @apply sp-text-body-sm sp-font-medium sp-text-slate-500 sp-w-16 sp-inline-block sp-mr-1;
-}
+  @import url("@/assets/css/tailwind.css");
+  .fireIcon {
+    @apply sp-bg-warning sp-rounded-md sp-w-10 sp-h-10;
+  }
+  .item {
+    @apply md:sp-basis-40 sp-px-4 sp-pb-2 md:sp-py-0;
+  }
+  .tile {
+    @apply sp-text-body-sm sp-font-medium sp-text-slate-500 sp-w-16 sp-inline-block sp-mr-1;
+  }
 </style>

@@ -22,14 +22,16 @@
     </div>
     <div class="sp-bg-gray-bg sp-h-full sp-pt-4">
       <v-container
-        class="sp-flex sp-flex-wrap sm:sp-flex-nowrap sp-content-start"
+        class="sp-flex sp-flex-wrap md:sp-flex-nowrap sp-content-start"
       >
         <!-- Filter -->
-        <div class="sp-mb-3 sp-flex-auto sm:sp-flex-initial">
+        <div
+          class="sp-w-full md:sp-w-auto sp-mb-3 sp-flex-auto sm:sp-flex-initial"
+        >
           <FindTasksFilters />
         </div>
         <!-- Main Content -->
-        <div class="sp-flex-auto">
+        <div class="sp-w-full md:sp-w-auto sp-flex-auto">
           <FindTasksTabs />
           <NuxtPage :keepalive="{}" />
         </div>
@@ -39,23 +41,23 @@
 </template>
 
 <script setup>
-import { storeFindTasks } from "~/stores/storeFindTasks";
-const _storeFindTasks = storeFindTasks();
-onBeforeMount(() => {
-  _storeFindTasks.resetFilter();
-});
+  import { storeFindTasks } from "~/stores/storeFindTasks";
+  const _storeFindTasks = storeFindTasks();
+  onBeforeMount(() => {
+    _storeFindTasks.resetFilter();
+  });
 
-const route = useRoute();
-const search = () => {
-  if (route.fullPath.includes("list")) {
-    _storeFindTasks.fetchListViewTasks();
-  } else {
-    _storeFindTasks.fetchMapViewTasks();
-  }
-};
+  const route = useRoute();
+  const search = () => {
+    if (route.fullPath.includes("list")) {
+      _storeFindTasks.fetchListViewTasks();
+    } else {
+      _storeFindTasks.fetchMapViewTasks();
+    }
+  };
 </script>
 <style lang="postcss" scoped>
-.searchBar:deep(input) {
-  padding-top: 8px;
-}
+  .searchBar:deep(input) {
+    padding-top: 8px;
+  }
 </style>
