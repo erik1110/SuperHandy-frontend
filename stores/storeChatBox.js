@@ -13,6 +13,8 @@ export const storeChatBox = defineStore("chatBox", () => {
   const nowRoom = ref({});
   const nowRoomChatList = ref([]);
   const showBadge = ref(false)
+  const route = useRoute()
+  console.log(route);
   /*
     Fetch Data
   */
@@ -253,11 +255,17 @@ export const storeChatBox = defineStore("chatBox", () => {
       )
     showBadge.value = !!hasUnreadCount
   }
+  // 路由更換自動關閉聊天室
+  watch(()=>route.path,(val)=>{
+    // console.log({val},route.path,showChat.value);
+    if(showChat.value) showChat.value = false
+  })
 
   onMounted(async () => {
     socketConnect();
     setUpEventHandlers();
   });
+
 
   return {
     roomLoading,
