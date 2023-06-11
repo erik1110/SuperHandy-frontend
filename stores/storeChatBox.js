@@ -10,6 +10,7 @@ export const storeChatBox = defineStore("chatBox", () => {
   const showChat = ref(false);
   const nowRoom = ref({});
   const nowRoomChatList = ref([]);
+  const showBadge = ref(false)
   /*
     Fetch Data
   */
@@ -42,6 +43,9 @@ export const storeChatBox = defineStore("chatBox", () => {
     if(val){
       fetchChatList()
     }
+  })
+  watch(roomList,(val)=>{
+    console.log('roomlist',{val});
   })
   // 取得個別聊天室對話
   const fetchRoomHistory = async (taskId) => {
@@ -152,8 +156,7 @@ export const storeChatBox = defineStore("chatBox", () => {
     socket.on("message", (msg) => {
       console.log("收到甚麼message訊息:", msg);
       // 更新 ChatList
-      // if(nowRoom.taskId)
-        updateMsg(msg)
+      updateMsg(msg)
     });
     //監聽read事件(接收websocket訊息)
     socket.on("read",(data)=>{
@@ -201,8 +204,6 @@ export const storeChatBox = defineStore("chatBox", () => {
     let newMsgRoom = roomList.value.find(r=>r.taskId==msg.taskId)
     newMsgRoom.lastMessage = msg.message
     newMsgRoom.updatedAt = msg.createdAt
-    // TODO: 釐清unreadCount邏輯
-    // newMsgRoom.unreadCount = msg.unreadCount
     console.log({newMsgRoom});
     // 如果正在聊天室內，更新房間訊息
     if(nowRoom.value.taskId == msg.taskId){
@@ -215,10 +216,13 @@ export const storeChatBox = defineStore("chatBox", () => {
       if(roomContent){
         scrollToBottom(roomContent)
       }
-      // TODO: ws 已讀傳送
+      // ws 已讀傳送
+      setRoomRead(msg.taskId,msg.chatId)
     }else{
       newMsgRoom.unreadCount ++
     }
+    // 更新聊天列表順序
+    updateChatList(msg.taskId)
     
   }
   // 滾動到最新訊息
@@ -227,6 +231,18 @@ export const storeChatBox = defineStore("chatBox", () => {
       content.scrollTop = content.scrollHeight;
     },100)
   };
+  // 更新聊天列表順序
+  const updateChatList = (msgIdx)=>{
+    console.log('updateChatList');
+    let renewIdx = roomList.value.findIndex(el=>el.taskId == msgIdx)
+    if(renewIdx!=0){
+      let removed = roomList.value.splice(renewIdx,1)
+      console.log({removed});
+      roomList.value.unshift(removed[0])
+      console.log(roomList.value);
+    }
+    
+  }
 
   onMounted(async () => {
     socketConnect();
