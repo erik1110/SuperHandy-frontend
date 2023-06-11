@@ -5,11 +5,14 @@ import { storeAuth } from "@/stores/storeAuth";
 import { getChatList, getChatRoomHistory } from "@/services/apis/chat";
 
 export const storeChatBox = defineStore("chatBox", () => {
+  const _storeAuth = storeAuth();
+
   const roomLoading = ref(false)
   const roomListLoading = ref(true)
   const showChat = ref(false);
   const nowRoom = ref({});
   const nowRoomChatList = ref([]);
+  const showBadge = ref(false)
   /*
     Fetch Data
   */
@@ -35,9 +38,15 @@ export const storeChatBox = defineStore("chatBox", () => {
       return acc
     },[])
     console.log('roomlist',roomList.value);
+    updateBadge()
     roomListLoading.value = false
+    
   };
-  
+  onMounted(()=>{
+    if(_storeAuth.loginToken){
+      fetchChatList()
+    }
+  })
   watch(showChat,(val)=>{
     if(val){
       fetchChatList()
@@ -136,7 +145,6 @@ export const storeChatBox = defineStore("chatBox", () => {
   const messages = reactive({});
   // WebSocket 連線
   const socketConnect = () => {
-    const _storeAuth = storeAuth();
     socket = io(URL, {
       transports: ["websocket"],
       auth: { Authorization: _storeAuth.loginToken ? `Bearer ${_storeAuth.loginToken}`: `` },
@@ -152,12 +160,12 @@ export const storeChatBox = defineStore("chatBox", () => {
     socket.on("message", (msg) => {
       console.log("收到甚麼message訊息:", msg);
       // 更新 ChatList
-      // if(nowRoom.taskId)
-        updateMsg(msg)
+      updateMsg(msg)
     });
     //監聽read事件(接收websocket訊息)
     socket.on("read",(data)=>{
       console.log("socket read:", {data});
+      updateBadge()
     })
 
     //監聽connectStatus事件(接收websocket訊息)
@@ -201,8 +209,6 @@ export const storeChatBox = defineStore("chatBox", () => {
     let newMsgRoom = roomList.value.find(r=>r.taskId==msg.taskId)
     newMsgRoom.lastMessage = msg.message
     newMsgRoom.updatedAt = msg.createdAt
-    // TODO: 釐清unreadCount邏輯
-    // newMsgRoom.unreadCount = msg.unreadCount
     console.log({newMsgRoom});
     // 如果正在聊天室內，更新房間訊息
     if(nowRoom.value.taskId == msg.taskId){
@@ -215,10 +221,13 @@ export const storeChatBox = defineStore("chatBox", () => {
       if(roomContent){
         scrollToBottom(roomContent)
       }
-      // TODO: ws 已讀傳送
+      // ws 已讀傳送
+      setRoomRead(msg.taskId,msg.chatId)
     }else{
       newMsgRoom.unreadCount ++
     }
+    // 更新聊天列表順序
+    updateChatList(msg.taskId)
     
   }
   // 滾動到最新訊息
@@ -227,6 +236,23 @@ export const storeChatBox = defineStore("chatBox", () => {
       content.scrollTop = content.scrollHeight;
     },100)
   };
+  // 更新聊天列表順序
+  const updateChatList = (msgIdx)=>{
+    console.log('updateChatList');
+    let renewIdx = roomList.value.findIndex(el=>el.taskId == msgIdx)
+    if(renewIdx!=0){
+      let removed = roomList.value.splice(renewIdx,1)
+      console.log({removed});
+      roomList.value.unshift(removed[0])
+      console.log(roomList.value);
+    }
+  }
+  // 更新Chat btn Badge
+  const updateBadge = ()=>{
+    let hasUnreadCount = roomList.value.find(el=>el.unreadCount != 0
+      )
+    showBadge.value = !!hasUnreadCount
+  }
 
   onMounted(async () => {
     socketConnect();
@@ -239,6 +265,7 @@ export const storeChatBox = defineStore("chatBox", () => {
     showChat,
     nowRoom,
     nowRoomChatList,
+    showBadge,
     roomList,
     fetchChatList,
     fetchRoomHistory,
