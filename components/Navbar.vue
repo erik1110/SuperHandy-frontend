@@ -64,8 +64,12 @@
   </v-app-bar>
 </template>
 <script setup>
+import { storeToRefs } from 'pinia'
+import { siteConfig } from '@/services/siteConfig'
+import { storeNotification } from "@/stores/storeNotification";
 import { storeFindTasks } from "@/stores/storeFindTasks";
 const _storeFindTasks = storeFindTasks();
+
 const route = useRoute();
 // Search
 const searchSubmit = async () => {
@@ -105,15 +109,21 @@ const noticeMenuUpdate = (event) => {
   } else {
     document.documentElement.style.overflow = "auto";
   }
-  // 系統通知
-  const _storeNotification = storeNotification()
-  const { isHasUnRead } = storeToRefs(_storeNotification)
-  const { hasUnRead } = storeNotification()
+}
+
+// 系統通知
+const _storeNotification = storeNotification()
+const { isHasUnRead } = storeToRefs(_storeNotification)
+const { hasUnRead } = storeNotification()
+const { checkIsLogin } = useSpUtility();
+if (checkIsLogin()) {
   hasUnRead()
   if (siteConfig.notification.isOpen) {
     setInterval(hasUnRead, siteConfig.notification.intervalTime);
   }
-};
+}
+
+
 </script>
 
 <style scoped></style>
