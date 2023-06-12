@@ -36,7 +36,7 @@ const FuncGetAccountPointsHistory = async function () {
       _historyData.time = fromNow(item.createdAt);//交易時間
       _historyData.desc = item.desc.join(', ');//交易項目
       _historyData.tagClass = roleSetting[item.role] ? roleSetting[item.role].tagClass : roleSetting['default'].tagClass;
-      _historyData.roleClass = roleSetting[item.role] ? roleSetting[item.role].roleClass : roleSetting['default'].tagClass;
+      _historyData.roleClass = roleSetting[item.role] ? roleSetting[item.role].roleClass : roleSetting['default'].roleClass;
 
       // 點數計算 - 幫手
       if (item.role === '幫手') {
