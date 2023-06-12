@@ -29,7 +29,12 @@
       </NuxtLink>
       <v-btn v-if="_storeAuth.loginToken" icon size="small">
         <v-icon>mdi-bell</v-icon>
-        <v-menu :close-on-content-click="false" activator="parent" width="300" max-height="400">
+        <v-menu
+          :close-on-content-click="false"
+          activator="parent"
+          width="300"
+          max-height="400"
+        >
           <Notifications />
         </v-menu>
       </v-btn>
@@ -42,6 +47,7 @@
               :key="index"
               :value="index"
               :to="item.to"
+              @update:modelValue="noticeMenuUpdate"
             >
               <v-list-item>
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -115,6 +121,14 @@ const logout = () => {
   navigateTo("/auth/login");
 };
 
+const noticeMenuUpdate = (event) => {
+  console.log("noticeMenuUpdate", event);
+  if (event) {
+    document.documentElement.style.overflow = "hidden";
+  } else {
+    document.documentElement.style.overflow = "auto";
+  }
+};
 </script>
 
 <style scoped></style>
