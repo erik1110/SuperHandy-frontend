@@ -70,7 +70,7 @@ export const useHttp = () => {
   };
 
   const req = function (method, url, data, config) {
-    console.log();
+    // console.log();
     method = method.toUpperCase();
     let options = { method, ...config };
     switch (method) {

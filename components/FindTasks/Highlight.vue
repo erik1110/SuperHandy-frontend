@@ -10,8 +10,6 @@
     <h1 class="sp-text-h2">找任務</h1>
     <p>各項任務由你大展身手！超人幫手限時推薦👏</p>
   </div>
-  <!-- sp-max-w-full md:sp-max-w-2xl lg:sp-max-w-3xl xl:sp-max-w-5xl 2xl:sp-max-w-6xl -->
-  <!-- <FindTasksSwiper /> -->
   <Swiper
     :slides-per-view="3"
     :loop="true"
@@ -55,34 +53,15 @@
 <script setup>
 import { getTasksHighlight } from "@/services/apis/findTasks";
 const highlightTasks = ref();
-// let mockTasks = [
-//   {
-//     taskId: "646c8aa6f48df43c2b5a2e2f",
-//     title: "Google五星評論",
-//     imgUrls: "https://example.com/switch.jpg",
-//     category: "人力派遣",
-//   },
-//   {
-//     taskId: "646c8aa6f48df43c2b5a2e23",
-//     title: "數位影像處理",
-//     imgUrls: "https://example.com/switch.jpg",
-//     category: "人力派遣",
-//   },
-// ];
+
 const fetchTasksHighlight = async () => {
   let { data } = await getTasksHighlight();
-  console.log(data);
+  // console.log(data);
   highlightTasks.value = [...data.tasks];
 };
 onMounted(() => {
   fetchTasksHighlight();
 });
-
-const showPrevBtn = ref(false);
-const showNextBtn = ref(true);
-const reachEndEvent = () => {
-  console.log("reachEndEvent");
-};
 </script>
 
 <style lang="scss" scoped></style>

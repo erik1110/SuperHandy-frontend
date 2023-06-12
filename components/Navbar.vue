@@ -122,7 +122,6 @@ const logout = () => {
 };
 
 const noticeMenuUpdate = (event) => {
-  console.log("noticeMenuUpdate", event);
   if (event) {
     document.documentElement.style.overflow = "hidden";
   } else {
