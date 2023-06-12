@@ -14,7 +14,8 @@
             </div>
             <div class="sp-mb-4">
                 <!-- 六個數字 -->
-                <AccountPerformance :hosterData="performanceHosterData" :helperData="performanceHelperData"></AccountPerformance>
+                <AccountPerformance :hosterData="performanceHosterData" :helperData="performanceHelperData">
+                </AccountPerformance>
             </div>
         </div>
         <div class="sp-card-wrapper sp-bg-white sp-p-6">
@@ -218,9 +219,9 @@ const uploadAvatar = async (event) => {
     try {
         //檢查圖片大小不可超過2MB
         logInfo(_work, 'file.size', _file.size)
-        if (!checkUploadImage(_file.size, siteConfig.Image.upload.maxSize)) {
+        if (!checkUploadImage(_file.size, siteConfig.image.upload.maxSize)) {
             logError(_work, 'file.size', _file.size)
-            openModal(`圖片大小不可超過${siteConfig.Image.upload.maxSizeCn}`)
+            openModal(`圖片大小不可超過${siteConfig.image.upload.maxSizeCn}`)
             circularLoading.value = false
             return;
         }
