@@ -4,12 +4,17 @@
   >
     <div class="sp-w-full sp-min-h-[150px] sp-rounded-lg sp-overflow-hidden">
       <!-- Formal -->
-      <!-- <v-img :src="avatar" class="sp-w-full"></v-img> -->
-      <!-- -----Test------ -->
       <v-img
+        :src="avatar"
+        cover
+        class="sp-w-full sp-h-full"
+        aspect-ratio="1"
+      ></v-img>
+      <!-- -----Test------ -->
+      <!-- <v-img
         src="https://source.unsplash.com/random/300x300/?person"
         class="sp-w-full"
-      ></v-img>
+      ></v-img> -->
     </div>
     <div class="sp-text-h5 sp-text-slate-800 sp-my-2 sp-ml-1">
       {{ lastName }}**
@@ -29,14 +34,14 @@
 </template>
 
 <script setup>
-  const { avatar, lastName, completedTasks, completionRate, rating } =
-    defineProps({
-      lastName: String,
-      avatar: String,
-      completedTasks: Number,
-      completionRate: Number,
-      rating: Object,
-    });
+const { avatar, lastName, completedTasks, completionRate, rating } =
+  defineProps({
+    lastName: String,
+    avatar: String,
+    completedTasks: Number,
+    completionRate: Number,
+    rating: Object,
+  });
 </script>
 
 <style lang="scss" scoped></style>
