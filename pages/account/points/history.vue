@@ -14,6 +14,10 @@ const roleSetting = {
     tagClass: 'sp-tag-dark-lg-amber',
     roleClass: 'sp-tag-light-xs-amber'
   },
+  default:{
+    tagClass: 'sp-tag-dark-lg-slate',
+    roleClass: 'sp-tag-light-xs-slate'
+  }
 }
 const FuncGetAccountPointsHistory = async function () {
   try {
@@ -31,19 +35,17 @@ const FuncGetAccountPointsHistory = async function () {
       _historyData.taskId = item.taskId;//任務編號
       _historyData.time = fromNow(item.createdAt);//交易時間
       _historyData.desc = item.desc.join(', ');//交易項目
-      _historyData.tagClass = roleSetting[item.role] ? roleSetting[item.role].tagClass : 'sp-tag-dark-lg-slate';
-      _historyData.roleClass = roleSetting[item.role] ? roleSetting[item.role].roleClass : 'sp-tag-light-xs-slate';
-
-      // 點數計算 - 案主
-      if (item.role === '案主') {
-        _historyData.total = (item.money.superCoin + item.money.helperCoin);
-        _historyData.detail = `超人幣: ${item.money.superCoin}, 幫手幣: ${item.money.helperCoin} `;
-      }
+      _historyData.tagClass = roleSetting[item.role] ? roleSetting[item.role].tagClass : roleSetting['default'].tagClass;
+      _historyData.roleClass = roleSetting[item.role] ? roleSetting[item.role].roleClass : roleSetting['default'].tagClass;
 
       // 點數計算 - 幫手
       if (item.role === '幫手') {
         _historyData.total = item.money.salary;
         _historyData.detail = `平台費: ${item.money.platform}, 超人幣: ${item.money.superCoin}`;
+      } else {
+        // 點數計算 - 案主 | 系統
+        _historyData.total = (item.money.superCoin + item.money.helperCoin);
+        _historyData.detail = `超人幣: ${item.money.superCoin}, 幫手幣: ${item.money.helperCoin} `;
       }
 
       // 點數顯示顏色和前綴符號
