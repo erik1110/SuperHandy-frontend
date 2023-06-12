@@ -10,7 +10,7 @@
       <div class="sp-hidden md:sp-flex sp-w-[220px] sp-py-2 sp-mr-1">
         <v-text-field
           v-model="_storeFindTasks.keyword"
-          label="請輸入關鍵字"
+          label="搜尋任務"
           append-inner-icon="mdi-magnify"
           density="compact"
           hide-details
@@ -80,40 +80,40 @@
   </v-app-bar>
 </template>
 <script setup>
-  import { storeFindTasks } from "@/stores/storeFindTasks";
-  const _storeFindTasks = storeFindTasks();
-  const route = useRoute();
-  // Search
-  const searchSubmit = async () => {
-    if (!route.path.includes("find-tasks")) {
-      await navigateTo("/find-tasks/list");
-    }
-    if (route.path.includes("list")) {
-      await _storeFindTasks.fetchListViewTasks();
-    } else if (route.path.includes("map")) {
-      await _storeFindTasks.fetchMapViewTasks();
-    }
-  };
-  // Account Menu Data
-  const items = [
-    { title: "我的帳號", to: "/account" },
-    { title: "任務管理", to: "/account/tasks" },
-    { title: "評價查看", to: "/account/comments" },
-    { title: "點數管理", to: "/account/points" },
-    // { title: "登出", to: "/auth/login" },
-  ];
-  const humburgerItems = [
-    { title: "尋找任務", to: "/find-tasks/list" },
-    { title: "刊登任務", to: "/post-task/-1" },
-  ];
-  // Auth
-  import { storeAuth } from "@/stores/storeAuth";
-  const _storeAuth = storeAuth();
+import { storeFindTasks } from "@/stores/storeFindTasks";
+const _storeFindTasks = storeFindTasks();
+const route = useRoute();
+// Search
+const searchSubmit = async () => {
+  if (!route.path.includes("find-tasks")) {
+    await navigateTo("/find-tasks/list");
+  }
+  if (route.path.includes("list")) {
+    await _storeFindTasks.fetchListViewTasks();
+  } else if (route.path.includes("map")) {
+    await _storeFindTasks.fetchMapViewTasks();
+  }
+};
+// Account Menu Data
+const items = [
+  { title: "我的帳號", to: "/account" },
+  { title: "任務管理", to: "/account/tasks" },
+  { title: "評價查看", to: "/account/comments" },
+  { title: "點數管理", to: "/account/points" },
+  // { title: "登出", to: "/auth/login" },
+];
+const humburgerItems = [
+  { title: "尋找任務", to: "/find-tasks/list" },
+  { title: "刊登任務", to: "/post-task/-1" },
+];
+// Auth
+import { storeAuth } from "@/stores/storeAuth";
+const _storeAuth = storeAuth();
 
-  const logout = () => {
-    _storeAuth.setLoginToken("");
-    navigateTo("/auth/login");
-  };
+const logout = () => {
+  _storeAuth.setLoginToken("");
+  navigateTo("/auth/login");
+};
 </script>
 
 <style scoped></style>
