@@ -10,7 +10,7 @@
             <div v-if="data.bonus"
                 class="sp-bg-red-50 sp-py-2 sp-text-red-600 sp-inline-block sp-px-10 lg:sp-block lg:sp-px-0">
                 <span class="mdi mdi-gift-outline me-2"></span>
-                贈送&nbsp;{{ data.bonus }}&nbsp;超人幣
+                贈送&nbsp;{{ data.bonus }}&nbsp;幫手幣
             </div>
             <div v-else class="sp-h-10"></div>
             <div class="sp-py-8">NT$ {{ data.price }}</div>

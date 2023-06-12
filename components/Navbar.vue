@@ -27,9 +27,15 @@
       <NuxtLink class="sp-hidden md:sp-inline-grid" to="/post-task/-1">
         <v-btn>刊登任務</v-btn>
       </NuxtLink>
-      <v-btn v-if="_storeAuth.loginToken" icon size="small"
-        ><v-icon>mdi-bell</v-icon>
-        <v-menu :close-on-content-click="false" activator="parent">
+      <v-btn v-if="_storeAuth.loginToken" icon size="small">
+        <v-icon>mdi-bell</v-icon>
+        <v-menu
+          :close-on-content-click="false"
+          activator="parent"
+          width="300"
+          scroll-strategy="none"
+          @update:modelValue="closeMenu"
+        >
           <Notifications />
         </v-menu>
       </v-btn>
@@ -113,6 +119,10 @@ const _storeAuth = storeAuth();
 const logout = () => {
   _storeAuth.setLoginToken("");
   navigateTo("/auth/login");
+};
+
+const closeMenu = (event) => {
+  console.log(event);
 };
 </script>
 

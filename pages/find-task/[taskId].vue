@@ -12,7 +12,7 @@
             <p class="sp-text-end sp-text-caption sp-text-slate-500 sp-me-4">
               <span class="sp-pr-2 sp-mr-1 sp-border-r sp-border-slate-400">刊登時間{{ fromNow(taskData.publishedAt)
               }}</span>
-              {{ taskData.viewerCount }}人詢問
+              {{ taskData.helperCount }}人詢問
             </p>
           </v-col>
         </v-row>
