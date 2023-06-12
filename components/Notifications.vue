@@ -20,6 +20,7 @@
             </v-list-item-title>
         </v-list-item>
 
+
         <!--  訊息列表 -->
         <v-list-item id="notiItem" v-for="(item, index) in notiList" :key="item.notifyId" :value="item.notifyId"
             class="sp-px-2" :disabled="item.read">
@@ -170,15 +171,5 @@ getNotiList()
 </script>
 
 <style scoped>
-.text-08 {
-    font-size: 0.8rem;
-}
-
-.text-05 {
-    font-size: 0.5rem;
-}
-
-.cursor-pointer {
-    cursor: pointer;
-}
+body {}
 </style>
