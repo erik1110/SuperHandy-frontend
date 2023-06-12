@@ -8,9 +8,17 @@
 
     <template v-slot:append>
       <div class="sp-hidden md:sp-flex sp-w-[220px] sp-py-2 sp-mr-1">
-        <v-text-field v-model="_storeFindTasks.keyword" label="請輸入關鍵字" append-inner-icon="mdi-magnify" density="compact"
-          hide-details single-line clearable @keyup.enter="searchSubmit"
-          @click:append-inner="searchSubmit"></v-text-field>
+        <v-text-field
+          v-model="_storeFindTasks.keyword"
+          label="搜尋任務"
+          append-inner-icon="mdi-magnify"
+          density="compact"
+          hide-details
+          single-line
+          clearable
+          @keyup.enter="searchSubmit"
+          @click:append-inner="searchSubmit"
+        ></v-text-field>
       </div>
 
       <NuxtLink class="sp-hidden md:sp-inline-grid" to="/find-tasks/list">
@@ -21,14 +29,20 @@
       </NuxtLink>
       <v-btn v-if="_storeAuth.loginToken" icon size="small">
         <v-icon>mdi-bell</v-icon>
-        <v-menu :close-on-content-click="false" activator="parent" width="300" scroll-strategy="none" max-height="400">
+        <v-menu :close-on-content-click="false" activator="parent" width="300" max-height="400">
           <Notifications />
         </v-menu>
       </v-btn>
-      <v-btn v-if="_storeAuth.loginToken" icon><v-icon>mdi-account-circle</v-icon>
+      <v-btn v-if="_storeAuth.loginToken" icon
+        ><v-icon>mdi-account-circle</v-icon>
         <v-menu activator="parent">
           <v-list>
-            <NuxtLink v-for="(item, index) in items" :key="index" :value="index" :to="item.to">
+            <NuxtLink
+              v-for="(item, index) in items"
+              :key="index"
+              :value="index"
+              :to="item.to"
+            >
               <v-list-item>
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item>
@@ -44,7 +58,12 @@
           <v-icon>mdi-menu</v-icon>
           <v-menu activator="parent">
             <v-list>
-              <NuxtLink v-for="(item, index) in humburgerItems" :key="index" :value="index" :to="item.to">
+              <NuxtLink
+                v-for="(item, index) in humburgerItems"
+                :key="index"
+                :value="index"
+                :to="item.to"
+              >
                 <v-list-item>
                   <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
