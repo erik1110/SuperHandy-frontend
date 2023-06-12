@@ -33,8 +33,7 @@
           :close-on-content-click="false"
           activator="parent"
           width="300"
-          scroll-strategy="none"
-          @update:modelValue="closeMenu"
+          max-height="400"
         >
           <Notifications />
         </v-menu>
@@ -48,6 +47,7 @@
               :key="index"
               :value="index"
               :to="item.to"
+              @update:modelValue="noticeMenuUpdate"
             >
               <v-list-item>
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -121,8 +121,8 @@ const logout = () => {
   navigateTo("/auth/login");
 };
 
-const closeMenu = (event) => {
-  console.log("closeMenu", event);
+const noticeMenuUpdate = (event) => {
+  console.log("noticeMenuUpdate", event);
   if (event) {
     document.documentElement.style.overflow = "hidden";
   } else {

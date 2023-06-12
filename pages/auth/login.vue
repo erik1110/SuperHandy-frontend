@@ -1,7 +1,7 @@
 <template>
   <AuthSheetWrapper>
     <h1 class="text-center sp-mb-8">登入</h1>
-    <v-btn block color="v-purple">
+    <v-btn block color="v-purple" @click="FuncGoogleLogin()">
       <v-icon class="mr-5">mdi-google</v-icon>
       Log in with google
     </v-btn>
@@ -85,7 +85,7 @@
 
 <script setup>
 import { postLogin } from "@/services/apis/auth";
-import { postResendVerification } from "@/services/apis/auth";
+import { postResendVerification, getGoogleAccount } from "@/services/apis/auth";
 import { storeAuth } from "@/stores/storeAuth";
 import { storeGlobal } from "@/stores/storeGlobal";
 import { storeChatBox } from "@/stores/storeChatBox";
@@ -162,6 +162,19 @@ onMounted(() => {
     account.value = `user${query.dev}@example.com`;
     password.value = "12345678";
   }
+});
+
+const pageRoot = ref("");
+const FuncGoogleLogin = () => {
+  window.open(`http://localhost:3010/auth/google`, "_top", "");
+};
+//for google login
+let messagePort;
+const { port1, port2 } = new MessageChannel();
+messagePort = port1;
+const messageEvent = (event) => {};
+onMounted(() => {
+  pageRoot.value = window.location.origin;
 });
 </script>
 
