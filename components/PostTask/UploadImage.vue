@@ -65,9 +65,9 @@ const upload = async (event) => {
     try {
         //檢查圖片大小不可超過2MB
         logInfo(_work, 'file.size', _file.size)
-        if (!checkUploadImage(_file.size, siteConfig.Image.upload.maxSize)) {
+        if (!checkUploadImage(_file.size, siteConfig.image.upload.maxSize)) {
             logError(_work, 'file.size', _file.size)
-            _message = `圖片大小不可超過${siteConfig.Image.upload.maxSizeCn}`
+            _message = `圖片大小不可超過${siteConfig.image.upload.maxSizeCn}`
             circularLoading.value = false
             return;
         }
