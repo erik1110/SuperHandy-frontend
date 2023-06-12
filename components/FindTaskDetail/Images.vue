@@ -1,8 +1,11 @@
 <template>
     <div class="sp-py-3 sp-flex sm:sp-space-x-2 sp-flex-wrap">
         <div v-for="item, idx in imgUrls" :key="idx" class="sp-relative pa-3">
-            <v-img :src="item" aspect-ratio="1" cover class="box sp-cursor-pointer" :data-id="idx"
-                @click="openBigImg(item)"></v-img>
+            <find-task-detail-big-image-tooltip>
+                <v-img :src="item" aspect-ratio="1" cover class="box sp-cursor-pointer" :data-id="idx"
+                    @click="openBigImg(item)">
+                </v-img>
+            </find-task-detail-big-image-tooltip>
         </div>
 
         <!-- 顯示大圖 -->
