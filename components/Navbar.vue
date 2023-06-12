@@ -8,17 +8,9 @@
 
     <template v-slot:append>
       <div class="sp-hidden md:sp-flex sp-w-[220px] sp-py-2 sp-mr-1">
-        <v-text-field
-          v-model="_storeFindTasks.keyword"
-          label="搜尋任務"
-          append-inner-icon="mdi-magnify"
-          density="compact"
-          hide-details
-          single-line
-          clearable
-          @keyup.enter="searchSubmit"
-          @click:append-inner="searchSubmit"
-        ></v-text-field>
+        <v-text-field v-model="_storeFindTasks.keyword" label="搜尋任務" append-inner-icon="mdi-magnify" density="compact"
+          hide-details single-line clearable @keyup.enter="searchSubmit"
+          @click:append-inner="searchSubmit"></v-text-field>
       </div>
 
       <NuxtLink class="sp-hidden md:sp-inline-grid" to="/find-tasks/list">
@@ -28,21 +20,17 @@
         <v-btn>刊登任務</v-btn>
       </NuxtLink>
       <v-btn v-if="_storeAuth.loginToken" icon size="small">
-        <v-icon>mdi-bell</v-icon>
+        <v-badge :model-value="isHasUnRead" color="error" dot>
+          <v-icon>mdi-bell</v-icon>
+        </v-badge>
         <v-menu :close-on-content-click="false" activator="parent" width="300" max-height="400">
           <Notifications />
         </v-menu>
       </v-btn>
-      <v-btn v-if="_storeAuth.loginToken" icon
-        ><v-icon>mdi-account-circle</v-icon>
+      <v-btn v-if="_storeAuth.loginToken" icon><v-icon>mdi-account-circle</v-icon>
         <v-menu activator="parent">
           <v-list>
-            <NuxtLink
-              v-for="(item, index) in items"
-              :key="index"
-              :value="index"
-              :to="item.to"
-            >
+            <NuxtLink v-for="(item, index) in items" :key="index" :value="index" :to="item.to">
               <v-list-item>
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item>
@@ -58,12 +46,7 @@
           <v-icon>mdi-menu</v-icon>
           <v-menu activator="parent">
             <v-list>
-              <NuxtLink
-                v-for="(item, index) in humburgerItems"
-                :key="index"
-                :value="index"
-                :to="item.to"
-              >
+              <NuxtLink v-for="(item, index) in humburgerItems" :key="index" :value="index" :to="item.to">
                 <v-list-item>
                   <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
@@ -80,8 +63,12 @@
   </v-app-bar>
 </template>
 <script setup>
+import { storeToRefs } from 'pinia'
+import { storeNotification } from '@/stores/storeNotification'
+import { siteConfig } from '@/services/siteConfig';
 import { storeFindTasks } from "@/stores/storeFindTasks";
 const _storeFindTasks = storeFindTasks();
+
 const route = useRoute();
 // Search
 const searchSubmit = async () => {
@@ -115,6 +102,15 @@ const logout = () => {
   navigateTo("/auth/login");
 };
 
+
+// 系統通知
+const _storeNotification = storeNotification()
+const { isHasUnRead } = storeToRefs(_storeNotification)
+const { hasUnRead } = storeNotification()
+hasUnRead()
+if (siteConfig.notification.isOpen) {
+  setInterval(hasUnRead, siteConfig.notification.intervalTime);
+}
 </script>
 
 <style scoped></style>
