@@ -89,7 +89,6 @@ const isOpen = computed(() => {
 });
 // 開啟聊天室房間
 const openRoom = async () => {
-  console.log("openRoom");
   // 獲得個別聊天歷史訊息
   await _storeChatBox.fetchRoomHistory(props.room.taskId);
   // 選擇要顯示的房間

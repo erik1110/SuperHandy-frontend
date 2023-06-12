@@ -26,6 +26,7 @@
     } else {
     }
   };
+  detail.value = null;
   onMounted(() => {
     FuncGetTasksManagementDetail();
   });

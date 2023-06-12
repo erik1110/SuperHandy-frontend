@@ -205,7 +205,7 @@ const fetchCompletedCases = async () => {
 };
 const fetchTaskStats = async () => {
   let res = await getTaskStats();
-  console.log({ res });
+  // console.log({ res });
 };
 const fetchExcellentHelpers = async () => {
   let { data } = await getExcellentHelpers();

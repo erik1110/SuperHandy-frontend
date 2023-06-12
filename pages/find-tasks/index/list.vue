@@ -22,24 +22,24 @@
 </template>
 
 <script setup>
-  import { storeToRefs } from "pinia";
-  import { storeFindTasks } from "~/stores/storeFindTasks";
-  const _storeFindTasks = storeFindTasks();
-  const { listViewTasks, taskMeta, page } = storeToRefs(_storeFindTasks);
+import { storeToRefs } from "pinia";
+import { storeFindTasks } from "~/stores/storeFindTasks";
+const _storeFindTasks = storeFindTasks();
+const { listViewTasks, taskMeta, page } = storeToRefs(_storeFindTasks);
 
-  watch(page, () => {
-    console.log("page changed");
-    if (window.innerWidth <= 768) {
-      window.scrollTo({ top: 895, behavior: "smooth" });
-    } else {
-      window.scrollTo({ top: 300, behavior: "smooth" });
-    }
-  });
+watch(page, () => {
+  // console.log("page changed");
+  if (window.innerWidth <= 768) {
+    window.scrollTo({ top: 895, behavior: "smooth" });
+  } else {
+    window.scrollTo({ top: 300, behavior: "smooth" });
+  }
+});
 
-  onMounted(async () => {
-    // _storeFindTasks.filterData.page = 1;
-    await _storeFindTasks.fetchListViewTasks();
-  });
+onMounted(async () => {
+  // _storeFindTasks.filterData.page = 1;
+  await _storeFindTasks.fetchListViewTasks();
+});
 </script>
 
 <style lang="scss" scoped></style>

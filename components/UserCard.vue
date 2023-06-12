@@ -8,12 +8,12 @@
           class="sm:sp-w-full sp-w-[90px] sp-h-[90px] sm:sp-min-w-[150px] sm:sp-min-h-[150px] sp-rounded-lg sp-overflow-hidden"
         >
           <!-- Formal -->
-          <!-- <v-img :src="props.avatar" class="sp-w-full"></v-img> -->
+          <v-img :src="props.avatar" class="sp-w-full sp-h-full" cover></v-img>
           <!-- -----Test------ -->
-          <v-img
+          <!-- <v-img
             src="https://source.unsplash.com/random/600x600/?person"
             class="sp-w-full"
-          ></v-img>
+          ></v-img> -->
         </div>
         <div class="sp-flex-1 sp-flex-shrink-0">
           <div class="sp-text-h5 sp-text-slate-800 sp-my-2 sp-ml-1">
@@ -82,48 +82,48 @@
 </template>
 
 <script setup>
-  import {
-    postTasksManagementHelper,
-    getTasksManagementDetail,
-  } from "@/services/apis/tasks";
-  // import {storeAuth} from "@/stores/storeAuth"
-  import { storeChatBox } from "@/stores/storeChatBox";
-  // const _storeAuth = storeAuth()
-  const _storeChatBox = storeChatBox();
+import {
+  postTasksManagementHelper,
+  getTasksManagementDetail,
+} from "@/services/apis/tasks";
+// import {storeAuth} from "@/stores/storeAuth"
+import { storeChatBox } from "@/stores/storeChatBox";
+// const _storeAuth = storeAuth()
+const _storeChatBox = storeChatBox();
 
-  // const role = ref("幫手");
-  const props = defineProps({
-    avatar: String,
-    completedTasks: Number,
-    completionRate: Number,
-    lastName: String,
-    rating: Object,
-    role: String,
-    taskId: String,
-    helperId: String,
-  });
-  const tasksChooseHelper = async function () {
-    let res = await postTasksManagementHelper(props.taskId, props.helperId);
-    if (!res.error) {
-      tasksReload();
-    }
-  };
-  const tasksReload = async function () {
-    let res = await getTasksManagementDetail(props.taskId);
-    if (!res.error) {
-      const taskDetail = useState("taskDetail");
-      taskDetail.value = res.data;
-    }
-  };
+// const role = ref("幫手");
+const props = defineProps({
+  avatar: String,
+  completedTasks: Number,
+  completionRate: Number,
+  lastName: String,
+  rating: Object,
+  role: String,
+  taskId: String,
+  helperId: String,
+});
+const tasksChooseHelper = async function () {
+  let res = await postTasksManagementHelper(props.taskId, props.helperId);
+  if (!res.error) {
+    tasksReload();
+  }
+};
+const tasksReload = async function () {
+  let res = await getTasksManagementDetail(props.taskId);
+  if (!res.error) {
+    const taskDetail = useState("taskDetail");
+    taskDetail.value = res.data;
+  }
+};
 </script>
 
 <style lang="postcss" scoped>
-  @import url("@/assets/css/tailwind.css");
-  .card {
-    @apply sp-p-4 sp-bg-white sp-max-w-[350px] sp-min-w-[280px] sm:sp-max-w-[400px] sm:sp-min-w-[320px] sp-rounded-2xl sp-border;
-  }
+@import url("@/assets/css/tailwind.css");
+.card {
+  @apply sp-p-4 sp-bg-white sp-max-w-[350px] sp-min-w-[280px] sm:sp-max-w-[400px] sm:sp-min-w-[320px] sp-rounded-2xl sp-border;
+}
 
-  .num {
-    @apply sp-text-h4 sp-text-primary;
-  }
+.num {
+  @apply sp-text-h4 sp-text-primary;
+}
 </style>

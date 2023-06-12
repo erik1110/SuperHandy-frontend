@@ -158,7 +158,6 @@ const getPosition = async () => {
 // 中心點更新
 const centerUpdated = () => {
   let c = map.value.leafletObject.getCenter();
-  console.log({ c });
   _storeFindTasks.mapCenterBackup = [c.lat, c.lng];
 };
 // 超出地圖顯示範圍，顯示重新搜尋按鈕
@@ -175,7 +174,6 @@ const boundsUpdated = (bounds) => {
 };
 const zoomBackup = ref(0);
 const zoomUpdated = (zoom) => {
-  console.log({ zoom });
   if (zoomBackup.value != zoom) {
     zoomBackup.value = zoom;
     showReFetch.value.z = true;
@@ -196,14 +194,13 @@ function calculateRadius(zoom) {
     Math.pow(2, zoom + 8);
   const r = Math.round(metersPerPixel);
   _storeFindTasks.radius = r;
-  console.log({ r });
+  // console.log({ r });
 }
 /*
   Get Data
 */
 
 const getData = async () => {
-  console.log("get data");
   showReFetch.value = { b: false, z: false };
   await _storeFindTasks.fetchMapViewTasks();
 };

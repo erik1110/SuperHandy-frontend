@@ -175,7 +175,7 @@ watch(
 );
 const fetchServices = async () => {
   let res = await getCategories();
-  console.log({ res });
+  // console.log({ res });
   servicesItems.value = res.data.reduce((acc, cur) => {
     acc.push(cur.name);
     return acc;
@@ -195,7 +195,6 @@ const submitFilters = () => {
     _storeFindTasks.page = 1;
     _storeFindTasks.fetchListViewTasks();
   } else {
-    console.log(1);
     _storeFindTasks.fetchMapViewTasks("filter");
   }
 };

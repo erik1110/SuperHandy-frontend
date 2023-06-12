@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="sp-my-4 sp-card-wrapper sp-bg-white">
+    <div class="sp-mb-4 sp-card-wrapper sp-bg-white">
       <VCardText class="sp-overflow-x-auto">
         <v-tabs show-arrows v-model="groupTab" color="purple">
           <v-tab value="all">全部 [{{ postList.all.length }}]</v-tab>
@@ -117,93 +117,93 @@
   </div>
 </template>
 <script setup>
-import { getTasksPosterManagement } from "@/services/apis/tasks";
-const groupTab = useState("all");
-const postList = ref({
-  all: [],
-  draft: [],
-  published: [],
-  inProgressed: [],
-  confirmed: [],
-  unpublished: [],
-  other: [],
-});
-const listModel = {
-  all: [],
-  draft: [],
-  published: [],
-  inProgressed: [],
-  confirmed: [],
-  unpublished: [],
-  other: [],
-};
-let FuncGetTasksPosterManagement = async () => {
-  let res = await getTasksPosterManagement();
-  if (!res.error) {
-    let resArray = res.data;
-    postList.value = listModel;
-    resArray.forEach(function (item) {
-      postList.value.all.push(item);
-      switch (item.status) {
-        case "草稿": {
-          postList.value.draft.push(item);
-          break;
+  import { getTasksPosterManagement } from "@/services/apis/tasks";
+  const groupTab = useState("all");
+  const postList = ref({
+    all: [],
+    draft: [],
+    published: [],
+    inProgressed: [],
+    confirmed: [],
+    unpublished: [],
+    other: [],
+  });
+  const listModel = {
+    all: [],
+    draft: [],
+    published: [],
+    inProgressed: [],
+    confirmed: [],
+    unpublished: [],
+    other: [],
+  };
+  let FuncGetTasksPosterManagement = async () => {
+    let res = await getTasksPosterManagement();
+    if (!res.error) {
+      let resArray = res.data;
+      postList.value = listModel;
+      resArray.forEach(function (item) {
+        postList.value.all.push(item);
+        switch (item.status) {
+          case "草稿": {
+            postList.value.draft.push(item);
+            break;
+          }
+          case "媒合中": {
+            postList.value.published.push(item);
+            break;
+          }
+          case "進行中": {
+            postList.value.inProgressed.push(item);
+            break;
+          }
+          case "已完成": {
+            postList.value.confirmed.push(item);
+            break;
+          }
+          case "已下架": {
+            postList.value.unpublished.push(item);
+            break;
+          }
+          default: {
+            postList.value.other.push(item);
+            break;
+          }
         }
-        case "媒合中": {
-          postList.value.published.push(item);
-          break;
-        }
-        case "進行中": {
-          postList.value.inProgressed.push(item);
-          break;
-        }
-        case "已完成": {
-          postList.value.confirmed.push(item);
-          break;
-        }
-        case "已下架": {
-          postList.value.unpublished.push(item);
-          break;
-        }
-        default: {
-          postList.value.other.push(item);
-          break;
-        }
-      }
-    });
-  }
-};
-let colorControl = (status) => {
-  if (status == "草稿" || status == "已下架") {
-    return "v-orange";
-  } else if (status == "媒合中" || status == "進行中") {
-    return "v-purple";
-  } else if (status == "已完成") {
-    return "secondary-darken";
-  } else {
-    return "v-gray-text";
-  }
-};
-onMounted(() => {
-  FuncGetTasksPosterManagement();
-});
-const toDraftPage = function (taskId) {
-  navigateTo(`/post-task/${taskId}`);
-};
-const toDetailPage = function (taskId) {
-  navigateTo(`/account/tasks/${taskId}`);
-};
+      });
+    }
+  };
+  let colorControl = (status) => {
+    if (status == "草稿" || status == "已下架") {
+      return "v-orange";
+    } else if (status == "媒合中" || status == "進行中") {
+      return "v-purple";
+    } else if (status == "已完成") {
+      return "secondary-darken";
+    } else {
+      return "v-gray-text";
+    }
+  };
+  onMounted(() => {
+    FuncGetTasksPosterManagement();
+  });
+  const toDraftPage = function (taskId) {
+    navigateTo(`/post-task/${taskId}`);
+  };
+  const toDetailPage = function (taskId) {
+    navigateTo(`/account/tasks/${taskId}`);
+  };
 </script>
 <style lang="postcss" scoped>
-@import url("@/assets/css/tailwind.css");
+  @import url("@/assets/css/tailwind.css");
 
-.tile {
-  @apply sp-text-body-sm sp-font-medium sp-text-slate-800  sp-mr-1 sp-mb-3 sp-whitespace-nowrap;
-  span {
-    @apply sp-w-10 sp-text-slate-500 sp-inline-block;
-    &.expired {
-      @apply sp-text-red-800;
+  .tile {
+    @apply sp-text-body-sm sp-font-medium sp-text-slate-800  sp-mr-1 sp-mb-3 sp-whitespace-nowrap;
+    span {
+      @apply sp-w-10 sp-text-slate-500 sp-inline-block;
+      &.expired {
+        @apply sp-text-red-800;
+      }
     }
   }
-}
 </style>

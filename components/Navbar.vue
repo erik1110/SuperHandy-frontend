@@ -30,7 +30,8 @@
       <v-btn v-if="_storeAuth.loginToken" icon><v-icon>mdi-account-circle</v-icon>
         <v-menu activator="parent">
           <v-list>
-            <NuxtLink v-for="(item, index) in items" :key="index" :value="index" :to="item.to">
+            <NuxtLink v-for="(item, index) in items" :key="index" :value="index" :to="item.to"
+              @update:modelValue="noticeMenuUpdate">
               <v-list-item>
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item>
@@ -63,12 +64,8 @@
   </v-app-bar>
 </template>
 <script setup>
-import { storeToRefs } from 'pinia'
-import { storeNotification } from '@/stores/storeNotification'
-import { siteConfig } from '@/services/siteConfig';
 import { storeFindTasks } from "@/stores/storeFindTasks";
 const _storeFindTasks = storeFindTasks();
-
 const route = useRoute();
 // Search
 const searchSubmit = async () => {
@@ -102,15 +99,21 @@ const logout = () => {
   navigateTo("/auth/login");
 };
 
-
-// 系統通知
-const _storeNotification = storeNotification()
-const { isHasUnRead } = storeToRefs(_storeNotification)
-const { hasUnRead } = storeNotification()
-hasUnRead()
-if (siteConfig.notification.isOpen) {
-  setInterval(hasUnRead, siteConfig.notification.intervalTime);
-}
+const noticeMenuUpdate = (event) => {
+  if (event) {
+    document.documentElement.style.overflow = "hidden";
+  } else {
+    document.documentElement.style.overflow = "auto";
+  }
+  // 系統通知
+  const _storeNotification = storeNotification()
+  const { isHasUnRead } = storeToRefs(_storeNotification)
+  const { hasUnRead } = storeNotification()
+  hasUnRead()
+  if (siteConfig.notification.isOpen) {
+    setInterval(hasUnRead, siteConfig.notification.intervalTime);
+  }
+};
 </script>
 
 <style scoped></style>
