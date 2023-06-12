@@ -2,10 +2,12 @@
     <div class="sp-py-3 sp-flex sm:sp-space-x-2 sp-flex-wrap">
         <!-- 照片列表 -->
         <div v-for="item, idx in imgUrls" :key="idx" class="sp-relative pa-3">
-            <v-btn :data-id="idx" variant="plain" icon="mdi-close-circle" :ripple="false" class="btn-del-img"
-                @click="deleteConfirm(idx, $event)"></v-btn>
-            <v-img :src="item" aspect-ratio="1" cover class="box sp-cursor-pointer" :data-id="idx"
-                @click="openBigImg(item)"></v-img>
+            <find-task-detail-big-image-tooltip>
+                <v-btn :data-id="idx" variant="plain" icon="mdi-close-circle" :ripple="false" class="btn-del-img"
+                    @click="deleteConfirm(idx, $event)"></v-btn>
+                <v-img :src="item" aspect-ratio="1" cover class="box sp-cursor-pointer" :data-id="idx"
+                    @click="openBigImg(item)"></v-img>
+            </find-task-detail-big-image-tooltip>
         </div>
         <!-- 照片列表 -->
 
@@ -65,9 +67,9 @@ const upload = async (event) => {
     try {
         //檢查圖片大小不可超過2MB
         logInfo(_work, 'file.size', _file.size)
-        if (!checkUploadImage(_file.size, siteConfig.Image.upload.maxSize)) {
+        if (!checkUploadImage(_file.size, siteConfig.image.upload.maxSize)) {
             logError(_work, 'file.size', _file.size)
-            _message = `圖片大小不可超過${siteConfig.Image.upload.maxSizeCn}`
+            _message = `圖片大小不可超過${siteConfig.image.upload.maxSizeCn}`
             circularLoading.value = false
             return;
         }

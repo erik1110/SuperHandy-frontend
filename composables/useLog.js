@@ -5,7 +5,7 @@ export const useLog = function () {
     whiteArrs: [
       "localhost",
       "127.0.0.1",
-      "superhandy-frontend-fork.herokuapp.com",
+      //"superhandy-frontend-fork.herokuapp.com",
     ],
   };
 

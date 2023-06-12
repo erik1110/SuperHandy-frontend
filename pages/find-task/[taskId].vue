@@ -10,9 +10,9 @@
               {{ taskData.title }}
             </h1>
             <p class="sp-text-end sp-text-caption sp-text-slate-500 sp-me-4">
-              <span class="sp-pr-2 sp-mr-1 sp-border-r sp-border-slate-400">刊登時間{{ fromNow(taskData.publishedAt)
+              <span class="sp-pr-2 sp-mr-1 sp-border-r sp-border-slate-400">刊登時間&nbsp;{{ fromNow(taskData.publishedAt)
               }}</span>
-              {{ taskData.helperCount }}人詢問
+              &nbsp;{{ taskData.helperCount }}&nbsp;人詢問
             </p>
           </v-col>
         </v-row>
@@ -61,7 +61,7 @@ const { checkRespStatus, checkTaskId, checkIsLogin, getTaskId } = useSpUtility()
 const { logInfo, logError } = useLog();
 const { fromNow } = useMoment();
 const taskData = ref({
-  imgUrls:[]
+  imgUrls: []
 });
 const posterInfoData = ref({});
 const alertMessage = ref('');

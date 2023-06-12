@@ -13,12 +13,13 @@
         <v-list-item class="sp-px-2">
             <v-list-item-title class="sp-flex sp-items-center sp-justify-between">
                 <p>系統通知</p>
-                <v-btn variant="plain" :ripple="false" @click="updateReadAll" size="small" :disabled="btnReadAllDisabled"
+                <v-btn variant="plain" :ripple="false" @click="updateReadAll" size="small" :disabled="!isHasUnRead"
                     :loading="btnReadAllLoading">
                     全部標記已讀
                 </v-btn>
             </v-list-item-title>
         </v-list-item>
+
 
         <!--  訊息列表 -->
         <v-list-item id="notiItem" v-for="(item, index) in notiList" :key="item.notifyId" :value="item.notifyId"
@@ -60,9 +61,9 @@ import { storeToRefs } from 'pinia'
 import { getList, patchRead, patchReadALL } from "@/services/apis/notifications";
 import { storeNotification } from '@/stores/storeNotification'
 const _storeNotification = storeNotification()
-const { notiLength } = storeToRefs(_storeNotification)
-const { addNotiLength } = storeNotification()
-const { excuteAsyncFunc, promiseAllSettledHanlder, checkRespStatus, checkUploadImage } = useSpUtility()
+const { notiLength, isHasUnRead } = storeToRefs(_storeNotification)
+const { addNotiLength, hasUnRead } = storeNotification()
+const { excuteAsyncFunc, promiseAllSettledHanlder } = useSpUtility()
 const { fromNow } = useMoment()
 const { logInfo, logError } = useLog()
 const circularLoading = ref(true)
@@ -82,7 +83,7 @@ const _tagsColor = {
 const btnShowMore = ref(true)
 const btnShowMoreLoading = ref(false)
 const btnReadAllLoading = ref(false)
-const btnReadAllDisabled = ref(false)
+//const btnReadAllDisabled = ref(false)
 
 // - 單筆已讀 -
 const updateReadOne = (id) => {
@@ -104,7 +105,7 @@ const updateReadOne = (id) => {
 
 // - 全部已讀 -
 const updateReadAll = () => {
-    btnReadAllDisabled.value = true
+    // btnReadAllDisabled.value = true
     btnReadAllLoading.value = true
     promiseAllSettledHanlder(
         [
@@ -118,8 +119,8 @@ const updateReadAll = () => {
         }
         //finally
         , () => {
-            btnReadAllDisabled.value = false
-            // btnReadAllLoading.value = false
+            //btnReadAllDisabled.value = false
+            btnReadAllLoading.value = false
         }
     )
 }
@@ -131,7 +132,7 @@ const getMore = () => {
     getNotiList()
 }
 
-// - 初始 -
+// - 取得所有通知 -
 const getNotiList = () => {
     promiseAllSettledHanlder(
         [
@@ -148,9 +149,7 @@ const getNotiList = () => {
                 }
 
                 // 找出未讀的項目
-                const readObj = result.find((item) => item.read == false)
-                logInfo(_work, 'readObj', readObj)
-                btnReadAllDisabled.value = readObj ? false : true;
+                hasUnRead()
             }),
         ]
         //成功
@@ -168,18 +167,9 @@ const getNotiList = () => {
 }
 getNotiList()
 
+
 </script>
 
 <style scoped>
-.text-08 {
-    font-size: 0.8rem;
-}
-
-.text-05 {
-    font-size: 0.5rem;
-}
-
-.cursor-pointer {
-    cursor: pointer;
-}
+body {}
 </style>

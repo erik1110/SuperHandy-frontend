@@ -35,11 +35,18 @@ export const siteConfig = {
     exposurePlan: { title: "曝光方案", to: "/exposure-plan" },
   },
 
-  Image:{
+  image:{
     upload:{
-      maxSize:(2*1024*1024),// 2MB
+      maxSize:( 2 * 1024 * 1024 ),// 2MB
       maxSizeCn:'2MB',
     }
   },
+
+  //系統通知
+  notification:{
+    showLength: 3,//顯示筆數
+    isOpen: true, //是否開啟setInterval
+    intervalTime: (1000 * 60 * 5)
+  }
 
 };
