@@ -40,7 +40,6 @@ export const siteConfig = {
       maxSize:(2*1024*1024),// 2MB
       maxSizeCn:'2MB',
     }
-
-  }
+  },
 
 };
