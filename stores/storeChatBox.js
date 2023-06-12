@@ -39,6 +39,23 @@ export const storeChatBox = defineStore("chatBox", () => {
       acc.push(newObj)
       return acc
     },[])
+
+    // === for test ===
+    // let r  = data.reduce((acc,cur)=>{
+    //   let newObj = {
+    //     ...cur[cur.partnerRole],
+    //     taskId: cur.taskId,
+    //     updatedAt: cur.updatedAt,
+    //     title: cur.title,
+    //     unreadCount: cur.unreadCount,
+    //     role: cur.partnerRole,
+    //     lastMessage: cur.lastMessage
+    //   }
+    //   acc.push(newObj)
+    //   return acc
+    // },[])
+    // roomList.value = [ ...r,...r ]
+
     console.log('roomlist',roomList.value);
     updateBadge()
     roomListLoading.value = false
@@ -52,6 +69,10 @@ export const storeChatBox = defineStore("chatBox", () => {
   watch(showChat,(val)=>{
     if(val){
       fetchChatList()
+      document.documentElement.style.overflow = 'hidden'
+    }else{
+      console.log("close");
+      document.documentElement.style.overflow = 'auto'
     }
   })
   // 取得個別聊天室對話

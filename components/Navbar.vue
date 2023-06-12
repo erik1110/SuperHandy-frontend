@@ -122,7 +122,12 @@ const logout = () => {
 };
 
 const closeMenu = (event) => {
-  console.log(event);
+  console.log("closeMenu", event);
+  if (event) {
+    document.documentElement.style.overflow = "hidden";
+  } else {
+    document.documentElement.style.overflow = "auto";
+  }
 };
 </script>
 

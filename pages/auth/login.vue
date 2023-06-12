@@ -158,8 +158,8 @@ const resendEmail = async function () {
 // for test
 const { query } = useRoute();
 onMounted(() => {
-  if (query.dev == 1) {
-    account.value = "user1@example.com";
+  if (query.dev <= 6) {
+    account.value = `user${query.dev}@example.com`;
     password.value = "12345678";
   }
 });

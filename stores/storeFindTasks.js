@@ -90,6 +90,7 @@ const mapViewTasks = ref([]);
       city: null,
       dist: null,
       selectedCates: [],
+      services: "",
       isUrgent: false,
     });
     // fetchListViewTasks();

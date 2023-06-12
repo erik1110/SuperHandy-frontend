@@ -195,7 +195,6 @@ const submitFilters = () => {
     _storeFindTasks.page = 1;
     _storeFindTasks.fetchListViewTasks();
   } else {
-    console.log(1);
     _storeFindTasks.fetchMapViewTasks("filter");
   }
 };
