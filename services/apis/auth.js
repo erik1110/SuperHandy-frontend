@@ -20,3 +20,6 @@ export const postResendVerification = (data) =>
   req("POST", "/resend-verification", data);
 //google 登入
 export const getGoogleAccount = () => req("GET", "/auth/google");
+// google 回傳
+export const getGoogleCallback = (queryString) =>
+  req("GET", `/auth/google/callback?${queryString}`);
