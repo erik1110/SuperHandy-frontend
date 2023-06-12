@@ -217,6 +217,7 @@ const submit = async (event, taskTrans) => {
         data.imgUrls = [...imgUrls.value]
         data.contactInfo = { ...contactInfoData.value }
         data.location = { ...locationData.value }
+        data.salary = Number(data.salary)
 
         if (taskTrans) {
             data.taskTrans = {
