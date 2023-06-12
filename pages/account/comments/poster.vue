@@ -187,16 +187,23 @@
                   class="sp-inline-block sp-w-[20px] sp-h-[20px] sp-cursor-pointer"
                   @click="item.isEdit = true"
                 ></PencilSquareIcon>
-                <XMarkIcon
+                <VBtn
                   v-if="item.isEdit"
-                  class="sp-inline-block sp-mr-2 sp-w-[20px] sp-h-[20px] sp-cursor-pointer"
+                  class="sp-mr-2"
+                  color="secondary"
+                  outlined
+                  size="x-small"
                   @click="cancelEdit(item)"
-                ></XMarkIcon>
-                <ClipboardDocumentCheckIcon
+                  >取消</VBtn
+                >
+                <VBtn
                   v-if="item.isEdit"
-                  class="sp-inline-block sp-w-[20px] sp-h-[20px] sp-cursor-pointer"
+                  color="primary"
+                  outlined
+                  size="x-small"
                   @click="postComment(item)"
-                ></ClipboardDocumentCheckIcon>
+                  >送出</VBtn
+                >
               </div>
             </div>
           </div>
@@ -211,12 +218,7 @@
     getAccountComments,
   } from "@/services/apis/account";
   import { postTasksManagementComment } from "@/services/apis/tasks";
-  import {
-    MapPinIcon,
-    PencilSquareIcon,
-    XMarkIcon,
-    ClipboardDocumentCheckIcon,
-  } from "@heroicons/vue/24/solid";
+  import { MapPinIcon, PencilSquareIcon } from "@heroicons/vue/24/solid";
   const categories = useState("categories");
   const posterStars = ref(null);
   const activeGroup = ref(0);
@@ -224,10 +226,13 @@
   const commentItems = ["全部", "待評價", "已評價"];
   const type = ref("全部");
   const commentGroup = ref([]);
+  const isSnackbarOpen = useState("isSnackbarOpen");
+  const snackbarMessage = useState("snackbarMessage");
   const FuncGetAccountCommentsStar = async function () {
     let res = await getAccountCommentsStar("案主");
     if (!res.error) {
       posterStars.value = res.data;
+      searchComments();
     }
   };
   FuncGetAccountCommentsStar();
@@ -274,10 +279,17 @@
       star: item.editStar,
       comment: item.editComment,
     };
+    if (data.star == 0) {
+      isSnackbarOpen.value = true;
+      snackbarMessage.value = "請給予評價星數!";
+      return false;
+    }
     let res = await postTasksManagementComment(item.taskId, data);
     if (!res.error) {
       item.isEdit = false;
       item.posterReview.status = "已評論";
+      isSnackbarOpen.value = true;
+      snackbarMessage.value = "評價成功!";
     }
   };
   const gotoDetail = function (taskId) {

@@ -87,7 +87,7 @@
             />
           </div>
         </div>
-        <VBtn color="primary" @click="prepareSubmit()">送出</VBtn>
+        <VBtn color="primary" @click="prepareSubmit()">提交審核</VBtn>
       </template>
       <template
         v-else-if="
