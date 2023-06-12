@@ -24,7 +24,7 @@ export const storeFindTasks = defineStore("findTasks", () => {
     cleanNull(payload)
 
     let { data } = await getListViewTasks(payload);
-    console.log({ data });
+    // console.log({ data });
     listViewTasks.value = data.tasks;
     taskMeta.value ={
       totalTasks: data.total_tasks,
@@ -47,7 +47,7 @@ const mapViewTasks = ref([]);
   const fetchMapViewTasks = async (from)=>{
     loading.value = true
     await nextTick()
-    console.log({filterData});
+    // console.log({filterData});
     if(from=='filter'){
       zoomLevel.value = 13
     }
@@ -59,10 +59,10 @@ const mapViewTasks = ref([]);
     };
     payload = {...payload,...filterData}
     cleanNull(payload)
-    console.log({payload});
+    // console.log({payload});
 
     let { data } = await getMapViewTasks(payload)
-    console.log({data});
+    // console.log({data});
     mapViewTasks.value = data.tasks
     taskMeta.value.totalTasks = data.total_tasks
     mapCenter.value = [data.latitude,data.longitude]

@@ -12,7 +12,14 @@
     </div>
     <div class="sp-w-full" v-else-if="status != '-1'">
       <div class="sp-text-body">{{ message }}</div>
-      <v-btn v-if="status != '40002'" block class="sp-mt-4" color="primary" @click="resendEmail">重寄驗證信</v-btn>
+      <v-btn
+        v-if="status != '40002'"
+        block
+        class="sp-mt-4"
+        color="primary"
+        @click="resendEmail"
+        >重寄驗證信</v-btn
+      >
       <NuxtLink v-else to="/auth/login">
         <v-btn block class="sp-mx-auto sp-mt-4 text-white" color="primary">
           登入
@@ -22,10 +29,7 @@
   </AuthSheetWrapper>
 </template>
 <script setup>
-import {
-  getVerifyEmail,
-  postResendVerification,
-} from "@/services/apis/auth";
+import { getVerifyEmail, postResendVerification } from "@/services/apis/auth";
 const route = useRoute();
 const token = ref("");
 const nickname = ref("");
@@ -36,7 +40,7 @@ nickname.value = route.query.nickname;
 token.value = route.query.token;
 onMounted(async () => {
   let res = await getVerifyEmail(token.value);
-  console.log(res);
+  // console.log(res);
   if (!res.error) {
     status.value = "200";
     message.value = "恭喜您註冊成功";

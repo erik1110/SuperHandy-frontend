@@ -115,7 +115,7 @@ const onSubmit = async () => {
       password: password.value,
     };
     let res = await postLogin(payload);
-    console.log({ res });
+    // console.log({ res });
     if (res.error) {
       errMsg.value = res.message;
       loading.value = false;

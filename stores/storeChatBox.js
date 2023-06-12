@@ -14,7 +14,6 @@ export const storeChatBox = defineStore("chatBox", () => {
   const nowRoomChatList = ref([]);
   const showBadge = ref(false)
   const route = useRoute()
-  console.log(route);
   /*
     Fetch Data
   */
@@ -23,7 +22,7 @@ export const storeChatBox = defineStore("chatBox", () => {
   const fetchChatList = async () => {
     roomListLoading.value = true
     let res = await getChatList();
-    console.log({ res });
+    // console.log({ res });
     if(res.status=="false") return
     let data = res.data
     roomList.value = data.reduce((acc,cur)=>{
@@ -40,23 +39,7 @@ export const storeChatBox = defineStore("chatBox", () => {
       return acc
     },[])
 
-    // === for test ===
-    // let r  = data.reduce((acc,cur)=>{
-    //   let newObj = {
-    //     ...cur[cur.partnerRole],
-    //     taskId: cur.taskId,
-    //     updatedAt: cur.updatedAt,
-    //     title: cur.title,
-    //     unreadCount: cur.unreadCount,
-    //     role: cur.partnerRole,
-    //     lastMessage: cur.lastMessage
-    //   }
-    //   acc.push(newObj)
-    //   return acc
-    // },[])
-    // roomList.value = [ ...r,...r ]
-
-    console.log('roomlist',roomList.value);
+    // console.log('roomlist',roomList.value);
     updateBadge()
     roomListLoading.value = false
     
@@ -71,7 +54,6 @@ export const storeChatBox = defineStore("chatBox", () => {
       fetchChatList()
       document.documentElement.style.overflow = 'hidden'
     }else{
-      console.log("close");
       document.documentElement.style.overflow = 'auto'
     }
   })
@@ -79,7 +61,7 @@ export const storeChatBox = defineStore("chatBox", () => {
   const fetchRoomHistory = async (taskId) => {
     roomLoading.value = true
     let res = await getChatRoomHistory({ taskId });
-    console.log({ res });
+    // console.log({ res });
     nowRoomChatList.value = res.data 
     roomLoading.value = false
     // === for test ===
@@ -172,7 +154,6 @@ export const storeChatBox = defineStore("chatBox", () => {
       transports: ["websocket"],
       auth: { Authorization: _storeAuth.loginToken ? `Bearer ${_storeAuth.loginToken}`: `` },
     });
-    console.log("socket in store", { socket });
   };
 
   /* 
@@ -181,19 +162,20 @@ export const storeChatBox = defineStore("chatBox", () => {
   const setUpEventHandlers = () => {
     //監聽message事件(接收websocket訊息)
     socket.on("message", (msg) => {
-      console.log("收到甚麼message訊息:", msg);
+      // console.log("收到甚麼message訊息:", msg);
       // 更新 ChatList
       updateMsg(msg)
     });
     //監聽read事件(接收websocket訊息)
     socket.on("read",(data)=>{
-      console.log("socket read:", {data});
+      // console.log("socket read:", {data});
       updateBadge()
     })
 
     //監聽connectStatus事件(接收websocket訊息)
     socket.on("connectStatus", (data) => {
-      console.log("socket connected:", data.message,{data});
+      // console.log("socket connected:", data.message,{data});
+      console.log("socket connected");
     });
     //監聽errorMsg事件(接收websocket訊息)
     socket.on("errorMsg", (err) => {
@@ -214,8 +196,6 @@ export const storeChatBox = defineStore("chatBox", () => {
   }
   // WebSocket重新連線
   const reConnectWebSocket = () => {
-    console.log("reConnectWebSocket");
-
     //關閉舊的連線
     socket.close();
     //建立新的連線
@@ -232,7 +212,6 @@ export const storeChatBox = defineStore("chatBox", () => {
     let newMsgRoom = roomList.value.find(r=>r.taskId==msg.taskId)
     newMsgRoom.lastMessage = msg.message
     newMsgRoom.updatedAt = msg.createdAt
-    console.log({newMsgRoom});
     // 如果正在聊天室內，更新房間訊息
     if(nowRoom.value.taskId == msg.taskId){
       let randomNum = Math.round(Math.random())*1000
@@ -261,13 +240,9 @@ export const storeChatBox = defineStore("chatBox", () => {
   };
   // 更新聊天列表順序
   const updateChatList = (msgIdx)=>{
-    console.log('updateChatList');
-    let renewIdx = roomList.value.findIndex(el=>el.taskId == msgIdx)
     if(renewIdx!=0){
       let removed = roomList.value.splice(renewIdx,1)
-      console.log({removed});
       roomList.value.unshift(removed[0])
-      console.log(roomList.value);
     }
   }
   // 更新Chat btn Badge
@@ -278,7 +253,6 @@ export const storeChatBox = defineStore("chatBox", () => {
   }
   // 路由更換自動關閉聊天室
   watch(()=>route.path,(val)=>{
-    // console.log({val},route.path,showChat.value);
     if(showChat.value) showChat.value = false
   })
 
