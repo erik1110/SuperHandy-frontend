@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="sp-my-4 sp-card-wrapper sp-bg-white">
+    <div class="sp-mb-4 sp-card-wrapper sp-bg-white">
       <VCardText>
         <v-tabs v-model="groupTab" color="purple">
           <v-tab value="all">全部 [{{ postList.all.length }}]</v-tab>
@@ -117,89 +117,89 @@
   </div>
 </template>
 <script setup>
-import { getTasksHelperManagement } from "@/services/apis/tasks";
-const groupTab = useState("all");
-const postList = ref({
-  all: [],
-  published: [],
-  inProgressed: [],
-  confirmed: [],
-  unpublished: [],
-  other: [],
-});
-const listModel = {
-  all: [],
-  published: [],
-  inProgressed: [],
-  confirmed: [],
-  unpublished: [],
-  other: [],
-};
-let FuncGetTasksHelperManagement = async () => {
-  let res = await getTasksHelperManagement();
-  if (!res.error) {
-    let resArray = res.data;
-    postList.value = listModel;
-    resArray.forEach(function (item) {
-      postList.value.all.push(item);
-      if (item.helperStatus == "媒合失敗") {
-        item.status = "未媒合";
-        postList.value.other.push(item);
-      } else {
-        switch (item.status) {
-          case "媒合中": {
-            postList.value.published.push(item);
-            break;
-          }
-          case "進行中": {
-            postList.value.inProgressed.push(item);
-            break;
-          }
-          case "已完成": {
-            postList.value.confirmed.push(item);
-            break;
-          }
-          case "已下架": {
-            postList.value.unpublished.push(item);
-            break;
-          }
-          default: {
-            postList.value.other.push(item);
-            break;
+  import { getTasksHelperManagement } from "@/services/apis/tasks";
+  const groupTab = useState("all");
+  const postList = ref({
+    all: [],
+    published: [],
+    inProgressed: [],
+    confirmed: [],
+    unpublished: [],
+    other: [],
+  });
+  const listModel = {
+    all: [],
+    published: [],
+    inProgressed: [],
+    confirmed: [],
+    unpublished: [],
+    other: [],
+  };
+  let FuncGetTasksHelperManagement = async () => {
+    let res = await getTasksHelperManagement();
+    if (!res.error) {
+      let resArray = res.data;
+      postList.value = listModel;
+      resArray.forEach(function (item) {
+        postList.value.all.push(item);
+        if (item.helperStatus == "媒合失敗") {
+          item.status = "未媒合";
+          postList.value.other.push(item);
+        } else {
+          switch (item.status) {
+            case "媒合中": {
+              postList.value.published.push(item);
+              break;
+            }
+            case "進行中": {
+              postList.value.inProgressed.push(item);
+              break;
+            }
+            case "已完成": {
+              postList.value.confirmed.push(item);
+              break;
+            }
+            case "已下架": {
+              postList.value.unpublished.push(item);
+              break;
+            }
+            default: {
+              postList.value.other.push(item);
+              break;
+            }
           }
         }
-      }
-    });
-  }
-};
-let colorControl = (status) => {
-  if (status == "草稿" || status == "已下架") {
-    return "v-orange";
-  } else if (status == "媒合中" || status == "進行中") {
-    return "v-purple";
-  } else if (status == "已完成") {
-    return "secondary-darken";
-  } else {
-    return "v-gray-text";
-  }
-};
-onMounted(() => {
-  FuncGetTasksHelperManagement();
-});
-const toDetailPage = function (taskId) {
-  navigateTo(`/account/tasks/${taskId}`);
-};
+      });
+    }
+  };
+  let colorControl = (status) => {
+    if (status == "草稿" || status == "已下架") {
+      return "v-orange";
+    } else if (status == "媒合中" || status == "進行中") {
+      return "v-purple";
+    } else if (status == "已完成") {
+      return "secondary-darken";
+    } else {
+      return "v-gray-text";
+    }
+  };
+  onMounted(() => {
+    FuncGetTasksHelperManagement();
+  });
+  const toDetailPage = function (taskId) {
+    navigateTo(`/account/tasks/${taskId}`);
+  };
 </script>
 <style lang="postcss" scoped>
-@import url("@/assets/css/tailwind.css");
+  @import url("@/assets/css/tailwind.css");
 
-.tile {
-  @apply sp-text-body-sm sp-font-medium sp-text-slate-800  sp-mr-1 sp-mb-3 sp-whitespace-nowrap;
-  span {
-    @apply sp-w-10 sp-text-slate-500 sp-inline-block;
-    &.expired {
-      @apply sp-text-red-800;
+  .tile {
+    @apply sp-text-body-sm sp-font-medium sp-text-slate-800  sp-mr-1 sp-mb-3 sp-whitespace-nowrap;
+    span {
+      @apply sp-w-10 sp-text-slate-500 sp-inline-block;
+      &.expired {
+        @apply sp-text-red-800;
+      }
     }
   }
-}
 </style>
