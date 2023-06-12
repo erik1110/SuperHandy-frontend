@@ -29,13 +29,7 @@
       </NuxtLink>
       <v-btn v-if="_storeAuth.loginToken" icon size="small">
         <v-icon>mdi-bell</v-icon>
-        <v-menu
-          :close-on-content-click="false"
-          activator="parent"
-          width="300"
-          scroll-strategy="none"
-          @update:modelValue="closeMenu"
-        >
+        <v-menu :close-on-content-click="false" activator="parent" width="300" max-height="400">
           <Notifications />
         </v-menu>
       </v-btn>
@@ -121,9 +115,6 @@ const logout = () => {
   navigateTo("/auth/login");
 };
 
-const closeMenu = (event) => {
-  console.log(event);
-};
 </script>
 
 <style scoped></style>
