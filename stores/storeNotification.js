@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { getList } from "@/services/apis/notifications";
 import { siteConfig } from "@/services/siteConfig";
-const { logInfo, logError } = useLog()
+const { logDebug, logError } = useLog()
 
 export const storeNotification = defineStore("storeNotification", () => {
   const notiLength = ref(siteConfig.notification.showLength);
@@ -13,7 +13,7 @@ export const storeNotification = defineStore("storeNotification", () => {
   const isHasUnRead = ref(false)
 
   const hasUnRead = async () => {
-    logInfo('Notification setInterval', 'hasUnRead')
+    // logDebug('Notification listener...')
     try {
       const { data } = await getList();
       const readObj = data.find((item) => item.read == false);

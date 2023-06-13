@@ -104,6 +104,10 @@
   .sp-tag-light-xs-slate {
     @apply sp-px-2 sp-py-1 sp-text-base sp-bg-slate-100 sp-text-slate-600 sp-rounded sp-tracking-normal;
   }
+
+  .sp-btn-light-xs-cyan {
+    @apply sp-tag-light-xs-cyan sp-text-sm  hover:sp-text-cyan-800;
+  }
 }
 
 :root {

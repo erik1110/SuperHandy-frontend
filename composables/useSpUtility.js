@@ -1,4 +1,4 @@
-const { logInfo, logError } = useLog()
+const { logDebug, logError } = useLog()
 
 
 export const useSpUtility = () => {
@@ -47,7 +47,7 @@ export const useSpUtility = () => {
         response = await excuteFunc()
       }
 
-      //logInfo(work, 'excuteAsyncFunc', response);
+      //logDebug(work, 'excuteAsyncFunc', response);
 
       if (response && !checkRespStatus(response)) {
         _message = response.message
@@ -57,7 +57,7 @@ export const useSpUtility = () => {
           successFunc(response)
         }
       }
-      //logInfo(work, 'excuteAsyncFunc', 'success');
+      //logDebug(work, 'excuteAsyncFunc', 'success');
     } catch (error) {
       logError(work, 'excuteAsyncFunc', { error });
       _message = _message.length > 0 ? _message : `${work}執行失敗`

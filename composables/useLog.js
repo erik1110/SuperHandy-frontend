@@ -21,9 +21,18 @@ export const useLog = function () {
     }
   }
 
-  function logInfo() {
+  function logDebug() {
     if (!process.client) return;
     _consoleLog(_options, arguments);
+  }
+
+  function logInfo() {
+    if (!process.client) return;
+    _consoleLog({
+      alwaysOpen: true,
+      env: _options.env,
+      whiteArrs: _options.whiteArrs,
+    }, arguments);
   }
 
   function logError() {
@@ -42,6 +51,7 @@ export const useLog = function () {
   }
 
   return {
+    logDebug,
     logInfo,
     logError,
   };

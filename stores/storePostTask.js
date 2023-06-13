@@ -104,20 +104,20 @@ export const storePostTask = defineStore("storePostTask", () => {
     function closeModal () {
         postTaskModal.value = false
         if(_useSpUtility.checkIsFunc(modalOption.value.closeCallback)){
-            _useLog.logInfo('execCloseCallback')
+            _useLog.logDebug('execCloseCallback')
             modalOption.value.closeCallback()
         }
     }
     function execConfirmCallback(){
         postTaskModal.value = false
-        _useLog.logInfo('execConfirmCallback', modalOption.value.confirmCallback.name)
+        _useLog.logDebug('execConfirmCallback', modalOption.value.confirmCallback.name)
         if(_useSpUtility.checkIsFunc(modalOption.value.confirmCallback)){
             modalOption.value.confirmCallback()
         }
     }
     function execCloseCallback(){
         postTaskModal.value = false
-        _useLog.logInfo('execCloseCallback')
+        _useLog.logDebug('execCloseCallback')
         if(_useSpUtility.checkIsFunc(modalOption.value.closeCallback)){
             modalOption.value.closeCallback()
         }

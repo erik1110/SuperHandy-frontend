@@ -88,7 +88,7 @@ import { storeFullOverlay } from "@/stores/storeFullOverlay";
 import { getCategories, postUploadImage } from "@/services/apis/general";
 import { getAccountInfo, patchAccountInfo, getProfileStatus } from "@/services/apis/account";
 
-const { logInfo, logError } = useLog()
+const { logDebug, logError } = useLog()
 const { excuteAsyncFunc, promiseAllSettledHanlder, checkRespStatus, checkUploadImage } = useSpUtility()
 const { formRules, validateFormResult, ruleAddress, ruleRequired } = useFormUtil()
 
@@ -161,7 +161,7 @@ const init = () => {
         //finally
         , () => {
             _storeFullOverlay.close()
-            logInfo(_work, 'init done')
+            logDebug(_work, 'init done')
         }
     )
 }
@@ -218,7 +218,7 @@ const uploadAvatar = async (event) => {
     circularLoading.value = true
     try {
         //檢查圖片大小不可超過2MB
-        logInfo(_work, 'file.size', _file.size)
+        logDebug(_work, 'file.size', _file.size)
         if (!checkUploadImage(_file.size, siteConfig.image.upload.maxSize)) {
             logError(_work, 'file.size', _file.size)
             openModal(`圖片大小不可超過${siteConfig.image.upload.maxSizeCn}`)
@@ -230,14 +230,14 @@ const uploadAvatar = async (event) => {
         formData.append("file", _file)
         const res1 = await postUploadImage(formData)
         if (res1 && checkRespStatus(res1)) {
-            logInfo(_work, 'upload avatar success')
+            logDebug(_work, 'upload avatar success')
             const _avatarPath = res1.data.imgUrl
             //更新會員資料
             const res2 = await patchAccountInfo({ avatarPath: _avatarPath })
             if (res2 && !checkRespStatus(res2)) {
                 openModal(res2.message)
             } else {
-                logInfo(_work, 'update info-form success')
+                logDebug(_work, 'update info-form success')
                 avatarPath.value = _avatarPath
                 openModal('會員照片更新成功')
             }

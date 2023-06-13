@@ -8,7 +8,7 @@
                 <span class="">/&nbsp;超人幣</span>
             </div>
             <div v-if="data.bonus"
-                class="sp-bg-red-50 sp-py-2 sp-text-red-600 sp-inline-block sp-px-10 lg:sp-block lg:sp-px-0">
+                class="sp-bg-red-50 sp-py-2 sp-text-red-600 sp-inline-block sp-px-10 min-[1280px]:sp-block min-[1280px]:sp-px-0">
                 <span class="mdi mdi-gift-outline me-2"></span>
                 贈送&nbsp;{{ data.bonus }}&nbsp;幫手幣
             </div>
@@ -16,7 +16,7 @@
             <div class="sp-py-8">NT$ {{ data.price }}</div>
         </div>
         <div class="">
-            <v-btn color="primary" outline @click="$emit('openPurchaseModal', data.price)">立刻儲值去</v-btn>
+            <v-btn color="primary" @click="$emit('openPurchaseModal', data.price)">立刻儲值去</v-btn>
         </div>
     </div>
 </template>
