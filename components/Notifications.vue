@@ -26,8 +26,8 @@
         <v-list v-else class="overflow-auto" max-height="340">
             <!--  訊息列表 -->
             <v-list-item id="notiItem" v-for="(item, index) in notiList" :key="item.notifyId" :value="item.notifyId"
-                class="py-2" :disabled="item.read">
-                <v-list-item-title class="sp-whitespace-normal" @click="updateReadOne(item.notifyId)">
+                class="py-2">
+                <v-list-item-title class="sp-whitespace-normal" @click="updateReadOne(item)">
                     <div class="sp-flex sp-items-center sp-space-x-4 sp-justify-between">
                         <div class="sp-flex sp-space-x-2">
                             <div>
@@ -62,6 +62,7 @@
 import { storeToRefs } from 'pinia'
 import { getList, patchRead, patchReadALL } from "@/services/apis/notifications";
 import { storeNotification } from '@/stores/storeNotification'
+import { siteConfig } from '@/services/siteConfig';
 const _storeNotification = storeNotification()
 const { notiLength, isHasUnRead } = storeToRefs(_storeNotification)
 const { addNotiLength, hasUnRead } = storeNotification()
@@ -70,6 +71,7 @@ const { fromNow } = useMoment()
 const { logDebug, logError } = useLog()
 const loading = ref(true)
 const noData = ref(false)
+const btnShowMore = ref(false)
 const notiList = ref([])
 const _work = '系統通知'
 const _tagsColor = {
@@ -81,25 +83,46 @@ const _tagsColor = {
     }
 };
 
-// - 按鈕互動 -
-const btnShowMore = ref(false)
+
+// - 訊息導頁by tag -
+const goToPageByTag = async (item) =>{
+
+    switch(item.tag){
+        case '案主通知':
+        case '幫手通知':
+            await navigateTo(`${siteConfig.linkPaths.tasks.to}/${item.taskId}`);
+            break;
+        case '系統通知':
+            await navigateTo(`${siteConfig.linkPaths.pointsHistory.to}`);
+            break;
+        default:
+            break;
+    }
+}
 
 // - 單筆已讀 -
-const updateReadOne = (id) => {
-    loading.value = true
-    promiseAllSettledHanlder(
-        [
-            excuteAsyncFunc(_work, patchRead, id, null)
-        ]
-        //成功
-        , getNotiList
-        //失敗
-        , (error) => {
-            logError(_work, { error })
-        }
-        //finally
-        , null
-    )
+const updateReadOne = (item) => {
+
+    goToPageByTag(item);
+
+    if(!item.read){
+        loading.value = true
+        promiseAllSettledHanlder(
+            [
+                excuteAsyncFunc(_work, patchRead, item.notifyId, null)
+            ]
+            //成功
+            , getNotiList
+            //失敗
+            , (error) => {
+                logError(_work, { error })
+                loading.value = false
+            }
+            //finally
+            , null
+        )
+    }
+
 }
 
 // - 全部已讀 -
@@ -114,6 +137,7 @@ const updateReadAll = () => {
         //失敗
         , (error) => {
             logError(_work, { error })
+            loading.value = false
         }
         //finally
         , null
