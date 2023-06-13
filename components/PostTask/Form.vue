@@ -91,7 +91,7 @@ const { validateFormResult } = useFormUtil();
 const _storeFullOverlay = storeFullOverlay();
 const _storePostTask = storePostTask();
 const _storeLocation = storeLocation();
-const { logInfo, logError } = useLog()
+const { logDebug, logError } = useLog()
 
 // - Modal相關方法 -
 const { openConfirmModal, openErrorModal, openModal, closeModal, execConfirmCallback, execCloseCallback } = storePostTask();
@@ -173,7 +173,7 @@ const setCurrentRules = (submitter) => {
 const validatePostTaskForm = async () => {
 
     const validate = await validateFormResult(postTaskForm)
-    logInfo(_work, 'validatePostTaskForm.Result', validate)
+    logDebug(_work, 'validatePostTaskForm.Result', validate)
     //驗證成功
     if (validate) {
         return true;
@@ -198,7 +198,7 @@ const submit = async (event, taskTrans) => {
         published: _submitter === postTaskConfig.taskSubmitter.published,
         unpublished: _submitter === postTaskConfig.taskSubmitter.unpublished,
     })
-    logInfo(_work, 'submit', _submitter, taskTrans)
+    logDebug(_work, 'submit', _submitter, taskTrans)
 
     //2.1設定現在要使用的表單驗證規則
     setCurrentRules(_submitter)
@@ -225,10 +225,10 @@ const submit = async (event, taskTrans) => {
                 helperCoin: taskTrans.helperCoin
             }
         }
-        logInfo(_work, 'formData', data)
+        logDebug(_work, 'formData', data)
 
         const response = await executeFetchData(_submitter, data, taskId)
-        logInfo(_work, 'submit.response', response);
+        logDebug(_work, 'submit.response', response);
 
         if (response && !checkRespStatus(response)) {
             openErrorModal(response.message)
@@ -291,7 +291,7 @@ const resetForm = () => {
     postTaskFeeModal.value = false
     postTaskModal.value = false
     imgUrls.value = []
-    logInfo(_work, 'reset form done')
+    logDebug(_work, 'reset form done')
 }
 
 // - 刪除草稿 -
@@ -386,7 +386,7 @@ const Init = () => {
         //任務來源:新增任務
         currentTaskStatus.value = postTaskConfig.currentTaskStatus.create
     }
-    logInfo(_work, currentTaskStatus.value, 'check.currentTaskStatus')
+    logDebug(_work, currentTaskStatus.value, 'check.currentTaskStatus')
 
 
     promiseAllSettledHanlder(
@@ -404,7 +404,7 @@ const Init = () => {
         //finally
         , () => {
             _storeFullOverlay.close()
-            logInfo(_work, 'init done')
+            logDebug(_work, 'init done')
         }
     )
 }

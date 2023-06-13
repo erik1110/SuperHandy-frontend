@@ -29,7 +29,7 @@
 import { storeFullOverlay } from "@/stores/storeFullOverlay";
 import { getExposurePlan } from '@/services/apis/general';
 const { excuteAsyncFunc, promiseAllSettledHanlder} = useSpUtility()
-const { logInfo, logError } = useLog()
+const { logDebug, logError } = useLog()
 const _storeFullOverlay = storeFullOverlay();
 const _work = '曝光方案'
 const planA = ref({ items: [] }) //一般曝光
@@ -58,7 +58,7 @@ const init = () => {
     //finally
     , () => {
       _storeFullOverlay.close()
-      logInfo(_work, 'init done')
+      logDebug(_work, 'init done')
     }
   )
 }

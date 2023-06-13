@@ -46,7 +46,7 @@ import { storePostTask } from "@/stores/storePostTask";
 import { postUploadImage } from '@/services/apis/general'
 
 const { checkRespStatus, checkUploadImage } = useSpUtility()
-const { logInfo, logError } = useLog()
+const { logDebug, logError } = useLog()
 
 const _storePostTask = storePostTask();
 const { openConfirmModal, openModal, closeModal } = storePostTask();
@@ -66,7 +66,7 @@ const upload = async (event) => {
     circularLoading.value = true
     try {
         //檢查圖片大小不可超過2MB
-        logInfo(_work, 'file.size', _file.size)
+        logDebug(_work, 'file.size', _file.size)
         if (!checkUploadImage(_file.size, siteConfig.image.upload.maxSize)) {
             logError(_work, 'file.size', _file.size)
             _message = `圖片大小不可超過${siteConfig.image.upload.maxSizeCn}`
@@ -78,7 +78,7 @@ const upload = async (event) => {
         formData.append("file", _file)
         const response = await postUploadImage(formData)
         if (response && checkRespStatus(response)) {
-            logInfo(_work, 'upload success')
+            logDebug(_work, 'upload success')
             _dialogType = postTaskConfig.dialogType.info
             imgUrls.value.push(response.data.imgUrl)
         }

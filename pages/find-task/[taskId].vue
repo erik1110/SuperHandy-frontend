@@ -58,7 +58,7 @@ import { getTasksDetail, postApplyTask } from '@/services/apis/findTasks'
 import { siteConfig } from '@/services/siteConfig'
 
 const { checkRespStatus, checkTaskId, checkIsLogin, getTaskId } = useSpUtility()
-const { logInfo, logError } = useLog();
+const { logDebug, logError } = useLog();
 const { fromNow } = useMoment();
 const taskData = ref({
   imgUrls: []
@@ -81,7 +81,7 @@ const apply = async () => {
     navigateTo(siteConfig.linkPaths.login.to)
   }
   try {
-    logInfo(_work, 'apply.taskId', taskId)
+    logDebug(_work, 'apply.taskId', taskId)
     if (!checkTaskId(taskId)) {
       alertMessage.value = "任務編號不正確"
       return;
@@ -115,7 +115,7 @@ const apply = async () => {
 const init = async () => {
   try {
     taskId = getTaskId()
-    logInfo(_work, 'init.taskId', taskId)
+    logDebug(_work, 'init.taskId', taskId)
     if (!checkTaskId(taskId)) {
       alertMessage.value = "任務編號不正確"
       return;
