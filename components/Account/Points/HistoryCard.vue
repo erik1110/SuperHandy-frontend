@@ -21,11 +21,11 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>任務編號</td>
+                                        <td>任務標題</td>
                                         <td class="sp-break-all">
                                             <nuxt-link :to="`${siteConfig.linkPaths.tasks.to}/${item.taskId}`"
                                             class="sp-text-purple hover:sp-cursor-pointer" target="_blank">
-                                                {{ item.taskId }}
+                                                {{ item.taskTitle }}
                                             </nuxt-link>
                                         </td>
                                     </tr>
