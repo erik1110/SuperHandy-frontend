@@ -1,7 +1,7 @@
 <template>
-    <div class="sp-bg-gray-bg sp-p-4 sp-rounded-lg">
+    <div v-if="data.cnRole" class="sp-bg-gray-bg sp-p-4 sp-rounded-lg">
         <div class="text-center lg:sp-flex lg:sp-space-x-20 lg:sp-items-center">
-            <div v-if="data.cnRole" class="sp-font-bold sp-mb-2 lg:sp-mb-0">
+            <div class="sp-font-bold sp-mb-2 lg:sp-mb-0">
                 {{ data.cnRole }}
                 <span class="mdi mdi-menu-right sp-hidden lg:sp-inline-block"></span>
                 <span class="mdi mdi-menu-down lg:sp-hidden"></span>
@@ -17,16 +17,26 @@
                     <span class="number sp-inline-block">{{ data.numTasks }}</span>
                     <span class="sp-inline-block">{{ data.cnNumTasks }}</span>
                 </div>
+                <!-- 評價 start -->
                 <div class="number-wrap sp-text-gray-placeholder">
-                    <div class="sp-inline-block">
-                        <NuxtLink :to="siteConfig.linkPaths.comments.to">
-                            <span class="number sp-text-gray-placeholder">{{
-                                data.rating
-                            }}</span>
-                        </NuxtLink>
+                    <div v-if="data.rating">
+                        <div class="sp-inline-block">
+                            <NuxtLink :to="siteConfig.linkPaths.comments.to">
+                                <span class="number sp-text-gray-placeholder">{{
+                                    data.rating
+                                }}</span>
+                            </NuxtLink>
+                        </div>
+                        <span v-if="data.rating" class="sp-inline-block">星評價</span>
                     </div>
-                    <span v-if="data.rating" class="sp-inline-block">星評價</span>
+                    <div v-else >
+                        <div class="sp-inline-block">
+                            <span class="number sp-text-gray-placeholder">0</span>
+                        </div>
+                        <span class="sp-inline-block">星評價</span>
+                    </div>
                 </div>
+                <!-- 評價 end -->
             </div>
         </div>
     </div>
