@@ -19,22 +19,15 @@
                 </div>
                 <!-- 評價 start -->
                 <div class="number-wrap sp-text-gray-placeholder">
-                    <div v-if="data.rating">
-                        <div class="sp-inline-block">
-                            <NuxtLink :to="siteConfig.linkPaths.comments.to">
-                                <span class="number sp-text-gray-placeholder">{{
-                                    data.rating
-                                }}</span>
-                            </NuxtLink>
-                        </div>
-                        <span v-if="data.rating" class="sp-inline-block">星評價</span>
+                    <div class="sp-inline-block">
+                        <NuxtLink :to="siteConfig.linkPaths.comments.to">
+                            <div class="number sp-text-gray-placeholder">
+                                <div v-if="data.rating">{{ data.rating }}</div>
+                                <div v-else > 0</div>
+                            </div>
+                        </NuxtLink>
                     </div>
-                    <div v-else >
-                        <div class="sp-inline-block">
-                            <span class="number sp-text-gray-placeholder">0</span>
-                        </div>
-                        <span class="sp-inline-block">星評價</span>
-                    </div>
+                    <span class="sp-inline-block">星評價</span>
                 </div>
                 <!-- 評價 end -->
             </div>
