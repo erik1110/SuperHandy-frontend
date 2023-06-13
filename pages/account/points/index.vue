@@ -1,4 +1,5 @@
 <template>
+  <PostTaskOverlay/>
   <div class="sp-card-wrapper sp-bg-white sp-p-6">
     <SecTitle :text="'目前帳戶點數'"></SecTitle>
     <v-container fluid class="px-0" v-if="!isLoading">
@@ -49,7 +50,9 @@
   <AccountPointsPurchaseModal :money="purchaseMoney" @close="purchaseModal = false"></AccountPointsPurchaseModal>
 </template>
 <script setup>
+import { storeFullOverlay } from "@/stores/storeFullOverlay";
 import { getAccountPoints } from "@/services/apis/point";
+const _storeFullOverlay = storeFullOverlay();
 const isLoading = ref(true);
 // const point = ref({});
 const pointSuper = ref({
@@ -84,13 +87,18 @@ const purchaseData = ref({
 const purchaseMoney = ref(0);
 const purchaseModal = useState("purchaseModal", () => ref(false));
 const FuncGetAccountPoints = async function () {
-  let res = await getAccountPoints();
+  _storeFullOverlay.open()
+  try{
+    let res = await getAccountPoints();
   if (!res.error) {
     // point.value = res.data;
     pointSuper.value.coin = res.data.superCoin;
     pointHelper.value.coin = res.data.helperCoin;
   }
-  isLoading.value = false;
+  } catch {} finally{
+    _storeFullOverlay.close()
+    isLoading.value = false;
+  }
 };
 onMounted(() => {
   FuncGetAccountPoints();

@@ -1,9 +1,12 @@
 <template>
+    <PostTaskOverlay/>
   <AccountPointsHistoryCard :data="historyList"></AccountPointsHistoryCard>
 </template>
 <script setup>
+import { storeFullOverlay } from "@/stores/storeFullOverlay";
 import { getAccountPointsHistory } from "@/services/apis/point";
 import { siteConfig } from "@/services/siteConfig";
+const _storeFullOverlay = storeFullOverlay();
 const { fromNow } = useMoment();
 const historyList = ref([]);
 const _tagsColor = {
@@ -22,6 +25,7 @@ const _tagsColor = {
 };
 
 const FuncGetAccountPointsHistory = async function () {
+  _storeFullOverlay.open()
   try {
     let res = await getAccountPointsHistory();
     if (!res.error) {
@@ -62,6 +66,7 @@ const FuncGetAccountPointsHistory = async function () {
   } catch (error) {
     console.log({ error });
   } finally {
+    _storeFullOverlay.close()
   }
 };
 FuncGetAccountPointsHistory();
