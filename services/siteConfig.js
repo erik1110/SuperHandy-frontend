@@ -31,6 +31,7 @@ export const siteConfig = {
     account: { title: "會員帳號", to: "/account" },
     tasks: { title: "任務管理", to: "/account/tasks" },
     points: { title: "點數管理", to: "/account/points" },
+    pointsHistory: { title: "點數歷史", to: "/account/points/history" },
     comments: { title: "評價查看", to: "/account/comments" },
     exposurePlan: { title: "曝光方案", to: "/exposure-plan" },
   },

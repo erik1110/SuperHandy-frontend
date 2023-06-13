@@ -1,6 +1,9 @@
 <template>
-    <PostTaskOverlay/>
-  <AccountPointsHistoryCard :data="historyList"></AccountPointsHistoryCard>
+  <PostTaskOverlay />
+  <div v-if="noData" class="sp-card-wrapper sp-bg-white sp-py-4 sp-px-6">
+      <p class="sp-text-center">目前沒有點數歷史資料</p>
+  </div>
+  <AccountPointsHistoryCard v-else :data="historyList"></AccountPointsHistoryCard>
 </template>
 <script setup>
 import { storeFullOverlay } from "@/stores/storeFullOverlay";
@@ -9,6 +12,7 @@ import { siteConfig } from "@/services/siteConfig";
 const _storeFullOverlay = storeFullOverlay();
 const { fromNow } = useMoment();
 const historyList = ref([]);
+const noData = ref(false)
 const _tagsColor = {
   role: {
     案主: "sp-tag-light-xs-cyan",
@@ -28,17 +32,16 @@ const FuncGetAccountPointsHistory = async function () {
   _storeFullOverlay.open()
   try {
     let res = await getAccountPointsHistory();
-    if (!res.error) {
-      // console.log(res)
-    } else {
+    if (res.error || !Array.isArray(res.data) || res.data.length === 0) {
+      noData.value = true
       return;
     }
-    if (!Array.isArray(res.data)) return;
     res.data.forEach((item) => {
       let _historyData = {};
       _historyData.tag = item.tag; //任務標籤
       _historyData.role = `# ${item.role}`; //任務角色
       _historyData.taskId = item.taskId; //任務編號
+      _historyData.taskTitle = item.taskTitle; //任務標題
       _historyData.time = fromNow(item.createdAt); //交易時間
       _historyData.desc = item.desc.join(", "); //交易項目
       _historyData.tagClass =
