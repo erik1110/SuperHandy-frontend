@@ -27,16 +27,16 @@
             <label class='label'>曝光方案</label>
             <div class='d-md-flex'>
                 <v-radio-group v-model='formData.exposurePlan' v-for='(item, index) in exposurePlans' :key='index'
-                    :rules='currentRules.exposurePlan' :disabled="currentDisabled.exposurePlan">
+                    :rules='currentRules.exposurePlan' :disabled="currentDisabled.exposurePlan" color="v-purple">
                     <v-radio :label='`${item.title} ${item.price}點`' :value='item.title'></v-radio>
                 </v-radio-group>
             </div>
             <div class="sp-text-end">
                 <NuxtLink :to="siteConfig.linkPaths.exposurePlan.to" target="_blank">
-                    <v-chip class="ma-2 px-10 sp-cursor-pointer" color="secondary-darken" size="small">
-                        <v-icon start icon="mdi-magnify"></v-icon>
+                    <span class="sp-btn-light-xs-cyan sp-rounded-full sp-px-5">
+                        <span class="mdi mdi-magnify"></span>
                         查看曝光方案
-                    </v-chip>
+                    </span>
                 </NuxtLink>
             </div>
         </div>
