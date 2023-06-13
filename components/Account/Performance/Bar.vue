@@ -7,17 +7,17 @@
                 <span class="mdi mdi-menu-down lg:sp-hidden"></span>
             </div>
             <div class="sp-flex sp-justify-between sp-space-x-2 lg:sp-space-x-10">
-                <div v-if="data.coin"  class="number-wrap sp-text-purple">
+                <div  class="number-wrap sp-text-purple">
                     <NuxtLink :to="siteConfig.linkPaths.points.to">
                         <span class="number">{{ data.coin }}</span>
                     </NuxtLink>
                     <span class="sp-inline-block">{{ data.cnCoin }}</span>
                 </div>
-                <div v-if="data.numTasks" class="number-wrap sp-text-gray-placeholder">
+                <div class="number-wrap sp-text-gray-placeholder">
                     <span class="number sp-inline-block">{{ data.numTasks }}</span>
                     <span class="sp-inline-block">{{ data.cnNumTasks }}</span>
                 </div>
-                <div v-if="data.rating" class="number-wrap sp-text-gray-placeholder">
+                <div class="number-wrap sp-text-gray-placeholder">
                     <div class="sp-inline-block">
                         <NuxtLink :to="siteConfig.linkPaths.comments.to">
                             <span class="number sp-text-gray-placeholder">{{
@@ -25,7 +25,7 @@
                             }}</span>
                         </NuxtLink>
                     </div>
-                    <span class="sp-inline-block">星評價</span>
+                    <span v-if="data.rating" class="sp-inline-block">星評價</span>
                 </div>
             </div>
         </div>

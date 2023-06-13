@@ -4,7 +4,7 @@
             <div class="sp-text-center sp-space-y-2">
                 <div class="sp-text-xl sp-font-bold sp-text-gray-placeholder">{{ data.title }}</div>
                 <div class="bg-svg sp-mx-auto" :class="data.image"></div>
-                <div v-if="data.coin" class="sp-text-purple sp-ps-4 sp-py-4 sp-flex sp-items-center sp-justify-center">
+                <div class="sp-text-purple sp-ps-4 sp-py-4 sp-flex sp-items-center sp-justify-center">
                     <span class="sp-text-5xl sp-font-bold">{{ data.coin }}</span>
                     <span class="sp-text-base sp-font-normal">&nbsp;&nbsp;/&nbsp;點</span>
                 </div>
