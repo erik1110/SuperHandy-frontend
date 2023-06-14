@@ -1,5 +1,8 @@
 <template>
-  <PostTaskOverlay/>
+  <PostTaskOverlay />
+  <div class="sp-card-wrapper sp-bg-white sp-p-4">
+    <AccountPointsTabs />
+  </div>
   <div class="sp-card-wrapper sp-bg-white sp-p-6">
     <SecTitle :text="'目前帳戶點數'"></SecTitle>
     <v-container fluid class="px-0" v-if="!isLoading">
@@ -90,11 +93,11 @@ const FuncGetAccountPoints = async function () {
   _storeFullOverlay.open()
   try{
     let res = await getAccountPoints();
-  if (!res.error) {
-    // point.value = res.data;
-    pointSuper.value.coin = res.data.superCoin;
-    pointHelper.value.coin = res.data.helperCoin;
-  }
+    if (!res.error) {
+      // point.value = res.data;
+      pointSuper.value.coin = res.data.superCoin;
+      pointHelper.value.coin = res.data.helperCoin;
+    }
   } catch {} finally{
     _storeFullOverlay.close()
     isLoading.value = false;
