@@ -76,7 +76,7 @@
         navigateTo("/auth/login");
         _storeGlobal.confirmHandler({
           open: true,
-          content: "註冊成功！請查收您的電子郵件並完成帳戶驗證。",
+          content: "註冊成功！請使用您的 google 帳號進行登入。",
         });
       }
     } catch (err) {
