@@ -58,6 +58,11 @@ const mapViewTasks = ref([]);
       latitude: mapCenterBackup.value[0]
     };
     payload = {...payload,...filterData}
+    if(from=="map"){
+      delete payload.city
+      delete payload.dist
+    }
+    console.log({payload});
     cleanNull(payload)
     // console.log({payload});
 
