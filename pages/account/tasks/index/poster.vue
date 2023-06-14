@@ -2,6 +2,14 @@
   <div>
     <div class="sp-mb-4 sp-card-wrapper sp-bg-white">
       <VCardText class="sp-overflow-x-auto">
+        <VTextField
+          class="sp-mb-2"
+          v-model="searchText"
+          placeholder="請輸入關鍵字"
+          append-inner-icon="mdi-magnify"
+          @click:append-inner="FuncGetTasksPosterManagement"
+          @keyup.enter="FuncGetTasksPosterManagement"
+        ></VTextField>
         <v-tabs show-arrows v-model="groupTab" color="purple">
           <v-tab value="all">全部 [{{ postList.all.length }}]</v-tab>
           <v-tab value="draft">草稿區 [{{ postList.draft.length }}]</v-tab>
@@ -121,6 +129,7 @@
   import { storeFullOverlay } from "~/stores/storeFullOverlay";
   const _storeFullOverlay = storeFullOverlay();
   const groupTab = useState("all");
+  const searchText = ref("");
   const postList = ref({
     all: [],
     draft: [],
@@ -141,10 +150,14 @@
   };
   let FuncGetTasksPosterManagement = async () => {
     _storeFullOverlay.open();
-    let res = await getTasksPosterManagement();
+    let queryString = "?limit=100";
+    if (searchText.value.length != 0) {
+      queryString += `&keyword=${searchText.value}`;
+    }
+    let res = await getTasksPosterManagement(queryString);
     if (!res.error) {
-      let resArray = res.data;
-      postList.value = listModel;
+      let resArray = res.data.tasks;
+      postList.value = JSON.parse(JSON.stringify(listModel));
       resArray.forEach(function (item) {
         postList.value.all.push(item);
         switch (item.status) {

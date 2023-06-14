@@ -2,6 +2,14 @@
   <div>
     <div class="sp-mb-4 sp-card-wrapper sp-bg-white">
       <VCardText>
+        <VTextField
+          class="sp-mb-2"
+          v-model="searchText"
+          placeholder="請輸入關鍵字"
+          append-inner-icon="mdi-magnify"
+          @click:append-inner="FuncGetTasksHelperManagement"
+          @keyup.enter="FuncGetTasksHelperManagement"
+        ></VTextField>
         <v-tabs v-model="groupTab" color="purple">
           <v-tab value="all">全部 [{{ postList.all.length }}]</v-tab>
           <v-tab value="published"
@@ -120,6 +128,7 @@
   import { getTasksHelperManagement } from "@/services/apis/tasks";
   import { storeFullOverlay } from "~/stores/storeFullOverlay";
   const _storeFullOverlay = storeFullOverlay();
+  const searchText = ref("");
   const groupTab = useState("all");
   const postList = ref({
     all: [],
@@ -139,10 +148,14 @@
   };
   let FuncGetTasksHelperManagement = async () => {
     _storeFullOverlay.open();
-    let res = await getTasksHelperManagement();
+    let queryString = "?limit=100";
+    if (searchText.value.length != 0) {
+      queryString += `&keyword=${searchText.value}`;
+    }
+    let res = await getTasksHelperManagement(queryString);
     if (!res.error) {
-      let resArray = res.data;
-      postList.value = listModel;
+      let resArray = res.data.tasks;
+      postList.value = JSON.parse(JSON.stringify(listModel));
       resArray.forEach(function (item) {
         postList.value.all.push(item);
         if (item.helperStatus == "媒合失敗") {

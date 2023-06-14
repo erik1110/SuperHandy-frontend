@@ -1,12 +1,22 @@
 const { req } = useHttp();
 
 //取得案主歷史
-export const getTasksPosterManagement = () =>
-  req("GET", "/tasks/management/poster", {}, { auth: true });
+export const getTasksPosterManagement = (queryString) =>
+  req(
+    "GET",
+    `/tasks/management/poster/query${queryString}`,
+    {},
+    { auth: true }
+  );
 
 //取得幫手歷史
-export const getTasksHelperManagement = () =>
-  req("GET", "/tasks/management/helper", {}, { auth: true });
+export const getTasksHelperManagement = (queryString) =>
+  req(
+    "GET",
+    `/tasks/management/poster/query${queryString}`,
+    {},
+    { auth: true }
+  );
 
 //刪除案件
 export const deleteTasksManagement = (taskId) =>
