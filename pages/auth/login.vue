@@ -170,7 +170,7 @@
   const pageRoot = ref("");
   const FuncGoogleLogin = () => {
     window.open(
-      `${import.meta.env.VITE_BACKEND_ROOT_DEV}/auth/google`,
+      `${import.meta.env.VITE_BACKEND_ROOT_DEV}auth/google`,
       "_top",
       ""
     );
