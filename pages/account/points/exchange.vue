@@ -1,4 +1,7 @@
 <template>
+  <div class="sp-card-wrapper sp-bg-white sp-p-4">
+    <AccountPointsTabs />
+  </div>
   <div class="sp-card-wrapper sp-bg-white sp-p-6">
     <SecTitle :text="'超人幣兌換新台幣'"></SecTitle>
     <v-container fluid class="px-0">

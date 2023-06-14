@@ -1,7 +1,10 @@
 <template>
   <PostTaskOverlay />
+  <div class="sp-card-wrapper sp-bg-white sp-p-4">
+    <AccountPointsTabs />
+  </div>
   <div v-if="noData" class="sp-card-wrapper sp-bg-white sp-py-4 sp-px-6">
-      <p class="sp-text-center">目前沒有點數歷史資料</p>
+    <p class="sp-text-center">目前沒有點數歷史資料</p>
   </div>
   <AccountPointsHistoryCard v-else :data="historyList"></AccountPointsHistoryCard>
 </template>
