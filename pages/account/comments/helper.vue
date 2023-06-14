@@ -140,7 +140,7 @@
               class="sp-px-4 sp-py-1 sp-border-r-2 sp-border-gray-400 sp-border-solid sp-overflow-hidden"
             >
               <v-rating
-                v-model="item.helperReview.star"
+                v-model="item.editStar"
                 class="sm:sp-flex-initial sp-flex-auto"
                 :readonly="!item.isEdit"
                 density="compact"
@@ -151,7 +151,7 @@
             <div class="sp-px-4 sp-py-2 sp-inline-flex sp-flex-1">
               <input
                 class="sp-h-[20px] sp-outline-none sp-flex-1"
-                v-model="item.helperReview.comment"
+                v-model="item.editComment"
                 :disabled="!item.isEdit"
                 :placeholder="item.isEdit ? '請輸入評論...' : ''"
               />

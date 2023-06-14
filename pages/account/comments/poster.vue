@@ -2,7 +2,7 @@
   <div>
     <VCard class="mb-4" v-if="posterStars">
       <VCardText>
-        <div class="sp-flex sp-items-center sp-mb-4">
+        <div class="sp-flex sp-items-center sp-flex-wrap sp-mb-4">
           <div class="sp-text-center">
             <div class="sp-text-h4">{{ posterStars.avg.toFixed(1) }}</div>
             <v-rating
@@ -15,47 +15,49 @@
               disabled
             ></v-rating>
           </div>
-          <div
-            class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
-            :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 0 }"
-            @click="activeGroup = 0"
-          >
-            全部({{ posterStars.totalCount }})
-          </div>
-          <div
-            class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
-            :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 5 }"
-            @click="activeGroup = 5"
-          >
-            五星({{ posterStars["5"] }})
-          </div>
-          <div
-            class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
-            :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 4 }"
-            @click="activeGroup = 4"
-          >
-            四星({{ posterStars["4"] }})
-          </div>
-          <div
-            class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
-            :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 3 }"
-            @click="activeGroup = 3"
-          >
-            三星({{ posterStars["3"] }})
-          </div>
-          <div
-            class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
-            :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 2 }"
-            @click="activeGroup = 2"
-          >
-            二星({{ posterStars["2"] }})
-          </div>
-          <div
-            class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
-            :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 1 }"
-            @click="activeGroup = 1"
-          >
-            一星({{ posterStars["1"] }})
+          <div class="sp-w-full lg:sp-w-auto sp-flex">
+            <div
+              class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
+              :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 0 }"
+              @click="activeGroup = 0"
+            >
+              全部({{ posterStars.totalCount }})
+            </div>
+            <div
+              class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
+              :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 5 }"
+              @click="activeGroup = 5"
+            >
+              五星({{ posterStars["5"] }})
+            </div>
+            <div
+              class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
+              :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 4 }"
+              @click="activeGroup = 4"
+            >
+              四星({{ posterStars["4"] }})
+            </div>
+            <div
+              class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
+              :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 3 }"
+              @click="activeGroup = 3"
+            >
+              三星({{ posterStars["3"] }})
+            </div>
+            <div
+              class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
+              :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 2 }"
+              @click="activeGroup = 2"
+            >
+              二星({{ posterStars["2"] }})
+            </div>
+            <div
+              class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
+              :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 1 }"
+              @click="activeGroup = 1"
+            >
+              一星({{ posterStars["1"] }})
+            </div>
           </div>
         </div>
         <label class="text-v-gray-text pb-2 d-block" for="taskComment"
