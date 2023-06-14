@@ -112,17 +112,28 @@ const noticeMenuUpdate = (event) => {
 }
 
 // 系統通知
-const _storeNotification = storeNotification()
-const { isHasUnRead } = storeToRefs(_storeNotification)
-const { hasUnRead } = storeNotification()
+const _storeNotification = storeNotification();
+const { isHasUnRead } = storeToRefs(_storeNotification);
+const { logInfo } = useLog();
+const { hasUnRead } = storeNotification();
 const { checkIsLogin } = useSpUtility();
-if (checkIsLogin()) {
-  hasUnRead()
-  if (siteConfig.notification.isOpen) {
-    setInterval(hasUnRead, siteConfig.notification.intervalTime);
+let aNotiIntervalFun = null;
+onMounted(()=>{
+  if (checkIsLogin()) {
+    hasUnRead()
+    if (siteConfig.notification.isOpen) {
+      logInfo('notification intervalFun start...', siteConfig.notification.intervalTime);
+      aNotiIntervalFun = setInterval(hasUnRead, siteConfig.notification.intervalTime);
+    }
   }
-}
+})
 
+onUnmounted(()=>{
+  if(aNotiIntervalFun){
+    clearInterval(aNotiIntervalFun);
+    logInfo('notification intervalFun cancel');
+  }
+})
 
 </script>
 
