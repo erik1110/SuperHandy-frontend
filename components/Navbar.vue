@@ -8,9 +8,17 @@
 
     <template v-slot:append>
       <div class="sp-hidden md:sp-flex sp-w-[220px] sp-py-2 sp-mr-1">
-        <v-text-field v-model="_storeFindTasks.keyword" label="搜尋任務" append-inner-icon="mdi-magnify" density="compact"
-          hide-details single-line clearable @keyup.enter="searchSubmit"
-          @click:append-inner="searchSubmit"></v-text-field>
+        <v-text-field
+          v-model="_storeFindTasks.keyword"
+          label="搜尋任務"
+          append-inner-icon="mdi-magnify"
+          density="compact"
+          hide-details
+          single-line
+          clearable
+          @keyup.enter="searchSubmit"
+          @click:append-inner="searchSubmit"
+        ></v-text-field>
       </div>
 
       <NuxtLink class="sp-hidden md:sp-inline-grid" to="/find-tasks/list">
@@ -23,15 +31,26 @@
         <v-badge :model-value="isHasUnRead" color="error" dot>
           <v-icon>mdi-bell</v-icon>
         </v-badge>
-        <v-menu :close-on-content-click="false" activator="parent" width="300" max-height="400">
+        <v-menu
+          :close-on-content-click="false"
+          activator="parent"
+          width="300"
+          max-height="400"
+          @update:modelValue="noticeMenuUpdate"
+        >
           <Notifications />
         </v-menu>
       </v-btn>
-      <v-btn v-if="_storeAuth.loginToken" icon><v-icon>mdi-account-circle</v-icon>
+      <v-btn v-if="_storeAuth.loginToken" icon
+        ><v-icon>mdi-account-circle</v-icon>
         <v-menu activator="parent">
           <v-list>
-            <NuxtLink v-for="(item, index) in items" :key="index" :value="index" :to="item.to"
-              @update:modelValue="noticeMenuUpdate">
+            <NuxtLink
+              v-for="(item, index) in items"
+              :key="index"
+              :value="index"
+              :to="item.to"
+            >
               <v-list-item>
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item>
@@ -47,7 +66,12 @@
           <v-icon>mdi-menu</v-icon>
           <v-menu activator="parent">
             <v-list>
-              <NuxtLink v-for="(item, index) in humburgerItems" :key="index" :value="index" :to="item.to">
+              <NuxtLink
+                v-for="(item, index) in humburgerItems"
+                :key="index"
+                :value="index"
+                :to="item.to"
+              >
                 <v-list-item>
                   <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
@@ -64,8 +88,8 @@
   </v-app-bar>
 </template>
 <script setup>
-import { storeToRefs } from 'pinia'
-import { siteConfig } from '@/services/siteConfig'
+import { storeToRefs } from "pinia";
+import { siteConfig } from "@/services/siteConfig";
 import { storeNotification } from "@/stores/storeNotification";
 import { storeFindTasks } from "@/stores/storeFindTasks";
 const _storeFindTasks = storeFindTasks();
@@ -109,7 +133,7 @@ const noticeMenuUpdate = (event) => {
   } else {
     document.documentElement.style.overflow = "auto";
   }
-}
+};
 
 // 系統通知
 const _storeNotification = storeNotification();
@@ -118,23 +142,28 @@ const { logInfo } = useLog();
 const { hasUnRead } = storeNotification();
 const { checkIsLogin } = useSpUtility();
 let aNotiIntervalFun = null;
-onMounted(()=>{
+onMounted(() => {
   if (checkIsLogin()) {
-    hasUnRead()
+    hasUnRead();
     if (siteConfig.notification.isOpen) {
-      logInfo('notification intervalFun start...', siteConfig.notification.intervalTime);
-      aNotiIntervalFun = setInterval(hasUnRead, siteConfig.notification.intervalTime);
+      logInfo(
+        "notification intervalFun start...",
+        siteConfig.notification.intervalTime
+      );
+      aNotiIntervalFun = setInterval(
+        hasUnRead,
+        siteConfig.notification.intervalTime
+      );
     }
   }
-})
+});
 
-onUnmounted(()=>{
-  if(aNotiIntervalFun){
+onUnmounted(() => {
+  if (aNotiIntervalFun) {
     clearInterval(aNotiIntervalFun);
-    logInfo('notification intervalFun cancel');
+    logInfo("notification intervalFun cancel");
   }
-})
-
+});
 </script>
 
 <style scoped></style>
