@@ -118,6 +118,8 @@
 </template>
 <script setup>
   import { getTasksHelperManagement } from "@/services/apis/tasks";
+  import { storeFullOverlay } from "~/stores/storeFullOverlay";
+  const _storeFullOverlay = storeFullOverlay();
   const groupTab = useState("all");
   const postList = ref({
     all: [],
@@ -136,6 +138,7 @@
     other: [],
   };
   let FuncGetTasksHelperManagement = async () => {
+    _storeFullOverlay.open();
     let res = await getTasksHelperManagement();
     if (!res.error) {
       let resArray = res.data;
@@ -170,6 +173,7 @@
           }
         }
       });
+      _storeFullOverlay.close();
     }
   };
   let colorControl = (status) => {

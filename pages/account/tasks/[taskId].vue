@@ -16,6 +16,9 @@
 
 <script setup>
   import { getTasksManagementDetail } from "@/services/apis/tasks";
+  import { storeFullOverlay } from "~/stores/storeFullOverlay";
+  const _storeFullOverlay = storeFullOverlay();
+  _storeFullOverlay.open();
   const route = useRoute();
   const taskId = route.params.taskId;
   const detail = useState("taskDetail", () => ref());
@@ -30,6 +33,14 @@
   onMounted(() => {
     FuncGetTasksManagementDetail();
   });
+  watch(
+    () => detail.value,
+    (val) => {
+      if (val) {
+        _storeFullOverlay.close();
+      }
+    }
+  );
 </script>
 
 <style lang="scss" scoped></style>

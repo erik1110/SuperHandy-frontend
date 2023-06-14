@@ -46,7 +46,10 @@
       </div>
       <div class="sp-flex-1 sm:sp-mx-4 sp-my-4 sp-overflow-auto">
         <div class="sp-h-[100%]">
-          <slot />
+          <PostTaskOverlay />
+          <div :class="{ 'sp-hidden': isOpen }">
+            <slot />
+          </div>
         </div>
       </div>
     </div>
@@ -55,81 +58,85 @@
 </template>
 
 <script setup>
-import {
-  UserCircleIcon,
-  DocumentDuplicateIcon,
-  StarIcon,
-  CurrencyDollarIcon,
-} from "@heroicons/vue/24/solid";
-const route = useRoute();
-const activeRouter = ref("account");
-const FuncCheckTabs = function (val) {
-  if (val == "/account") {
-    activeRouter.value = "account";
-  } else if (val.startsWith("/account/tasks")) {
-    activeRouter.value = "task";
-  } else if (val.startsWith("/account/comments")) {
-    activeRouter.value = "comment";
-  } else if (val.startsWith("/account/messages")) {
-    activeRouter.value = "message";
-  } else if (val.startsWith("/account/points")) {
-    activeRouter.value = "point";
-  }
-};
-watch(
-  () => route.path,
-  (val) => {
-    FuncCheckTabs(val);
-  }
-);
-FuncCheckTabs(route.path);
+  import {
+    UserCircleIcon,
+    DocumentDuplicateIcon,
+    StarIcon,
+    CurrencyDollarIcon,
+  } from "@heroicons/vue/24/solid";
+  const route = useRoute();
+  const activeRouter = ref("account");
+  import { storeToRefs } from "pinia";
+  import { storeFullOverlay } from "~/stores/storeFullOverlay";
+  const _storeFullOverlay = storeFullOverlay();
+  const { isOpen } = storeToRefs(_storeFullOverlay);
+  const FuncCheckTabs = function (val) {
+    if (val == "/account") {
+      activeRouter.value = "account";
+    } else if (val.startsWith("/account/tasks")) {
+      activeRouter.value = "task";
+    } else if (val.startsWith("/account/comments")) {
+      activeRouter.value = "comment";
+    } else if (val.startsWith("/account/messages")) {
+      activeRouter.value = "message";
+    } else if (val.startsWith("/account/points")) {
+      activeRouter.value = "point";
+    }
+  };
+  watch(
+    () => route.path,
+    (val) => {
+      FuncCheckTabs(val);
+    }
+  );
+  FuncCheckTabs(route.path);
 </script>
 
 <style scoped lang="scss">
-.sidebar-icon {
-  display: inline-block;
-  margin-right: 10px;
-  width: 20px;
-  height: 20px;
-  // &.account-icon {
-  //   background: url("@/assets/images/svg/account.svg") center center / contain
-  //     no-repeat;
-  // }
-  // &.task-icon {
-  //   background: url("@/assets/images/svg/task.svg") center center / contain
-  //     no-repeat;
-  // }
-  // &.comment-icon {
-  //   background: url("@/assets/images/svg/comment.svg") center center / contain
-  //     no-repeat;
-  // }
-  // &.point-icon {
-  //   background: url("@/assets/images/svg/point.svg") center center / contain
-  //     no-repeat;
-  // }
-}
+  .sidebar-icon {
+    display: inline-block;
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+    // &.account-icon {
+    //   background: url("@/assets/images/svg/account.svg") center center / contain
+    //     no-repeat;
+    // }
+    // &.task-icon {
+    //   background: url("@/assets/images/svg/task.svg") center center / contain
+    //     no-repeat;
+    // }
+    // &.comment-icon {
+    //   background: url("@/assets/images/svg/comment.svg") center center / contain
+    //     no-repeat;
+    // }
+    // &.point-icon {
+    //   background: url("@/assets/images/svg/point.svg") center center / contain
+    //     no-repeat;
+    // }
+  }
 </style>
 <style scoped lang="postcss">
-@import url("@/assets/css/tailwind.css");
-.active {
-  position: relative;
-  &:before {
-    content: "";
-    @apply sp-absolute sp-w-full sp-h-full sp-left-0 sp-bg-secondary sp-rounded-lg sp-opacity-20;
+  @import url("@/assets/css/tailwind.css");
+  .active {
+    position: relative;
+    &:before {
+      content: "";
+      @apply sp-absolute sp-w-full sp-h-full sp-left-0 sp-bg-secondary sp-rounded-lg sp-opacity-20;
+    }
+    .sidebar_text {
+      @apply sp-z-10 sp-text-secondary-darken;
+    }
+    .sidebar_icon {
+      @apply sp-z-10 sp-text-secondary-darken;
+    }
   }
-  .sidebar_text {
-    @apply sp-z-10 sp-text-secondary-darken;
+  .sidebar {
+    &_text {
+      @apply sp-text-slate-700 sp-font-bold;
+    }
+    &_icon {
+      @apply sp-text-slate-700 sp-mr-2;
+    }
   }
-  .sidebar_icon {
-    @apply sp-z-10 sp-text-secondary-darken;
-  }
-}
-.sidebar {
-  &_text {
-    @apply sp-text-slate-700 sp-font-bold;
-  }
-  &_icon {
-    @apply sp-text-slate-700 sp-mr-2;
-  }
-}
 </style>

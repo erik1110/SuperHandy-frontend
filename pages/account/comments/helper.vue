@@ -219,6 +219,8 @@
   } from "@/services/apis/account";
   import { postTasksManagementComment } from "@/services/apis/tasks";
   import { MapPinIcon, PencilSquareIcon } from "@heroicons/vue/24/solid";
+  import { storeFullOverlay } from "~/stores/storeFullOverlay";
+  const _storeFullOverlay = storeFullOverlay();
   const categories = useState("categories");
   const helperStars = ref(null);
   const activeGroup = ref(0);
@@ -250,6 +252,7 @@
       query.yourStar = `${activeGroup.value}`;
     }
     query.limit = `100`;
+    _storeFullOverlay.open();
     let res = await getAccountComments(query);
     if (!res.error) {
       res.data.reviews.forEach(function (item) {
@@ -267,6 +270,7 @@
         item.isEdit = false;
       });
       commentGroup.value = res.data.reviews;
+      _storeFullOverlay.close();
     }
   };
   const cancelEdit = function (item) {

@@ -49,12 +49,12 @@
           第 {{ parseInt(detail.submittedInfo.length / 2) + 1 }} 次幫手成果上傳
         </div>
 
-        <div class="sp-text-body">告知事項 (非必填)</div>
+        <div class="sp-text-body">告知事項 (必填)</div>
         <v-textarea
           v-model="acceptComment"
           placeholder="請輸入事項說明"
         ></v-textarea>
-        <div class="sp-text-body sp-mb-4">說明圖片 (非必填)</div>
+        <div class="sp-text-body sp-mb-4">說明圖片 (必填)</div>
         <div class="sp-flex sp-mb-4">
           <div
             class="sp-inline-block sp-w-[96px] sp-h-[96px] sp-relative sp-mr-6 sp-mb-4"
@@ -74,6 +74,7 @@
 
           <div
             class="sp-w-[96px] sp-h-[96px] sp-inline-block sp-border-2 sp-border-blue-400 sp-border-dotted sp-p-4 sp-relative"
+            v-if="acceptImages.length <= 4"
           >
             <PlusIcon
               class="sp-text-blue-400 sp-mx-auto sp-w-[24px] sp-h-[24px]"
@@ -81,6 +82,7 @@
             <div class="sp-text-blue-400">上傳圖片</div>
             <input
               type="file"
+              ref="fileInput"
               class="sp-absolute sp-left-0 sp-top-0 sp-w-full sp-h-full sp-cursor-pointer sp-opacity-0"
               accept="image/png, image/jpeg, image/svg"
               @change="uploadFile"
@@ -100,12 +102,12 @@
         >
         <VBtn color="primary" @click="posterAccept">確認驗收</VBtn>
         <template v-if="isRefuseAreaOpen">
-          <div class="sp-mt-2 sp-text-body">告知事項 (非必填)</div>
+          <div class="sp-mt-2 sp-text-body">告知事項 (必填)</div>
           <v-textarea
             v-model="acceptComment"
             placeholder="請輸入事項說明"
           ></v-textarea>
-          <div class="sp-text-body sp-mb-4">說明圖片 (非必填)</div>
+          <div class="sp-text-body sp-mb-4">說明圖片 (必填)</div>
           <div class="sp-flex sp-mb-4">
             <div
               class="sp-inline-block sp-w-[96px] sp-h-[96px] sp-relative sp-mr-6 sp-mb-4"
@@ -125,6 +127,7 @@
 
             <div
               class="sp-w-[96px] sp-h-[96px] sp-inline-block sp-border-2 sp-border-blue-400 sp-border-dotted sp-p-4 sp-relative"
+              v-if="acceptImages.length <= 4"
             >
               <PlusIcon
                 class="sp-text-blue-400 sp-mx-auto sp-w-[24px] sp-h-[24px]"
@@ -132,6 +135,7 @@
               <div class="sp-text-blue-400">上傳圖片</div>
               <input
                 type="file"
+                ref="fileInput"
                 class="sp-absolute sp-left-0 sp-top-0 sp-w-full sp-h-full sp-cursor-pointer sp-opacity-0"
                 accept="image/png, image/jpeg, image/svg"
                 @change="uploadFile"
@@ -163,12 +167,17 @@
     postTasksManagementPosterAccpet,
     postTasksManagementPosterRefuse,
   } from "@/services/apis/tasks";
+  import { storeFullOverlay } from "~/stores/storeFullOverlay";
+  const _storeFullOverlay = storeFullOverlay();
   const detail = useState("taskDetail");
   const acceptComment = ref("");
   const acceptImages = ref([]);
   const tempFile = ref(null);
   const expendValue = ref([]);
   const isRefuseAreaOpen = ref(false);
+  const fileInput = ref(null);
+  const isSnackbarOpen = useState("isSnackbarOpen", () => ref(false));
+  const snackbarMessage = useState("snackbarMessage", () => ref(""));
   let FuncAcceptControll = function (val) {
     if (val.taskId && val.submittedInfo.length > 0) {
       expendValue.value.push(
@@ -199,6 +208,15 @@
     isRefuseAreaOpen.value = false;
   };
   const submitRefuse = async function (data) {
+    if (
+      data.submittedInfo.imgUrls.length == 0 ||
+      data.submittedInfo.comment.length == 0
+    ) {
+      isSnackbarOpen.value = true;
+      snackbarMessage.value = "請確認必填資訊!";
+      return false;
+    }
+    _storeFullOverlay.open();
     let res = await postTasksManagementPosterRefuse(detail.value.taskId, data);
     if (!res.error) {
       tasksReload();
@@ -222,6 +240,7 @@
       viewData: e.target.result,
     };
     acceptImages.value.push(data);
+    fileInput.value.value = "";
   };
   const removeImage = function (index) {
     acceptImages.value.splice(index, 1);
@@ -231,8 +250,10 @@
     let data = {};
     if (acceptImages.value.length == 0) {
       data = {
-        imgUrls: [],
-        Comment: acceptComment.value,
+        submittedInfo: {
+          imgUrls: [],
+          comment: "",
+        },
       };
       if (detail.value.role == "幫手") {
         submitHelperAccept(data);
@@ -272,6 +293,16 @@
     }
   };
   const submitHelperAccept = async function (data) {
+    console.log(data);
+    if (
+      data.submittedInfo.imgUrls.length == 0 ||
+      data.submittedInfo.comment.length == 0
+    ) {
+      isSnackbarOpen.value = true;
+      snackbarMessage.value = "請確認必填資訊!";
+      return false;
+    }
+    _storeFullOverlay.open();
     let res = await postTasksManagementHelperAccept(detail.value.taskId, data);
     if (!res.error) {
       tasksReload();
@@ -284,6 +315,7 @@
     }
   };
   const posterAccept = async function () {
+    _storeFullOverlay.open();
     let res = await postTasksManagementPosterAccpet(detail.value.taskId);
     if (!res.error) {
       getDetail();

@@ -219,6 +219,8 @@
   } from "@/services/apis/account";
   import { postTasksManagementComment } from "@/services/apis/tasks";
   import { MapPinIcon, PencilSquareIcon } from "@heroicons/vue/24/solid";
+  import { storeFullOverlay } from "~/stores/storeFullOverlay";
+  const _storeFullOverlay = storeFullOverlay();
   const categories = useState("categories");
   const posterStars = ref(null);
   const activeGroup = ref(0);
@@ -252,6 +254,7 @@
     query.limit = `100`;
     let res = await getAccountComments(query);
     if (!res.error) {
+      _storeFullOverlay.open();
       res.data.reviews.forEach(function (item) {
         if (item.helperReview.status == "待評價") {
           item.helperReview.star = 0;
@@ -267,6 +270,7 @@
         item.isEdit = false;
       });
       commentGroup.value = res.data.reviews;
+      _storeFullOverlay.close();
     }
   };
   const cancelEdit = function (item) {

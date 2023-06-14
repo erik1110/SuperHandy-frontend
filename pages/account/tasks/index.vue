@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="sp-my-4 sp-card-wrapper sp-bg-white">
+    <div class="sp-mb-4 sp-card-wrapper sp-bg-white">
       <VCardText>
         <V-tabs
           class="sp-inline-block"
@@ -26,20 +26,23 @@
 </template>
 
 <script setup>
-const route = useRoute();
-const identityTabs = ref("");
-if (route.path == "/account/tasks") {
-  navigateTo("/account/tasks/poster");
-  identityTabs.value = "account-tasks-index-poster";
-}
-onMounted(() => {
-  if (route.path != "/account/tasks") {
-    identityTabs.value = route.name;
+  import { storeFullOverlay } from "~/stores/storeFullOverlay";
+  const _storeFullOverlay = storeFullOverlay();
+  _storeFullOverlay.open();
+  const route = useRoute();
+  const identityTabs = ref("");
+  if (route.path == "/account/tasks") {
+    navigateTo("/account/tasks/poster");
+    identityTabs.value = "account-tasks-index-poster";
   }
-});
-const FuncPageRouter = function (route) {
-  navigateTo(route);
-};
+  onMounted(() => {
+    if (route.path != "/account/tasks") {
+      identityTabs.value = route.name;
+    }
+  });
+  const FuncPageRouter = function (route) {
+    navigateTo(route);
+  };
 </script>
 
 <style lang="scss" scoped></style>
