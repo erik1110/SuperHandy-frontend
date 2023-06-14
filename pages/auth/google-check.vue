@@ -12,15 +12,22 @@
   const _storeAuth = storeAuth();
   const _storeChatBox = storeChatBox();
   const open = true;
+  const googleSignData = useState("googleSignData", () => {
+    ref(null);
+  });
   onMounted(async () => {
     let res = await getGoogleCallback(queryString);
     if (!res.error) {
-      if (res.data.token) {
+      if (res.data.token && res.data.oauth_register) {
         _storeAuth.loginToken = res.data.token;
         _storeChatBox.reConnectWebSocket();
         _storeChatBox.fetchChatList();
         navigateTo("/");
       } else {
+        googleSignData.value = {
+          userId: res.data.userId,
+          queryString: queryString,
+        };
         navigateTo(`/auth/google-signup?${queryString}`);
       }
     } else {

@@ -23,3 +23,5 @@ export const getGoogleAccount = () => req("GET", "/auth/google");
 // google 回傳
 export const getGoogleCallback = (queryString) =>
   req("GET", `/auth/google/callback?${queryString}`);
+export const postGoogleSignUp = (userId, data) =>
+  req("POST", `auth/google/sign-in/${userId}`, data);
