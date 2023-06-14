@@ -48,7 +48,7 @@
             </v-list-item>
 
             <!-- 查看更多 -->
-            <v-list-item class="sp-px-2" v-if="btnShowMore">
+            <v-list-item class="sp-px-2" v-if="isShowMoreBtn">
                 <v-list-item-title class="sp-text-center">
                     <v-btn variant="plain" :ripple="false" @click="getMore" size="small">
                         查看更多...
@@ -71,7 +71,7 @@ const { fromNow } = useMoment()
 const { logDebug, logError } = useLog()
 const loading = ref(true)
 const noData = ref(false)
-const btnShowMore = ref(false)
+const isShowMoreBtn = ref(false)
 const notiList = ref([])
 const _work = '系統通知'
 const _tagsColor = {
@@ -163,9 +163,12 @@ const getNotiList = () => {
                 }
                 //擷取要顯示的筆數
                 notiList.value = result.slice(0, notiLength.value)
+
                 //是否顯示查看更多按鈕
-                if (notiLength.value >= result.length) {
-                    btnShowMore.value = false
+                if (notiLength.value < result.length) {
+                    isShowMoreBtn.value = true
+                }else{
+                    isShowMoreBtn.value = false
                 }
 
                 // 找出未讀的項目
