@@ -170,19 +170,11 @@
   const pageRoot = ref("");
   const FuncGoogleLogin = () => {
     window.open(
-      `${import.meta.env.VITE_BACKEND_ROOT_DEV}auth/google`,
+      `${import.meta.env.VITE_BACKEND_ROOT_DEV}/auth/google`,
       "_top",
       ""
     );
   };
-  //for google login
-  let messagePort;
-  const { port1, port2 } = new MessageChannel();
-  messagePort = port1;
-  const messageEvent = (event) => {};
-  onMounted(() => {
-    pageRoot.value = window.location.origin;
-  });
 </script>
 
 <style lang="scss" scoped></style>

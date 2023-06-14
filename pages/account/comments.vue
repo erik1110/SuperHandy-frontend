@@ -22,6 +22,9 @@
 
 <script setup>
   import { getCategories } from "@/services/apis/general";
+  import { storeFullOverlay } from "~/stores/storeFullOverlay";
+  const _storeFullOverlay = storeFullOverlay();
+  _storeFullOverlay.open();
   const route = useRoute();
   const commentTabs = ref("poster");
   const categories = useState("categories");

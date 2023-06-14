@@ -118,6 +118,8 @@
 </template>
 <script setup>
   import { getTasksPosterManagement } from "@/services/apis/tasks";
+  import { storeFullOverlay } from "~/stores/storeFullOverlay";
+  const _storeFullOverlay = storeFullOverlay();
   const groupTab = useState("all");
   const postList = ref({
     all: [],
@@ -138,6 +140,7 @@
     other: [],
   };
   let FuncGetTasksPosterManagement = async () => {
+    _storeFullOverlay.open();
     let res = await getTasksPosterManagement();
     if (!res.error) {
       let resArray = res.data;
@@ -171,6 +174,7 @@
           }
         }
       });
+      _storeFullOverlay.close();
     }
   };
   let colorControl = (status) => {

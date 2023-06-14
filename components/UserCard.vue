@@ -82,48 +82,51 @@
 </template>
 
 <script setup>
-import {
-  postTasksManagementHelper,
-  getTasksManagementDetail,
-} from "@/services/apis/tasks";
-// import {storeAuth} from "@/stores/storeAuth"
-import { storeChatBox } from "@/stores/storeChatBox";
-// const _storeAuth = storeAuth()
-const _storeChatBox = storeChatBox();
+  import {
+    postTasksManagementHelper,
+    getTasksManagementDetail,
+  } from "@/services/apis/tasks";
+  import { storeFullOverlay } from "~/stores/storeFullOverlay";
+  const _storeFullOverlay = storeFullOverlay();
+  // import {storeAuth} from "@/stores/storeAuth"
+  import { storeChatBox } from "@/stores/storeChatBox";
+  // const _storeAuth = storeAuth()
+  const _storeChatBox = storeChatBox();
 
-// const role = ref("幫手");
-const props = defineProps({
-  avatar: String,
-  completedTasks: Number,
-  completionRate: Number,
-  lastName: String,
-  rating: Object,
-  role: String,
-  taskId: String,
-  helperId: String,
-});
-const tasksChooseHelper = async function () {
-  let res = await postTasksManagementHelper(props.taskId, props.helperId);
-  if (!res.error) {
-    tasksReload();
-  }
-};
-const tasksReload = async function () {
-  let res = await getTasksManagementDetail(props.taskId);
-  if (!res.error) {
-    const taskDetail = useState("taskDetail");
-    taskDetail.value = res.data;
-  }
-};
+  // const role = ref("幫手");
+  const props = defineProps({
+    avatar: String,
+    completedTasks: Number,
+    completionRate: Number,
+    lastName: String,
+    rating: Object,
+    role: String,
+    taskId: String,
+    helperId: String,
+  });
+  const tasksChooseHelper = async function () {
+    _storeFullOverlay.open();
+    let res = await postTasksManagementHelper(props.taskId, props.helperId);
+    if (!res.error) {
+      tasksReload();
+    }
+  };
+  const tasksReload = async function () {
+    let res = await getTasksManagementDetail(props.taskId);
+    if (!res.error) {
+      const taskDetail = useState("taskDetail");
+      taskDetail.value = res.data;
+    }
+  };
 </script>
 
 <style lang="postcss" scoped>
-@import url("@/assets/css/tailwind.css");
-.card {
-  @apply sp-p-4 sp-bg-white sp-max-w-[350px] sp-min-w-[280px] sm:sp-max-w-[400px] sm:sp-min-w-[320px] sp-rounded-2xl sp-border;
-}
+  @import url("@/assets/css/tailwind.css");
+  .card {
+    @apply sp-p-4 sp-bg-white sp-max-w-[350px] sp-min-w-[280px] sm:sp-max-w-[400px] sm:sp-min-w-[320px] sp-rounded-2xl sp-border;
+  }
 
-.num {
-  @apply sp-text-h4 sp-text-primary;
-}
+  .num {
+    @apply sp-text-h4 sp-text-primary;
+  }
 </style>
