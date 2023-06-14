@@ -202,7 +202,7 @@ function calculateRadius(zoom) {
 
 const getData = async () => {
   showReFetch.value = { b: false, z: false };
-  await _storeFindTasks.fetchMapViewTasks();
+  await _storeFindTasks.fetchMapViewTasks("map");
 };
 onMounted(() => {
   getData();
