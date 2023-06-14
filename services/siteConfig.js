@@ -47,7 +47,7 @@ export const siteConfig = {
   notification: {
     showLength: 3,//顯示筆數
     isOpen: true, //是否開啟setInterval
-    intervalTime: (1000 * 60 * 1)
+    intervalTime: (1000 * 60 * 1)//60s
   }
 
 };
