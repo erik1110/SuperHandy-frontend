@@ -240,6 +240,7 @@ export const storeChatBox = defineStore("chatBox", () => {
   };
   // 更新聊天列表順序
   const updateChatList = (msgIdx)=>{
+    let renewIdx = roomList.value.findIndex(el=>el.taskId == msgIdx)
     if(renewIdx!=0){
       let removed = roomList.value.splice(renewIdx,1)
       roomList.value.unshift(removed[0])
