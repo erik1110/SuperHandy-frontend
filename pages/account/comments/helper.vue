@@ -225,7 +225,6 @@
               <v-rating
                 v-model="item.editStar"
                 class="sm:sp-flex-initial sp-flex-auto"
-                readonly
                 :readonly="!item.isEdit"
                 density="compact"
                 size="small"
