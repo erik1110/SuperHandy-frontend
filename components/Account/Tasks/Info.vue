@@ -106,19 +106,25 @@
           </div>
           <div
             class="sp-text-body sp-text-center md:sp-text-right"
-            v-if="!detail.progressBar.inProgressAt && detail.role == '案主'"
+            v-if="
+              !detail.progressBar.inProgressAt &&
+              detail.role == '案主' &&
+              detail.status != '未成立'
+            "
           >
             <VBtn
               color="secondary"
               class="sp-mr-2"
               size="small"
               @click="FuncEditTask()"
+              :loading="eventLoading"
               >編輯任務</VBtn
             >
             <VBtn
               color="v-gray-bg"
               class="sp-mr-2"
               size="small"
+              :loading="eventLoading"
               v-if="detail.status != '已下架'"
               @click="FuncUnpublishTask()"
               >下架任務</VBtn
@@ -127,6 +133,7 @@
               color="v-gray-bg"
               class="sp-mr-2"
               size="small"
+              :loading="eventLoading"
               v-if="detail.status == '已下架'"
               @click="FuncPublishTask()"
               >上架任務</VBtn
@@ -134,13 +141,24 @@
             <VBtn
               color="v-gray-bg-secondary"
               size="small"
-              @click="FuncDeleteTask()"
+              :loading="eventLoading"
+              @click="FuncCheckDeleteTask()"
               >刪除任務</VBtn
             >
           </div>
         </div>
       </VCardText>
     </VCard>
+    <VDialog v-model="isDeleteTaskDialogOpen" width="auto" max-width="600">
+      <VCard>
+        <VCardTitle>刪除任務</VCardTitle>
+        <VCardText> 是否確定要刪除 {{ detail.title }} 此任務? </VCardText>
+        <div class="sp-flex sp-justify-evenly sp-pt-6 sp-pb-4">
+          <VBtn color="v-gray-bg" @click="FuncCloseDeleteTask">取消</VBtn>
+          <VBtn color="primary" @click="FuncDeleteTask">確認</VBtn>
+        </div>
+      </VCard>
+    </VDialog>
   </div>
 </template>
 <script setup>
@@ -149,9 +167,11 @@
     getTasksManagementDetail,
     deleteTasksManagement,
   } from "@/services/apis/tasks";
+  const eventLoading = ref(false);
   const detail = useState("taskDetail");
   const isSnackbarOpen = useState("isSnackbarOpen");
   const snackbarMessage = useState("snackbarMessage");
+  const isDeleteTaskDialogOpen = ref(false);
   const tasksReload = async function () {
     let res = await getTasksManagementDetail(detail.value.taskId);
     if (!res.error) {
@@ -159,16 +179,20 @@
     }
   };
   const FuncUnpublishTask = async function () {
+    eventLoading.value = true;
     let res = await postTaskUnpublish(detail.value.taskId);
     if (!res.error) {
+      eventLoading.value = false;
       isSnackbarOpen.value = true;
       snackbarMessage.value = "下架成功!";
       tasksReload();
     }
   };
   const FuncPublishTask = async function () {
+    eventLoading.value = true;
     let res = await postTaskPublish(detail.value.taskId);
     if (!res.error) {
+      eventLoading.value = false;
       isSnackbarOpen.value = true;
       snackbarMessage.value = "上架成功!";
       tasksReload();
@@ -183,12 +207,21 @@
       navigateTo(`/post-task/${detail.value.taskId}?status=unpublished`);
     }
   };
+  const FuncCheckDeleteTask = function () {
+    isDeleteTaskDialogOpen.value = true;
+  };
+  const FuncCloseDeleteTask = function () {
+    isDeleteTaskDialogOpen.value = false;
+  };
   const FuncDeleteTask = async function () {
+    eventLoading.value = true;
+    isDeleteTaskDialogOpen.value = false;
     let res = await deleteTasksManagement(detail.value.taskId);
     if (!res.error) {
       isSnackbarOpen.value = true;
       snackbarMessage.value = "刪除成功!";
       setTimeout(function () {
+        eventLoading.value = false;
         navigateTo("/account/tasks/poster");
       }, 1000);
     }

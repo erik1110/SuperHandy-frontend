@@ -8,7 +8,6 @@
           <UserCard
             class="sp-m-2"
             :lastName="item.lastName"
-            :avatar="'https://picsum.photos/150'"
             :completedTasks="item.completedTasks"
             :completionRate="item.completionRate"
             role="幫手"
@@ -32,7 +31,12 @@
         if (val.role == "幫手") {
           showMessage.value = "等待媒合中...";
         } else if (val.role == "案主") {
-          showUser.value = val.helpers;
+          showUser.value = val.helpers.filter(
+            (item) => item.status == "等待媒合中"
+          );
+          if (showUser.value.length == 0) {
+            showMessage.value = "等待媒合中...";
+          }
         }
         show.value = true;
       } else {

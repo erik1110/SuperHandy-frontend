@@ -17,7 +17,7 @@
             <NuxtLink
               class="sp-mb-4 sp-py-2 sp-px-4 sp-flex sp-items-center"
               :class="{ active: activeRouter == 'task' }"
-              to="/account/tasks"
+              to="/account/tasks/poster"
             >
               <!-- <i class="sidebar-icon task-icon"></i> -->
               <DocumentDuplicateIcon class="sp-icon-sm sidebar_icon" />
@@ -26,7 +26,7 @@
             <NuxtLink
               class="sp-mb-4 sp-py-2 sp-px-4 sp-flex sp-items-center"
               :class="{ active: activeRouter == 'comment' }"
-              to="/account/comments"
+              to="/account/comments/poster"
             >
               <!-- <i class="sidebar-icon comment-icon"></i> -->
               <StarIcon class="sp-icon-sm sidebar_icon" />

@@ -45,6 +45,10 @@ export const useHttp = () => {
             },
           });
         } else if (response._data.error.name == "40302") {
+          _storeGlobal.confirmHandler({
+            open: true,
+            content: "您沒有權限查詢此畫面!",
+          });
           navigateTo("/");
         }
         console.log(response, "onResponseError");
