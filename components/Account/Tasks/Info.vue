@@ -97,7 +97,7 @@
             <span>
               <LightBox
                 v-for="(item, index) in detail.imgUrls"
-                class="sp-mr-2 sp-inline-block sp-cursor-pointer sp-w-[90px] sp-h-[90px]"
+                class="sp-mr-2 sp-mb-2 sp-inline-block sp-cursor-pointer sp-w-[90px] sp-h-[90px]"
                 :key="index"
                 :image="item"
                 :bigImage="item"
