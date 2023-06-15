@@ -91,6 +91,7 @@
 import { storeToRefs } from "pinia";
 import { siteConfig } from "@/services/siteConfig";
 import { storeNotification } from "@/stores/storeNotification";
+import { storeAuth } from "@/stores/storeAuth";
 import { storeFindTasks } from "@/stores/storeFindTasks";
 const _storeFindTasks = storeFindTasks();
 
@@ -119,7 +120,6 @@ const humburgerItems = [
   { title: "刊登任務", to: "/post-task/-1" },
 ];
 // Auth
-import { storeAuth } from "@/stores/storeAuth";
 const _storeAuth = storeAuth();
 
 const logout = () => {
@@ -128,6 +128,8 @@ const logout = () => {
 };
 
 const noticeMenuUpdate = (event) => {
+  console.log({ event });
+  _storeNotification.noticeIsOpen = event;
   if (event) {
     document.documentElement.style.overflow = "hidden";
   } else {

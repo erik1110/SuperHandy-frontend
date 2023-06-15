@@ -252,7 +252,7 @@ export const storeChatBox = defineStore("chatBox", () => {
     showBadge.value = !!hasUnreadCount
   }
   // 路由更換自動關閉聊天室
-  watch(()=>route.path,(val)=>{
+  watch(route,(val)=>{
     if(showChat.value) showChat.value = false
   })
 

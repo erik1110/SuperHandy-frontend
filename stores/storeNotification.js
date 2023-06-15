@@ -24,11 +24,13 @@ export const storeNotification = defineStore("storeNotification", () => {
       isHasUnRead.value = false
     }
   }
+  const noticeIsOpen = ref(false)
 
   return {
     notiLength,
     addNotiLength,
     isHasUnRead,
-    hasUnRead
+    hasUnRead,
+    noticeIsOpen
   };
 });
