@@ -15,44 +15,44 @@
               disabled
             ></v-rating>
           </div>
-          <div class="sp-w-full lg:sp-w-auto sp-flex">
+          <div class="sp-w-full lg:sp-w-auto sp-flex sp-flex-wrap">
             <div
-              class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
+              class="starButton"
               :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 0 }"
               @click="activeGroup = 0"
             >
               全部({{ posterStars.totalCount }})
             </div>
             <div
-              class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
+              class="starButton"
               :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 5 }"
               @click="activeGroup = 5"
             >
               五星({{ posterStars["5"] }})
             </div>
             <div
-              class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
+              class="starButton"
               :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 4 }"
               @click="activeGroup = 4"
             >
               四星({{ posterStars["4"] }})
             </div>
             <div
-              class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
+              class="starButton"
               :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 3 }"
               @click="activeGroup = 3"
             >
               三星({{ posterStars["3"] }})
             </div>
             <div
-              class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
+              class="starButton"
               :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 2 }"
               @click="activeGroup = 2"
             >
               二星({{ posterStars["2"] }})
             </div>
             <div
-              class="sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-border-solid sp-rounded-4 sp-py-2 sp-px-4 sp-mr-2 sp-text-body"
+              class="starButton"
               :class="{ 'sp-text-white sp-bg-[#5658FB]': activeGroup == 1 }"
               @click="activeGroup = 1"
             >
@@ -78,18 +78,18 @@
       </VCardText>
     </VCard>
     <VCard class="mb-4" v-for="(item, index) in commentGroup" :key="index">
-      <VCardText>
+      <VCardText class="sp-relative">
         <div class="">#{{ item.category }}</div>
-        <div class="sp-flex sp-my-2">
-          <div class="sp-mr-4 sp-shrink-0">
+        <div class="sp-flex sp-my-2 md:sp-flex-row sp-flex-col">
+          <div class="sp-mb-4 md:sp-mb-0 md:sp-mr-4 sp-shrink-0">
             <img
-              class="sp-shrink-0 sp-grow-0"
+              class="sp-shrink-0 sp-grow-0 sp-object-cover sp-w-[120px] sp-h-[120px]"
               width="120"
               height="120"
               :src="
                 item.imgUrls.length > 0
                   ? item.imgUrls[0]
-                  : 'https://picsum.photos/120'
+                  : '/images/sp_icon.png'
               "
             />
           </div>
@@ -113,33 +113,39 @@
               <span class="sp-shrink sp-w-[40px]">幫手</span>
               <span class="">{{ item.helper }}</span>
             </div>
-            <div class="sp-inline-flex sp-text-body">
+            <div class="sp-flex md:sp-inline-flex sp-text-body">
               <span class="sp-shrink sp-w-[40px]">刊登</span>
               <span class="">{{
                 new Date(item.publishedAt).toLocaleString()
               }}</span>
             </div>
-            <v-btn
-              color="primary"
-              outlined
-              class="sp--translate-y-2 sp-px-4 sp-py-2 sp-text-center sp-border-2 sp-border-black sp-border-solid sp-float-right"
-              @click="gotoDetail(item.taskId)"
+            <div
+              class="sm:sp--translate-y-2 sp-px-[1rem] sm:sp-px-0 sp-absolute sp-bottom-[10px] sp-left-0 sm:sp-relative sp-w-full sm:sp-w-auto sm:sp-float-right"
             >
-              查看詳情
-            </v-btn>
+              <v-btn
+                color="primary"
+                outlined
+                class="sp-px-4 sp-py-2 sp-w-full sp-text-center"
+                @click="gotoDetail(item.taskId)"
+              >
+                查看詳情
+              </v-btn>
+            </div>
           </div>
         </div>
-        <div class="sp-border-2 sp-border-gray-400 sp-border-solid">
+        <div
+          class="sp-hidden md:sp-block sp-border-2 sp-border-gray-400 sp-border-solid"
+        >
           <div
             class="d-flex sp-items-center sp-border-b-2 sp-border-gray-400 sp-border-solid"
           >
             <div
-              class="sp-px-4 sp-py-2 sp-border-r-2 sp-border-gray-400 sp-border-solid"
+              class="sp-px-4 sp-h-[44px] sp-py-3 sp-border-r-2 sp-border-gray-400 sp-border-solid"
             >
               幫手評價
             </div>
             <div
-              class="sp-px-4 sp-py-1 sp-border-r-2 sp-border-gray-400 sp-border-solid sp-overflow-hidden"
+              class="sp-px-4 sp-h-[44px] sp-py-2 sp-border-r-2 sp-border-gray-400 sp-border-solid sp-overflow-hidden"
             >
               <v-rating
                 v-model="item.helperReview.star"
@@ -152,7 +158,7 @@
             </div>
             <div class="sp-px-4 sp-py-2 sp-inline-flex sp-flex-1">
               <input
-                class="sp-h-[20px] sp-outline-none sp-flex-1"
+                class="sp-h-[28px] sp-outline-none sp-flex-1"
                 v-model="item.helperReview.comment"
                 disabled
               />
@@ -160,12 +166,12 @@
           </div>
           <div class="d-flex sp-items-center">
             <div
-              class="sp-px-4 sp-py-2 sp-border-r-2 sp-border-gray-400 sp-border-solid"
+              class="sp-px-4 sp-h-[44px] sp-py-3 sp-border-r-2 sp-border-gray-400 sp-border-solid"
             >
               案主評價
             </div>
             <div
-              class="sp-px-4 sp-py-1 sp-border-r-2 sp-border-gray-400 sp-border-solid sp-overflow-hidden"
+              class="sp-px-4 sp-h-[44px] sp-py-2 sp-border-r-2 sp-border-gray-400 sp-border-solid sp-overflow-hidden"
             >
               <v-rating
                 v-model="item.editStar"
@@ -178,7 +184,7 @@
             </div>
             <div class="sp-px-4 sp-py-2 sp-inline-flex sp-flex-1">
               <input
-                class="sp-h-[20px] sp-outline-none sp-flex-1"
+                class="sp-h-[28px] sp-outline-none sp-flex-1"
                 v-model="item.editComment"
                 :disabled="!item.isEdit"
                 :placeholder="item.isEdit ? '請輸入評論...' : ''"
@@ -186,7 +192,7 @@
               <div v-if="item.posterReview.status == '待評價'">
                 <PencilSquareIcon
                   v-if="!item.isEdit"
-                  class="sp-inline-block sp-w-[20px] sp-h-[20px] sp-cursor-pointer"
+                  class="sp-inline-block sp-w-[28px] sp-h-[20px] sp-cursor-pointer"
                   @click="item.isEdit = true"
                 ></PencilSquareIcon>
                 <VBtn
@@ -194,7 +200,7 @@
                   class="sp-mr-2"
                   color="secondary"
                   outlined
-                  size="x-small"
+                  size="small"
                   @click="cancelEdit(item)"
                   >取消</VBtn
                 >
@@ -202,7 +208,77 @@
                   v-if="item.isEdit"
                   color="primary"
                   outlined
-                  size="x-small"
+                  size="small"
+                  @click="postComment(item)"
+                  >送出</VBtn
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sp-block md:sp-hidden">
+          <div
+            class="sp-border-2 sp-border-gray-400 sp-border-solid sp-p-2 sp-mb-4"
+          >
+            <div class="sp-mb-2 sp-text-body">幫手評價</div>
+            <div class="sp-mb-2">
+              <v-rating
+                v-model="item.helperReview.star"
+                class="sm:sp-flex-initial sp-flex-auto"
+                readonly
+                density="compact"
+                size="small"
+                color="v-purple"
+              ></v-rating>
+            </div>
+            <div class="sp-mb-2 sp-text-body">
+              {{ item.helperReview.comment }}
+            </div>
+          </div>
+          <div
+            class="sp-border-2 sp-border-gray-400 sp-border-solid sp-p-2 sp-mb-[40px] md:sp-mb-0"
+          >
+            <div class="sp-mb-2 sp-text-body">案主評價</div>
+            <div class="sp-mb-2">
+              <v-rating
+                v-model="item.editStar"
+                class="sm:sp-flex-initial sp-flex-auto"
+                readonly
+                :readonly="!item.isEdit"
+                density="compact"
+                size="small"
+                color="v-purple"
+              ></v-rating>
+            </div>
+            <div
+              class="sp-mb-2 sp-text-body sp-flex sp-border-2 sp-border-gray-400 sp-border-solid sp-p-2"
+            >
+              <input
+                class="sp-h-[28px] sp-outline-none sp-flex-1"
+                v-model="item.editComment"
+                :disabled="!item.isEdit"
+                :placeholder="item.isEdit ? '請輸入評論...' : ''"
+              />
+              <div v-if="item.posterReview.status == '待評價'">
+                <PencilSquareIcon
+                  v-if="!item.isEdit"
+                  class="sp-inline-block sp-w-[28px] sp-h-[20px] sp-cursor-pointer"
+                  @click="item.isEdit = true"
+                ></PencilSquareIcon>
+                <VBtn
+                  v-if="item.isEdit"
+                  class="sp-mr-2"
+                  color="secondary"
+                  outlined
+                  size="small"
+                  @click="cancelEdit(item)"
+                  >取消</VBtn
+                >
+                <VBtn
+                  v-if="item.isEdit"
+                  color="primary"
+                  outlined
+                  size="small"
                   @click="postComment(item)"
                   >送出</VBtn
                 >
@@ -232,6 +308,7 @@
   const commentGroup = ref([]);
   const isSnackbarOpen = useState("isSnackbarOpen");
   const snackbarMessage = useState("snackbarMessage");
+  const commentTabs = useState("commentTabs");
   const FuncGetAccountCommentsStar = async function () {
     let res = await getAccountCommentsStar("案主");
     if (!res.error) {
@@ -240,6 +317,7 @@
     }
   };
   FuncGetAccountCommentsStar();
+  commentTabs.value = "poster";
   const searchComments = async function () {
     let query = {
       role: "案主",
@@ -302,3 +380,9 @@
     navigateTo(`/account/tasks/${taskId}`);
   };
 </script>
+<style lang="postcss" scoped>
+  @import url("@/assets/css/tailwind.css");
+  .starButton {
+    @apply sp-cursor-pointer sp-border-2 sp-border-gray-100 sp-mb-2 sp-border-solid sp-py-2 sp-px-4 sp-mr-2 sp-text-body sp-flex-shrink-0;
+  }
+</style>

@@ -26,7 +26,7 @@
   const _storeFullOverlay = storeFullOverlay();
   _storeFullOverlay.open();
   const route = useRoute();
-  const commentTabs = ref("poster");
+  const commentTabs = useState("commentTabs", () => ref("poster"));
   const categories = useState("categories");
   if (route.path == "/account/comments") {
     navigateTo("/account/comments/poster");

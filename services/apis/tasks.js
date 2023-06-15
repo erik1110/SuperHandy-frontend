@@ -13,7 +13,7 @@ export const getTasksPosterManagement = (queryString) =>
 export const getTasksHelperManagement = (queryString) =>
   req(
     "GET",
-    `/tasks/management/poster/query${queryString}`,
+    `/tasks/management/helper/query${queryString}`,
     {},
     { auth: true }
   );
