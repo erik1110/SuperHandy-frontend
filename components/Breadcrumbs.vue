@@ -51,15 +51,23 @@ const makeBreadcrumbs = (urlPathArr) => {
 
   let lastNode = breadcrumbsArr.pop();
 
-  // - 處理我的帳號:"首頁/會員/我的帳號" -
+  // - 不規則處理:我的帳號:"首頁/會員/我的帳號" -
   if (lastNode.title === "會員") {
     breadcrumbsArr.push(lastNode);
-    breadcrumbsArr.push({
+    breadcrumbsArr.push({ //加入[我的帳號]
       title: "我的帳號",
       disabled: false,
       href: lastNode.href,
     });
     lastNode = breadcrumbsArr.pop();
+  }
+  // - 不規則處理:任務詳情:"首頁/找任務/任務詳情" -
+  if (lastNode.title === "任務詳情") {
+    breadcrumbsArr.push({ //加入[找任務]
+      title: "找任務",
+      disabled: false,
+      href: siteConfig.linkPaths.findTasksList.to,
+    });
   }
 
   // - 最後一個要disabled -
