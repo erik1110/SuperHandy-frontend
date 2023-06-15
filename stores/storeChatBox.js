@@ -251,10 +251,11 @@ export const storeChatBox = defineStore("chatBox", () => {
       )
     showBadge.value = !!hasUnreadCount
   }
-  // 路由更換自動關閉聊天室
-  watch(()=>route.path,(val)=>{
-    if(showChat.value) showChat.value = false
-  })
+  // // 路由更換自動關閉聊天室
+  // watch(()=>route.path,(val)=>{
+  //   console.log({val});
+  //   if(showChat.value) showChat.value = false
+  // })
 
   onMounted(async () => {
     socketConnect();
