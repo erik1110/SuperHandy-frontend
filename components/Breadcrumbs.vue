@@ -4,65 +4,84 @@
 
 <script setup>
 import { siteConfig } from "@/services/siteConfig";
-
-const linkPaths = siteConfig.linkPaths;
-const breadcrumbsCn = siteConfig.breadcrumbsCn;
 const route = useRoute();
 const home = {
-  title: breadcrumbsCn.home,
+  title: siteConfig.breadcrumbs.cnName.home,
   disabled: false,
   href: "/",
 };
-const breadcrumbItems = computed(() => {
-  const now = route.path;
-  if (now && now === linkPaths.home.to) {
-    return [];
-  }
 
+// - 取得URL路徑並解析為陣列 -
+const parseUrlPathToArray = (nowPath) => {
+  let pathArr = [];
+  if (!nowPath) return pathArr;
+  if (nowPath === '/' || nowPath === '/index') return pathArr;
+  pathArr = nowPath.split("/");
+  pathArr.shift();
+  return pathArr;
+}
+
+// - 製作麵包屑物件 -
+const makeBreadcrumbs = (urlPathArr) => {
+
+  let breadcrumbsArr = [];
+  if (!urlPathArr) return breadcrumbsArr;
+  if (urlPathArr.length === 0) return breadcrumbsArr;
+  breadcrumbsArr.push(home);
   let href = "";
-  let result = [home];
-  const nowArr = now.split("/");
-  nowArr.shift();
-  nowArr.forEach((element) => {
-    href = href + `/${element}`;
 
-    const value = breadcrumbsCn[element];
-    if (value) {
-      result.push({
-        title: value,
-        disabled: false,
-        href: href,
-      });
+  for (let i = 0; i < urlPathArr.length; ++i) {
+    const item = urlPathArr[i];
+    const cnName = siteConfig.breadcrumbs.cnName[item];
+    if (!cnName) continue;
+
+    href = href + `/${item}`;
+    // - 不規則處理:href替換 -
+    const irrHerfs = siteConfig.breadcrumbs.irregular.herf;
+    if (irrHerfs[item]) {
+      href = irrHerfs[item];
     }
-  });
+    breadcrumbsArr.push({
+      title: cnName,
+      disabled: false,
+      href: href,
+    })
+  }// for-end
 
-  // - 不規則處理 -
-  let last = result.pop();
 
-  //1.會員
-  if (last.title === "會員") {
-    result.push(last);
-    result.push({
+  let lastNode = breadcrumbsArr.pop();
+
+  // - 不規則處理:我的帳號:"首頁/會員/我的帳號" -
+  if (lastNode.title === "會員") {
+    breadcrumbsArr.push(lastNode);
+    breadcrumbsArr.push({ //加入[我的帳號]
       title: "我的帳號",
       disabled: false,
-      href: last.href,
+      href: lastNode.href,
     });
-    last = result.pop();
+    lastNode = breadcrumbsArr.pop();
   }
-
-  //2.任務詳情
-  if (last.title === "任務詳情") {
-    result.push({
+  // - 不規則處理:任務詳情:"首頁/找任務/任務詳情" -
+  if (lastNode.title === "任務詳情") {
+    breadcrumbsArr.push({ //加入[找任務]
       title: "找任務",
       disabled: false,
       href: siteConfig.linkPaths.findTasksList.to,
     });
-    result.push(last);
-    last = result.pop();
   }
 
-  last.disabled = true;
-  result.push(last);
-  return result;
-});
+  // - 最後一個要disabled -
+  lastNode.disabled = true;
+  breadcrumbsArr.push(lastNode);
+
+  return breadcrumbsArr;
+};
+
+
+const breadcrumbItems = computed(() => {
+  const nowPath = route.path;
+  const urlPathArr = parseUrlPathToArray(nowPath);
+  return makeBreadcrumbs(urlPathArr);
+})
+
 </script>

@@ -18,8 +18,7 @@
         </v-row>
       </v-container>
       <!-- 提示訊息 -->
-      <v-alert v-if="alertMessage" :color="isApplyTaskSuccess ? 'deep-purple-accent-4' : 'error'" variant="tonal"
-        class="text-center">
+      <v-alert v-if="alertMessage" :color="alertMessageColor" variant="tonal" class="text-center">
         <v-icon v-if="isApplyTaskSuccess">mdi-check-circle</v-icon>
         <v-icon v-else>mdi-alert-circle</v-icon>
         {{ alertMessage }}
@@ -64,14 +63,19 @@ const taskData = ref({
   imgUrls: []
 });
 const posterInfoData = ref({});
-const alertMessage = ref('');
 const _storeFullOverlay = storeFullOverlay()
 const isApplyTaskSuccess = ref(false)
 const btnSubmitLoading = ref(false);
 const btnSubmitDisabled = ref(false);
 const _work = '任務詳情'
 let taskId = ''
-
+const alertColors = {
+  success: 'deep-purple-accent-4',
+  fail: 'error',
+  warn: 'amber-darken-4'
+}
+const alertMessage = ref('');
+const alertMessageColor = ref('')
 
 
 // - 我要接案 -
@@ -84,6 +88,7 @@ const apply = async () => {
     logDebug(_work, 'apply.taskId', taskId)
     if (!checkTaskId(taskId)) {
       alertMessage.value = "任務編號不正確"
+      alertMessageColor.value = alertColors.fail
       return;
     }
 
@@ -94,14 +99,17 @@ const apply = async () => {
     const response = await postApplyTask(taskId);
     if (response && !checkRespStatus(response)) {
       alertMessage.value = response.message
+      alertMessageColor.value = alertColors.fail
       return;
     }
     isApplyTaskSuccess.value = true
     alertMessage.value = `接案申請已成功送出，${response.message}`
+    alertMessageColor.value = alertColors.success
 
   } catch (error) {
     logError(_work, { error })
     alertMessage.value = "接收任務失敗"
+    alertMessageColor.value = alertColors.fail
   } finally {
     _storeFullOverlay.close()
     btnSubmitLoading.value = false
@@ -118,6 +126,7 @@ const init = async () => {
     logDebug(_work, 'init.taskId', taskId)
     if (!checkTaskId(taskId)) {
       alertMessage.value = "任務編號不正確"
+      alertMessageColor.value = alertColors.fail
       return;
     }
 
@@ -127,17 +136,32 @@ const init = async () => {
     const response = await getTasksDetail(taskId);
     if (response && !checkRespStatus(response)) {
       alertMessage.value = response.message
+      alertMessageColor.value = alertColors.fail
       return;
     }
 
     taskData.value = response.data;
     posterInfoData.value = response.data.posterInfo;
+    // 2023-06-15 response增加"relation"
+    if (response.data?.relation) {
+      btnSubmitDisabled.value = true
+      alertMessageColor.value = alertColors.warn
+      if (response.data.relation === 'hoster') {
+        alertMessage.value = '無法應徵自己的任務'
+      }
+      if (response.data.relation === 'helper') {
+        alertMessage.value = '已經應徵過此任務'
+      }
+      return;
+    }
+
     isApplyTaskSuccess.value = false
     btnSubmitDisabled.value = false
 
   } catch (error) {
     logError(_work, { error })
     alertMessage.value = "取得任務內容失敗"
+    alertMessageColor.value = alertColors.fail
   } finally {
     _storeFullOverlay.close()
   }
