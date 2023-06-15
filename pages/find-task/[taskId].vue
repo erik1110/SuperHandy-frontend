@@ -143,7 +143,7 @@ const init = async () => {
     taskData.value = response.data;
     posterInfoData.value = response.data.posterInfo;
     // 2023-06-15 response增加"relation"
-    if (response.data?.relation) {
+    if (response.data.relation !== undefined) {
       btnSubmitDisabled.value = true
       alertMessageColor.value = alertColors.warn
       if (response.data.relation === 'hoster') {
