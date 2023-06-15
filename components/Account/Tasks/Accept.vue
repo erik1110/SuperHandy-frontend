@@ -178,6 +178,7 @@
   const fileInput = ref(null);
   const isSnackbarOpen = useState("isSnackbarOpen", () => ref(false));
   const snackbarMessage = useState("snackbarMessage", () => ref(""));
+  const eventLoading = ref(false);
   let FuncAcceptControll = function (val) {
     if (val.taskId && val.submittedInfo.length > 0) {
       expendValue.value.push(
@@ -207,21 +208,6 @@
   const cancelRefuse = function () {
     isRefuseAreaOpen.value = false;
   };
-  const submitRefuse = async function (data) {
-    if (
-      data.submittedInfo.imgUrls.length == 0 ||
-      data.submittedInfo.comment.length == 0
-    ) {
-      isSnackbarOpen.value = true;
-      snackbarMessage.value = "請確認必填資訊!";
-      return false;
-    }
-    _storeFullOverlay.open();
-    let res = await postTasksManagementPosterRefuse(detail.value.taskId, data);
-    if (!res.error) {
-      tasksReload();
-    }
-  };
   const uploadFile = function (e) {
     const file = e.target.files.item(0);
     tempFile.value = e.target.files[0];
@@ -248,6 +234,7 @@
   const prepareSubmit = async function () {
     let imageUrls = [];
     let data = {};
+    _storeFullOverlay.open();
     if (acceptImages.value.length == 0) {
       data = {
         submittedInfo: {
@@ -292,6 +279,21 @@
       });
     }
   };
+  const submitRefuse = async function (data) {
+    if (
+      data.submittedInfo.imgUrls.length == 0 ||
+      data.submittedInfo.comment.length == 0
+    ) {
+      isSnackbarOpen.value = true;
+      snackbarMessage.value = "請確認必填資訊!";
+      _storeFullOverlay.close();
+      return false;
+    }
+    let res = await postTasksManagementPosterRefuse(detail.value.taskId, data);
+    if (!res.error) {
+      tasksReload();
+    }
+  };
   const submitHelperAccept = async function (data) {
     console.log(data);
     if (
@@ -300,6 +302,7 @@
     ) {
       isSnackbarOpen.value = true;
       snackbarMessage.value = "請確認必填資訊!";
+      _storeFullOverlay.close();
       return false;
     }
     _storeFullOverlay.open();

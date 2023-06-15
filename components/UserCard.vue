@@ -8,7 +8,10 @@
           class="sm:sp-w-full sp-w-[90px] sp-h-[90px] sm:sp-min-w-[150px] sm:sp-min-h-[150px] sp-rounded-lg sp-overflow-hidden"
         >
           <!-- Formal -->
-          <v-img :src="props.avatar" class="sp-w-full sp-h-full" cover></v-img>
+          <img
+            :src="props.avatar ? props.avatar : '/images/sp_icon.png'"
+            class="sp-w-full sp-h-full sp-object-cover"
+          />
           <!-- -----Test------ -->
           <!-- <v-img
             src="https://source.unsplash.com/random/600x600/?person"
@@ -105,6 +108,7 @@
     helperId: String,
   });
   const tasksChooseHelper = async function () {
+    //when detail watch value, overlay will close
     _storeFullOverlay.open();
     let res = await postTasksManagementHelper(props.taskId, props.helperId);
     if (!res.error) {

@@ -30,7 +30,7 @@
   const _storeFullOverlay = storeFullOverlay();
   _storeFullOverlay.open();
   const route = useRoute();
-  const identityTabs = ref("");
+  const identityTabs = useState("identityTabs", () => ref(""));
   if (route.path == "/account/tasks") {
     navigateTo("/account/tasks/poster");
     identityTabs.value = "account-tasks-index-poster";
@@ -38,11 +38,19 @@
   onMounted(() => {
     if (route.path != "/account/tasks") {
       identityTabs.value = route.name;
+    } else {
+      console.log("catch me");
     }
   });
   const FuncPageRouter = function (route) {
     navigateTo(route);
   };
+  watch(
+    () => route,
+    (val) => {
+      console.log(val);
+    }
+  );
 </script>
 
 <style lang="scss" scoped></style>

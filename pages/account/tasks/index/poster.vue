@@ -70,7 +70,7 @@
               :src="
                 item.imgUrls.length > 0
                   ? item.imgUrls[0]
-                  : 'https://picsum.photos/120'
+                  : '/images/sp_icon.png'
               "
               height="100%"
             />
@@ -94,7 +94,7 @@
                   ),
                 }"
               >
-                <span>過期</span>
+                <span>到期</span>
                 <span class="expired"
                   >{{ new Date(item.expiredAt).toLocaleString() }}
                 </span>
@@ -128,6 +128,7 @@
   import { getTasksPosterManagement } from "@/services/apis/tasks";
   import { storeFullOverlay } from "~/stores/storeFullOverlay";
   const _storeFullOverlay = storeFullOverlay();
+  const identityTabs = useState("identityTabs");
   const groupTab = useState("all");
   const searchText = ref("");
   const postList = ref({
@@ -149,6 +150,7 @@
     other: [],
   };
   let FuncGetTasksPosterManagement = async () => {
+    identityTabs.value = "account-tasks-index-poster";
     _storeFullOverlay.open();
     let queryString = "?limit=100";
     if (searchText.value.length != 0) {

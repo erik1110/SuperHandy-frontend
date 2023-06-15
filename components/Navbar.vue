@@ -88,84 +88,84 @@
   </v-app-bar>
 </template>
 <script setup>
-import { storeToRefs } from "pinia";
-import { siteConfig } from "@/services/siteConfig";
-import { storeNotification } from "@/stores/storeNotification";
-import { storeAuth } from "@/stores/storeAuth";
-import { storeFindTasks } from "@/stores/storeFindTasks";
-const _storeFindTasks = storeFindTasks();
+  import { storeToRefs } from "pinia";
+  import { siteConfig } from "@/services/siteConfig";
+  import { storeNotification } from "@/stores/storeNotification";
+  import { storeAuth } from "@/stores/storeAuth";
+  import { storeFindTasks } from "@/stores/storeFindTasks";
+  const _storeFindTasks = storeFindTasks();
 
-const route = useRoute();
-// Search
-const searchSubmit = async () => {
-  if (!route.path.includes("find-tasks")) {
-    await navigateTo("/find-tasks/list");
-  }
-  if (route.path.includes("list")) {
-    await _storeFindTasks.fetchListViewTasks();
-  } else if (route.path.includes("map")) {
-    await _storeFindTasks.fetchMapViewTasks();
-  }
-};
-// Account Menu Data
-const items = [
-  { title: "我的帳號", to: "/account" },
-  { title: "任務管理", to: "/account/tasks" },
-  { title: "評價查看", to: "/account/comments" },
-  { title: "點數管理", to: "/account/points" },
-  // { title: "登出", to: "/auth/login" },
-];
-const humburgerItems = [
-  { title: "尋找任務", to: "/find-tasks/list" },
-  { title: "刊登任務", to: "/post-task/-1" },
-];
-// Auth
-const _storeAuth = storeAuth();
-
-const logout = () => {
-  _storeAuth.setLoginToken("");
-  navigateTo("/auth/login");
-};
-
-const noticeMenuUpdate = (event) => {
-  console.log({ event });
-  _storeNotification.noticeIsOpen = event;
-  if (event) {
-    document.documentElement.style.overflow = "hidden";
-  } else {
-    document.documentElement.style.overflow = "auto";
-  }
-};
-
-// 系統通知
-const _storeNotification = storeNotification();
-const { isHasUnRead } = storeToRefs(_storeNotification);
-const { logInfo } = useLog();
-const { hasUnRead } = storeNotification();
-const { checkIsLogin } = useSpUtility();
-let aNotiIntervalFun = null;
-onMounted(() => {
-  if (checkIsLogin()) {
-    hasUnRead();
-    if (siteConfig.notification.isOpen) {
-      logInfo(
-        "notification intervalFun start...",
-        siteConfig.notification.intervalTime
-      );
-      aNotiIntervalFun = setInterval(
-        hasUnRead,
-        siteConfig.notification.intervalTime
-      );
+  const route = useRoute();
+  // Search
+  const searchSubmit = async () => {
+    if (!route.path.includes("find-tasks")) {
+      await navigateTo("/find-tasks/list");
     }
-  }
-});
+    if (route.path.includes("list")) {
+      await _storeFindTasks.fetchListViewTasks();
+    } else if (route.path.includes("map")) {
+      await _storeFindTasks.fetchMapViewTasks();
+    }
+  };
+  // Account Menu Data
+  const items = [
+    { title: "我的帳號", to: "/account" },
+    { title: "任務管理", to: "/account/tasks/poster" },
+    { title: "評價查看", to: "/account/comments/poster" },
+    { title: "點數管理", to: "/account/points" },
+    // { title: "登出", to: "/auth/login" },
+  ];
+  const humburgerItems = [
+    { title: "尋找任務", to: "/find-tasks/list" },
+    { title: "刊登任務", to: "/post-task/-1" },
+  ];
+  // Auth
+  const _storeAuth = storeAuth();
 
-onUnmounted(() => {
-  if (aNotiIntervalFun) {
-    clearInterval(aNotiIntervalFun);
-    logInfo("notification intervalFun cancel");
-  }
-});
+  const logout = () => {
+    _storeAuth.setLoginToken("");
+    navigateTo("/auth/login");
+  };
+
+  const noticeMenuUpdate = (event) => {
+    console.log({ event });
+    _storeNotification.noticeIsOpen = event;
+    if (event) {
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.documentElement.style.overflow = "auto";
+    }
+  };
+
+  // 系統通知
+  const _storeNotification = storeNotification();
+  const { isHasUnRead } = storeToRefs(_storeNotification);
+  const { logInfo } = useLog();
+  const { hasUnRead } = storeNotification();
+  const { checkIsLogin } = useSpUtility();
+  let aNotiIntervalFun = null;
+  onMounted(() => {
+    if (checkIsLogin()) {
+      hasUnRead();
+      if (siteConfig.notification.isOpen) {
+        logInfo(
+          "notification intervalFun start...",
+          siteConfig.notification.intervalTime
+        );
+        aNotiIntervalFun = setInterval(
+          hasUnRead,
+          siteConfig.notification.intervalTime
+        );
+      }
+    }
+  });
+
+  onUnmounted(() => {
+    if (aNotiIntervalFun) {
+      clearInterval(aNotiIntervalFun);
+      logInfo("notification intervalFun cancel");
+    }
+  });
 </script>
 
 <style scoped></style>
