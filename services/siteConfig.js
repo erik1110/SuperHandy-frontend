@@ -43,7 +43,7 @@ export const siteConfig = {
     postTask: { title: "刊登任務", to: "/post-task/-1" },
     findTasksList: { title: "任務列表", to: "/find-tasks/list" },
     account: { title: "會員帳號", to: "/account" },
-    tasks: { title: "任務管理", to: "/account/tasks/poster" },
+    tasks: { title: "任務管理-任務詳情", to: "/account/tasks" },//for taskId使用
     points: { title: "點數管理", to: "/account/points" },
     pointsHistory: { title: "點數歷史", to: "/account/points/history" },
     comments: { title: "評價查看", to: "/account/comments" },

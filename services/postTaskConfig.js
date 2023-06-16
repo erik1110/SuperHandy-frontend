@@ -59,6 +59,19 @@ export const postTaskConfig = {
             locationCity: [ruleRequired],
             locationDist: [ruleRequired],
             locationAddress: [ruleRequired, ruleAddress]
+        },
+        unpublish: {
+            title: _formRules.taskTitle.rule,
+            category: [ruleRequired],
+            description: [ruleRequired, _formRules.taskDescription.rule[0]],
+            salary: [],//下架編輯時，薪水不必小於帳戶點數
+            exposurePlan: [(v) => (!!v && v.length > 1) || "必填欄位"],
+            contactInfoName: [ruleRequired, _formRules.name.rule[0]],
+            contactInfoPhone: [ruleRequired, rulePhone],
+            contactInfoEmail: [ruleRequired, ruleEmail],
+            locationCity: [ruleRequired],
+            locationDist: [ruleRequired],
+            locationAddress: [ruleRequired, ruleAddress]
         }
     },
 
