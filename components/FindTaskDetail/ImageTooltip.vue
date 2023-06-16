@@ -1,5 +1,5 @@
 <template>
-    <v-tooltip text="點擊看大圖" location="top">
+    <v-tooltip :text="text" location="top">
         <template v-slot:activator="{ props }">
             <div v-bind="props">
                 <slot></slot>
@@ -7,3 +7,6 @@
         </template>
     </v-tooltip>
 </template>
+<script setup>
+const { text } = defineProps(['text'])
+</script>
