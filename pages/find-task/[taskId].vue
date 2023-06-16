@@ -53,7 +53,7 @@
 
 <script setup>
 import { storeFullOverlay } from '@/stores/storeFullOverlay'
-import { getTasksDetail, postApplyTask } from '@/services/apis/findTasks'
+import { getTasksDetail, getTasksDetailByAuth, postApplyTask } from '@/services/apis/findTasks'
 import { siteConfig } from '@/services/siteConfig'
 
 const { checkRespStatus, checkTaskId, checkIsLogin, getTaskId } = useSpUtility()
@@ -133,7 +133,13 @@ const init = async () => {
     _storeFullOverlay.open()
     btnSubmitDisabled.value = true
 
-    const response = await getTasksDetail(taskId);
+    let response = null;
+    if (checkIsLogin) {
+      response = await getTasksDetailByAuth(taskId);
+    } else {
+      response = await getTasksDetail(taskId);
+    }
+
     if (response && !checkRespStatus(response)) {
       alertMessage.value = response.message
       alertMessageColor.value = alertColors.fail
@@ -143,17 +149,17 @@ const init = async () => {
     taskData.value = response.data;
     posterInfoData.value = response.data.posterInfo;
     // 2023-06-15 response增加"relation"
-    // if (response.data.relation !== undefined) {
-    //   btnSubmitDisabled.value = true
-    //   alertMessageColor.value = alertColors.warn
-    //   if (response.data.relation === 'hoster') {
-    //     alertMessage.value = '無法應徵自己的任務'
-    //   }
-    //   if (response.data.relation === 'helper') {
-    //     alertMessage.value = '已經應徵過此任務'
-    //   }
-    //   return;
-    // }
+    if (response.data.relation !== null) {
+      btnSubmitDisabled.value = true
+      alertMessageColor.value = alertColors.warn
+      if (response.data.relation === 'poster') {
+        alertMessage.value = '無法應徵自己的任務'
+      }
+      if (response.data.relation === 'helper') {
+        alertMessage.value = '已經應徵過此任務'
+      }
+      return;
+    }
 
     isApplyTaskSuccess.value = false
     btnSubmitDisabled.value = false
