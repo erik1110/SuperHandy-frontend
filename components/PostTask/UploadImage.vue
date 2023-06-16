@@ -2,12 +2,12 @@
     <div class="sp-py-3 sp-flex sm:sp-space-x-2 sp-flex-wrap">
         <!-- 照片列表 -->
         <div v-for="item, idx in imgUrls" :key="idx" class="sp-relative pa-3">
-            <find-task-detail-big-image-tooltip>
+            <FindTaskDetailImageTooltip :text="'點擊看大圖'">
                 <v-btn :data-id="idx" variant="plain" icon="mdi-close-circle" :ripple="false" class="btn-del-img"
                     @click="deleteConfirm(idx, $event)"></v-btn>
                 <v-img :src="item" aspect-ratio="1" cover class="box sp-cursor-pointer" :data-id="idx"
                     @click="openBigImg(item)"></v-img>
-            </find-task-detail-big-image-tooltip>
+            </FindTaskDetailImageTooltip>
         </div>
         <!-- 照片列表 -->
 
@@ -49,7 +49,7 @@ const { checkRespStatus, checkUploadImage } = useSpUtility()
 const { logDebug, logError } = useLog()
 
 const _storePostTask = storePostTask();
-const { openConfirmModal, openModal, closeModal } = storePostTask();
+const { openConfirmModal, openErrorModal, closeModal } = storePostTask();
 const { imgUrls } = storeToRefs(_storePostTask)
 
 const _work = '圖片上傳'
@@ -60,8 +60,6 @@ const bigImgSrc = ref('')
 // - 上傳一張圖片 -
 const upload = async (event) => {
 
-    let _message = ''
-    let _dialogType = postTaskConfig.dialogType.error
     const _file = event.target.files[0]
     circularLoading.value = true
     try {
@@ -69,7 +67,7 @@ const upload = async (event) => {
         logDebug(_work, 'file.size', _file.size)
         if (!checkUploadImage(_file.size, siteConfig.image.upload.maxSize)) {
             logError(_work, 'file.size', _file.size)
-            _message = `圖片大小不可超過${siteConfig.image.upload.maxSizeCn}`
+            openErrorModal(`圖片大小不可超過${siteConfig.image.upload.maxSizeCn}`)
             circularLoading.value = false
             return;
         }
@@ -79,18 +77,17 @@ const upload = async (event) => {
         const response = await postUploadImage(formData)
         if (response && checkRespStatus(response)) {
             logDebug(_work, 'upload success')
-            _dialogType = postTaskConfig.dialogType.info
             imgUrls.value.push(response.data.imgUrl)
         }
-        _message = response.message
+
+        //_message = response.message
         //防止不能上傳同一張圖片
         event.target.value = ''
 
     } catch (error) {
         logError(_work, { error })
-        _message = '圖片上傳失敗'
+        openErrorModal('圖片上傳失敗')
     } finally {
-        openModal({ type: _dialogType, message: _message })
         circularLoading.value = false
     }
 
