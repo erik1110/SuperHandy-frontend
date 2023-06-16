@@ -26,6 +26,10 @@ export const useFormUtil = () => {
       .then((res) => {
         if (res.valid) {
           result = true;
+        }else{
+          res.errors.forEach(item => {
+            console.log(item.id,item.errorMessages.join(','))
+          });
         }
       })
       .catch((err) => {
