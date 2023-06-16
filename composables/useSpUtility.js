@@ -3,6 +3,7 @@ const { logDebug, logError } = useLog()
 
 export const useSpUtility = () => {
   const isNumber = n => (typeof (n) === 'number' || n instanceof Number);
+  const convertStoI = value => isNaN(parseInt(value)) ? false : true;
   const checkIsLogin = () => useCookie("spToken").value?.length > 0 ? true : false
   const checkTaskId = taskId => taskId && taskId.length == 24 ? true : false
   const checkUploadImage = (fileSize, maxSize) => fileSize > maxSize ? false : true
