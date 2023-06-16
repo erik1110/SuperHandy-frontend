@@ -156,15 +156,17 @@ const setCurrentRules = (submitter) => {
     switch (submitter) {
         case postTaskConfig.taskSubmitter.draftAdd:
         case postTaskConfig.taskSubmitter.draftUpdate:
-            currentRules.value = postTaskConfig.rules.draft
+            currentRules.value = postTaskConfig.rules.draft;
             break;
         case postTaskConfig.taskSubmitter.published:
         case postTaskConfig.taskSubmitter.publishFromDraft:
+            currentRules.value = postTaskConfig.rules.publish;
+            break;
         case postTaskConfig.taskSubmitter.unpublished:
-            currentRules.value = postTaskConfig.rules.publish
+            currentRules.value = postTaskConfig.rules.unpublish;
             break;
         default:
-            currentRules.value = postTaskConfig.rules.publish
+            currentRules.value = postTaskConfig.rules.publish;
             break;
     }
 }
@@ -265,8 +267,8 @@ const submit = async (event, taskTrans) => {
                 excuteAsyncFunc(_work, getTasksById, taskId, setResponseDate)
                 // 2023-06-07 改成導向任務詳情頁面
                 //openModal({ isShowGoTaskBtn: true, message: response.message })
-                const message= `${response.message}，是否前往任務詳情頁執行任務上架 ?`
-                openConfirmModal(message, ()=>{
+                const message = `${response.message}，是否前往任務詳情頁執行任務上架 ?`
+                openConfirmModal(message, () => {
                     navigateTo(`${siteConfig.linkPaths.tasks.to}/${taskId}`)
                 })
                 break;
