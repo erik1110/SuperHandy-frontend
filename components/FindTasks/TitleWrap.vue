@@ -1,6 +1,6 @@
 <template>
   <div class="sp-flex sp-justify-between sp-items-center sp-mb-3">
-    <h3 class="sp-text-h5 sp-whitespace-nowrap sp-mr-2">{{ title }}</h3>
+    <h3 class="sp-text-h5 sp-mr-2">{{ title }}</h3>
     <slot></slot>
   </div>
 </template>
