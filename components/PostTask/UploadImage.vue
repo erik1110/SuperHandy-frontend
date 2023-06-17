@@ -75,12 +75,13 @@ const upload = async (event) => {
         let formData = new FormData();
         formData.append("file", _file)
         const response = await postUploadImage(formData)
-        if (response && checkRespStatus(response)) {
-            logDebug(_work, 'upload success')
-            imgUrls.value.push(response.data.imgUrl)
+        if (response && !checkRespStatus(response)) {
+            logError(_work, { response })
+            openErrorModal(response.message)
         }
 
-        //_message = response.message
+        logDebug(_work, 'upload success')
+        imgUrls.value.push(response.data.imgUrl)
         //防止不能上傳同一張圖片
         event.target.value = ''
 

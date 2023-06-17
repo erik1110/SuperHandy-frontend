@@ -8,9 +8,11 @@
                 姓名
             </p>
             <p v-if="posterInfoData.lastName">
-                <a class="sp-text-purple hover:sp-cursor-pointer" @click="posterDialog = true">
-                    {{ posterInfoData.lastName }}**
-                </a>
+                <FindTaskDetailImageTooltip :text="'點擊看案主資訊'" :location="'right'">
+                    <a class="sp-text-purple hover:sp-cursor-pointer" @click="posterDialog = true">
+                        {{ posterInfoData.lastName }}**
+                    </a>
+                </FindTaskDetailImageTooltip>
             </p>
         </div>
         <div class="wrap">
