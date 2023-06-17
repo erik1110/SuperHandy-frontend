@@ -24,10 +24,14 @@ const _tagsColor = {
     default: "sp-tag-light-xs-slate",
   },
   tag: {
-    刊登任務: "sp-tag-dark-lg-cyan",
-    完成任務: "sp-tag-dark-lg-amber",
-    系統儲值: "sp-tag-dark-lg-slate",
+    案主: "sp-tag-dark-lg-cyan",
+    幫手: "sp-tag-dark-lg-amber",
+    系統: "sp-tag-dark-lg-slate",
     default: "sp-tag-dark-lg-slate",
+    // 刊登任務: "sp-tag-dark-lg-cyan",
+    // 完成任務: "sp-tag-dark-lg-amber",
+    // 系統儲值: "sp-tag-dark-lg-slate",
+    // default: "sp-tag-dark-lg-slate",
   },
 };
 
@@ -48,7 +52,7 @@ const FuncGetAccountPointsHistory = async function () {
       _historyData.time = fromNow(item.createdAt); //交易時間
       _historyData.desc = item.desc.join(", "); //交易項目
       _historyData.tagClass =
-        _tagsColor.tag[item.tag] ?? _tagsColor.tag.default;
+        _tagsColor.tag[item.role] ?? _tagsColor.tag.default;
       _historyData.roleClass =
         _tagsColor.role[item.role] ?? _tagsColor.role.default;
 
