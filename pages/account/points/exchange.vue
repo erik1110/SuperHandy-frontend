@@ -9,40 +9,17 @@
         <v-row class="my-5">
           <v-col cols="12" lg="6" class="sp-space-y-5">
             <!-- 銀行代碼 -->
-            <VAutocomplete
-              v-model="bankNo"
-              :items="bankList"
-              item-value="code"
-              item-title="name"
-              label="銀行代碼"
-              :rules="[ruleRequired]"
-              hint="請輸入您的銀行代碼"
-              clearable
-            ></VAutocomplete>
+            <VSelect v-model="bankNo" :items="bankList" item-value="code" item-title="name" label="銀行代碼"
+              :rules="[ruleRequired]" hint="請輸入您的銀行代碼" clearable></VSelect>
 
             <!-- 銀行帳號 -->
-            <VTextField
-              v-model="bankAcct"
-              label="銀行帳號"
-              hint="請輸入您的銀行帳號共14碼數字"
-              :rules="[ruleRequired, ruleBankAcctLen]"
-              hiint="請輸入您的銀行帳號"
-              type="number"
-              counter="14"
-              clearable
-            >
+            <VTextField v-model="bankAcct" label="銀行帳號" hint="請輸入您的銀行帳號共14碼數字" :rules="[ruleRequired, ruleBankAcctLen]"
+              hiint="請輸入您的銀行帳號" type="number" counter="14" clearable>
             </VTextField>
 
             <!-- 超人幣點數 -->
-            <VTextField
-              v-model="point"
-              label="超人幣"
-              hint="請輸入您要兌換的超人幣點數"
-              type="number"
-              prefix="$"
-              suffix="超人幣"
-              :rules="[ruleRequired, rulePointExchange]"
-            >
+            <VTextField v-model="point" label="超人幣" hint="請輸入您要兌換的超人幣點數" type="number" prefix="$" suffix="超人幣"
+              :rules="[ruleRequired, rulePointExchange]">
             </VTextField>
 
             <!-- 兌換規定 -->
@@ -65,23 +42,17 @@
         </v-row>
         <v-row>
           <v-col cols="12" lg="6">
-            <v-row class="sp-flex sp-items-center">
-              <v-col cols="6">
-                <v-checkbox
-                  v-model="chkRule"
-                  label="我已了解以上規定"
-                  color="v-purple"
-                  hide-details
-                ></v-checkbox>
+            <v-row v-if="chkSuperCoin">
+              <v-col>
+                <v-alert variant="tonal" type="error" text="超人幣點數不足。"></v-alert>
               </v-col>
-              <v-col cols="6" class="text-end">
-                <VBtn
-                  color="v-purple"
-                  type="submit"
-                  :disabled="submitDisabled"
-                  :loading="isLoading"
-                  >兌換</VBtn
-                >
+            </v-row>
+            <v-row class="sp-flex sp-items-center">
+              <v-col cols="8">
+                <v-checkbox v-model="chkRule" label="我已了解以上規定" color="v-purple" hide-details></v-checkbox>
+              </v-col>
+              <v-col cols="4" class="text-end">
+                <VBtn color="v-purple" type="submit" :disabled="submitDisabled" :loading="isLoading">兌換</VBtn>
               </v-col>
             </v-row>
           </v-col>
@@ -107,11 +78,11 @@ const bankList = ref(data);
 const bankNo = ref(null);
 const bankAcct = ref(null);
 const point = ref(300);
-const isRead = ref(false);
 const userPoint = ref({});
 const isLoading = ref(false);
 const submitDisabled = ref(true);
 const chkRule = ref(false);
+const chkSuperCoin = ref(false);
 const FuncGetAccountPoints = async function () {
   let res = await getAccountPoints();
   if (!res.error) {
@@ -156,8 +127,19 @@ const submit = async () => {
   chkRule.value = false;
   isLoading.value = false;
 };
+
+const checkSuperCoin = () => userPoint.value?.superCoin >= 300 ? true : false;
 watch(chkRule, (val) => {
-  submitDisabled.value = !val;
+  if (val && checkSuperCoin()) {
+    submitDisabled.value = !val;
+  }
+});
+watch(userPoint, (val) => {
+  if (!checkSuperCoin()) {
+    chkSuperCoin.value = true;
+  } else {
+    chkSuperCoin.value = false;
+  }
 });
 </script>
 <style scoped lang="scss">
