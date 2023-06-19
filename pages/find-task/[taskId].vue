@@ -140,8 +140,10 @@ const init = async () => {
     }
 
     if (response && !checkRespStatus(response)) {
-      alertMessage.value = response.message
-      alertMessageColor.value = alertColors.fail
+      //2023-06-19因為無法保證使用者再次進入卻帶有錯誤token而導致後端回應token錯誤訊息
+      //alertMessage.value = response.message
+      //alertMessageColor.value = alertColors.fail
+      response = await getTasksDetail(taskId);
       return;
     }
 
