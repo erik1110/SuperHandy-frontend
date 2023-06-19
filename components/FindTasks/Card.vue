@@ -62,7 +62,7 @@
         <span class="sp-pr-2 sp-mr-1 sp-border-r sp-border-slate-400"
           >刊登時間 {{ fromNow(taskData.publishedAt) }}</span
         >
-        {{ taskData.helperCount }} 人詢問
+        {{ taskData.viewerCount }} 人看過
       </p>
       <NuxtLink
         class="sp-w-full md:sp-w-auto sp-mt-2 md:sp-mt-0"
