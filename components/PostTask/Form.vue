@@ -84,7 +84,8 @@ import { postTaskConfig } from '@/services/postTaskConfig';
 import { getDraftById, getTasksById, deleteDraftById, executeFetchData } from '@/services/apis/postTask'
 import { getCategories, getExposurePlan } from '@/services/apis/general';
 import { getAccountPoints } from '@/services/apis/point';
-import { siteConfig } from '~/services/siteConfig';
+import { getAccountInfo } from '@/services/apis/account';
+import { siteConfig } from '@/services/siteConfig';
 
 const { excuteAsyncFunc, promiseAllSettledHanlder, checkTaskId, checkRespStatus } = useSpUtility()
 const { validateFormResult } = useFormUtil();
@@ -357,6 +358,17 @@ const Init = () => {
     taskId = route.params.taskId
 
     let promiseArr = [
+        excuteAsyncFunc(_work, getAccountInfo, null, (response) => {
+            if(response && checkRespStatus(response)){
+                const data = response.data;
+                locationData.value = data.location;
+                contactInfoData.value = {
+                    name: `${data.lastName}${data.firstName}`,
+                    phone: data.phone,
+                    email: data.email
+                }
+            }
+        }),
         excuteAsyncFunc(_work, getExposurePlan, null, (response) => exposurePlans.value = response.data),
         excuteAsyncFunc(_work, getCategories, null, (response) => {
             taskCategories.value = response.data
