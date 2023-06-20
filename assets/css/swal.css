@@ -1,0 +1,118 @@
+/* 共同的 */
+div.swal2-container.swal2-center.swal2-backdrop-show .swal2-popup.swal2-modal {
+    padding: 0;
+}
+
+
+
+/* sp-basicBox */
+/* div.swal2-container.swal2-center.swal2-backdrop-show.sp-basicBox .swal2-actions {
+    width: 100% !important;
+} */
+
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-basicBox button.swal2-styled.swal2-confirm {
+    border: 0 !important;
+    border-radius: 4px !important;
+    background: initial !important;
+    background-color: #fff !important;
+    color: rgb(24, 103, 192) !important;
+    font-size: 1em !important;
+    padding: 0.375em 0.625em !important;
+}
+
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-basicBox button.swal2-styled.swal2-confirm:focus {
+    box-shadow: none;
+}
+
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-basicBox .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm:hover,
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-basicBox .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm:active {
+    background-image: none !important;
+    background-color: rgb(24, 103, 192, 0.1) !important;
+    /* width: 100% !important; */
+}
+
+
+
+
+/* sp-confirmBox */
+/* confirm btn */
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-confirmBox button.swal2-styled.swal2-confirm {
+    border: 0 !important;
+    border-radius: 4px !important;
+    background: initial !important;
+    background-color: #fff !important;
+    color: rgb(102, 187, 106) !important;
+    font-size: 1em !important;
+    padding: 0.375em 0.625em !important;
+}
+
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-confirmBox button.swal2-styled.swal2-confirm:focus {
+    box-shadow: none !important;
+}
+
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-confirmBox .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm:hover,
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-confirmBox .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm:active {
+    background-image: none !important;
+    background-color: rgb(102, 187, 106, 0.1) !important;
+}
+
+
+
+
+/* sp-deleteConfirmBox */
+/* confirm btn */
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-deleteConfirmBox button.swal2-styled.swal2-confirm {
+    border: 0 !important;
+    border-radius: 4px !important;
+    background: initial !important;
+    background-color: #fff !important;
+    color: rgb(213, 0, 0) !important;
+    font-size: 1em !important;
+    padding: 0.375em 0.625em !important;
+}
+
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-deleteConfirmBox button.swal2-styled.swal2-confirm:focus {
+    box-shadow: none !important;
+}
+
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-deleteConfirmBox .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm:hover,
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-deleteConfirmBox .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm:active {
+    background-image: none !important;
+    background-color: rgb(213, 0, 0, 0.1) !important;
+}
+
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-deleteConfirmBox h2.swal2-title {
+    background-color: rgb(213, 0, 0) !important;
+    color: #fff !important;
+    font-size: 1.25rem !important;
+    padding: 0.375rem !important;
+}
+
+
+
+
+/* sp-confirmBox & sp-deleteConfirmBox */
+/* cancel btn */
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-confirmBox button.swal2-styled.swal2-cancel,
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-deleteConfirmBox button.swal2-styled.swal2-cancel {
+    border: 0 !important;
+    border-radius: 4px !important;
+    background: initial !important;
+    background-color: #fff !important;
+    color: rgb(158, 158, 158) !important;
+    font-size: 1em !important;
+    padding: 0.375em 0.625em !important;
+}
+
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-confirmBox button.swal2-styled.swal2-cancel:focus,
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-deleteConfirmBox button.swal2-styled.swal2-cancel:focus {
+    box-shadow: none !important;
+}
+
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-confirmBox .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-cancel:hover,
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-confirmBox .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-cancel:active,
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-deleteConfirmBox .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-cancel:hover,
+div.swal2-container.swal2-center.swal2-backdrop-show.sp-deleteConfirmBox .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-cancel:active {
+    background-image: none !important;
+    background-color: rgb(158, 158, 158, 0.1) !important;
+}
