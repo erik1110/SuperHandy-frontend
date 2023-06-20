@@ -7,12 +7,6 @@
       <div class="sp-rounded-lg sp-overflow-hidden">
         <!-- Formal -->
         <v-img :src="imgUrls" cover :height="150"></v-img>
-        <!-- -----Test------ -->
-        <!-- <v-img
-          src="https://source.unsplash.com/random/240x180/?lifeStyle"
-          cover
-          :max-height="150"
-        ></v-img> -->
       </div>
       <div
         class="sp-text-body sp-font-medium sp-text-slate-800 sp-my-2 sp-ml-1"
@@ -20,7 +14,6 @@
         {{ title }}
       </div>
     </div>
-    <!-- <v-tooltip activator="parent" location="top">{{ Ｆㄏ }}</v-tooltip> -->
   </div>
 </template>
 

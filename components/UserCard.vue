@@ -12,11 +12,6 @@
             :src="props.avatar ? props.avatar : '/images/sp_icon.png'"
             class="sp-w-full sp-h-full sp-object-cover"
           />
-          <!-- -----Test------ -->
-          <!-- <v-img
-            src="https://source.unsplash.com/random/600x600/?person"
-            class="sp-w-full"
-          ></v-img> -->
         </div>
         <div class="sp-flex-1 sp-flex-shrink-0">
           <div class="sp-text-h5 sp-text-slate-800 sp-my-2 sp-ml-1">

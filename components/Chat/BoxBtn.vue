@@ -4,7 +4,6 @@
       v-if="!showChat"
       class="boxBtn sp-bg-purple sp-rounded-full sp-shadow-xl sp-cursor-pointer"
     >
-      <!-- <v-badge class="dot" content="2" color="v-pink"> -->
       <v-badge :model-value="showBadge" class="dot" dot color="v-pink">
         <ChatBubbleOvalLeftEllipsisIcon
           class="sp-w-9 sp-h-9 sp-text-white sp-shadow-sm"

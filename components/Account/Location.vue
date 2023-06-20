@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <label class='label'>地址</label> -->
     <div class="sp-space-y-4 lg:sp-flex lg:sp-space-x-2 lg:sp-space-y-0">
       <div class=" lg:sp-w-1/2 lg:sp-flex lg:sp-space-x-2">
         <v-select v-model="locationData.city" :rules='currentRules.locationCity' :disabled="currentDisabled.locationCity"

@@ -74,7 +74,6 @@
               <span class="tile">服務類型</span># {{ t.category }}
             </p>
             <p class="my-3"><span class="tile">案主</span>{{ t.posterName }}</p>
-            <!-- <p class="my-3"><span class="tile">聯絡電話</span>09-26XXX-XXX</p> -->
             <p class="mt-3 mb-4">
               <span class="tile">案件預算</span>
               <span class="sp-text-purple sp-font-semibold sp-text-body-sm"

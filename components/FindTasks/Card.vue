@@ -10,7 +10,6 @@
       class="sp-flex sp-items-center sp-my-2 sp-gray-placeholder sp-text-body-sm"
     >
       <MapPinIcon class="sp-icon-xs sp-mr-1 sp-text-purple" />
-      <!-- {{ t.location.city }}{{ t.location.dist }} -->
       {{ taskData.address }}
     </div>
     <div
@@ -24,10 +23,6 @@
         <p class="tile">案主</p>
         <p>{{ taskData.posterName }}</p>
       </div>
-      <!-- <div class="item">
-        <p class="tile">聯絡電話</p>
-        <p>09-26XXX-XXX</p>
-      </div> -->
       <div class="item sp-w-full md:sp-w-auto">
         <p class="tile">案件預算</p>
         <p class="sp-text-purple sp-font-semibold sp-text-body-sm">

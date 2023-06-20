@@ -150,7 +150,6 @@
       </div>
       <Bg_s6 class="s6_bg" />
     </HomeSecWrapper>
-    <!-- UserModal -->
     <HomeUserModal
       :dialog="userDialog"
       :data="helper"
