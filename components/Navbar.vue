@@ -30,7 +30,6 @@
       </v-btn>
       <v-btn v-if="_storeAuth.loginToken" icon>
         <AccountIcon></AccountIcon>
-        <!-- <v-icon>mdi-account-circle</v-icon> -->
         <v-menu activator="parent">
           <v-list>
             <NuxtLink v-for="(item, index) in items" :key="index" :value="index" :to="item.to">

@@ -31,11 +31,6 @@
                 {{ posterInfoData.email }}
             </p>
         </div>
-        <!-- <div class="wrap justify-center pb-4">
-            <v-btn type='button' color="v-orange" class="px-4" rounded=" xl">
-                <v-icon class="mt-1">mdi-message-reply-text-outline</v-icon>案主聊天室
-            </v-btn>
-        </div> -->
     </div>
     <FindTaskDetailPosterModal :dialog="posterDialog" :data="posterInfoData" @close="posterDialog = false">
     </FindTaskDetailPosterModal>

@@ -10,11 +10,6 @@
         class="sp-w-full sp-h-full"
         aspect-ratio="1"
       ></v-img>
-      <!-- -----Test------ -->
-      <!-- <v-img
-        src="https://source.unsplash.com/random/300x300/?person"
-        class="sp-w-full"
-      ></v-img> -->
     </div>
     <div class="sp-text-h5 sp-text-slate-800 sp-my-2 sp-ml-1">
       {{ lastName }}**

@@ -10,7 +10,6 @@
               :class="{ active: activeRouter == 'account' }"
               to="/account"
             >
-              <!-- <i class="sidebar-icon account-icon"></i> -->
               <UserCircleIcon class="sp-icon-sm sidebar_icon" />
               <span class="sidebar_text">我的帳號</span>
             </NuxtLink>
@@ -19,7 +18,6 @@
               :class="{ active: activeRouter == 'task' }"
               to="/account/tasks/poster"
             >
-              <!-- <i class="sidebar-icon task-icon"></i> -->
               <DocumentDuplicateIcon class="sp-icon-sm sidebar_icon" />
               <span class="sidebar_text">任務管理</span>
             </NuxtLink>
@@ -28,7 +26,6 @@
               :class="{ active: activeRouter == 'comment' }"
               to="/account/comments/poster"
             >
-              <!-- <i class="sidebar-icon comment-icon"></i> -->
               <StarIcon class="sp-icon-sm sidebar_icon" />
               <span class="sidebar_text">評價查看</span>
             </NuxtLink>
@@ -37,7 +34,6 @@
               :class="{ active: activeRouter == 'point' }"
               to="/account/points"
             >
-              <!-- <i class="sidebar-icon point-icon"></i> -->
               <CurrencyDollarIcon class="sp-icon-sm sidebar_icon" />
               <span class="sidebar_text">點數管理</span>
             </NuxtLink>

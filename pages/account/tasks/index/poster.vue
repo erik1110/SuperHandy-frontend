@@ -40,27 +40,11 @@
           class="sp-text-h5 sp-text-slate-800 sp-flex sp-flex-row-reverse sm:sp-flex-row sp-items-center sp-justify-end sm:sp-justify-between sp-mb-4"
         >
           <span>{{ item.title }}</span>
-          <!-- <div
-            class="sp-text-body sp-flex-shrink-0 sp-mr-4 sm:sp-w-[94.5px] sm:sp-mr-0 sp-px-2 sp-py-1 sp-text-center"
-            :class="colorControl(item.status)"
-          >
-            {{ item.status }}
-          </div> -->
           <v-chip class="mr-1" size="small" :color="colorControl(item.status)">
             {{ item.status }}
           </v-chip>
         </h5>
         <div class="d-flex sm:sp-mb-0 sp-flex-wrap">
-          <!-- <div class="sp-mr-4 sp-shrink-0 sp-mb-2 sm:sp-mb-0">
-            <img
-              class="sp-shrink-0 sp-grow-0 sp-inline-block sp-w-[90px] sp-h-[90px]"
-              :src="
-                item.imgUrls.length > 0
-                  ? item.imgUrls[0]
-                  : 'https://picsum.photos/120'
-              "
-            />
-          </div> -->
           <div
             class="sp-mr-4 sp-rounded-lg sp-overflow-hidden sp-w-[90px] sp-h-[90px] sp-mb-2 sm:sp-mb-0"
           >
@@ -75,7 +59,6 @@
               height="100%"
             />
           </div>
-          <!-- <div class="sm:sp-flex-1 sp-w-full sm:sp-w-auto"> -->
           <div
             class="sp-flex sp-flex-col sm:sp-flex-row sm:sp-justify-between sm:sp-items-end sm:sp-flex-1 sp-w-full sm:sp-w-auto"
           >
@@ -100,10 +83,6 @@
                 </span>
               </div>
             </div>
-
-            <!-- <div
-              class="sm:sp--translate-y-2 sp-px-[1rem] sm:sp-px-0 sp-absolute sp-bottom-[15px] sp-left-0 sm:sp-relative sp-w-full sm:sp-w-auto sm:sp-float-right"
-            > -->
             <div class="sp-w-full sm:sp-w-auto">
               <v-btn
                 color="v-purple"
