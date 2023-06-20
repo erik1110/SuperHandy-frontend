@@ -155,16 +155,6 @@
     resendLoading.value = false;
   };
 
-  // for test
-  const { query } = useRoute();
-  onMounted(() => {
-    if (query.dev <= 6) {
-      account.value = `user${query.dev}@example.com`;
-      password.value = "12345678";
-    }
-  });
-
-  const pageRoot = ref("");
   const FuncGoogleLogin = () => {
     window.open(
       `${import.meta.env.VITE_BACKEND_ROOT_DEV}/auth/google`,
