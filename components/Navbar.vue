@@ -106,7 +106,6 @@
   };
 
   const noticeMenuUpdate = (event) => {
-    console.log({ event });
     _storeNotification.noticeIsOpen = event;
     if (event) {
       document.documentElement.style.overflow = "hidden";

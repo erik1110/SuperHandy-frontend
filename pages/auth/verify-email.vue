@@ -40,7 +40,6 @@ nickname.value = route.query.nickname;
 token.value = route.query.token;
 onMounted(async () => {
   let res = await getVerifyEmail(token.value);
-  // console.log(res);
   if (!res.error) {
     status.value = "200";
     message.value = "恭喜您註冊成功";

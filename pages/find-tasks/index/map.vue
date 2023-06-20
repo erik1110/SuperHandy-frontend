@@ -151,7 +151,6 @@ const getPosition = async () => {
       getData();
     }, 1000);
   } else {
-    console.log("Geolocation is not supported by this browser.");
     _storeFindTasks.mapCenter = [25.034436016196786, 121.56407163196346];
   }
 };
@@ -194,7 +193,6 @@ function calculateRadius(zoom) {
     Math.pow(2, zoom + 8);
   const r = Math.round(metersPerPixel);
   _storeFindTasks.radius = r;
-  // console.log({ r });
 }
 /*
   Get Data

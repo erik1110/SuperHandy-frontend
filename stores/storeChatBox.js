@@ -101,11 +101,9 @@ export const storeChatBox = defineStore("chatBox", () => {
     });
     //監聽connectStatus事件(接收websocket訊息)
     socket.on("connectStatus", (data) => {
-      console.log("socket connected");
     });
     //監聽errorMsg事件(接收websocket訊息)
     socket.on("errorMsg", (err) => {
-      console.log("socket err:", { err });
     });
   };
 

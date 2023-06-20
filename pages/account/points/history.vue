@@ -74,7 +74,6 @@ const FuncGetAccountPointsHistory = async function () {
       historyList.value.push(_historyData);
     });
   } catch (error) {
-    console.log({ error });
   } finally {
     _storeFullOverlay.close()
   }

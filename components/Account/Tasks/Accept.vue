@@ -211,9 +211,9 @@
   const uploadFile = function (e) {
     const file = e.target.files.item(0);
     tempFile.value = e.target.files[0];
-    console.log(tempFile.value);
     if (file.size > 5000000) {
-      alert("please check file size no over 5 MB.");
+      isSnackbarOpen.value = true;
+      snackbarMessage.value = "檔案大小不可超過 5 MB!";
       return false;
     }
     const reader = new FileReader();
@@ -295,7 +295,6 @@
     }
   };
   const submitHelperAccept = async function (data) {
-    console.log(data);
     if (
       data.submittedInfo.imgUrls.length == 0 ||
       data.submittedInfo.comment.length == 0

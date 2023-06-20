@@ -61,9 +61,7 @@ export const useSpUtility = () => {
     } catch (error) {
       logError(work, 'excuteAsyncFunc', { error });
       _message = _message.length > 0 ? _message : `${work}執行失敗`
-      //console.log('_message',_message)
       throw _message
-      // Uncaught (in promise) ???
     }
   }
   const promiseErrorHanlder = (results) => {

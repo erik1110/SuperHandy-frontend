@@ -381,7 +381,6 @@ const Init = () => {
             if (index >= 0) {
                 currentRules.value.salary[index] = (v) => v <= userCoin.value.superCoin || `不可超過目前帳戶儲值餘額 ${userCoin.value.superCoin} 點超人幣`
             }
-            // console.log(userCoin.value)
         })
     ]
 

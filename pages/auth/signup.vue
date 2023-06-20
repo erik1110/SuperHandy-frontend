@@ -96,10 +96,8 @@ const submitForm = async () => {
     password: password.value,
     confirmPassword: confirmPassword.value,
   };
-  // console.log({ payload });
   try {
     let res = await postSignup(payload);
-    // console.log({ res });
     if (res.error) {
       errMsg.value = res.message;
       return;
@@ -111,7 +109,6 @@ const submitForm = async () => {
       });
     }
   } catch (err) {
-    console.log(err.response.data);
   }
 };
 

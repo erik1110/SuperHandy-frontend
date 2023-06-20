@@ -204,12 +204,10 @@ const fetchCompletedCases = async () => {
     let { data } = await getCompletedCases();
     completedCaseData.value = data.slice(0, 5);
   } catch (err) {
-    console.log({ err });
   }
 };
 const fetchTaskStats = async () => {
   let res = await getTaskStats();
-  // console.log({ res });
 };
 const fetchExcellentHelpers = async () => {
   let { data } = await getExcellentHelpers();

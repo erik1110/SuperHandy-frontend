@@ -118,7 +118,6 @@
         password: password.value,
       };
       let res = await postLogin(payload);
-      // console.log({ res });
       if (res.error) {
         errMsg.value = res.message;
         loading.value = false;
@@ -136,7 +135,6 @@
         navigateTo("/");
       }
     } catch (err) {
-      console.log({ err });
     }
     loading.value = false;
   };

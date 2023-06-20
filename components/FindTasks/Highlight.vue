@@ -56,7 +56,6 @@ const highlightTasks = ref();
 
 const fetchTasksHighlight = async () => {
   let { data } = await getTasksHighlight();
-  // console.log(data);
   highlightTasks.value = [...data.tasks];
 };
 onMounted(() => {
