@@ -65,10 +65,8 @@
       lastName: lastName.value,
       phone: phone.value,
     };
-    // console.log({ payload });
     try {
       let res = await postGoogleSignUp(googleSignData.value.userId, payload);
-      // console.log({ res });
       if (res.error) {
         errMsg.value = res.message;
         return;
@@ -80,7 +78,6 @@
         });
       }
     } catch (err) {
-      console.log(err.response.data);
     }
   };
 </script>

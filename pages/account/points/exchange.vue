@@ -72,7 +72,6 @@ const _storeGlobal = storeGlobal();
 const { ruleRequired, ruleBankAcctLen, rulePointExchange, validateFormResult } =
   useFormUtil();
 
-// const form = ref(false);
 const exchangeForm = ref(null);
 const bankList = ref(data);
 const bankNo = ref(null);
@@ -105,7 +104,6 @@ const submit = async () => {
     bankNo: bankNo.value,
     bankAcct: bankAcct.value,
   };
-  // console.log(data);
   let res = await postAccountPointsCashback(data);
   if (!res.error) {
     exchangeForm.value.reset();
@@ -122,7 +120,6 @@ const submit = async () => {
       title: "點數兌換失敗",
       content: res.message,
     });
-    // console.log(res);
   }
   chkRule.value = false;
   isLoading.value = false;

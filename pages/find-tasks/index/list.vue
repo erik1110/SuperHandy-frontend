@@ -28,7 +28,6 @@ const _storeFindTasks = storeFindTasks();
 const { listViewTasks, taskMeta, page } = storeToRefs(_storeFindTasks);
 
 watch(page, () => {
-  // console.log("page changed");
   if (window.innerWidth <= 768) {
     window.scrollTo({ top: 895, behavior: "smooth" });
   } else {
@@ -37,7 +36,6 @@ watch(page, () => {
 });
 
 onMounted(async () => {
-  // _storeFindTasks.filterData.page = 1;
   await _storeFindTasks.fetchListViewTasks();
 });
 </script>

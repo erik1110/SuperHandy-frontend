@@ -96,10 +96,8 @@ const submitForm = async () => {
     password: password.value,
     confirmPassword: confirmPassword.value,
   };
-  // console.log({ payload });
   try {
     let res = await postSignup(payload);
-    // console.log({ res });
     if (res.error) {
       errMsg.value = res.message;
       return;
@@ -111,24 +109,9 @@ const submitForm = async () => {
       });
     }
   } catch (err) {
-    console.log(err.response.data);
   }
 };
 
-// for test
-const { query } = useRoute();
-onMounted(() => {
-  const randomNum = Math.floor(Math.random() * 100);
-  if (query.dev == 1) {
-    lastName.value = "yang";
-    firstName.value = "rrr";
-    nickname.value = `Rere${randomNum}`;
-    phone.value = `09999999${randomNum}`;
-    email.value = "simola5631@syinxun.com";
-    password.value = "11111111";
-    confirmPassword.value = "11111111";
-  }
-});
 </script>
 
 <style lang="scss" scoped></style>

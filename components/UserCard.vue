@@ -91,12 +91,8 @@
   } from "@/services/apis/tasks";
   import { storeFullOverlay } from "~/stores/storeFullOverlay";
   const _storeFullOverlay = storeFullOverlay();
-  // import {storeAuth} from "@/stores/storeAuth"
   import { storeChatBox } from "@/stores/storeChatBox";
-  // const _storeAuth = storeAuth()
-  const _storeChatBox = storeChatBox();
 
-  // const role = ref("幫手");
   const props = defineProps({
     avatar: String,
     completedTasks: Number,
@@ -108,7 +104,6 @@
     helperId: String,
   });
   const tasksChooseHelper = async function () {
-    //when detail watch value, overlay will close
     _storeFullOverlay.open();
     let res = await postTasksManagementHelper(props.taskId, props.helperId);
     if (!res.error) {

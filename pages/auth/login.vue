@@ -118,7 +118,6 @@
         password: password.value,
       };
       let res = await postLogin(payload);
-      // console.log({ res });
       if (res.error) {
         errMsg.value = res.message;
         loading.value = false;
@@ -129,14 +128,12 @@
         }
         return;
       } else {
-        // _storeAuth.setLoginToken(res.data.token)
         _storeAuth.loginToken = res.data.token;
         _storeChatBox.reConnectWebSocket();
         _storeChatBox.fetchChatList();
         navigateTo("/");
       }
     } catch (err) {
-      console.log({ err });
     }
     loading.value = false;
   };
@@ -158,16 +155,6 @@
     resendLoading.value = false;
   };
 
-  // for test
-  const { query } = useRoute();
-  onMounted(() => {
-    if (query.dev <= 6) {
-      account.value = `user${query.dev}@example.com`;
-      password.value = "12345678";
-    }
-  });
-
-  const pageRoot = ref("");
   const FuncGoogleLogin = () => {
     window.open(
       `${import.meta.env.VITE_BACKEND_ROOT_DEV}/auth/google`,

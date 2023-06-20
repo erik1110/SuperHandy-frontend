@@ -28,10 +28,6 @@ const _tagsColor = {
     幫手: "sp-tag-dark-lg-amber",
     系統: "sp-tag-dark-lg-slate",
     default: "sp-tag-dark-lg-slate",
-    // 刊登任務: "sp-tag-dark-lg-cyan",
-    // 完成任務: "sp-tag-dark-lg-amber",
-    // 系統儲值: "sp-tag-dark-lg-slate",
-    // default: "sp-tag-dark-lg-slate",
   },
 };
 
@@ -74,7 +70,6 @@ const FuncGetAccountPointsHistory = async function () {
       historyList.value.push(_historyData);
     });
   } catch (error) {
-    console.log({ error });
   } finally {
     _storeFullOverlay.close()
   }

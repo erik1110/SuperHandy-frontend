@@ -51,7 +51,6 @@ const onSubmit = async () => {
       content: "重設成功，請使用新密碼登入"
     })
     navigateTo('/auth/login')
-    // message.value = "重設成功，請使用新密碼登入";
   } else {
     errMsg.value = res.message;
   }

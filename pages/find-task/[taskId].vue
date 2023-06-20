@@ -80,7 +80,6 @@ const alertMessageColor = ref('')
 // - 我要接案 -
 const apply = async () => {
   if (!checkIsLogin()) {
-    //alertMessage.value = '請先登入'
     navigateTo(siteConfig.linkPaths.login.to)
   }
   try {
@@ -140,16 +139,12 @@ const init = async () => {
     }
 
     if (response && !checkRespStatus(response)) {
-      //2023-06-19因為無法保證使用者再次進入卻帶有錯誤token而導致後端回應token錯誤訊息
-      //alertMessage.value = response.message
-      //alertMessageColor.value = alertColors.fail
       response = await getTasksDetail(taskId);
       return;
     }
 
     taskData.value = response.data;
     posterInfoData.value = response.data.posterInfo;
-    // 2023-06-15 response增加"relation"
     if (response.data.relation !== null) {
       btnSubmitDisabled.value = true
       alertMessageColor.value = alertColors.warn

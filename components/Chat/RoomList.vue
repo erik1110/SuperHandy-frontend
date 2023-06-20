@@ -35,7 +35,6 @@ const isShowLoading = computed(() => {
 <style lang="scss" scoped>
 @import url("@/assets/css/tailwind.css");
 .roomList {
-  //   @apply sp-bg-slate-100;
   overflow-x: auto;
 }
 </style>

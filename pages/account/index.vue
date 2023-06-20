@@ -179,7 +179,6 @@ const submit = async () => {
     try {
         //表單檢查
         const result = await validateFormResult(accountForm)
-        //console.log(result, 'result')
         if (!result) {
             openModal('表單驗證還沒完成')
             return;
@@ -189,7 +188,6 @@ const submit = async () => {
         const data = { ...userData.value }
         data.location = { ...locationData.value }
         data.avatarPath = avatarPath.value
-        console.log(data, 'account.update.data')
 
         const response = await patchAccountInfo(data)
         if (response && !checkRespStatus(response)) {

@@ -266,8 +266,6 @@ const submit = async (event, taskTrans) => {
                 break;
             case postTaskConfig.taskSubmitter.unpublished:
                 excuteAsyncFunc(_work, getTasksById, taskId, setResponseDate)
-                // 2023-06-07 改成導向任務詳情頁面
-                //openModal({ isShowGoTaskBtn: true, message: response.message })
                 const message = `${response.message}，是否前往任務詳情頁執行任務上架 ?`
                 openConfirmModal(message, () => {
                     navigateTo(`${siteConfig.linkPaths.tasks.to}/${taskId}`)
@@ -381,7 +379,6 @@ const Init = () => {
             if (index >= 0) {
                 currentRules.value.salary[index] = (v) => v <= userCoin.value.superCoin || `不可超過目前帳戶儲值餘額 ${userCoin.value.superCoin} 點超人幣`
             }
-            // console.log(userCoin.value)
         })
     ]
 

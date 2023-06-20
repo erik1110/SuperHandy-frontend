@@ -98,22 +98,6 @@
     margin-right: 10px;
     width: 20px;
     height: 20px;
-    // &.account-icon {
-    //   background: url("@/assets/images/svg/account.svg") center center / contain
-    //     no-repeat;
-    // }
-    // &.task-icon {
-    //   background: url("@/assets/images/svg/task.svg") center center / contain
-    //     no-repeat;
-    // }
-    // &.comment-icon {
-    //   background: url("@/assets/images/svg/comment.svg") center center / contain
-    //     no-repeat;
-    // }
-    // &.point-icon {
-    //   background: url("@/assets/images/svg/point.svg") center center / contain
-    //     no-repeat;
-    // }
   }
 </style>
 <style scoped lang="postcss">

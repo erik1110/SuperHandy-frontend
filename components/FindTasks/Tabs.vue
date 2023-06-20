@@ -37,7 +37,6 @@ const initView = () => {
 };
 watch(viewTab, (val) => {
   const tabs = document.querySelector(".tabs");
-  //   console.log({ val });
   if (val == "map") {
     tabs.classList.add("slide");
   } else {

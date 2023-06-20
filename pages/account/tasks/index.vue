@@ -39,18 +39,11 @@
     if (route.path != "/account/tasks") {
       identityTabs.value = route.name;
     } else {
-      console.log("catch me");
     }
   });
   const FuncPageRouter = function (route) {
     navigateTo(route);
   };
-  watch(
-    () => route,
-    (val) => {
-      console.log(val);
-    }
-  );
 </script>
 
 <style lang="scss" scoped></style>

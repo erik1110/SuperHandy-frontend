@@ -82,8 +82,6 @@ watch(showChat, (val) => {
 .expand-leave-active {
   transition: width 0.5s ease-in-out, height 0.5s ease-in-out,
     opacity 0.3s ease-in-out;
-  //   width: 500px;
-  //   height: 360px;
   opacity: 1;
 }
 
