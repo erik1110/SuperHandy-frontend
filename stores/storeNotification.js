@@ -13,7 +13,6 @@ export const storeNotification = defineStore("storeNotification", () => {
   const isHasUnRead = ref(false)
 
   const hasUnRead = async () => {
-    // logDebug('Notification listener...')
     try {
       const { data } = await getList();
       const readObj = data.find((item) => item.read == false);

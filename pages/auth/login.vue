@@ -128,7 +128,6 @@
         }
         return;
       } else {
-        // _storeAuth.setLoginToken(res.data.token)
         _storeAuth.loginToken = res.data.token;
         _storeChatBox.reConnectWebSocket();
         _storeChatBox.fetchChatList();

@@ -18,12 +18,10 @@ export const useMoment = () => {
     // 解析目標時間
     const targetMoment = moment(time);
     // 計算兩個時間的差距
-    // const duration = moment.duration(currentTime.diff(targetMoment));
     const duration = timeDuration(time)
     // 判斷時間差是否小於一天
     if (duration.asHours() < 24) {
       // 如果小於一天，顯示 XX小時前
-      // return moment(time).startOf("hour").fromNow();
       return moment(time).fromNow();
 
     } else {

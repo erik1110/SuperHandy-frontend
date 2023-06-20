@@ -4,8 +4,6 @@ module.exports = {
   theme: {
     fontFamily: {
       sans: ['"Noto Sans TC"', "sans-serif"],
-      // serif: ['Georgia', 'serif'],
-      // cursive: ["'Sigmar'", "cursive"],
     },
     extend: {
       colors: {

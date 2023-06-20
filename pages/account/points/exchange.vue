@@ -72,7 +72,6 @@ const _storeGlobal = storeGlobal();
 const { ruleRequired, ruleBankAcctLen, rulePointExchange, validateFormResult } =
   useFormUtil();
 
-// const form = ref(false);
 const exchangeForm = ref(null);
 const bankList = ref(data);
 const bankNo = ref(null);

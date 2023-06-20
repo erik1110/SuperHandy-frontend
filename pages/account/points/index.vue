@@ -57,7 +57,6 @@ import { storeFullOverlay } from "@/stores/storeFullOverlay";
 import { getAccountPoints } from "@/services/apis/point";
 const _storeFullOverlay = storeFullOverlay();
 const isLoading = ref(true);
-// const point = ref({});
 const pointSuper = ref({
   title: '超人幣',
   image: 'superCoin',
@@ -94,7 +93,6 @@ const FuncGetAccountPoints = async function () {
   try{
     let res = await getAccountPoints();
     if (!res.error) {
-      // point.value = res.data;
       pointSuper.value.coin = res.data.superCoin;
       pointHelper.value.coin = res.data.helperCoin;
     }

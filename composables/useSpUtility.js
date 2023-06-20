@@ -47,8 +47,6 @@ export const useSpUtility = () => {
         response = await excuteFunc()
       }
 
-      //logDebug(work, 'excuteAsyncFunc', response);
-
       if (response && !checkRespStatus(response)) {
         _message = response.message
         throw _message
@@ -57,7 +55,6 @@ export const useSpUtility = () => {
           successFunc(response)
         }
       }
-      //logDebug(work, 'excuteAsyncFunc', 'success');
     } catch (error) {
       logError(work, 'excuteAsyncFunc', { error });
       _message = _message.length > 0 ? _message : `${work}執行失敗`

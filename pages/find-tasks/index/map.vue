@@ -122,7 +122,6 @@ import pinUrgentImg from "@/assets/images/pin_urgent.png";
 import { storeFindTasks } from "~/stores/storeFindTasks";
 import { storeToRefs } from "pinia";
 
-// const loading = ref(false);
 const { fromNow } = useMoment();
 const _storeFindTasks = storeFindTasks();
 const { mapViewTasks, mapCenterBackup, mapCenter, zoomLevel } =
@@ -132,7 +131,6 @@ const { mapViewTasks, mapCenterBackup, mapCenter, zoomLevel } =
   Map
 */
 const map = ref(null);
-// const zoomLevel = ref(14);
 const showReFetch = ref({ b: false, z: false });
 
 const getPosition = async () => {
@@ -177,9 +175,6 @@ const zoomUpdated = (zoom) => {
     zoomBackup.value = zoom;
     showReFetch.value.z = true;
   }
-  // // if (zoom < 13 || zoom > 15) {
-  // showReFetch.value.z = true;
-  // // }
   calculateRadius(zoom);
 };
 // zoom 換算成半徑

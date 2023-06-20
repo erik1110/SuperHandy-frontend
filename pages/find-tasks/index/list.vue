@@ -36,7 +36,6 @@ watch(page, () => {
 });
 
 onMounted(async () => {
-  // _storeFindTasks.filterData.page = 1;
   await _storeFindTasks.fetchListViewTasks();
 });
 </script>
