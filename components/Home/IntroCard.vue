@@ -1,9 +1,12 @@
 <template>
-  <v-card max-width="400" min-width="300" elevation="0">
+  <v-card max-width="320" min-width="320" elevation="0">
     <v-card-item>
       <v-card-title class="font-weight-bold d-flex align-center">
         <!-- <IconSmile /> -->
-        <component :is="icons[cardData.icon]" class="sp-icon-sm sp-mr-2 sp-text-primary"></component>
+        <component
+          :is="icons[cardData.icon]"
+          class="sp-icon-sm sp-mr-2 sp-text-primary"
+        ></component>
         <div>
           {{ cardData.title }}
         </div>
@@ -17,15 +20,19 @@
 </template>
 
 <script setup>
-import { FaceSmileIcon, RocketLaunchIcon, ShieldCheckIcon } from '@heroicons/vue/24/solid'
+import {
+  MagnifyingGlassIcon,
+  ChatBubbleLeftRightIcon,
+  ChatBubbleOvalLeftEllipsisIcon,
+} from "@heroicons/vue/24/solid";
 const { cardData } = defineProps({
   cardData: Object,
-})
+});
 const icons = shallowRef({
-  FaceSmileIcon,
-  RocketLaunchIcon,
-  ShieldCheckIcon
-})
+  MagnifyingGlassIcon,
+  ChatBubbleLeftRightIcon,
+  ChatBubbleOvalLeftEllipsisIcon,
+});
 </script>
 
 <style lang="scss" scoped></style>
