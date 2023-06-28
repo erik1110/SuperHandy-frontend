@@ -6,7 +6,7 @@
         <div class="sp-card-wrapper sp-bg-white sp-min-w-[200px]">
           <VCardText class="sp-flex sp-flex-col sp-p-4 sp-h-[100%]">
             <NuxtLink
-              class="account sp-mb-4 sp-py-2 sp-px-4 sp-flex sp-items-center"
+              class="account sp-mb-4 sp-py-2 sp-px-4 sp-flex sp-items-center sp-z-0"
               :class="{ active: activeRouter == 'account' }"
               to="/account"
             >
@@ -14,7 +14,7 @@
               <span class="sidebar_text">我的帳號</span>
             </NuxtLink>
             <NuxtLink
-              class="sp-mb-4 sp-py-2 sp-px-4 sp-flex sp-items-center"
+              class="sp-mb-4 sp-py-2 sp-px-4 sp-flex sp-items-center sp-z-0"
               :class="{ active: activeRouter == 'task' }"
               to="/account/tasks/poster"
             >
@@ -22,7 +22,7 @@
               <span class="sidebar_text">任務管理</span>
             </NuxtLink>
             <NuxtLink
-              class="sp-mb-4 sp-py-2 sp-px-4 sp-flex sp-items-center"
+              class="sp-mb-4 sp-py-2 sp-px-4 sp-flex sp-items-center sp-z-0"
               :class="{ active: activeRouter == 'comment' }"
               to="/account/comments/poster"
             >
@@ -30,7 +30,7 @@
               <span class="sidebar_text">評價查看</span>
             </NuxtLink>
             <NuxtLink
-              class="sp-flex sp-py-2 sp-px-4 sp-items-center"
+              class="sp-flex sp-py-2 sp-px-4 sp-items-center sp-z-0"
               :class="{ active: activeRouter == 'point' }"
               to="/account/points"
             >
