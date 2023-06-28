@@ -1,19 +1,19 @@
 {
   "intro":[
     {
-      "icon": "FaceSmileIcon",
-      "title":"便捷易用",
-      "desc":"地圖尋找任務,簡單下單 安全可靠的跑腿員配對 操作簡便,節省您寶貴時間"
+      "icon": "MagnifyingGlassIcon",
+      "title":"地毯式搜尋",
+      "desc":"地圖方式尋找任務，輕鬆找到附近需要幫助的任務"
     },
     {
-      "icon": "RocketLaunchIcon",
-      "title":"高效快速",
-      "desc":"緊急任務優先處理,快速完成 大量跑腿員服務,時空不限 線上支付,簡化流程,節省您的時間"
+      "icon": "ChatBubbleLeftRightIcon",
+      "title":"技能評價系統",
+      "desc":"幫手和案主的互相評價，建立信任和可靠性"
     },
     {
-      "icon": "ShieldCheckIcon",
-      "title":"信任保障",
-      "desc":"誠信經營,高品質服務 任務進度即時追蹤,通訊暢通配對一位即時人力"
+      "icon": "ChatBubbleOvalLeftEllipsisIcon",
+      "title":"即時通訊與通知",
+      "desc":"提供即時、便捷的溝通和通知，確保有效的溝通與合作"
     }
   ],
   "countData":[
@@ -33,18 +33,18 @@
   "steps":[
     {
       "icon": "NewspaperIcon",
-      "title": "步驟 1",
-      "subtitle": "刊登任務"
+      "title": "刊登任務",
+      "subtitle": "步驟 1"
     },
     {
       "icon": "UserGroupIcon",
-      "title": "步驟 2",
-      "subtitle": "幫手上門"
+      "title": "幫手上門",
+      "subtitle": "步驟 2"
     },
     {
       "icon": "HandThumbUpIcon",
-      "title": "步驟 3",
-      "subtitle": "共享雙贏"
+      "title": "共享雙贏",
+      "subtitle": "步驟 3"
     }
   ]
 }
