@@ -74,6 +74,7 @@ const noData = ref(false)
 const isShowMoreBtn = ref(false)
 const notiList = ref([])
 const _work = '系統通知'
+
 const _tagsColor = {
     tag: {
         '案主通知': 'sp-tag-light-xs-cyan',
@@ -84,13 +85,26 @@ const _tagsColor = {
 };
 
 
-// - 訊息導頁by tag -
-const goToPageByTag = async (item) =>{
+// - 如果當前頁面的網址=要去的頁面 -
+const redirectTo = async (target) => {
+    const route = useRoute();
+    const now = route.path;
+    if (process.client && now == target) {
+        logDebug('reload');
+        location.reload();
+    } else {
+        await navigateTo(target);
+    }
+}
 
-    switch(item.tag){
+// - 訊息導頁by tag -
+const goToPageByTag = async (item) => {
+
+    switch (item.tag) {
         case '案主通知':
         case '幫手通知':
-            await navigateTo(`${siteConfig.linkPaths.tasks.to}/${item.taskId}`);
+            const target = `${siteConfig.linkPaths.tasks.to}/${item.taskId}`;
+            redirectTo(target);
             break;
         case '系統通知':
             await navigateTo(`${siteConfig.linkPaths.pointsHistory.to}`);
@@ -105,7 +119,7 @@ const updateReadOne = (item) => {
 
     goToPageByTag(item);
 
-    if(!item.read){
+    if (!item.read) {
         loading.value = true
         promiseAllSettledHanlder(
             [
@@ -167,7 +181,7 @@ const getNotiList = () => {
                 //是否顯示查看更多按鈕
                 if (notiLength.value < result.length) {
                     isShowMoreBtn.value = true
-                }else{
+                } else {
                     isShowMoreBtn.value = false
                 }
 
