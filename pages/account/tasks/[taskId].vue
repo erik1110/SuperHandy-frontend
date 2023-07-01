@@ -15,32 +15,33 @@
 </template>
 
 <script setup>
-  import { getTasksManagementDetail } from "@/services/apis/tasks";
-  import { storeFullOverlay } from "~/stores/storeFullOverlay";
-  const _storeFullOverlay = storeFullOverlay();
-  _storeFullOverlay.open();
-  const route = useRoute();
-  const taskId = route.params.taskId;
-  const detail = useState("taskDetail", () => ref());
-  const FuncGetTasksManagementDetail = async () => {
-    let res = await getTasksManagementDetail(taskId);
-    if (!res.error) {
-      detail.value = res.data;
-    } else {
+import { getTasksManagementDetail } from "@/services/apis/tasks";
+import { storeFullOverlay } from "~/stores/storeFullOverlay";
+const _storeFullOverlay = storeFullOverlay();
+_storeFullOverlay.open();
+const route = useRoute();
+const taskId = route.params.taskId;
+const detail = useState("taskDetail", () => ref());
+const FuncGetTasksManagementDetail = async () => {
+  let res = await getTasksManagementDetail(taskId);
+  if (!res.error) {
+    detail.value = res.data;
+  } else {
+  }
+};
+detail.value = null;
+onMounted(() => {
+  FuncGetTasksManagementDetail();
+  document.documentElement.style.overflow = "auto";
+});
+watch(
+  () => detail.value,
+  (val) => {
+    if (val) {
+      _storeFullOverlay.close();
     }
-  };
-  detail.value = null;
-  onMounted(() => {
-    FuncGetTasksManagementDetail();
-  });
-  watch(
-    () => detail.value,
-    (val) => {
-      if (val) {
-        _storeFullOverlay.close();
-      }
-    }
-  );
+  }
+);
 </script>
 
 <style lang="scss" scoped></style>
