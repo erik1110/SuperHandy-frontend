@@ -1,6 +1,6 @@
 <template>
   <img
-    class="sp-cursor-pointer"
+    class="sp-cursor-pointer sp-object-cover"
     :class="lightBoxControll.class"
     :src="lightBoxControll.image"
     @click="open = true"
@@ -14,16 +14,16 @@
   </v-overlay>
 </template>
 <script setup>
-  const lightBoxControll = defineProps({
-    image: String,
-    bigImage: String,
-    class: String,
-  });
-  const open = ref(false);
+const lightBoxControll = defineProps({
+  image: String,
+  bigImage: String,
+  class: String,
+});
+const open = ref(false);
 </script>
 <style scoped lang="scss">
-  .bigImage {
-    max-width: 80vw;
-    max-height: 80vh;
-  }
+.bigImage {
+  max-width: 80vw;
+  max-height: 80vh;
+}
 </style>
