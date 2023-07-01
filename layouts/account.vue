@@ -40,7 +40,7 @@
           </VCardText>
         </div>
       </div>
-      <div class="sp-flex-1 sm:sp-mx-4 sp-my-4 sp-overflow-auto">
+      <div class="sp-flex-1 sm:sp-mx-4 sp-mt-4 sp-overflow-hidden">
         <div class="sp-h-[100%]">
           <PostTaskOverlay />
           <div :class="{ 'sp-hidden': isOpen }">

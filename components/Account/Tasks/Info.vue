@@ -97,7 +97,7 @@
             <span>
               <LightBox
                 v-for="(item, index) in detail.imgUrls"
-                class="sp-mr-2 sp-mb-2 sp-inline-block sp-cursor-pointer sp-w-[90px] sp-h-[90px]"
+                class="sp-mr-2 sp-mb-2 sp-inline-block sp-cursor-pointer sp-w-[90px] sp-h-[90px] sp-object-cover"
                 :key="index"
                 :image="item"
                 :bigImage="item"
@@ -162,68 +162,68 @@
   </div>
 </template>
 <script setup>
-  import { postTaskUnpublish, postTaskPublish } from "@/services/apis/postTask";
-  import {
-    getTasksManagementDetail,
-    deleteTasksManagement,
-  } from "@/services/apis/tasks";
-  const eventLoading = ref(false);
-  const detail = useState("taskDetail");
-  const isSnackbarOpen = useState("isSnackbarOpen");
-  const snackbarMessage = useState("snackbarMessage");
-  const isDeleteTaskDialogOpen = ref(false);
-  const tasksReload = async function () {
-    let res = await getTasksManagementDetail(detail.value.taskId);
-    if (!res.error) {
-      detail.value = res.data;
-    }
-  };
-  const FuncUnpublishTask = async function () {
-    eventLoading.value = true;
-    let res = await postTaskUnpublish(detail.value.taskId);
-    if (!res.error) {
+import { postTaskUnpublish, postTaskPublish } from "@/services/apis/postTask";
+import {
+  getTasksManagementDetail,
+  deleteTasksManagement,
+} from "@/services/apis/tasks";
+const eventLoading = ref(false);
+const detail = useState("taskDetail");
+const isSnackbarOpen = useState("isSnackbarOpen");
+const snackbarMessage = useState("snackbarMessage");
+const isDeleteTaskDialogOpen = ref(false);
+const tasksReload = async function () {
+  let res = await getTasksManagementDetail(detail.value.taskId);
+  if (!res.error) {
+    detail.value = res.data;
+  }
+};
+const FuncUnpublishTask = async function () {
+  eventLoading.value = true;
+  let res = await postTaskUnpublish(detail.value.taskId);
+  if (!res.error) {
+    eventLoading.value = false;
+    isSnackbarOpen.value = true;
+    snackbarMessage.value = "下架成功!";
+    tasksReload();
+  }
+};
+const FuncPublishTask = async function () {
+  eventLoading.value = true;
+  let res = await postTaskPublish(detail.value.taskId);
+  if (!res.error) {
+    eventLoading.value = false;
+    isSnackbarOpen.value = true;
+    snackbarMessage.value = "上架成功!";
+    tasksReload();
+  }
+};
+const FuncEditTask = function () {
+  if (detail.value.status != "已下架") {
+    isSnackbarOpen.value = true;
+    snackbarMessage.value = "需要下架才能編輯!";
+    tasksReload();
+  } else {
+    navigateTo(`/post-task/${detail.value.taskId}?status=unpublished`);
+  }
+};
+const FuncCheckDeleteTask = function () {
+  isDeleteTaskDialogOpen.value = true;
+};
+const FuncCloseDeleteTask = function () {
+  isDeleteTaskDialogOpen.value = false;
+};
+const FuncDeleteTask = async function () {
+  eventLoading.value = true;
+  isDeleteTaskDialogOpen.value = false;
+  let res = await deleteTasksManagement(detail.value.taskId);
+  if (!res.error) {
+    isSnackbarOpen.value = true;
+    snackbarMessage.value = "刪除成功!";
+    setTimeout(function () {
       eventLoading.value = false;
-      isSnackbarOpen.value = true;
-      snackbarMessage.value = "下架成功!";
-      tasksReload();
-    }
-  };
-  const FuncPublishTask = async function () {
-    eventLoading.value = true;
-    let res = await postTaskPublish(detail.value.taskId);
-    if (!res.error) {
-      eventLoading.value = false;
-      isSnackbarOpen.value = true;
-      snackbarMessage.value = "上架成功!";
-      tasksReload();
-    }
-  };
-  const FuncEditTask = function () {
-    if (detail.value.status != "已下架") {
-      isSnackbarOpen.value = true;
-      snackbarMessage.value = "需要下架才能編輯!";
-      tasksReload();
-    } else {
-      navigateTo(`/post-task/${detail.value.taskId}?status=unpublished`);
-    }
-  };
-  const FuncCheckDeleteTask = function () {
-    isDeleteTaskDialogOpen.value = true;
-  };
-  const FuncCloseDeleteTask = function () {
-    isDeleteTaskDialogOpen.value = false;
-  };
-  const FuncDeleteTask = async function () {
-    eventLoading.value = true;
-    isDeleteTaskDialogOpen.value = false;
-    let res = await deleteTasksManagement(detail.value.taskId);
-    if (!res.error) {
-      isSnackbarOpen.value = true;
-      snackbarMessage.value = "刪除成功!";
-      setTimeout(function () {
-        eventLoading.value = false;
-        navigateTo("/account/tasks/poster");
-      }, 1000);
-    }
-  };
+      navigateTo("/account/tasks/poster");
+    }, 1000);
+  }
+};
 </script>
