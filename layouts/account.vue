@@ -54,69 +54,69 @@
 </template>
 
 <script setup>
-  import {
-    UserCircleIcon,
-    DocumentDuplicateIcon,
-    StarIcon,
-    CurrencyDollarIcon,
-  } from "@heroicons/vue/24/solid";
-  const route = useRoute();
-  const activeRouter = ref("account");
-  import { storeToRefs } from "pinia";
-  import { storeFullOverlay } from "~/stores/storeFullOverlay";
-  const _storeFullOverlay = storeFullOverlay();
-  const { isOpen } = storeToRefs(_storeFullOverlay);
-  const FuncCheckTabs = function (val) {
-    if (val == "/account") {
-      activeRouter.value = "account";
-    } else if (val.startsWith("/account/tasks")) {
-      activeRouter.value = "task";
-    } else if (val.startsWith("/account/comments")) {
-      activeRouter.value = "comment";
-    } else if (val.startsWith("/account/messages")) {
-      activeRouter.value = "message";
-    } else if (val.startsWith("/account/points")) {
-      activeRouter.value = "point";
-    }
-  };
-  watch(
-    () => route.path,
-    (val) => {
-      FuncCheckTabs(val);
-    }
-  );
-  FuncCheckTabs(route.path);
+import {
+  UserCircleIcon,
+  DocumentDuplicateIcon,
+  StarIcon,
+  CurrencyDollarIcon,
+} from "@heroicons/vue/24/solid";
+const route = useRoute();
+const activeRouter = ref("account");
+import { storeToRefs } from "pinia";
+import { storeFullOverlay } from "~/stores/storeFullOverlay";
+const _storeFullOverlay = storeFullOverlay();
+const { isOpen } = storeToRefs(_storeFullOverlay);
+const FuncCheckTabs = function (val) {
+  if (val == "/account") {
+    activeRouter.value = "account";
+  } else if (val.startsWith("/account/tasks")) {
+    activeRouter.value = "task";
+  } else if (val.startsWith("/account/comments")) {
+    activeRouter.value = "comment";
+  } else if (val.startsWith("/account/messages")) {
+    activeRouter.value = "message";
+  } else if (val.startsWith("/account/points")) {
+    activeRouter.value = "point";
+  }
+};
+watch(
+  () => route.path,
+  (val) => {
+    FuncCheckTabs(val);
+  }
+);
+FuncCheckTabs(route.path);
 </script>
 
 <style scoped lang="scss">
-  .sidebar-icon {
-    display: inline-block;
-    margin-right: 10px;
-    width: 20px;
-    height: 20px;
-  }
+.sidebar-icon {
+  display: inline-block;
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+}
 </style>
 <style scoped lang="postcss">
-  @import url("@/assets/css/tailwind.css");
-  .active {
-    position: relative;
-    &:before {
-      content: "";
-      @apply sp-absolute sp-w-full sp-h-full sp-left-0 sp-bg-secondary sp-rounded-lg sp-opacity-20;
-    }
-    .sidebar_text {
-      @apply sp-z-10 sp-text-secondary-darken;
-    }
-    .sidebar_icon {
-      @apply sp-z-10 sp-text-secondary-darken;
-    }
+@import url("@/assets/css/tailwind.css");
+.active {
+  position: relative;
+  &:before {
+    content: "";
+    @apply sp-absolute sp-w-full sp-h-full sp-left-0 sp-bg-secondary sp-rounded-lg sp-opacity-20;
   }
-  .sidebar {
-    &_text {
-      @apply sp-text-slate-700 sp-font-bold;
-    }
-    &_icon {
-      @apply sp-text-slate-700 sp-mr-2;
-    }
+  .sidebar_text {
+    @apply sp-z-10 sp-text-secondary-darken;
   }
+  .sidebar_icon {
+    @apply sp-z-10 sp-text-secondary-darken;
+  }
+}
+.sidebar {
+  &_text {
+    @apply sp-text-slate-700 sp-font-bold;
+  }
+  &_icon {
+    @apply sp-text-slate-700 sp-mr-2;
+  }
+}
 </style>
