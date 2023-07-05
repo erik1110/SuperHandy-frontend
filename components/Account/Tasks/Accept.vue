@@ -159,168 +159,166 @@
   </VCard>
 </template>
 <script setup>
-  import { PlusIcon, XCircleIcon } from "@heroicons/vue/24/solid";
-  import { postUploadImage } from "@/services/apis/general";
-  import {
-    getTasksManagementDetail,
-    postTasksManagementHelperAccept,
-    postTasksManagementPosterAccpet,
-    postTasksManagementPosterRefuse,
-  } from "@/services/apis/tasks";
-  import { storeFullOverlay } from "~/stores/storeFullOverlay";
-  const _storeFullOverlay = storeFullOverlay();
-  const detail = useState("taskDetail");
-  const acceptComment = ref("");
-  const acceptImages = ref([]);
-  const tempFile = ref(null);
-  const expendValue = ref([]);
-  const isRefuseAreaOpen = ref(false);
-  const fileInput = ref(null);
-  const isSnackbarOpen = useState("isSnackbarOpen", () => ref(false));
-  const snackbarMessage = useState("snackbarMessage", () => ref(""));
-  const eventLoading = ref(false);
-  let FuncAcceptControll = function (val) {
-    if (val.taskId && val.submittedInfo.length > 0) {
-      expendValue.value.push(
-        val.submittedInfo[val.submittedInfo.length - 1]._id
-      );
-    }
+import { PlusIcon, XCircleIcon } from "@heroicons/vue/24/solid";
+import { postUploadImage } from "@/services/apis/general";
+import {
+  getTasksManagementDetail,
+  postTasksManagementHelperAccept,
+  postTasksManagementPosterAccpet,
+  postTasksManagementPosterRefuse,
+} from "@/services/apis/tasks";
+import { storeFullOverlay } from "~/stores/storeFullOverlay";
+const _storeFullOverlay = storeFullOverlay();
+const detail = useState("taskDetail");
+const acceptComment = ref("");
+const acceptImages = ref([]);
+const tempFile = ref(null);
+const expendValue = ref([]);
+const isRefuseAreaOpen = ref(false);
+const fileInput = ref(null);
+const isSnackbarOpen = useState("isSnackbarOpen", () => ref(false));
+const snackbarMessage = useState("snackbarMessage", () => ref(""));
+const eventLoading = ref(false);
+let FuncAcceptControll = function (val) {
+  if (val.taskId && val.submittedInfo.length > 0) {
+    expendValue.value.push(val.submittedInfo[val.submittedInfo.length - 1]._id);
+  }
+};
+FuncAcceptControll(detail.value);
+watch(
+  () => detail.value,
+  (val) => {
+    FuncAcceptControll(val);
+  }
+);
+const tasksReload = async function () {
+  let res = await getTasksManagementDetail(detail.value.taskId);
+  if (!res.error) {
+    detail.value = res.data;
+  }
+};
+const openRefuseArea = function () {
+  acceptComment.value = "";
+  acceptImages.value = [];
+  tempFile.value = null;
+  isRefuseAreaOpen.value = true;
+};
+const cancelRefuse = function () {
+  isRefuseAreaOpen.value = false;
+};
+const uploadFile = function (e) {
+  const file = e.target.files.item(0);
+  tempFile.value = e.target.files[0];
+  if (file.size > 5000000) {
+    isSnackbarOpen.value = true;
+    snackbarMessage.value = "檔案大小不可超過 5 MB!";
+    return false;
+  }
+  const reader = new FileReader();
+  reader.addEventListener("load", imageLoaded);
+  reader.readAsDataURL(file);
+};
+const imageLoaded = function (e) {
+  let data = {
+    formData: tempFile.value,
+    viewData: e.target.result,
   };
-  FuncAcceptControll(detail.value);
-  watch(
-    () => detail.value,
-    (val) => {
-      FuncAcceptControll(val);
-    }
-  );
-  const tasksReload = async function () {
-    let res = await getTasksManagementDetail(detail.value.taskId);
-    if (!res.error) {
-      detail.value = res.data;
-    }
-  };
-  const openRefuseArea = function () {
-    acceptComment.value = "";
-    acceptImages.value = [];
-    tempFile.value = null;
-    isRefuseAreaOpen.value = true;
-  };
-  const cancelRefuse = function () {
-    isRefuseAreaOpen.value = false;
-  };
-  const uploadFile = function (e) {
-    const file = e.target.files.item(0);
-    tempFile.value = e.target.files[0];
-    if (file.size > 5000000) {
-      isSnackbarOpen.value = true;
-      snackbarMessage.value = "檔案大小不可超過 5 MB!";
-      return false;
-    }
-    const reader = new FileReader();
-    reader.addEventListener("load", imageLoaded);
-    reader.readAsDataURL(file);
-  };
-  const imageLoaded = function (e) {
-    let data = {
-      formData: tempFile.value,
-      viewData: e.target.result,
+  acceptImages.value.push(data);
+  fileInput.value.value = "";
+};
+const removeImage = function (index) {
+  acceptImages.value.splice(index, 1);
+};
+const prepareSubmit = async function () {
+  let imageUrls = [];
+  let data = {};
+  _storeFullOverlay.open();
+  if (acceptImages.value.length == 0) {
+    data = {
+      submittedInfo: {
+        imgUrls: [],
+        comment: "",
+      },
     };
-    acceptImages.value.push(data);
-    fileInput.value.value = "";
-  };
-  const removeImage = function (index) {
-    acceptImages.value.splice(index, 1);
-  };
-  const prepareSubmit = async function () {
-    let imageUrls = [];
-    let data = {};
-    _storeFullOverlay.open();
-    if (acceptImages.value.length == 0) {
-      data = {
-        submittedInfo: {
-          imgUrls: [],
-          comment: "",
-        },
-      };
+    if (detail.value.role == "幫手") {
+      submitHelperAccept(data);
+    } else if (detail.value.role == "案主") {
+      submitRefuse(data);
+    }
+  } else {
+    acceptImages.value.forEach(async function (item, index) {
+      if (item.formData) {
+        let formData = new FormData();
+        let blob = new Blob([item.formData], {
+          type: item.formData.type,
+        });
+        blob.name = item.formData.name;
+        formData.append("file", blob, item.formData.name);
+        let imgRes = await postUploadImage(formData);
+        if (!imgRes.error) {
+          imageUrls.push(imgRes.data.imgUrl);
+        }
+      } else {
+        imageUrls.push(item.viewData);
+      }
+      if (acceptImages.value.length == index + 1) {
+        data = {
+          submittedInfo: {
+            imgUrls: imageUrls,
+            comment: acceptComment.value,
+          },
+        };
+      }
       if (detail.value.role == "幫手") {
         submitHelperAccept(data);
       } else if (detail.value.role == "案主") {
         submitRefuse(data);
       }
-    } else {
-      acceptImages.value.forEach(async function (item, index) {
-        if (item.formData) {
-          let formData = new FormData();
-          let blob = new Blob([item.formData], {
-            type: item.formData.type,
-          });
-          blob.name = item.formData.name;
-          formData.append("file", blob, item.formData.name);
-          let imgRes = await postUploadImage(formData);
-          if (!imgRes.error) {
-            imageUrls.push(imgRes.data.imgUrl);
-          }
-        } else {
-          imageUrls.push(item.viewData);
-        }
-        if (acceptImages.value.length == index + 1) {
-          data = {
-            submittedInfo: {
-              imgUrls: imageUrls,
-              comment: acceptComment.value,
-            },
-          };
-        }
-        if (detail.value.role == "幫手") {
-          submitHelperAccept(data);
-        } else if (detail.value.role == "案主") {
-          submitRefuse(data);
-        }
-      });
-    }
-  };
-  const submitRefuse = async function (data) {
-    if (
-      data.submittedInfo.imgUrls.length == 0 ||
-      data.submittedInfo.comment.length == 0
-    ) {
-      isSnackbarOpen.value = true;
-      snackbarMessage.value = "請確認必填資訊!";
-      _storeFullOverlay.close();
-      return false;
-    }
-    let res = await postTasksManagementPosterRefuse(detail.value.taskId, data);
-    if (!res.error) {
-      tasksReload();
-    }
-  };
-  const submitHelperAccept = async function (data) {
-    if (
-      data.submittedInfo.imgUrls.length == 0 ||
-      data.submittedInfo.comment.length == 0
-    ) {
-      isSnackbarOpen.value = true;
-      snackbarMessage.value = "請確認必填資訊!";
-      _storeFullOverlay.close();
-      return false;
-    }
-    _storeFullOverlay.open();
-    let res = await postTasksManagementHelperAccept(detail.value.taskId, data);
-    if (!res.error) {
-      tasksReload();
-    }
-  };
-  const getDetail = async function () {
-    let res = await getTasksManagementDetail(detail.value.taskId);
-    if (!res.error) {
-      detail.value = res.data;
-    }
-  };
-  const posterAccept = async function () {
-    _storeFullOverlay.open();
-    let res = await postTasksManagementPosterAccpet(detail.value.taskId);
-    if (!res.error) {
-      getDetail();
-    }
-  };
+    });
+  }
+};
+const submitRefuse = async function (data) {
+  if (
+    data.submittedInfo.imgUrls.length == 0 ||
+    data.submittedInfo.comment.length == 0
+  ) {
+    isSnackbarOpen.value = true;
+    snackbarMessage.value = "請確認必填資訊!";
+    _storeFullOverlay.close();
+    return false;
+  }
+  let res = await postTasksManagementPosterRefuse(detail.value.taskId, data);
+  if (!res.error) {
+    tasksReload();
+  }
+};
+const submitHelperAccept = async function (data) {
+  if (
+    data.submittedInfo.imgUrls.length == 0 ||
+    data.submittedInfo.comment.length == 0
+  ) {
+    isSnackbarOpen.value = true;
+    snackbarMessage.value = "請確認必填資訊!";
+    _storeFullOverlay.close();
+    return false;
+  }
+  _storeFullOverlay.open();
+  let res = await postTasksManagementHelperAccept(detail.value.taskId, data);
+  if (!res.error) {
+    tasksReload();
+  }
+};
+const getDetail = async function () {
+  let res = await getTasksManagementDetail(detail.value.taskId);
+  if (!res.error) {
+    detail.value = res.data;
+  }
+};
+const posterAccept = async function () {
+  _storeFullOverlay.open();
+  let res = await postTasksManagementPosterAccpet(detail.value.taskId);
+  if (!res.error) {
+    getDetail();
+  }
+};
 </script>

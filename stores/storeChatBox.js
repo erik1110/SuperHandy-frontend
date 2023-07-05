@@ -14,6 +14,7 @@ export const storeChatBox = defineStore("chatBox", () => {
   const nowRoom = ref({});
   const nowRoomChatList = ref([]);
   const showBadge = ref(false);
+  const notificationMessage = ref([]);
   const route = useRoute();
   /*
     Fetch Data
@@ -98,13 +99,15 @@ export const storeChatBox = defineStore("chatBox", () => {
     //監聽是否有通知新內容(接收 websocket 訊息)
     socket.on("notification", (msg) => {
       isHasUnRead.value = true;
+      notificationMessage.value.push(msg);
+      setTimeout(function () {
+        notificationMessage.value.shift();
+      }, 3000);
     });
     //監聽connectStatus事件(接收websocket訊息)
-    socket.on("connectStatus", (data) => {
-    });
+    socket.on("connectStatus", (data) => {});
     //監聽errorMsg事件(接收websocket訊息)
-    socket.on("errorMsg", (err) => {
-    });
+    socket.on("errorMsg", (err) => {});
   };
 
   /* 
@@ -200,5 +203,6 @@ export const storeChatBox = defineStore("chatBox", () => {
     setRoomRead,
     messages,
     reConnectWebSocket,
+    notificationMessage,
   };
 });

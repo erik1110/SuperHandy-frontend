@@ -24,11 +24,12 @@ export const useFormUtil = () => {
       .then((res) => {
         if (res.valid) {
           result = true;
-        }else{
-          res.errors.forEach(item => {
-            console.log(item.id,item.errorMessages.join(','))
-          });
         }
+        // else {
+        //   res.errors.forEach(item => {
+        //     console.log(item.id, item.errorMessages.join(','))
+        //   });
+        // }
       })
       .catch((err) => {
         result = false;
@@ -101,8 +102,9 @@ export const useFormUtil = () => {
       },
       taskSalary: {
         rule: [
-          (v) => pattern.positiveInteger.test(v) || "金額輸入不正確",
-          (v) => v >= 10 || "最少需要 10 點超人幣",
+          ruleRequired,
+          (v) => !v || pattern.positiveInteger.test(v) || "金額輸入不正確",
+          (v) => v >= 10 || "任務薪水至少需要 10 點超人幣",
           'checkUserCoin'
         ],
       },

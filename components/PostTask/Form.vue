@@ -124,12 +124,12 @@ const dev = process.dev
 
 
 // - loading -
-function openLoading(option) {
+function openLoading (option) {
     _storeFullOverlay.open()
     btnDisabled.value = true
     openBtnLoading(option)
 }
-function closeLoading() {
+function closeLoading () {
     _storeFullOverlay.close()
     btnDisabled.value = false
     closeBtnLoading()
@@ -162,6 +162,13 @@ const setCurrentRules = (submitter) => {
         case postTaskConfig.taskSubmitter.published:
         case postTaskConfig.taskSubmitter.publishFromDraft:
             currentRules.value = postTaskConfig.rules.publish;
+            console.log('1', currentRules.value);
+            //增加任務薪水檢查規則
+            const index = currentRules.value.salary.findIndex((item) => item == 'checkUserCoin')
+            if (index >= 0) {
+                currentRules.value.salary[index] = (v) => v <= userCoin.value.superCoin || `不可超過目前帳戶儲值餘額 ${userCoin.value.superCoin} 點超人幣`
+            }
+            console.log('2', currentRules.value);
             break;
         case postTaskConfig.taskSubmitter.unpublished:
             currentRules.value = postTaskConfig.rules.unpublish;
@@ -357,7 +364,7 @@ const Init = () => {
 
     let promiseArr = [
         excuteAsyncFunc(_work, getAccountInfo, null, (response) => {
-            if(response && checkRespStatus(response)){
+            if (response && checkRespStatus(response)) {
                 const data = response.data;
                 locationData.value = data.location;
                 contactInfoData.value = {
@@ -374,11 +381,7 @@ const Init = () => {
         }),
         excuteAsyncFunc(_work, getAccountPoints, null, (response) => {
             userCoin.value = response.data
-            //增加任務薪水檢查規則
-            const index = currentRules.value.salary.findIndex((item) => item == 'checkUserCoin')
-            if (index >= 0) {
-                currentRules.value.salary[index] = (v) => v <= userCoin.value.superCoin || `不可超過目前帳戶儲值餘額 ${userCoin.value.superCoin} 點超人幣`
-            }
+
         })
     ]
 
@@ -426,7 +429,7 @@ onMounted(() => {
 })
 
 // - 假資料 -
-function fakeData() {
+function fakeData () {
     formData.value.title = '測試任務'
     formData.value.category = '到府驅蟲'
     formData.value.description = 'test'

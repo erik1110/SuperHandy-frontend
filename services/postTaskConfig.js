@@ -4,7 +4,7 @@ export const postTaskConfig = {
 
     // 表單提示
     hintMsgs: {
-        counter:{
+        counter: {
             title: _formRules.taskTitle.counter,
             category: '',
             description: _formRules.taskDescription.counter,
@@ -17,11 +17,11 @@ export const postTaskConfig = {
             locationDist: '',
             locationAddress: _formRules.address.counter,
         },
-        hint:{
+        hint: {
             title: _formRules.taskTitle.hint,
             category: '',
             description: _formRules.taskDescription.hint,
-            salary: '最少需要 10 點超人幣',
+            salary: '任務薪水至少需要 10 點超人幣',
             exposurePlan: '',
             contactInfoName: _formRules.name.hint,
             contactInfoPhone: '請輸入有效的手機號碼:09開頭共10碼',
@@ -38,7 +38,7 @@ export const postTaskConfig = {
             title: _formRules.taskTitle.rule,
             category: [],
             description: _formRules.taskDescription.rule,
-            salary: _formRules.taskSalary.rule,
+            salary: [_formRules.taskSalary.rule[1]],
             exposurePlan: [],
             contactInfoName: _formRules.name.rule,
             contactInfoPhone: [rulePhone],
@@ -77,17 +77,17 @@ export const postTaskConfig = {
 
 
     //任務來源狀態
-    currentTaskStatus:{
-        create:'create',//新增任務
-        draft:'draft',//草稿編輯
-        unpublished:'unpublished'//下架編輯
+    currentTaskStatus: {
+        create: 'create',//新增任務
+        draft: 'draft',//草稿編輯
+        unpublished: 'unpublished'//下架編輯
     },
 
     //欄位是否開啟
-    fieldDisadled:{
+    fieldDisadled: {
         //全部都可以編輯
-        init:{
-            title:false,
+        init: {
+            title: false,
             category: false,
             description: false,
             salary: false,
@@ -100,7 +100,7 @@ export const postTaskConfig = {
             locationAddress: false,
         },
         //只有任務說明,任務圖片,聯絡人可以編輯
-        unpublishedEdit:{
+        unpublishedEdit: {
             title: true,
             category: true,
             description: false,
