@@ -15,7 +15,7 @@
 
 ## Preview
 
-[Launch Live Preview](https://superhandy-frontend-fork.herokuapp.com/)
+[Launch Live Preview](https://superhandy-frontend.zeabur.app/)
 
 <img src="./public/images/home.png">
 
